@@ -27,8 +27,4 @@ jobs:
       run: mv .env.example .env
 
     - name: Generate Application Key
-<<<<<<< HEAD
       run: php artisan key:generate
-=======
-      run: php artisan key:generate
->>>>>>> acf46b767daf7e597f61e74d22ff89babd30f229
