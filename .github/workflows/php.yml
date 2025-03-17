@@ -21,7 +21,7 @@ jobs:
         tools: composer:v2
 
     - name: Install Dependencies
-      run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+      run: composer install --ignore-platform-req=ext-gd
 
     - name: Copy .env.example to .env
       run: mv .env.example .env
