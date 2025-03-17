@@ -28,3 +28,27 @@ jobs:
 
     - name: Generate Application Key
       run: php artisan key:generate
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    steps:
+    - name: Deploy to VPS via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_IP }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          cd /home/shyftcom.com/public_html
+          git pull origin main
+          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          php artisan migrate --force
+          php artisan config:clear
+          php artisan cache:clear
+          php artisan route:clear
+          php artisan view:clear
+          php artisan queue:restart
+          chown -R www-data:www-data storage bootstrap/cache
+          chmod -R 775 storage bootstrap/cache
+          systemctl restart lscpd
