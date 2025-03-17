@@ -36,9 +36,9 @@ jobs:
     - name: Deploy to VPS via SSH
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.VPS_SSH_KEY }}
+        host: ${{ secrets..env.SSH_HOST }}
+        username: ${{ secrets..env.SSH_USER }}
+        key: ${{ secrets..env.VPS_SSH_KEY }}
         script: |
           cd /home/shyftcom.com/public_html
           git pull origin main
