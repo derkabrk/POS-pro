@@ -38,7 +38,7 @@ jobs:
       with:
         host: 167.86.111.219
         username: root
-        key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCivgGC2OiU6lO26m04/x7WRZ94kDDFs0GQiZIt9PofiYhh+0Ph8MprZuhYw8XmXI/dZDs4aNUaLwVPskeaGEU+8wkbIGjuy7h88CfMEIajUUxefiHpV5dufxBkNu6ZdPaTDjNP8XnpNZKjaGnOPvQVZbhWEWrFpw9ed7xj0FzHANDFDYQHieptB8UfElLSj50JFrR/FexC4LOoBrntfFF4hHlzwfJ6BezXx3ZkX0lDE+nsXNYBguTDUR0WbG81Y9ItTsGtEqyQhoEyPRPti2FsBs4dCODJhcGCbk+kb14fuvMcAZ9TLmSnCuZe+PA53vKIC/xDKcbAul+Pn6TlKsBij06zmKi5IlWUNJIpDQ0/LGgRwt4l0wF9+AIhFU1J8AUAra9ayEBWoaHP/raHF/Pd/B6hEMBRW0Y3z5Mdw6u8gEQuput7gxfWz0HGQuZsE2U+DDwadB582WRfKTOPe8rYxsL1ZOPDvuyrWtPge1snKLumQWvLNCizTGHzRyGVOOc= root@vmi2508559.contaboserver.net
+        key : SHA256:BtWYsf5CjsWvX+4klCBsdEGGCO+m/nLAUCuxVdrMPMw root@vmi2508559.contaboserver.net
         script: |
           cd /home/shyftcom.com/public_html
           git pull origin main
