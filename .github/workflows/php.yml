@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
@@ -21,14 +21,32 @@ jobs:
         tools: composer:v2
 
     - name: Install Dependencies
-      run: composer install --ignore-platform-req=ext-gd
+      run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
     - name: Copy .env.example to .env
       run: mv .env.example .env
 
+      
+    - name: Create .env File
+      run: |
+        echo "APP_KEY=${{ secrets.APP_KEY }}" > .env
+        echo "APP_ENV=production" >> .env
+        echo "APP_DEBUG=false" >> .env
+        echo "DB_CONNECTION=mysql" >> .env
+        echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+        echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+
     - name: Generate Application Key
       run: php artisan key:generate
 
+    - name: Run Migrations
+      run: php artisan migrate --force
+
+    - name: Run Tests
+      run: php artisan test
+      
   deploy:
     runs-on: self-hosted
     needs: build
@@ -36,58 +54,9 @@ jobs:
     - name: Deploy to VPS via SSH
       uses: appleboy/ssh-action@master
       with:
-        host: 167.86.111.219
-        username: root
-        key : -----BEGIN OPENSSH PRIVATE KEY-----
-b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABB9K7eNAl
-+FaPbIwoBhTe3LAAAAEAAAAAEAAAIXAAAAB3NzaC1yc2EAAAADAQABAAACAQCznlDKzFl8
-nPYoaBdO7u8nc5hLm7TKRF9/RlvJcgQL2rYKb1kzNVk+g5AhtMhEeIFMc8x5VwD/kWw1C4
-pOjn9xPxwT+97tnPGtZ4BDuTmjYMrFMqN9I30uhiZb1ZFGm3aBRDFRWXNXQdVpZNrhflzP
-i4LEp/LwPxbivPiuMqgRDEfUNYhG1QZIUKHfjZBKeNjlVrWsY7pJNRd5V5HhwouQedPyvr
-dXXfOcRLux8PmkXoPgIaOO5aAqZ0JBE8HM8ZWDBCyA8i7CgiTUcERZrtBLW8C4Klau3RD2
-CEytOG4OsgtNtoexVXbHB1zSk/WXxZNBlaJvtWGEyZuiHXsjUtbZ+b6h7V2lmYFvm/3qQh
-g5afBAy7Fvv7oJ3upoXBHVj170+krfGvFe5H9uGTeQimz6vHN2HAdloyIbu9ZrmYuudKJh
-uIE/4LgqBQLJQCHPh3IYyrqcQ6wXCqxbEy7TV68OdiBnlfZR7i61LZnvj81CB6v6zTzm6R
-TEn1BoAOR537ckrdsOqec1MIzVjDy30vuGZnRuMX2ZD2EN40SEnDklMqaNBCOI9B+c3f80
-kU0z7CsyEq8+g7bP4OtoCZFyWmRv1jmzcwUbQBjBgN9yxf5viS2f/9Q4bjxQbDobIJbnPt
-zwKigO6tzUdn96Ys3285E7fTQEfl6tNuC4Z6s58kBizwAAB1DRBJoOvtOXtivDDkuKr+QD
-1Ro8fTSEE4XwcaxkNuB9TEmFKfuj8WR3TCQ7Nb//WwhzmSmJnUcNxj0s4KijDw3RVDZfLw
-wAurtjcoqZcXdSIndZE55NmoN0t+s4Vg40uQU1NL3d+sXcyas/sMM4q/zTe8VoQg85v4SK
-DDRHBU1PLgqzCmWdphuRl93sfVO+1xvLyTFjWHXILK8Xq6dqC+UsiM/9RIlQkfgKu/i5wL
-11XaXVmaG77nCm0LCMW389orCS0aZeq3Ep0wCFxFdduFTv7UTXY/Ui3Uc6M4bFI2rWNdPF
-1KO8cuDYAFiZoOirFgZ8vis7NObYTgtlh9ck/y64ucV+HJl0Xqb/lPSSkajGesNmKUjfPF
-jn4TSZ5qsKCZu47zYP1WkFM3nJww0sZpAn4+Nzuyh9ApDgbSKj6trr7cGkuWWM9qBf8iJT
-DtRBzXAKc/vXnyC5OHqzwwKJYJatD0kYB0TkSjDgrrUrIr4c13hfc6GznWlSxzvuOieAnx
-Y84HcV5buDxDD9uZPK1nnAkzC8Mny1wMHRluTJFv1jBOochmy/pbuBh2FDGXN5/m7PuiC/
-Rbg5EPfgabvA0teQ7UACPrdxgo+coIrBMOcjNgZSc9Bc0ZeX6M8kcBbB+fV3Ht6lNphVOL
-Ld2BR595vqyD4PW5Qqy3Xy8/7iwmiygT4WgER0/WC/TT8Vger+MQCvCzcHYghP9Gzz8jmr
-8u6+9S2wkIM3W0puYiv5gysygiz+XBW2I/yah824Ocn+M6IGvnXndkHJGGcSfjqPeIe7s3
-lkJSaSZ3oGrRRgOfwlCv4QXruuZKSaFvis7PyOgF6JoqrfFoaySS3d6lCE2ruLSslWAApE
-eMIflMA0oIBbB3a9811CPgJDZSvkkCSrZHdlFToULuXKzpjk0BtrqcryeQQYkWkkbMl705
-psv62xilw7H/K6W22f/DKcXdaSfKX7FpscsKrk5Z9uLVmIALcKyAtY5ULVvKXotsGUZdKz
-66VuiDWT7T20yRiu8ZebQbuTZ/k2zkSI158dE85iNZzpp96vMS3A6sOJY/xl7zR8wekxIv
-wV3Ja1PEzk5WHrk1eWf9nZj1SyMd87fezuhVY+aUb6u8bW3ZbXebDbwRGLrn0qnYUbyHVv
-gHebI5sZQAd5eUYZczLEIA20rhcaLalEsb+00ggZ6kvJs3HoUlY/425NfBc0sJ4DmJJCst
-pyytgHhJMUeehhmUjDAzf+YSDf/Cu/1p9GIkIFAV+fFefxiAtZwCmEKkVzJ9P7+29qTcB7
-Cs2SZItMMRD/AtP5gpIj51OZ1i5/pqtBjf2rIRYpJvgYCwjnPKD9rMAppMoFpFrMq2+Cwr
-nRU/74wmzoM4FnfAWAsOSJGsxs/5PuxMvHE4j4IbNP3KcC+JW1R744ufPdsgOd8GNhWWz4
-yK8FRMcpg/A7BnoDRhjJBlkz5O9jvN479ZJO35zjAcnLbjgdYe6PDE00Vs+QVnjBTynMrm
-HTtQU2BOlpy92fG9LmsCXycPqSRr/Sh9w99lfhsfaLKOZDOYTFldpuLBPLyv/Xtz0Hqdlh
-fhPUqbiDjHxWk4C+8JvRTWbwdXd9Og6qBQ4n2Llg/ycmvdV5iLfAF/HHwYBYjp4TCqgXRd
-SvOgrQADFBtJnyoAi0cFzciw33fSojMt7C+IUeI4PEv5OL3E5evWDRujzc+V6f9jZEbJwd
-znLF5iXQ7Trd0uP47x9lsepO6whIQ0iopew3bdZUVhhlnEIM4KjVVGOnaZ1H4MsZOsPD2e
-wOLgoiehzztTxUnCuq+Q5SNc/2DkuJH32hiXFkUW7kbmEct9Ol7PG1rReC7nkTGhEEE1Wf
-5OKHYF8nuuTuvpyU0GP75MmdAyA+tM/UcKrPG/BSCZVjV31m39Sxh4rlHmym/PTMufkYw3
-Wzab8Lt2x4/DvqwQdvJlf/dxhmQ9ze0/kG290y3tJHFGvGZ3bzqud8oPW6t283Ihs69zZS
-OaRXsqwxqloXakaBUFMJ9AxhmeDzkjmYdFAcEqQYCeswJ2BuU6uBRrc1zmAPBcUd/TxmDn
-BX+20v2iTYkt1l3nPfoANH2Poe3Ceq1f3u9qdH9+vGpTJ/gngLYkV1eskHApWi3GuyPmRG
-xIULnuc/YIuWQ056iU+TUYq4McpVqtIx9VSWeH9JQOEQi6Ycbb5T6oT8eLMe2gvUro4ucb
-LCVSfqerKsoodzKLzOjC9+bbnPnZJaprD7mhmExVSFsTZ//HQJitDmNb2C0Jq5CvoPIw+a
-N/lhrLUVv36FRvPy78bDrow8hEHY1awBT8yAMAsNII6OH2XDaFYUuWamjyk17Eyu0SwJsL
-aRBiAPy0e3pOwAFpToS4qmXpihFiZPFGpEtzhEOsh/Xlx7KBW988k7rXZGzxowX/11VwIX
-BxCJhcivlJgJ9xWzUKEj6DqI+t+MtNTVnVLMxJRhpFM/wYBtOqsjjxyMlpJvtwhQH45tFx
-dmdbazfIbxw/Pq8411neiWvxs=
------END OPENSSH PRIVATE KEY-----
+        host: ${{ secrets.VPS_IP }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
         script: |
           cd /home/shyftcom.com/public_html
           git pull origin main
