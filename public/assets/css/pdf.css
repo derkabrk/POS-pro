@@ -1,0 +1,254 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 100%;
+}
+
+.styled-table thead tr {
+    background-color: rgba(31, 31, 31, 0.05);
+    color: #000;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    /* padding: 12px 15px; */
+    text-align: center;
+}
+.production-pdf-table th,
+.production-pdf-table td {
+    border-right: 1px solid #dddddd;
+}
+.production-pdf-table th {
+    border-bottom: 1px solid #dddddd;
+}
+.production-pdf-table tr td {
+    padding: 5px;
+    white-space: pre-wrap;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: rgba(31, 31, 31, 0.05);
+}
+
+.styled-table .table-img {
+    height: 25px;
+    max-width: 100%;
+}
+
+.table-header {
+    text-align: center;
+}
+.in-table-header .head-red {
+    background-color: #c52127 !important;
+    color: white;
+    padding: 12px;
+    font-weight: 800;
+    border: 1px solid gray;
+}
+.in-table-header .head-black {
+    background-color: black !important;
+    color: white;
+    padding: 12px;
+    font-weight: 800;
+    border: 1px solid gray;
+}
+.in-table-body-container {
+    border: 1.5px solid #d9d9d9 !important;
+}
+.in-table-body td {
+    padding: 5px;
+    border-left: 1.5px solid #d9d9d9;
+}
+/* .invoice-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0px;
+}
+.invoice-content {
+    width: 800px;
+    background-color: white;
+    margin: 12px;
+    position: relative;
+}
+.invoice-logo {
+    width: 52px;
+    height: 54px;
+}
+.logo {
+    padding-top: 12px;
+    margin-bottom: 26px;
+}
+.logo h3 {
+    font-size: 24px;
+    font-weight: 700;
+}
+.business-footer {
+    position: relative;
+    z-index: 2;
+}
+.right-invoice {
+    font-size: 35px;
+    color: white;
+    background-color: #000000;
+    right: 38px;
+    top: 100px;
+    padding: 8px 18px;
+    border-radius: 30px 0 0 30px;
+    position: absolute;
+    margin: 0;
+}
+.in-table-row td {
+    border: none !important;
+    font-size: 12px !important;
+    padding: 0px;
+}
+.in-table-row-bottom td {
+    border: none !important;
+    font-size: 14px !important;
+    font-weight: 600;
+    padding: 0px;
+}
+.in-table-row-bottom .total-amound {
+    background-color: #c52127;
+    color: white;
+    padding: 3px;
+}
+.in-table-header .head-red {
+    background-color: #c52127 !important;
+    color: white;
+    padding: 12px;
+    font-weight: 800;
+    border: 1px solid gray;
+}
+.in-table-header .head-black {
+    background-color: black !important;
+    color: white;
+    padding: 12px;
+    font-weight: 800;
+    border: 1px solid gray;
+}
+.in-print-btn {
+    background-color: #f9f9f9;
+    color: black;
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10%;
+    font-size: 18px;
+}
+.in-print-btn-container {
+    position: absolute;
+}
+.in-table-body-container {
+    border: 1.5px solid #d9d9d9 !important;
+}
+.in-table-body td {
+    padding: 5px;
+    border-left: 1.5px solid #d9d9d9;
+}
+.in-footer {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    background-color: #c52127;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px;
+}
+
+.in-hr {
+    margin: 0px !important;
+}
+.in-signature h4 {
+    font-size: 14px !important;
+    font-weight: 500;
+}
+.in-signature-container {
+    bottom: 50px;
+    width: 100%;
+    right: 0px;
+}
+.word-amount {
+    top: -8px;
+    line-height: 20px;
+    position: absolute;
+    font-size: 14px;
+    font-weight: 600;
+    max-width: 450px;
+    text-wrap: auto;
+} */
+
+/* .print-container {
+    display: block;
+}
+.pdf-mode .print-container {
+    display: none;
+} */
+
+/* pdf css */
+
+h4 {
+    margin: 0;
+}
+.w-full {
+    width: 100%;
+}
+.w-half {
+    width: 50%;
+}
+.margin-top {
+    margin-top: 1.25rem;
+}
+.footer {
+    font-size: 0.875rem;
+    padding: 1rem;
+    background-color: rgb(241 245 249);
+}
+table {
+    width: 100%;
+    border-spacing: 0;
+}
+table.products {
+    font-size: 0.875rem;
+}
+table.products tr {
+    background-color: rgb(96 165 250);
+}
+table.products th {
+    color: #ffffff;
+    padding: 0.5rem;
+}
+table tr.items {
+    background-color: rgb(241 245 249);
+}
+table tr.items td {
+    padding: 0.5rem;
+}
+.total {
+    text-align: right;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+}

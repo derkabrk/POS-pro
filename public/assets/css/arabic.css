@@ -1,0 +1,300 @@
+[dir="rtl"] body {
+    background: #ecf1f9 !important;
+}
+[dir="rtl"] a,
+[dir="rtl"] button,
+[dir="rtl"] .btn,
+[dir="rtl"] ol li a,
+[dir="rtl"] ul li a {
+    text-decoration: none !important;
+}
+[dir="rtl"] .dropdown-item.active,
+[dir="rtl"] .dropdown-item:active,
+[dir="rtl"] .nav-pills .nav-link.active,
+[dir="rtl"] .nav-pills .show > .nav-link,
+[dir="rtl"] .btn-primary {
+    background-color: #c52127 !important;
+}
+[dir="rtl"] .btn-primary {
+    border-color: #c52127 !important;
+}
+
+[dir="rtl"] .text-primary,
+[dir="rtl"] .arabic-primary-clr,
+[dir="rtl"] .nav-link {
+    color: #c52127 !important;
+}
+
+[dir="rtl"] p {
+    margin-bottom: 0px;
+}
+
+[dir="rtl"] .card {
+    border: 0;
+    box-shadow: 0px 4px 24px 0px #e4c3c30d;
+    border-radius: 12px;
+}
+
+[dir="rtl"] .nav-link.active {
+    color: #fff !important;
+}
+
+[dir="rtl"] .btn-custom-warning {
+    background-color: #c52127 !important;
+    color: #fff;
+    border: none !important;
+}
+
+[dir="rtl"] .role-reset-btn {
+    font-weight: bold;
+    color: #c52127;
+    border: 1px solid #c52127;
+    padding: 0.2rem 0.5rem !important;
+}
+
+[dir="rtl"] ol,
+[dir="rtl"] ul {
+    padding-right: 0;
+}
+[dir="rtl"] .section-container {
+    padding-right: 300px;
+    padding-left: 0;
+}
+
+[dir="rtl"] .section-container.active {
+    padding-left: 0;
+    padding-right: 80px;
+}
+[dir="rtl"] .side-bar {
+    left: unset;
+    right: 0;
+}
+[dir="rtl"] .sidebar-opner {
+    margin-right: 0;
+    margin-left: 20px;
+}
+[dir="rtl"] .side-bar-manu li a .sidebar-icon {
+    margin-left: 10px;
+    margin-right: 0;
+}
+[dir="rtl"] .side-bar.active .side-bar-manu li a .sidebar-icon {
+    margin-right: 0;
+    margin-left: 30px;
+    left: unset;
+    right: -10px;
+}
+[dir="rtl"] .side-bar-manu li .dropdown-menu li {
+    padding-right: 15px;
+    padding-left: 0;
+}
+[dir="rtl"] .side-bar-manu li .dropdown-menu {
+    margin-left: 0;
+    margin-right: 20px;
+    border-left: 0;
+    border-right: 1px solid #fff;
+}
+[dir="rtl"] .side-bar-manu .dropdown::before {
+    left: 15px;
+    right: unset;
+    transform: rotate(180deg);
+}
+
+[dir="rtl"] .gpt-dashboard-card .couter-box {
+    justify-content: space-between !important;
+}
+
+[dir="rtl"] .gpt-dashboard-card .couter-box h5 {
+    text-align: left;
+}
+
+[dir="rtl"] .gpt-dashboard-card .couter-box .icons {
+    margin-left: 5px;
+}
+[dir="rtl"] .gpt-dashboard-card .couter-box h5,
+[dir="rtl"] .gpt-dashboard-card .couter-box p {
+    margin-bottom: 0;
+}
+[dir="rtl"] .gpt-dashboard-chart .card-header .gpt-up-down-arrow span {
+    left: 20px !important;
+    right: unset !important;
+}
+[dir="rtl"] .print-btn i {
+    margin-right: 0;
+    margin-left: 6px;
+}
+[dir="rtl"] .password-input .hide-pass {
+    left: 10px;
+    right: unset;
+}
+[dir="rtl"] .table-action .dropdown-menu a i {
+    margin-left: 7px;
+    margin-right: 0;
+}
+[dir="rtl"] .arabic-text-right {
+    text-align: right !important;
+}
+
+[dir="rtl"] .order-form-section label {
+    left: unset;
+    right: 10px;
+}
+[dir="rtl"] .order-form-section .settings-image-upload .title {
+    right: 30px !important;
+}
+
+[dir="rtl"] .feature-btn {
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+}
+[dir="rtl"] .table > :not(:last-child) > :last-child > * {
+    border-bottom-color: rgba(31, 31, 31, 0.1) !important;
+}
+[dir="rtl"] .table th {
+    background-color: rgba(31, 31, 31, 0.05) !important;
+}
+
+[dir="rtl"] .table-top-left .gpt-up-down-arrow span {
+    right: 98px !important;
+}
+
+@media (min-width: 500px) {
+    .gpt-up-down-arrow span {
+        right: 96% !important;
+    }
+}
+
+@media only screen and (min-width: 0px) and (max-width: 500px) {
+    .gpt-up-down-arrow span {
+        right: 92% !important;
+    }
+}
+
+[dir="rtl"] .table-search .position-absolute {
+    right: 92%;
+}
+
+[dir="rtl"] .table-top-left.d-flex.gap-3.margin-l-16 {
+    margin-right: 16px !important;
+}
+
+[dir="rtl"] .erp-table-section .searchResults .w-60 {
+    text-align: right !important;
+}
+
+[dir="rtl"] label.upload-img-label {
+    top: -6px;
+    left: 5px !important;
+}
+
+[dir="rtl"] .modal-body label {
+    left: -5px;
+}
+
+
+/* notification style css start */
+
+[dir="rtl"] .toast.toast-success {
+    background-color: green !important;
+}
+[dir="rtl"] .toast.toast-error {
+    background-color: #c52127 !important;
+}
+/* notification style css end */
+
+/* delete modal style css start */
+[dir="rtl"] .jconfirm-title,
+[dir="rtl"] .jconfirm-content {
+    direction: ltr;
+    unicode-bidi: embed;
+}
+/* delete modal style css end */
+
+
+@media only screen and (min-width: 360px) and (max-width: 644px) {
+    [dir="rtl"] .table-search .position-absolute {
+        right: 77%;
+    }
+}
+@media only screen and (min-width: 0px) and (max-width: 360px) {
+    [dir="rtl"] .table-search .position-absolute {
+        right: 75%;
+    }
+}
+
+/*----------- dashboard counter card css  start------------*/
+@media only screen and (min-width: 1424px) {
+    [dir="rtl"] .gpt-dashboard-card.counter-grid-6 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+@media only screen and (min-width: 880px) and (max-width: 1424px) {
+    [dir="rtl"] .gpt-dashboard-card.counter-grid-6 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media only screen and (min-width: 650px) and (max-width: 880px) {
+    [dir="rtl"] .gpt-dashboard-card.counter-grid-6 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (min-width: 1423px) and (max-width: 1700px) {
+    [dir="rtl"] .gpt-dashboard-card .couter-box .icons {
+        height: 44px;
+        width: 44px;
+    }
+    [dir="rtl"] .gpt-dashboard-card .couter-box h5 {
+        font-size: 18px;
+        line-height: 28px;
+    }
+    [dir="rtl"] .gpt-dashboard-card .couter-box p {
+        font-size: 14px;
+        line-height: 24px;
+    }
+}
+
+@media (max-width: 650px) {
+    [dir="rtl"] .gpt-dashboard-card.counter-grid-6 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/*----------- dashboard counter card css  end------------*/
+
+@media only screen and (min-width: 0px) and (max-width: 400px) {
+    [dir="rtl"] .header-left .text-custom-primary {
+        font-size: 11px;
+    }
+}
+@media (max-width: 1150px) {
+    [dir="rtl"] .side-bar {
+        right: -100%;
+        left: unset;
+    }
+    [dir="rtl"] .side-bar.active {
+        right: 0;
+        left: unset;
+    }
+    [dir="rtl"] .section-container {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    [dir="rtl"] .section-container.active {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    [dir="rtl"] .close-btn {
+        left: 15px;
+        right: unset;
+    }
+    [dir="rtl"] .side-bar.active .side-bar-manu li a .sidebar-icon {
+        margin-left: 0;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    [dir="rtl"] .gpt-dashboard-card .couter-box p {
+        width: 100%;
+    }
+}

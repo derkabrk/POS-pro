@@ -1,0 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+body {
+  margin: 0;
+  padding: 0 !important;
+  color: #404040;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  line-height: 18px;
+  background: #ECF1F9;
+}
+
+.payment-method-section {
+  padding: 45px 0;
+}
+
+.payment-items {
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 14px 15px;
+  border-radius: 8px;
+  background: #FFF;
+  -webkit-box-shadow: 0px 3px 8px -1px rgba(71, 50, 50, 0.05), 0px 0px 1px 0px rgba(12, 26, 75, 0.24);
+          box-shadow: 0px 3px 8px -1px rgba(71, 50, 50, 0.05), 0px 0px 1px 0px rgba(12, 26, 75, 0.24);
+  display: block;
+  margin-bottom: 10px;
+  position: relative;
+}
+.payment-items:after {
+  position: absolute;
+  content: "";
+  display: block;
+  right: 20px;
+  top: 18px;
+  width: 10px;
+  height: 10px;
+  border: solid rgb(115, 115, 115);
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+.payment-items img {
+  max-height: 20px;
+}
+.payment-items.active {
+  background: #4876FF;
+  color: #fff;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.payment-items.active::after {
+  border-color: #fff;
+}
+.payment-items.active svg {
+  fill: #fff;
+}
+.payment-items.active svg path {
+  fill: #fff;
+}
+
+.payment-method-nav {
+  padding: 16px;
+  border-radius: 16px;
+  background: #FFF;
+}
+
+.payment-method-wrp {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.payment-list-table {
+  border-radius: 16px;
+  background: #FFF;
+  padding: 15px;
+}
+.payment-list-table td {
+  color: #404040;
+  font-size: 14px;
+  line-height: 18px;
+  padding: 12px 15px;
+}
+.payment-list-table .table-striped > tbody > tr:nth-of-type(odd) > * {
+  background: #F5F5F5;
+  border: none;
+}
+.payment-list-table tbody, .payment-list-table td, .payment-list-table tfoot, .payment-list-table th, .payment-list-table thead, .payment-list-table tr {
+  border: none;
+}
+
+.payment-title {
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.payment-btn {
+  background: #4876FF !important;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  padding: 5px 20px;
+}
+
+.stripe-form {
+  margin-top: 20px;
+}
+.stripe-form .form-control {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 5px;
+  padding: 9px;
+}
+.stripe-form .form-control svg {
+  min-width: 30px;
+  margin-right: 10px;
+}
+.stripe-form input {
+  border: none;
+  outline: none;
+  width: 100%;
+  color: #737373;
+  font-size: 14px;
+  font-weight: 500;
+}
+.stripe-form input:last-child {
+  text-align: right;
+}

@@ -1,0 +1,128 @@
+/* General modal styles  */
+.calculator-content {
+    width: 320px;
+    border-radius: 10px;
+    background-color: #cfd8dc;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 10px 20px;
+}
+.custom-modal-header {
+    width: 20px;
+    margin-left: auto;
+}
+.custom-modal-header:hover {
+    background-color: inherit;
+}
+.close {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.container {
+    padding: 1px;
+}
+
+#display {
+    background-color: #eceff1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.button-row {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.calculator-dialog {
+    max-width: 320px;
+}
+
+.calculator-dialog .calculator-btn,
+.button-row .calculator-btn {
+    background-color: #546e7a;
+    border: 1px solid #546e7a;
+    border-radius: 8px;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 1rem;
+    flex: 1;
+    margin: 0 5px;
+    transition: all 0.2s ease-in-out;
+}
+.button-row .calculator-btn {
+    padding: 10px 20px;
+}
+
+.calculator-btn:hover {
+    background-color: #f0f0f0;
+}
+.modal-body {
+    padding: auto;
+}
+.calculator-btn:active {
+    background-color: #ddd;
+    transform: scale(0.95);
+}
+
+.operator-group {
+    background-color: #546e7a;
+    color: #ffffff;
+}
+
+.operator-group:hover {
+    background-color: #546e7a;
+}
+
+.operand-group {
+    background-color: #90a4ae;
+    color: #ffffff;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+
+    /* box-shadow: 0px 4px #90a4ae; */
+}
+
+.operand-group:hover {
+    background-color: #90a4ae;
+}
+
+#clear {
+    background-color: #f44336;
+    color: #ffffff;
+}
+#backspace {
+    background-color: #ff9800;
+    color: #ffffff;
+}
+
+#clear:hover {
+    background-color: #f44336;
+}
+
+#equal {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+
+#equal:hover {
+    background-color: #4caf50;
+}
+
+@media (max-width: 576px) {
+    #display {
+        font-size: 1.5rem;
+        padding: 10px;
+    }
+
+    .calculator-btn {
+        font-size: 1rem;
+        padding: 3px 15px;
+    }
+}
