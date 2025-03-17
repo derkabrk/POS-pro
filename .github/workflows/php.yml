@@ -22,10 +22,6 @@ jobs:
 
     - name: Install Dependencies
       run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-
-    - name: Copy .env.example to .env
-      run: mv .env.example .env
-
       
     - name: Create .env File
       run: |
