@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
@@ -26,9 +26,50 @@ jobs:
     - name: Copy .env.example to .env
       run: mv .env.example .env
 
+      
+    - name: Create .env File
+      run: |
+        echo "APP_KEY=${{ secrets.APP_KEY }}" > .env
+        echo "APP_ENV=development" >> .env
+        echo "APP_DEBUG=false" >> .env
+        echo "DB_CONNECTION=mysql" >> .env
+        echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+        echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+
     - name: Generate Application Key
-<<<<<<< HEAD
       run: php artisan key:generate
-=======
-      run: php artisan key:generate
->>>>>>> acf46b767daf7e597f61e74d22ff89babd30f229
+
+    - name: Run Migrations
+      run: php artisan migrate --force
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    steps:
+    - name: Deploy to VPS via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_IP }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        script: |
+          cd /home/shyftcom.com/public_html
+          git pull origin main
+          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          php artisan migrate --force
+          php artisan config:clear
+          php artisan cache:clear
+          php artisan route:clear
+          php artisan view:clear
+          php artisan queue:restart
+          chown -R www-data:www-data storage bootstrap/cache
+          chmod -R 775 storage bootstrap/cache
+          systemctl restart lscpd
+
+
+
+
+
