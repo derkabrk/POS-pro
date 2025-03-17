@@ -1,5 +1,5 @@
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
     steps:
     - name: Deploy to VPS via SSH
