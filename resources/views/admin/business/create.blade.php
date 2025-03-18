@@ -54,11 +54,10 @@
                                     </div>
                                 </div>
 
-
                                 <div class="col-lg-6 mb-2">
-                                    <label>Select Business type</label>
+                                    <label>Business type</label>
                                     <div class="gpt-up-down-arrow position-relative">
-                                        <select name="plan_subscribe_id"
+                                        <select name="business_type"
                                                 class="form-control table-select w-100 role">
                                         
                                                 <option value="e-commerce">E-commerce </option>
