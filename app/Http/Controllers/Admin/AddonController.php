@@ -35,6 +35,9 @@ class AddonController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
+
+            print($responseData);
+
             $responseData = curl_exec($ch);
             if ($responseData !== false) {
                 $result = json_decode($responseData, true); // Decode JSON into an associative array
