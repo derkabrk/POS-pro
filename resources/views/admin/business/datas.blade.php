@@ -40,7 +40,7 @@
                             data-expired_date="{{ formatted_date($business->will_expire) }}"
                             data-created_date="{{ formatted_date($business->created_at) }}">
                             <i class="fal fa-eye"></i>
-                            {{ __('View') }}  
+                            {{ __('View') }}   
                         </a>
 
                     </li>
