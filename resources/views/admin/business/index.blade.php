@@ -63,6 +63,7 @@
                         <th> {{ __('SL') }}. </th>
                         <th> {{ __('Business Name') }} </th>
                         <th> {{ __('Business Category') }} </th>
+                        <th> Business Type </th>
                         <th> {{ __('Phone') }} </th>
                         <th> {{ __('Package') }} </th>
                         <th> {{ __('Last Enroll') }} </th>
@@ -183,6 +184,15 @@
                             </div>
                             <div class="col-md-7"><p id="category"></p></div>
                         </div>
+
+                        <div class="row align-items-center mt-3">
+                            <div class="col-md-4"><p>Business Type</p></div>
+                            <div class="col-1">
+                                <p>:</p>
+                            </div>
+                            <div class="col-md-7"><p id="type"></p></div>
+                        </div>
+
                         <div class="row align-items-center mt-3">
                             <div class="col-md-4"><p>{{ __('Phone') }}</p></div>
                             <div class="col-1">

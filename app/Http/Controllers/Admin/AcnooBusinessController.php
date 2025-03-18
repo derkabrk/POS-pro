@@ -101,6 +101,7 @@ class AcnooBusinessController extends Controller
                 'business_category_id' => $request->business_category_id,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'user_id' => $user->id,
+                'type'=>  $request->type,
             ]);
 
             User::create([
