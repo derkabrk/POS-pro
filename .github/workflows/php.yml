@@ -48,6 +48,6 @@ jobs:
           php artisan route:clear
           php artisan view:clear
           php artisan queue:restart
-          chown -R www-data:www-data storage bootstrap/cache
-          chmod -R 775 storage bootstrap/cache
+          chmod -R 777 bootstrap/cache
+          chmod -R 777 storage
           systemctl restart lscpd
