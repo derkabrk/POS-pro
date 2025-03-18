@@ -43,7 +43,7 @@ jobs:
         script: |
           cd /home/shyftcom.com/public_html/POS-pro
           git pull origin main
-          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          composer install --ignore-platform-req=ext-curl
           php artisan migrate --force
           php artisan config:clear
           php artisan cache:clear
