@@ -83,6 +83,7 @@ class AcnooBusinessController extends Controller
             'shopOpeningBalance' => 'nullable|numeric',
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
+            'type'  =>  'required|in:e-commerce,business,both'
         ]);
 
         DB::beginTransaction();
@@ -100,6 +101,7 @@ class AcnooBusinessController extends Controller
                 'business_category_id' => $request->business_category_id,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'user_id' => $user->id,
+                'type'=>  $request->type,
             ]);
 
             User::create([

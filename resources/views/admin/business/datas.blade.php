@@ -10,6 +10,7 @@
         <td>{{ $loop->index + 1 }} <i class="{{ request('id') == $business->id ? 'fas fa-bell text-red' : '' }}"></i></td>
         <td>{{ $business->companyName }}</td>
         <td>{{ $business->category->name ?? '' }}</td>
+        <td>{{ $business->type ?? '' }}</td>
         <td>{{ $business->phoneNumber }}</td>
         <td>{{ $business->enrolled_plan->plan->subscriptionName ?? '' }}</td>
         <td>{{ formatted_date($business->subscriptionDate) }}</td>
@@ -32,13 +33,14 @@
                             data-image="{{ asset($business->pictureUrl ?? 'assets/img/default-shop.svg') }}"
                             data-name="{{ $business->companyName }}" data-address="{{ $business->address }}"
                             data-category="{{ $business->category->name ?? '' }}"
+                            data-type="{{ $business->type ?? '' }}"
                             data-phone="{{ $business->phoneNumber }}"
                             data-package="{{ $business->enrolled_plan->plan->subscriptionName ?? '' }}"
                             data-last_enroll="{{ formatted_date($business->subscriptionDate) }}"
                             data-expired_date="{{ formatted_date($business->will_expire) }}"
                             data-created_date="{{ formatted_date($business->created_at) }}">
                             <i class="fal fa-eye"></i>
-                            {{ __('View') }}
+                            {{ __('View') }}  
                         </a>
 
                     </li>
