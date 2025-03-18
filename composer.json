@@ -7,7 +7,6 @@
     "require": {
         "php": "^8.1",
         "ageekdev/laravel-barcode": "^1.2",
-        "maatwebsite/excel": "^3.1",
         "anandsiddharth/laravel-paytm-wallet": "^2.0",
         "barryvdh/laravel-dompdf": "^3.0",
         "dipesh79/laravel-phonepe": "*",
@@ -17,6 +16,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "league/omnipay": "^3.2",
+        "maatwebsite/excel": "^1.1",
         "mercadopago/dx-php": "^2.4",
         "mollie/mollie-api-php": "^2.65",
         "nwidart/laravel-modules": "10.0.6",

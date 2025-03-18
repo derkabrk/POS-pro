@@ -35,9 +35,6 @@ class AddonController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
-
-            print($responseData);
-
             $responseData = curl_exec($ch);
             if ($responseData !== false) {
                 $result = json_decode($responseData, true); // Decode JSON into an associative array
@@ -104,7 +101,7 @@ class AddonController extends Controller
                     return response()->json(['message' => __('Invalid purchase code.')], 406);
                 }
             } else {
-                return response()->json(['message' => __('Api request failed')], 406);
+                return response()->json(['message' => __('Api reqcuest failed')], 406);
             }
 
             curl_close($ch);
