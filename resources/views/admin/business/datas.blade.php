@@ -10,6 +10,7 @@
         <td>{{ $loop->index + 1 }} <i class="{{ request('id') == $business->id ? 'fas fa-bell text-red' : '' }}"></i></td>
         <td>{{ $business->companyName }}</td>
         <td>{{ $business->category->name ?? '' }}</td>
+        <td>{{ $business->type ?? '' }}</td>
         <td>{{ $business->phoneNumber }}</td>
         <td>{{ $business->enrolled_plan->plan->subscriptionName ?? '' }}</td>
         <td>{{ formatted_date($business->subscriptionDate) }}</td>

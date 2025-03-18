@@ -186,14 +186,6 @@
                         </div>
 
                         <div class="row align-items-center mt-3">
-                            <div class="col-md-4"><p>Business Type</p></div>
-                            <div class="col-1">
-                                <p>:</p>
-                            </div>
-                            <div class="col-md-7"><p id="type"></p></div>
-                        </div>
-
-                        <div class="row align-items-center mt-3">
                             <div class="col-md-4"><p>{{ __('Phone') }}</p></div>
                             <div class="col-1">
                                 <p>:</p>
