@@ -11,7 +11,9 @@
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>{{ __('Business Categories List') }}</h4>
-                    
+                    @can('banners-create')
+                        <a type="button" href="{{ route('shipping-companies.create')}}" class="add-order-btn rounded-2 {{ Route::is('admin.plans.create') ? 'active' : '' }}" class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>{{ __('Add new Category') }}</a>
+                    @endcan
                 </div>
                 <div class="table-top-form p-16-0">
                     <form action="{{ route('shipping-companies.filter') }}" method="post" class="filter-form" table="#business-category-data">
