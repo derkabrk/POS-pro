@@ -55,6 +55,21 @@
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
+                                    <label>Business type</label>
+                                    <div class="gpt-up-down-arrow position-relative">
+                                        <select name="type"
+                                                class="form-control table-select w-100 role">
+                                        
+                                                <option value="e-commerce">E-commerce </option>
+                                                <option value="business">Business </option>
+                                                <option value="both">Both</option>
+                                           
+                                        </select>
+                                        <span></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
                                     <label>{{ __('Phone') }}</label>
                                     <input type="text" name="phoneNumber" required class="form-control" placeholder="{{ __('Enter Phone Number') }}">
                                 </div>
