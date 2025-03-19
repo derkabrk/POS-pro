@@ -22,25 +22,23 @@
 
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">
+                            <div class="col-lg-6 mb-2">
+                        <label>Company Name</label>
+                       <input type="text" name="name" required class="form-control" placeholder="Company Name">
+                                </div>
                                 <div class="col-lg-6 mb-2">
-                                    <label>{{ __('Buisness Name') }}</label>
-                                    <input type="text" value="{{ $category->name }}" name="name" required class="form-control" placeholder="{{ __('Enter Buisness Name') }}">
+                                    <label>Address</label>
+                                    <input type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Adress">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
-                                    <label>{{ __('Status') }}</label>
-                                    <div class="form-control d-flex justify-content-between align-items-center radio-switcher">
-                                        <p class="dynamic-text mb-0">{{ $category->status == 1 ? 'Active' : 'Deactive' }}</p>
-                                        <label class="switch m-0">
-                                            <input type="checkbox" name="status" class="change-text" {{ $category->status == 1 ? 'checked' : '' }}>
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
+                                    <label>Email</label>
+                                    <input type="text" name="email" class="form-control" rows="3" placeholder="Enter Company Adress">
                                 </div>
 
-                                <div class="col-lg-12 mb-2">
-                                    <label>{{ __('Description') }}</label>
-                                    <textarea type="text" name="description" class="form-control" placeholder="{{ __('Enter Description') }}">{{ $category->description }}</textarea>
+                                <div class="col-lg-6 mb-2">
+                                    <label>Phone Number</label>
+                                    <input type="text" name="contact_number" class="form-control" rows="3" placeholder="Enter Company Adress">
                                 </div>
 
                                 <div class="col-lg-12">

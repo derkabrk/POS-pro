@@ -21,12 +21,22 @@
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
-                                    <label>Business Name</label>
+                                    <label>Company Name</label>
                                     <input type="text" name="name" required class="form-control" placeholder="Company Name">
                                 </div>
-                                <div class="col-lg-12 mb-2">
+                                <div class="col-lg-6 mb-2">
                                     <label>Address</label>
-                                    <textarea type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Adress"></textarea>
+                                    <input type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Adress">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>Email</label>
+                                    <input type="text" name="email" class="form-control" rows="3" placeholder="Enter Company Adress">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>Phone Number</label>
+                                    <input type="text" name="contact_number" class="form-control" rows="3" placeholder="Enter Company Adress">
                                 </div>
 
                                 <div class="col-lg-12">
