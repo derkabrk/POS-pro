@@ -10,13 +10,13 @@ class AcnooShippingCompaniesController extends Controller
 {
     public function index()
     {
-        $categories = ShippingCompanies::latest()->paginate(20);
-        return view('admin.shipping-companies.index', compact('categories'));
+        $shippingCompanies = ShippingCompanies::latest()->paginate(20);
+        return view('admin.shipping-companies.index', compact('shippingCompanies'));
     }
 
     public function acnooFilter(Request $request)
     {
-        $categories = ShippingCompanies::when(request('search'), function ($q) {
+        $shippingCompanies = ShippingCompanies::when(request('search'), function ($q) {
             $q->where(function ($q) {
                 $q->where('name', 'like', '%' . request('search') . '%')
                     ->orWhere('description', 'like', '%' . request('search') . '%');
@@ -27,7 +27,7 @@ class AcnooShippingCompaniesController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'data' => view('admin.shipping-companies.datas', compact('categories'))->render()
+                'data' => view('admin.shipping-companies.datas', compact('shippingCompanies'))->render()
             ]);
         }
 
@@ -40,21 +40,26 @@ class AcnooShippingCompaniesController extends Controller
         return view('admin.shipping-companies.create');
     }
 
+ 
     public function store(Request $request)
     {
-
-        $request->validate([
-            'address' => 'nullable|string|max:255',
+        // **Validation**
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'contact_number' => 'nullable|string|max:20',
+            'email' => 'required|email|unique:shipping_companies,email',
+            'address' => 'nullable|string|max:255',
         ]);
 
-        ShippingCompanies::create($request);
+        // **Store data**
+        ShippingCompany::create($validatedData);
 
-        return response()->json([
-            'message'   => __('Shipping Company saved successfully'),
-            'redirect'  => route('admin.business-categories.index')
+       return response()->json([
+       'message'   => __('Shipping Company saved successfully'),
+       'redirect'  => route('admin.business-shipping-companies.index')
         ]);
     }
+
 
     public function edit($id)
     {
@@ -64,17 +69,18 @@ class AcnooShippingCompaniesController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'in:on',
-            'description' => 'nullable|string|max:255',
-            'name' => 'required|string|max:255,name,' . $id,
-        ]);
+        $shippingCompany = ShippingCompany::findOrFail($id);
 
-        $category = ShippingCompanies::find($id);
-
-        $category->update($request->except('status') + [
-            'status' => $request->status ? 1 : 0,
+        // **Validation**
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_number' => 'nullable|string|max:20',
+            'email' => 'required|email|unique:shipping_companies,email,'.$id,
+            'address' => 'nullable|string|max:255',
         ]);
+    
+        // **Update record**
+        $shippingCompany->update($validatedData);
 
         return response()->json([
             'message'   => __('Category updated successfully'),

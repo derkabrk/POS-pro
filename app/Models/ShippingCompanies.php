@@ -17,5 +17,7 @@ class ShippingCompanies extends Model
     protected $fillable = [
         'name',
         'address',
+        'contact_number',
+        'email',
     ];
 }
