@@ -10,7 +10,7 @@
         <div class="card border-0">
             <div class="card-bodys">
                 <div class="table-header p-16">
-                    <h4>{{__('Add new Category')}}</h4>
+                    <h4>Add New Company</h4>
                     @can('shipping-companies-read')
                         <a href="{{ route('admin.shipping-companies.index') }}" class="add-order-btn rounded-2 {{ Route::is('admin.shipping-companies.create') ? 'active' : '' }}"><i class="far fa-list me-1" aria-hidden="true"></i> {{ __('View List') }}</a>
                     @endcan
@@ -21,26 +21,12 @@
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
-                                    <label>{{ __('Buisness Name') }}</label>
-                                    <input type="text" name="name" required class="form-control" placeholder="{{ __('Enter Buisness Name') }}">
+                                    <label>Business Name</label>
+                                    <input type="text" name="name" required class="form-control" placeholder="Company Name">
                                 </div>
-
-                                <div class="col-lg-6 mb-2">
-                                    <div class="col-lg-12">
-                                        <label>{{ __('Status') }}</label>
-                                        <div class="form-control d-flex justify-content-between align-items-center radio-switcher">
-                                            <p class="dynamic-text mb-0">{{ __('Active') }}</p>
-                                            <label class="switch m-0">
-                                                <input type="checkbox" name="status" class="change-text" checked>
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="col-lg-12 mb-2">
-                                    <label>{{ __('Description') }}</label>
-                                    <textarea type="text" name="description" class="form-control" rows="3" placeholder="{{ __('Enter Description') }}"></textarea>
+                                    <label>Address</label>
+                                    <textarea type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Adress"></textarea>
                                 </div>
 
                                 <div class="col-lg-12">

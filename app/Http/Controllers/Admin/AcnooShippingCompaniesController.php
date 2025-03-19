@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\BusinessCategory;
+use App\Models\ShippingCompanies;
 use Illuminate\Http\Request;
 
 class AcnooShippingCompaniesController extends Controller
 {
     public function index()
     {
-        $categories = BusinessCategory::latest()->paginate(20);
+        $categories = ShippingCompanies::latest()->paginate(20);
         return view('admin.shipping-companies.index', compact('categories'));
     }
 
     public function acnooFilter(Request $request)
     {
-        $categories = BusinessCategory::when(request('search'), function ($q) {
+        $categories = ShippingCompanies::when(request('search'), function ($q) {
             $q->where(function ($q) {
                 $q->where('name', 'like', '%' . request('search') . '%')
                     ->orWhere('description', 'like', '%' . request('search') . '%');
@@ -44,24 +44,21 @@ class AcnooShippingCompaniesController extends Controller
     {
 
         $request->validate([
-            'status' => 'nullable|in:on',
-            'description' => 'nullable|string|max:255',
-            'name' => 'required|string|unique:business_categories|max:255',
+            'address' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
         ]);
 
-        BusinessCategory::create($request->except('status') + [
-            'status' => $request->status ? 1 : 0,
-        ]);
+        ShippingCompanies::create($request);
 
         return response()->json([
-            'message'   => __('Category saved successfully'),
+            'message'   => __('Shipping Company saved successfully'),
             'redirect'  => route('admin.business-categories.index')
         ]);
     }
 
     public function edit($id)
     {
-        $category = BusinessCategory::find($id);
+        $category = ShippingCompanies::find($id);
         return view('admin.shipping-companies.edit', compact('category'));
     }
 
@@ -70,10 +67,10 @@ class AcnooShippingCompaniesController extends Controller
         $request->validate([
             'status' => 'in:on',
             'description' => 'nullable|string|max:255',
-            'name' => 'required|string|max:255|unique:business_categories,name,' . $id,
+            'name' => 'required|string|max:255,name,' . $id,
         ]);
 
-        $category = BusinessCategory::find($id);
+        $category = ShippingCompanies::find($id);
 
         $category->update($request->except('status') + [
             'status' => $request->status ? 1 : 0,
@@ -87,7 +84,7 @@ class AcnooShippingCompaniesController extends Controller
 
     public function destroy($id)
     {
-        $category = BusinessCategory::findOrFail($id);
+        $category = ShippingCompanies::findOrFail($id);
         $category->delete();
         return response()->json([
             'message'   => __('Category deleted successfully'),
@@ -97,7 +94,7 @@ class AcnooShippingCompaniesController extends Controller
 
     public function deleteAll(Request $request)
     {
-        BusinessCategory::whereIn('id', $request->ids)->delete();
+        ShippingCompanies::whereIn('id', $request->ids)->delete();
 
         return response()->json([
             'message'   => __('Category deleted successfully'),
@@ -107,7 +104,7 @@ class AcnooShippingCompaniesController extends Controller
 
     public function status(Request $request, $id)
     {
-        $category = BusinessCategory::findOrFail($id);
+        $category = ShippingCompanies::findOrFail($id);
         $category->update(['status' => $request->status]);
         return response()->json(['message' => 'Business category']);
     }
