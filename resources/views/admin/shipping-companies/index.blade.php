@@ -65,6 +65,7 @@
                         <th class="text-start">Email</th>
                         <th class="text-start">Address</th>
                         <th class="text-start">Contact Number</th>
+                        <th class="text-start">Action</th>
                     </tr>
                     </thead>
                     <tbody id="business-category-data" class="searchResults">
