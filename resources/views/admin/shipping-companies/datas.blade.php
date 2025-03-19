@@ -19,11 +19,11 @@
                 </button>
                 <ul class="dropdown-menu">
                     @can('shipping-companiess-update')
-                        <li><a  href="{{ route('admin.shipping-companiess.edit', $shippingCompany->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
+                        <li><a  href="{{ route('admin.shipping-companies.edit', $shippingCompany->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
                     @endcan
                     @can('shipping-companiess-delete')
                         <li>
-                            <a href="{{ route('admin.shipping-companiess.destroy', $shippingCompany->id) }}" class="confirm-action" data-method="DELETE">
+                            <a href="{{ route('admin.shipping-companies.destroy', $shippingCompany->id) }}" class="confirm-action" data-method="DELETE">
                                 <i class="fal fa-trash-alt"></i>
                                 {{ __('Delete') }}
                             </a>
