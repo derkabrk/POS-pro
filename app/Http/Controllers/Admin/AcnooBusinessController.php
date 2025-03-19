@@ -278,7 +278,7 @@ class AcnooBusinessController extends Controller
             $business->update([
                 'subscriptionDate' => now(),
                 'plan_subscribe_id' => $subscribe->id,
-                'will_expire' => $request->date,
+                'will_expire' => $request->expieryDate,
             ]);
 
             sendNotification($subscribe->id, route('admin.subscription-reports.index', ['id' => $subscribe->id]), __('Plan subscribed by ' . auth()->user()->name));
