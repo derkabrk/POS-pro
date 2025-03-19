@@ -1,26 +1,17 @@
-@foreach($categories as $category)
+@foreach($shippingCompanies as $shippingCompany)
     <tr>
         <td class="w-60 checkbox">
             <label class="table-custom-checkbox">
-                <input type="checkbox" class="table-hidden-checkbox checkbox-item" name="ids[]" value="{{ $category->id }}" data-url="{{ route('admin.shipping-companiess.delete-all') }}">
+                <input type="checkbox" class="table-hidden-checkbox checkbox-item" name="ids[]" value="{{ $shippingCompany->id }}" data-url="{{ route('admin.shipping-companiess.delete-all') }}">
                 <span class="table-custom-checkmark custom-checkmark"></span>
             </label>
         </td>
         <td>{{ $loop->index+1 }}</td>
-        <td class="text-start">{{ $category->name }}</td>
-        <td class="text-start">{{ $category->description }}</td>
-        <td class="text-center">
-            @can('shipping-companies-update')
-                <label class="switch">
-                    <input type="checkbox" {{ $category->status == 1 ? 'checked' : '' }} class="status" data-url="{{ route('admin.shipping-companiess.status', $category->id) }}">
-                    <span class="slider round"></span>
-                </label>
-            @else
-                <div class="badge bg-{{ $category->status == 1 ? 'success' : 'danger' }}">
-                    {{ $category->status == 1 ? 'Active' : 'Deactive' }}
-                </div>
-            @endcan
-        </td>
+        <td class="text-start">{{ $shippingCompany->name }}</td>
+        <td class="text-start">{{ $shippingCompany->email }}</td>
+        <td class="text-start">{{ $shippingCompany->address }}</td>
+        <td class="text-start">{{ $shippingCompany->contact_number }}</td>
+
         <td class="print-d-none">
             <div class="dropdown table-action">
                 <button type="button" data-bs-toggle="dropdown">
@@ -28,11 +19,11 @@
                 </button>
                 <ul class="dropdown-menu">
                     @can('shipping-companiess-update')
-                        <li><a  href="{{ route('admin.shipping-companiess.edit', $category->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
+                        <li><a  href="{{ route('admin.shipping-companiess.edit', $shippingCompany->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
                     @endcan
                     @can('shipping-companiess-delete')
                         <li>
-                            <a href="{{ route('admin.shipping-companiess.destroy', $category->id) }}" class="confirm-action" data-method="DELETE">
+                            <a href="{{ route('admin.shipping-companiess.destroy', $shippingCompany->id) }}" class="confirm-action" data-method="DELETE">
                                 <i class="fal fa-trash-alt"></i>
                                 {{ __('Delete') }}
                             </a>

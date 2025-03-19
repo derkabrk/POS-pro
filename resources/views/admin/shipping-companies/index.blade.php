@@ -10,9 +10,9 @@
         <div class="card">
             <div class="card-bodys">
                 <div class="table-header p-16">
-                    <h4>{{ __('Business Categories List') }}</h4>
+                    <h4>Shipping Companies List</h4>
                     @can('banners-create')
-                        <a type="button" href="{{ route('admin.shipping-companies.create')}}" class="add-order-btn rounded-2 {{ Route::is('admin.plans.create') ? 'active' : '' }}" class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>{{ __('Add new Category') }}</a>
+                        <a type="button" href="{{ route('admin.shipping-companies.create')}}" class="add-order-btn rounded-2 {{ Route::is('admin.plans.create') ? 'active' : '' }}" class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>Add New Company</a>
                     @endcan
                 </div>
                 <div class="table-top-form p-16-0">
@@ -61,19 +61,19 @@
                             </th>
                         @endcan
                         <th>{{ __('SL') }}.</th>
-                        <th class="text-start">{{ __('Business Name') }}</th>
-                        <th class="text-start">{{ __('Description') }}</th>
-                        <th>{{ __('Status') }}</th>
-                        <th>{{ __('Action') }}</th>
+                        <th class="text-start">Company Name</th>
+                        <th class="text-start">Email</th>
+                        <th class="text-start">Address</th>
+                        <th class="text-start">Contact Number</th>
                     </tr>
                     </thead>
                     <tbody id="business-category-data" class="searchResults">
-                        @include('admin.business-categories.datas')
+                        @include('admin.shipping-companies.datas')
                     </tbody>
                 </table>
             </div>
             <div class="mt-3">
-                {{ $categories->links('vendor.pagination.bootstrap-5') }}
+                {{ $shippingCompanies->links('vendor.pagination.bootstrap-5') }}
             </div>
         </div>
     </div>
