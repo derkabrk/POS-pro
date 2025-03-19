@@ -2,7 +2,7 @@
     <tr>
         <td class="w-60 checkbox">
             <label class="table-custom-checkbox">
-                <input type="checkbox" class="table-hidden-checkbox checkbox-item" name="ids[]" value="{{ $shippingCompany->id }}" data-url="{{ route('admin.shipping-companiess.delete-all') }}">
+                <input type="checkbox" class="table-hidden-checkbox checkbox-item" name="ids[]" value="{{ $shippingCompany->id }}" data-url="{{ route('admin.shipping-companies.delete-all') }}">
                 <span class="table-custom-checkmark custom-checkmark"></span>
             </label>
         </td>
