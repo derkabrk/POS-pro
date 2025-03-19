@@ -63,8 +63,8 @@ class AcnooShippingCompaniesController extends Controller
 
     public function edit($id)
     {
-        $category = ShippingCompanies::find($id);
-        return view('admin.shipping-companies.edit', compact('category'));
+        $shippingCompany = ShippingCompanies::find($id);
+        return view('admin.shipping-companies.edit', compact('shippingCompany'));
     }
 
     public function update(Request $request, $id)
