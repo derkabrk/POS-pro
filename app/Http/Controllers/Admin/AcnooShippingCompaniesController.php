@@ -56,7 +56,7 @@ class AcnooShippingCompaniesController extends Controller
 
        return response()->json([
        'message'   => __('Shipping Company saved successfully'),
-       'redirect'  => route('admin.business-shipping-companies.index')
+       'redirect'  => route('admin.shipping-companies.index')
         ]);
     }
 
