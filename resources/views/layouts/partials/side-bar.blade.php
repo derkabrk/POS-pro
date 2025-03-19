@@ -58,8 +58,7 @@
                     </a>
                 </li>
             @endcanany
-
-
+            
             @canany(['shipping-companies-read'])
                 <li class="{{ Request::routeIs('admin.shipping-companies.index','admin.shipping-companies.create','admin.shipping-companies.edit') ? 'active' : '' }}">
                     <a href="{{ route('admin.shipping-companies.index') }}" class="active">

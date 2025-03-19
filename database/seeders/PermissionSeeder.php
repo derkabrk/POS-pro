@@ -49,6 +49,7 @@ class PermissionSeeder extends Seeder
                 'business' => 'r,c,u,d',
                 'addons' => 'r,c',
                 'business-categories' => 'r,c,u,d',
+                'shipping-companies'  => 'r,c,u,d',
                 'plans' => 'r,c,u,d',
                 'subscription-reports' => 'r',
                 'features' => 'r,c,u,d',
