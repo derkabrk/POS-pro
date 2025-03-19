@@ -256,6 +256,7 @@ class AcnooBusinessController extends Controller
             'notes' => 'required|string',
             'plan_id' => 'required|exists:plans,id',
             'business_id' => 'required|exists:businesses,id',
+            "expieryDate"=> 'required|date',
         ]);
 
         DB::beginTransaction();
@@ -277,7 +278,7 @@ class AcnooBusinessController extends Controller
             $business->update([
                 'subscriptionDate' => now(),
                 'plan_subscribe_id' => $subscribe->id,
-                'will_expire' => now()->addDays($plan->duration),
+                'will_expire' => $request->date,
             ]);
 
             sendNotification($subscribe->id, route('admin.subscription-reports.index', ['id' => $subscribe->id]), __('Plan subscribed by ' . auth()->user()->name));
