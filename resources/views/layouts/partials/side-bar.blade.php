@@ -47,14 +47,28 @@
             @endcanany
 
             @canany(['business-categories-read'])
-                <li class="{{ Request::routeIs('admin.business-categories.index','admin.business-categories.create','admin.business-categories.edit') ? 'active' : '' }}">
-                    <a href="{{ route('admin.business-categories.index') }}" class="active">
+                <li class="{{ Request::routeIs('admin.shipping-companies.index','admin.shipping-companies.create','admin.shipping-companies.edit') ? 'active' : '' }}">
+                    <a href="{{ route('admin.shipping-companies.index') }}" class="active">
                         <span class="sidebar-icon">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15.625 19.75H4.375C1.715 19.75 0.25 18.285 0.25 15.625V4.375C0.25 1.715 1.715 0.25 4.375 0.25H15.625C18.285 0.25 19.75 1.715 19.75 4.375V15.625C19.75 18.285 18.285 19.75 15.625 19.75ZM4.375 1.75C2.535 1.75 1.75 2.535 1.75 4.375V15.625C1.75 17.465 2.535 18.25 4.375 18.25H15.625C17.465 18.25 18.25 17.465 18.25 15.625V4.375C18.25 2.535 17.465 1.75 15.625 1.75H4.375ZM14.75 14C14.75 13.586 14.414 13.25 14 13.25H6C5.586 13.25 5.25 13.586 5.25 14C5.25 14.414 5.586 14.75 6 14.75H14C14.414 14.75 14.75 14.414 14.75 14ZM13.25 10C13.25 9.586 12.914 9.25 12.5 9.25H7.5C7.086 9.25 6.75 9.586 6.75 10C6.75 10.414 7.086 10.75 7.5 10.75H12.5C12.914 10.75 13.25 10.414 13.25 10ZM11.75 6C11.75 5.586 11.414 5.25 11 5.25H9C8.586 5.25 8.25 5.586 8.25 6C8.25 6.414 8.586 6.75 9 6.75H11C11.414 6.75 11.75 6.414 11.75 6Z" fill="white"/>
                             </svg>
                         </span>
                         {{ __('Business Category') }}
+                    </a>
+                </li>
+            @endcanany
+
+
+            @canany(['business-categories-read'])
+                <li class="{{ Request::routeIs('admin.shipping-companies.index','admin.shipping-companies.create','admin.shipping-companies.edit') ? 'active' : '' }}">
+                    <a href="{{ route('admin.shipping-companies.index') }}" class="active">
+                        <span class="sidebar-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.625 19.75H4.375C1.715 19.75 0.25 18.285 0.25 15.625V4.375C0.25 1.715 1.715 0.25 4.375 0.25H15.625C18.285 0.25 19.75 1.715 19.75 4.375V15.625C19.75 18.285 18.285 19.75 15.625 19.75ZM4.375 1.75C2.535 1.75 1.75 2.535 1.75 4.375V15.625C1.75 17.465 2.535 18.25 4.375 18.25H15.625C17.465 18.25 18.25 17.465 18.25 15.625V4.375C18.25 2.535 17.465 1.75 15.625 1.75H4.375ZM14.75 14C14.75 13.586 14.414 13.25 14 13.25H6C5.586 13.25 5.25 13.586 5.25 14C5.25 14.414 5.586 14.75 6 14.75H14C14.414 14.75 14.75 14.414 14.75 14ZM13.25 10C13.25 9.586 12.914 9.25 12.5 9.25H7.5C7.086 9.25 6.75 9.586 6.75 10C6.75 10.414 7.086 10.75 7.5 10.75H12.5C12.914 10.75 13.25 10.414 13.25 10ZM11.75 6C11.75 5.586 11.414 5.25 11 5.25H9C8.586 5.25 8.25 5.586 8.25 6C8.25 6.414 8.586 6.75 9 6.75H11C11.414 6.75 11.75 6.414 11.75 6Z" fill="white"/>
+                            </svg>
+                        </span>
+                        Shipping Companies
                     </a>
                 </li>
             @endcanany
