@@ -125,6 +125,14 @@
                         </div>
 
                         <div class="mt-3">
+                            <label>Expiery Date</label>
+                            <input type="text" id="datepicker" name="date" class="form-control">
+                        </div>
+
+                        
+
+
+                       <!--  <div class="mt-3">
                             <label for="gateway_id">{{ __('Payment Gateways') }}</label>
                             <div class="gpt-up-down-arrow position-relative">
                             <select name="gateway_id" id="gateway_id" class="form-control">
@@ -135,7 +143,7 @@
                             </select>
                             <span></span>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="mt-3">
                             <label>{{ __('Notes') }}</label>
