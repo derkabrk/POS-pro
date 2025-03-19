@@ -18,10 +18,10 @@
                     <i class="far fa-ellipsis-v"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    @can('shipping-companiess-update')
+                    @can('shipping-companies-update')
                         <li><a  href="{{ route('admin.shipping-companies.edit', $shippingCompany->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
                     @endcan
-                    @can('shipping-companiess-delete')
+                    @can('shipping-companies-delete')
                         <li>
                             <a href="{{ route('admin.shipping-companies.destroy', $shippingCompany->id) }}" class="confirm-action" data-method="DELETE">
                                 <i class="fal fa-trash-alt"></i>
