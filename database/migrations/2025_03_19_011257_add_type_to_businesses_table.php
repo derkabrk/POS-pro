@@ -13,7 +13,7 @@ return new class extends Migration
 
     {
         Schema::table('businesses', function (Blueprint $table) {
-            $table->enum('status', ['e-commerce', 'business', 'both'])->default('business');
+            $table->enum('type', ['e-commerce', 'business', 'both'])->default('business');
         });
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('businesses', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('type');
         });
     }
 };
