@@ -16,7 +16,7 @@
                     @endcan
                 </div>
                 <div class="order-form-section p-16">
-                    <form action="{{ route('admin.shipping-companies.update',$category->id) }}" method="POST" class="ajaxform_instant_reload">
+                    <form action="{{ route('admin.shipping-companies.update',$shippingCompany->id) }}" method="POST" class="ajaxform_instant_reload">
                         @csrf
                         @method('put')
 
