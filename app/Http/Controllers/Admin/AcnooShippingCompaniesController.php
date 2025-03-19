@@ -52,7 +52,7 @@ class AcnooShippingCompaniesController extends Controller
         ]);
 
         // **Store data**
-        ShippingCompany::create($validatedData);
+        ShippingCompanies::create($validatedData);
 
        return response()->json([
        'message'   => __('Shipping Company saved successfully'),
@@ -69,7 +69,7 @@ class AcnooShippingCompaniesController extends Controller
 
     public function update(Request $request, $id)
     {
-        $shippingCompany = ShippingCompany::findOrFail($id);
+        $shippingCompany = ShippingCompanies::findOrFail($id);
 
         // **Validation**
         $validatedData = $request->validate([

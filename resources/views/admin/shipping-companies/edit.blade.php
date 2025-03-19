@@ -33,7 +33,7 @@
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Email</label>
-                                    <input type="text" name="email" class="form-control" rows="3" placeholder="Enter Company Adress">
+                                    <input type="email" name="email" class="form-control" rows="3" placeholder="Enter Company Adress">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
