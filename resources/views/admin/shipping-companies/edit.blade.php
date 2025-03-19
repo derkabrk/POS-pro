@@ -10,7 +10,7 @@
         <div class="card">
             <div class="card-bodys">
                 <div class="table-header p-16">
-                    <h4>{{ __('Edit Business Category') }}</h4>
+                    <h4>Edit Company's Info</h4>
                     @can('shipping-companies-read')
                         <a href="{{ route('admin.shipping-companies.index') }}" class="add-order-btn rounded-2 active"><i class="far fa-list me-1" aria-hidden="true"></i> {{ __('View List') }}</a>
                     @endcan
@@ -24,21 +24,24 @@
                             <div class="row">
                             <div class="col-lg-6 mb-2">
                         <label>Company Name</label>
-                       <input type="text" name="name" required class="form-control" placeholder="Company Name">
+                       <input type="text" value="{{ $shippingCompany->name }}" name="name" required class="form-control" placeholder="{{ __('Enter Buisness Name') }}">
+
                                 </div>
                                 <div class="col-lg-6 mb-2">
                                     <label>Address</label>
-                                    <input type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Adress">
-                                </div>
+                                    <input type="text" value="{{ $shippingCompany->address }}" name="address" required class="form-control" placeholder="{{ __('Enter Buisness Name') }}">
+                                    </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Email</label>
-                                    <input type="email" name="email" class="form-control" rows="3" placeholder="Enter Company Adress">
+                                    <input type="email" value="{{ $shippingCompany->email }}" name="email" required class="form-control" placeholder="{{ __('Enter Buisness Name') }}">
+
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Phone Number</label>
-                                    <input type="text" name="contact_number" class="form-control" rows="3" placeholder="Enter Company Adress">
+                                    <input type="tel" value="{{ $shippingCompany->contact_number }}" name="contact_number" required class="form-control" placeholder="{{ __('Enter Buisness Name') }}">
+
                                 </div>
 
                                 <div class="col-lg-12">
