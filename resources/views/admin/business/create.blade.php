@@ -60,9 +60,9 @@
                                         <select name="type"
                                                 class="form-control table-select w-100 role">
                                         
-                                                <option value="e-commerce">E-commerce </option>
-                                                <option value="business">Business </option>
-                                                <option value="both">Both</option>
+                                                <option value="e-commerce"> E-commerce </option>
+                                                <option value="business"> Business </option>
+                                                <option value="both"> Both</option>
                                            
                                         </select>
                                         <span></span>

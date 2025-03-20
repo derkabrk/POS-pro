@@ -33,7 +33,7 @@
                             data-image="{{ asset($business->pictureUrl ?? 'assets/img/default-shop.svg') }}"
                             data-name="{{ $business->companyName }}" data-address="{{ $business->address }}"
                             data-category="{{ $business->category->name ?? '' }}"
-                            data-type="{{ $business->type ?? '' }}"
+                            data-type="{{ $business->type-value ?? '' }}"
                             data-phone="{{ $business->phoneNumber }}"
                             data-package="{{ $business->enrolled_plan->plan->subscriptionName ?? '' }}"
                             data-last_enroll="{{ formatted_date($business->subscriptionDate) }}"
