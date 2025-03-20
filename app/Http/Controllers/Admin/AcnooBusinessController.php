@@ -191,7 +191,7 @@ class AcnooBusinessController extends Controller
                 'phoneNumber' => $request->phoneNumber,
                 'shopOpeningBalance' => $request->shopOpeningBalance,
                 'business_category_id' => $request->business_category_id,
-                'type'=>  request->type,
+                'type'=>  $request->type,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl', $business->pictureUrl) : $business->pictureUrl,
             ]);
 

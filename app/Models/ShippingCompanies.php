@@ -19,6 +19,8 @@ class ShippingCompanies extends Model
         'address',
         'contact_number',
         'email',
+        'first_r_credential_lable',
+        'second_r_credential_lable',
         'create_api_url',
         'update_api_url',
         'delete_api_url',
