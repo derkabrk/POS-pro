@@ -19,5 +19,10 @@ class ShippingCompanies extends Model
         'address',
         'contact_number',
         'email',
+        'create_api_url',
+        'update_api_url',
+        'delete_api_url',
+        'list_api_url',
+        'track_api_url',
     ];
 }
