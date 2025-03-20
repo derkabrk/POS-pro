@@ -83,7 +83,7 @@ class AcnooBusinessController extends Controller
             'shopOpeningBalance' => 'nullable|numeric',
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
-            'type' => 'required|string',
+            'type' => 'required|in:e-commerce,business,both'
         ]);
 
         DB::beginTransaction();
