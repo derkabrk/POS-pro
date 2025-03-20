@@ -26,18 +26,47 @@
                                 </div>
                                 <div class="col-lg-6 mb-2">
                                     <label>Address</label>
-                                    <input type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Adress">
+                                    <input type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Address">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Email</label>
-                                    <input type="text" name="email" class="form-control" rows="3" placeholder="Enter Company Adress">
+                                    <input type="text" name="email" class="form-control" rows="3" placeholder="Enter Company Email">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Phone Number</label>
-                                    <input type="text" name="contact_number" class="form-control" rows="3" placeholder="Enter Company Adress">
+                                    <input type="text" name="contact_number" class="form-control" rows="3" placeholder="Enter Company Phone number">
                                 </div>
+
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>Create Api</label>
+                                    <input type="text" name="create_api_url" class="form-control"  placeholder="Enter Create Api">
+                                </div>
+
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>Update Api</label>
+                                    <input type="text" name="update_api_url" class="form-control" placeholder="Enter Update Api">
+                                </div>
+
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>Delete Api</label>
+                                    <input type="text" name="delete_api_url" class="form-control" placeholder="Enter Delete Api">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>List Api</label>
+                                    <input type="text" name="list_api_url" class="form-control" placeholder="Enter List Api">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>Track Api</label>
+                                    <input type="text" name="track_api_url" class="form-control" placeholder="Enter Track Api">
+                                </div>
+
 
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
