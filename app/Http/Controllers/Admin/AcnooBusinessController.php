@@ -104,7 +104,7 @@ class AcnooBusinessController extends Controller
                 'business_category_id' => $request->business_category_id,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'user_id' => $user->id,
-                'type'=>   $enumValue
+                'type'=>  request->type,
             ]);
 
             
@@ -179,7 +179,7 @@ class AcnooBusinessController extends Controller
 
         DB::beginTransaction();
 
-        $enumValue = BusinessType::from($request->input('type'));
+        
 
 
         try {
@@ -191,7 +191,7 @@ class AcnooBusinessController extends Controller
                 'phoneNumber' => $request->phoneNumber,
                 'shopOpeningBalance' => $request->shopOpeningBalance,
                 'business_category_id' => $request->business_category_id,
-                'type'=>  $enumValue,
+                'type'=>  request->type,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl', $business->pictureUrl) : $business->pictureUrl,
             ]);
 
