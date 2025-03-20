@@ -68,6 +68,12 @@
                                                 <option value="both">Both</option>
                                            
                                         </select>
+
+                                        <select name="type" class="form-control table-select w-100 role">
+    <option value="e-commerce" {{ $type == 'e-commerce' ? 'selected' : '' }}>E-commerce</option>
+    <option value="business" {{ $type == 'business' ? 'selected' : '' }}>Business</option>
+    <option value="both" {{ $type == 'both' ? 'selected' : '' }}>Both</option>
+</select>
                                         <span></span>
                                     </div>
                                 </div>
