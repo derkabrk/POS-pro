@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\BusinessType;
 
 class Business extends Model
 {
@@ -27,6 +28,11 @@ class Business extends Model
         'shopOpeningBalance',
         'vat_name',
         'vat_no',
+        "type",
+    ];
+
+    protected $casts = [
+        'type' => BusinessType::class,
     ];
 
     public function enrolled_plan()
