@@ -26,7 +26,8 @@ class Business extends Model
         'remainingShopBalance',
         'shopOpeningBalance',
         'vat_name',
-        'vat_no',
+	'vat_no',
+	'type',
     ];
 
     public function enrolled_plan()
