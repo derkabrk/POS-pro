@@ -26,17 +26,17 @@
                                 </div>
                                 <div class="col-lg-6 mb-2">
                                     <label>Address</label>
-                                    <input type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Address">
+                                    <input type="text" name="address" class="form-control" placeholder="Enter Company Address">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Email</label>
-                                    <input type="text" name="email" class="form-control" rows="3" placeholder="Enter Company Email">
+                                    <input type="text" name="email" class="form-control" placeholder="Enter Company Email">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Phone Number</label>
-                                    <input type="text" name="contact_number" class="form-control" rows="3" placeholder="Enter Company Phone number">
+                                    <input type="text" name="contact_number" class="form-control" placeholder="Enter Company Phone number">
                                 </div>
 
 
@@ -69,12 +69,12 @@
 
                                 <div class="col-lg-6 mb-2">
                                     <label>First Required Credential</label>
-                                    <input type="text" name="first_r_credential_lable" class="form-control" placeholder="Enter Track Api">
+                                    <input type="text" name="first_r_credential_lable" class="form-control" placeholder="Enter First Required Credential">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Second Required Credential</label>
-                                    <input type="text" name="second_r_credential_lable" class="form-control" placeholder="Enter Track Api">
+                                    <input type="text" name="second_r_credential_lable" class="form-control" placeholder="Enter Second Required Credential">
                                 </div>
 
 
