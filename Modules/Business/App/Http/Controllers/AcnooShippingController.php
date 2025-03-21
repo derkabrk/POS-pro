@@ -14,7 +14,7 @@ class AcnooShippingController extends Controller
 
     public function index()
     {
-        $Shipping = Shipping::latest()->paginate(20);
-        return view('business::shipping.index', compact('Shipping'));
+        $shipping = Shipping::latest()->paginate(20);
+        return view('business::shipping.index', compact('shipping'));
     }
 }
