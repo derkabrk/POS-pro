@@ -41,7 +41,7 @@
                     </tr>
                     </thead>
                     <tbody id="business-category-data" class="searchResults">
-                        @include('business.shipping.datas')
+                        @include('business::shipping.datas')
                     </tbody>
                 </table>
             </div>
