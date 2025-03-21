@@ -45,7 +45,7 @@
                 </table>
             </div>
             <div class="mt-3">
-                {{ $shippingCompanies->links('vendor.pagination.bootstrap-5') }}
+                {{ $shippings->links('vendor.pagination.bootstrap-5') }}
             </div>
         </div>
     </div>
