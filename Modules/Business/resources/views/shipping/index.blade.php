@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-{{ __('Business Categories List') }}
+Shipping Services
 @endsection
 
 @section('main_content')
@@ -53,9 +53,6 @@
 
 @endsection
 
-@push('modal')
-    @include('business.components.multi-delete-modal')
-@endpush
 
 @push('js')
     <script src="{{ asset('assets/js/custom/custom.js') }}"></script>

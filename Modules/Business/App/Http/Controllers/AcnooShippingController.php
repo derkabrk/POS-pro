@@ -23,6 +23,10 @@ class AcnooShippingController extends Controller
 
     public function store(Request $request)
     {
+
+        $shipping_companys = ShippingCompanies::latest()->get();
+
+        
         $request->validate([
             'first_r_credential' => 'nullable|max:250',
             'second_r_credential' => 'required|max:250',
