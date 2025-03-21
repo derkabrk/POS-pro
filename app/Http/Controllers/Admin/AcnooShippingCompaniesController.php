@@ -56,6 +56,8 @@ class AcnooShippingCompaniesController extends Controller
             'update_api_url'  => 'required|string|max:255',
             'list_api_url'    => 'required|string|max:255',
             'track_api_url'   => 'required|string|max:255',
+            'first_r_credential'   => 'required|string|max:255',
+            'second_r_credential'   => 'required|string|max:255',
         ]);
 
         // **Store data**
@@ -91,6 +93,8 @@ class AcnooShippingCompaniesController extends Controller
             'update_api_url'  => 'required|string|max:255',
             'list_api_url'    => 'required|string|max:255',
             'track_api_url'   => 'required|string|max:255',
+            'first_r_credential'   => 'required|string|max:255',
+            'second_r_credential'   => 'required|string|max:255',
         ]);
     
         // **Update record**
