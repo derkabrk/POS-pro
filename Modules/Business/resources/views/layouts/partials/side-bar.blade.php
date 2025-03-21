@@ -176,7 +176,7 @@
                                 href="{{ route('business.shipping.index') }}">All Services</a>
                         </li>
                         <li><a class="{{ Request::routeIs('business.shipping.create')}}"
-                                href="{{ route('business.shipping.create'}}">Add Service</a>
+                                href="{{ route('business.shipping.create')}}">Add Service</a>
                         </li>
                     </ul>
                 </li>
