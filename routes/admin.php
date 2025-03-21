@@ -89,6 +89,12 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::post('shipping-companies/status/{id}',[ADMIN\AcnooShippingCompaniesController::class,'status'])->name('shipping-companies.status');
     Route::post('shipping-companies/delete-all', [ADMIN\AcnooShippingCompaniesController::class,'deleteAll'])->name('shipping-companies.delete-all');
 
+
+    Route::resource('shipping',ADMIN\AcnooShippingController::class)->except('show');
+    Route::post('shipping/filter', [ADMIN\AcnooShippingController::class, 'acnooFilter'])->name('shipping.filter');
+    Route::post('shipping/status/{id}',[ADMIN\AcnooShippingController::class,'status'])->name('shipping.status');
+    Route::post('shipping/delete-all', [ADMIN\AcnooShippingController::class,'deleteAll'])->name('shipping.delete-all');
+
     Route::resource('profiles', ADMIN\ProfileController::class)->only('index', 'update');
 
     Route::resource('subscription-reports', ADMIN\SubscriptionReport::class)->only('index');

@@ -11,7 +11,7 @@ class AcnooShippingCompaniesController extends Controller
     public function index()
     {
         $shippingCompanies = ShippingCompanies::latest()->paginate(20);
-        return view('admin.shipping-companies.index', compact('shippingCompanies'));
+        return view('admin.shipping.index', compact('shippingCompanies'));
     }
 
     public function acnooFilter(Request $request)
@@ -27,7 +27,7 @@ class AcnooShippingCompaniesController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'data' => view('admin.shipping-companies.datas', compact('shippingCompanies'))->render()
+                'data' => view('admin.shipping.datas', compact('shippingCompanies'))->render()
             ]);
         }
 
@@ -37,7 +37,7 @@ class AcnooShippingCompaniesController extends Controller
 
     public function create()
     {
-        return view('admin.shipping-companies.create');
+        return view('admin.shipping.create');
     }
 
  
@@ -64,7 +64,7 @@ class AcnooShippingCompaniesController extends Controller
 
        return response()->json([
        'message'   => __('Shipping Company saved successfully'),
-       'redirect'  => route('admin.shipping-companies.index')
+       'redirect'  => route('admin.shipping.index')
         ]);
     }
 
@@ -72,7 +72,7 @@ class AcnooShippingCompaniesController extends Controller
     public function edit($id)
     {
         $shippingCompany = ShippingCompanies::find($id);
-        return view('admin.shipping-companies.edit', compact('shippingCompany'));
+        return view('admin.shipping.edit', compact('shippingCompany'));
     }
 
     public function update(Request $request, $id)
@@ -100,7 +100,7 @@ class AcnooShippingCompaniesController extends Controller
 
         return response()->json([
             'message'   => __('Category updated successfully'),
-            'redirect'  => route('admin.shipping-companies.index')
+            'redirect'  => route('admin.shipping.index')
         ]);
     }
 
@@ -110,7 +110,7 @@ class AcnooShippingCompaniesController extends Controller
         $category->delete();
         return response()->json([
             'message'   => __('Category deleted successfully'),
-            'redirect'  => route('admin.shipping-companies.index')
+            'redirect'  => route('admin.shipping.index')
         ]);
     }
 
@@ -120,7 +120,7 @@ class AcnooShippingCompaniesController extends Controller
 
         return response()->json([
             'message'   => __('Category deleted successfully'),
-            'redirect'  => route('admin.shipping-companies.index')
+            'redirect'  => route('admin.shipping.index')
         ]);
     }
 
