@@ -21,24 +21,34 @@
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
-                                    <label>Company Name</label>
+                                    <label>Platform Name</label>
                                     <input type="text" name="name" required class="form-control" placeholder="Company Name">
                                 </div>
+
+
                                 <div class="col-lg-6 mb-2">
-                                    <label>Address</label>
-                                    <input type="text" name="address" class="form-control" rows="3" placeholder="Enter Company Address">
+                                    <label> Select Service </label>
+                                    <div class="gpt-up-down-arrow position-relative">
+                                        <select name="shipping_company_id"
+                                                class="form-control table-select w-100 role">
+                                            <option value="">  Select Service </option>
+                                            @foreach ($shipping_companys as $shipping_company)
+                                                <option value="{{ $shipping_company->id }}"> {{ ucfirst($shipping_company->name) }} </option>
+                                            @endforeach
+                                        </select>
+                                        <span></span>
+                                    </div>
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
-                                    <label>Email</label>
-                                    <input type="text" name="email" class="form-control" rows="3" placeholder="Enter Company Email">
+                                    <label>First Required Credential</label>
+                                    <input type="text" name="first_r_credential" class="form-control" placeholder="Enter First Required Credential">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
-                                    <label>Phone Number</label>
-                                    <input type="text" name="contact_number" class="form-control" rows="3" placeholder="Enter Company Phone number">
+                                    <label>Second Required Credential</label>
+                                    <input type="text" name="second_r_credential" class="form-control" placeholder="Enter Second Required Credential">
                                 </div>
-
 
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
