@@ -15,7 +15,9 @@
                         <a type="button" href="{{ route('business.shipping-companies.create')}}" class="add-order-btn rounded-2 {{ Route::is('business.plans.create') ? 'active' : '' }}" class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>Add New Company</a>
                     @endcan
                 </div>
-                <div class="table-top-form p-16-0">
+
+
+        <!--        <div class="table-top-form p-16-0">
                     <form action="{{ route('business.shipping-companies.filter') }}" method="post" class="filter-form" table="#business-category-data">
                         @csrf
                         <div class="table-top-left d-flex gap-3 margin-l-16">
@@ -42,6 +44,8 @@
                     </form>
 
                 </div>
+
+-->
             </div>
 
 
