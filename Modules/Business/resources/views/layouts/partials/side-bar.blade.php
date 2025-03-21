@@ -172,11 +172,11 @@
                         Shipping
                     </a>
                     <ul>
-                        <li><a class="{{ Request::routeIs('business.shipping.index') && request('type') == 'Supplier' ? 'active' : '' }}"
-                                href="{{ route('business.shipping.index', ['type' => 'Supplier']) }}">All Services</a>
+                        <li><a class="{{ Request::routeIs('business.shipping.index') }}"
+                                href="{{ route('business.shipping.index') }}">All Services</a>
                         </li>
-                        <li><a class="{{ Request::routeIs('business.shipping.create') && request('type') == 'Supplier' ? 'active' : '' }}"
-                                href="{{ route('business.shipping.create', ['type' => 'Supplier']) }}">Add Service</a>
+                        <li><a class="{{ Request::routeIs('business.shipping.create')}}"
+                                href="{{ route('business.shipping.create'}}">Add Service</a>
                         </li>
                     </ul>
                 </li>
