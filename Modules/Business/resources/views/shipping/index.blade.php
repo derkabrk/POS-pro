@@ -33,10 +33,9 @@
                             </th>
                         @endcan
                         <th>{{ __('SL') }}.</th>
-                        <th class="text-start">Company Name</th>
-                        <th class="text-start">Email</th>
-                        <th class="text-start">Address</th>
-                        <th class="text-start">Contact Number</th>
+                        <th class="text-start">Name</th>
+                        <th class="text-start">Platform</th>
+                        <th class="text-start">Active</th>
                         <th class="text-start">Action</th>
                     </tr>
                     </thead>

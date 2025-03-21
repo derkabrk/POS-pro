@@ -1,16 +1,15 @@
-@foreach($Shipping as $Shipping)
+@foreach($shippings as $shipping)
     <tr>
         <td class="w-60 checkbox">
             <label class="table-custom-checkbox">
-                <input type="checkbox" class="table-hidden-checkbox checkbox-item" name="ids[]" value="{{ $Shipping->id }}" data-url="{{ route('admin.shipping-companies.delete-all') }}">
+                <input type="checkbox" class="table-hidden-checkbox checkbox-item" name="ids[]" value="{{ $shipping->id }}" data-url="{{ route('business::shipping.delete-all') }}">
                 <span class="table-custom-checkmark custom-checkmark"></span>
             </label>
         </td>
         <td>{{ $loop->index+1 }}</td>
-        <td class="text-start">{{ $Shipping->name }}</td>
-        <td class="text-start">{{ $Shipping->email }}</td>
-        <td class="text-start">{{ $Shipping->address }}</td>
-        <td class="text-start">{{ $Shipping->contact_number }}</td>
+        <td class="text-start">{{ $shipping->name }}</td>
+        <td class="text-start">{{ $shipping->shipping_company }}</td>
+        <td class="text-start">{{ $shipping->is_active }}</td>
 
         <td class="print-d-none">
             <div class="dropdown table-action">
@@ -18,17 +17,16 @@
                     <i class="far fa-ellipsis-v"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    @can('shipping-companies-update')
-                        <li><a  href="{{ route('admin.shipping-companies.edit', $Shipping->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
-                    @endcan
-                    @can('shipping-companies-delete')
+         
+                        <li><a  href="{{ route('business::shipping.edit', $shipping->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
+
                         <li>
-                            <a href="{{ route('admin.shipping-companies.destroy', $Shipping->id) }}" class="confirm-action" data-method="DELETE">
+                            <a href="{{ route('business::shipping.destroy', $shipping->id) }}" class="confirm-action" data-method="DELETE">
                                 <i class="fal fa-trash-alt"></i>
                                 {{ __('Delete') }}
                             </a>
                         </li>
-                    @endcan
+              
                 </ul>
             </div>
         </td>
