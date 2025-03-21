@@ -1,4 +1,5 @@
-@extends('layouts.master')
+@extends('business::layouts.master')
+
 
 @section('title')
 Shipping Services
@@ -11,9 +12,9 @@ Shipping Services
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>Shipping Companies List</h4>
-                    @can('banners-create')
+                   
                         <a type="button" href="{{ route('business.shipping.create')}}" class="add-order-btn rounded-2 class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>Add New Company</a>
-                    @endcan
+                
                 </div>
 
             </div>
@@ -22,7 +23,7 @@ Shipping Services
                 <table class="table" id="datatable">
                     <thead>
                     <tr>
-                        @can('banners-delete')
+                       
                             <th>
                                 <div class="d-flex align-items-center gap-3">
                                     <label class="table-custom-checkbox">
@@ -31,7 +32,7 @@ Shipping Services
                                     </label>
                                 </div>
                             </th>
-                        @endcan
+                        
                         <th>{{ __('SL') }}.</th>
                         <th class="text-start">Name</th>
                         <th class="text-start">Platform</th>
