@@ -6,6 +6,7 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\Gateway;
 use App\Models\Business;
+use App\Enums\BusinessType;
 use App\Helpers\HasUploader;
 use Illuminate\Http\Request;
 use App\Models\PlanSubscribe;
@@ -92,6 +93,8 @@ class AcnooBusinessController extends Controller
 
             $user = auth()->user();
 
+            $enumValue = BusinessType::from($request->input('type'));
+
             $business = Business::create([
                 'companyName' => $request->companyName,
                 'address' => $request->address,
@@ -101,8 +104,10 @@ class AcnooBusinessController extends Controller
                 'business_category_id' => $request->business_category_id,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'user_id' => $user->id,
-                'type'=>  $request->type,
+                'type'=>  request->type,
             ]);
+
+            
 
             User::create([
                 'business_id'=>$business->id,
@@ -169,11 +174,16 @@ class AcnooBusinessController extends Controller
             'shopOpeningBalance' => 'nullable|numeric',
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
+            'type' => 'required|in:e-commerce,business,both'
         ]);
 
         DB::beginTransaction();
 
+        $enumValue = BusinessType::from($request->input('type'));
+
+
         try {
+            
             $business = Business::findOrFail($id);
 
             $business->update([
@@ -182,6 +192,7 @@ class AcnooBusinessController extends Controller
                 'phoneNumber' => $request->phoneNumber,
                 'shopOpeningBalance' => $request->shopOpeningBalance,
                 'business_category_id' => $request->business_category_id,
+                'type'=>  $request->type,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl', $business->pictureUrl) : $business->pictureUrl,
             ]);
 
