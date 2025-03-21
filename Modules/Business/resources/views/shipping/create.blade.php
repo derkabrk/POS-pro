@@ -40,34 +40,6 @@
                                 </div>
 
 
-                                <div class="col-lg-6 mb-2">
-                                    <label>Create Api</label>
-                                    <input type="text" name="create_api_url" class="form-control"  placeholder="Enter Create Api">
-                                </div>
-
-
-                                <div class="col-lg-6 mb-2">
-                                    <label>Update Api</label>
-                                    <input type="text" name="update_api_url" class="form-control" placeholder="Enter Update Api">
-                                </div>
-
-
-                                <div class="col-lg-6 mb-2">
-                                    <label>Delete Api</label>
-                                    <input type="text" name="delete_api_url" class="form-control" placeholder="Enter Delete Api">
-                                </div>
-
-                                <div class="col-lg-6 mb-2">
-                                    <label>List Api</label>
-                                    <input type="text" name="list_api_url" class="form-control" placeholder="Enter List Api">
-                                </div>
-
-                                <div class="col-lg-6 mb-2">
-                                    <label>Track Api</label>
-                                    <input type="text" name="track_api_url" class="form-control" placeholder="Enter Track Api">
-                                </div>
-
-
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
                                         <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
