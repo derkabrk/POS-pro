@@ -49,7 +49,6 @@ class AcnooShippingCompaniesController extends Controller
             'contact_number' => 'nullable|string|max:20',
             'email' => 'required|email|unique:shipping_companies,email',
             'address' => 'nullable|string|max:255',
-
             'create_api_url'  => 'required|string|max:255',
             'update_api_url'  => 'required|string|max:255',
             'delete_api_url'  => 'required|string|max:255',
@@ -84,7 +83,6 @@ class AcnooShippingCompaniesController extends Controller
             'contact_number' => 'nullable|string|max:20',
             'email' => 'required|email|unique:shipping_companies,email,'.$id,
             'address' => 'nullable|string|max:255',
-            
             'create_api_url'  => 'required|string|max:255',
             'update_api_url'  => 'required|string|max:255',
             'delete_api_url'  => 'required|string|max:255',

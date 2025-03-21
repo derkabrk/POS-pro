@@ -179,10 +179,11 @@ class AcnooBusinessController extends Controller
 
         DB::beginTransaction();
 
-        
+        $enumValue = BusinessType::from($request->input('type'));
 
 
         try {
+            
             $business = Business::findOrFail($id);
 
             $business->update([

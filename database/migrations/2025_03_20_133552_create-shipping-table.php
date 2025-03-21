@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('shipping_company_id')->constrained()->cascadeOnDelete();
             $table->string ("name");
             $table->string ("shipping_company");
-            $table->string ("first_r_credential"); 
+            $table->string ("first_r_credential");
             $table->string ("second_r_credential");
             $table->json("shops");
             $table->boolean ("is_active");
