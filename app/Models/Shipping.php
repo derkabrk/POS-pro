@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 
-class Product extends EloquentModel
+class Shipping extends EloquentModel
 
 {
     use HasFactory;
