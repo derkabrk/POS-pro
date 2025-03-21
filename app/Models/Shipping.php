@@ -2,20 +2,18 @@
 
 namespace App\Models;
 
-<<<<<<< HEAD
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-=======
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Enums\BusinessType;
->>>>>>> fa84ff07fb843d5061240878ab37664ebb48c2c6
+
 
 class Shipping extends Model
 {
     use HasFactory;
-<<<<<<< HEAD
-=======
+
 
     /**
      * The attributes that are mass assignable.
@@ -40,5 +38,4 @@ class Shipping extends Model
     {
         return $this->belongsTo(ShippingCompanies::class, 'shipping_company_id');
     }
->>>>>>> fa84ff07fb843d5061240878ab37664ebb48c2c6
 }
