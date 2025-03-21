@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ShippingCompanies;
 use Illuminate\Http\Request;
 
-class AcnooShippingCompaniesController extends Controller
+class AcnooShippingController extends Controller
 {
     public function index()
     {
