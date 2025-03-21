@@ -24,5 +24,6 @@ return new class extends Migration
             $table->dropColumn('first_r_credential_lable');
             $table->dropColumn('second_r_credential_lable');
         });
+        
     }
 };
