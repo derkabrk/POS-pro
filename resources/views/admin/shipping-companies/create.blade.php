@@ -67,6 +67,16 @@
                                     <input type="text" name="track_api_url" class="form-control" placeholder="Enter Track Api">
                                 </div>
 
+                                <div class="col-lg-6 mb-2">
+                                    <label>First Required Credential</label>
+                                    <input type="text" name="first_r_credential_lable" class="form-control" placeholder="Enter Track Api">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>Second Required Credential</label>
+                                    <input type="text" name="second_r_credential_lable" class="form-control" placeholder="Enter Track Api">
+                                </div>
+
 
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
