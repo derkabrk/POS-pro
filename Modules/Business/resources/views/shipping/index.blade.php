@@ -12,13 +12,11 @@
                 <div class="table-header p-16">
                     <h4>Shipping Companies List</h4>
                     @can('banners-create')
-                        <a type="button" href="{{ route('business.shipping-companies.create')}}" class="add-order-btn rounded-2 {{ Route::is('business.plans.create') ? 'active' : '' }}" class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>Add New Company</a>
+                        <a type="button" href="{{ route('business.shipping.create')}}" class="add-order-btn rounded-2 {{ Route::is('business.plans.create') ? 'active' : '' }}" class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>Add New Company</a>
                     @endcan
                 </div>
 
             </div>
-
-
 
             <div class="responsive-table m-0">
                 <table class="table" id="datatable">
@@ -43,7 +41,7 @@
                     </tr>
                     </thead>
                     <tbody id="business-category-data" class="searchResults">
-                        @include('business.shipping-companies.datas')
+                        @include('business.shipping.datas')
                     </tbody>
                 </table>
             </div>
