@@ -157,6 +157,13 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('categories/delete-all', [Business\AcnooCategoryController::class,'deleteAll'])->name('categories.delete-all');
     Route::post('categories/filter', [Business\AcnooCategoryController::class, 'acnooFilter'])->name('categories.filter');
 
+
+    Route::resource('shipping', Business\AcnooShippingController::class);
+   // Route::post('categories/status/{id}', [Business\AcnooCategoryController::class, 'status'])->name('categories.status');
+   // Route::post('categories/delete-all', [Business\AcnooCategoryController::class, 'deleteAll'])->name('categories.deleteAll');
+   // Route::post('categories/delete-all', [Business\AcnooCategoryController::class,'deleteAll'])->name('categories.delete-all');
+   // Route::post('categories/filter', [Business\AcnooCategoryController::class, 'acnooFilter'])->name('categories.filter');
+
     //Parties
     Route::resource('parties', Business\AcnooPartyController::class)->except('show');
     Route::post('parties/filter', [Business\AcnooPartyController::class, 'acnooFilter'])->name('parties.filter');

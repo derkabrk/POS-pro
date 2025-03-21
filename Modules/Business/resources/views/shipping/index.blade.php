@@ -12,11 +12,11 @@
                 <div class="table-header p-16">
                     <h4>Shipping Companies List</h4>
                     @can('banners-create')
-                        <a type="button" href="{{ route('admin.shipping-companies.create')}}" class="add-order-btn rounded-2 {{ Route::is('admin.plans.create') ? 'active' : '' }}" class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>Add New Company</a>
+                        <a type="button" href="{{ route('business.shipping-companies.create')}}" class="add-order-btn rounded-2 {{ Route::is('business.plans.create') ? 'active' : '' }}" class="btn btn-primary" ><i class="fas fa-plus-circle me-1"></i>Add New Company</a>
                     @endcan
                 </div>
                 <div class="table-top-form p-16-0">
-                    <form action="{{ route('admin.shipping-companies.filter') }}" method="post" class="filter-form" table="#business-category-data">
+                    <form action="{{ route('business.shipping-companies.filter') }}" method="post" class="filter-form" table="#business-category-data">
                         @csrf
                         <div class="table-top-left d-flex gap-3 margin-l-16">
                             <div class="gpt-up-down-arrow position-relative">
@@ -69,7 +69,7 @@
                     </tr>
                     </thead>
                     <tbody id="business-category-data" class="searchResults">
-                        @include('admin.shipping-companies.datas')
+                        @include('business.shipping-companies.datas')
                     </tbody>
                 </table>
             </div>
@@ -83,7 +83,7 @@
 @endsection
 
 @push('modal')
-    @include('admin.components.multi-delete-modal')
+    @include('business.components.multi-delete-modal')
 @endpush
 
 @push('js')

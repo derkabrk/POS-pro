@@ -119,6 +119,7 @@
                     </ul>
                 </li>
             @endif
+
             @if (auth()->user()->role != 'staff' || visible_permission('partiesPermission'))
                 <li
                     class="dropdown {{ (Request::routeIs('business.parties.index') && request('type') == 'Customer') || (Request::routeIs('business.parties.create') && request('type') == 'Customer') || (Request::routeIs('business.parties.edit') && request('type') == 'Customer') ? 'active' : '' }}">
@@ -138,6 +139,8 @@
                         </li>
                     </ul>
                 </li>
+
+
                 <li
                     class="dropdown {{ (Request::routeIs('business.parties.index') && request('type') == 'Supplier') || (Request::routeIs('business.parties.create') && request('type') == 'Supplier') || (Request::routeIs('business.parties.edit') && request('type') == 'Supplier') ? 'active' : '' }}">
                     <a href="#">
@@ -156,7 +159,30 @@
                         </li>
                     </ul>
                 </li>
+
+
+
+                <li
+                    class="dropdown {{ (Request::routeIs('business.parties.index') && request('type') == 'Supplier') || (Request::routeIs('business.parties.create') && request('type') == 'Supplier') || (Request::routeIs('business.parties.edit') && request('type') == 'Supplier') ? 'active' : '' }}">
+                    <a href="#">
+                        <span class="sidebar-icon">
+                            <img src="{{ asset('assets/images/sidebar/supplier.svg') }}">
+
+                        </span>
+                        Shipping
+                    </a>
+                    <ul>
+                        <li><a class="{{ Request::routeIs('business.shipping.index') && request('type') == 'Supplier' ? 'active' : '' }}"
+                                href="{{ route('business.shipping.index', ['type' => 'Supplier']) }}">All Services</a>
+                        </li>
+                        <li><a class="{{ Request::routeIs('business.shipping.create') && request('type') == 'Supplier' ? 'active' : '' }}"
+                                href="{{ route('business.shipping.create', ['type' => 'Supplier']) }}">Add Service</a>
+                        </li>
+                    </ul>
+                </li>
             @endif
+
+
             @if (auth()->user()->role != 'staff' || visible_permission('addIncomePermission'))
                 <li
                     class="dropdown {{ Request::routeIs('business.incomes.index', 'business.income-categories.index') ? 'active' : '' }}">
