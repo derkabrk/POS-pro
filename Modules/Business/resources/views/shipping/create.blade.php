@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('business::layouts.master')
 
 @section('title')
     {{ __('Category') }}
