@@ -79,6 +79,7 @@
 
         selectElement.addEventListener("change", function() {
             let selectedOption = selectElement.options[selectElement.selectedIndex];
+
             let credential = selectedOption.getAttribute("data-credential");
 
             let credential2 = selectedOption.getAttribute("data-other");
@@ -92,6 +93,18 @@
             } else {
                 labelElement.textContent = "";
                 inputElement.value = "";
+
+                labelElement2.textContent = "";
+                inputElement2.value = "";
+            }
+
+
+            if (credential2) {
+    
+
+                labelElement2.textContent = `${credential2}`;
+                inputElement2.value = credential2;
+            } else {
 
                 labelElement2.textContent = "";
                 inputElement2.value = "";
