@@ -67,13 +67,19 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Get select and input elements
+        // Get the select element and the label
         const selectElement = document.querySelector("select[name='shipping_company_id']");
-        const inputElement = document.querySelector("input[name='first_r_credential_lable']");
+        const labelElement = document.querySelector("label[for='first_r_credential']");
 
-        // Add event listener on select change
+        // Add event listener to update label when select changes
         selectElement.addEventListener("change", function() {
-            inputElement.value = selectElement.options[selectElement.selectedIndex].text.trim(); // Set text of selected option
+            let selectedText = selectElement.options[selectElement.selectedIndex].text.trim();
+            
+            if (selectedText === "Select Service") {
+                labelElement.textContent = "First Required Credential"; // Default text
+            } else {
+                labelElement.textContent = `First Required Credential (${selectedText})`;
+            }
         });
     });
 </script>
