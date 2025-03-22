@@ -100,8 +100,9 @@
             // Update first required credential
             if (firstCredential && firstCredentialLabel) {
                 firstLabel.textContent = firstCredentialLabel;
-                secondLabel.textContent = secondCredentialLabel;
+              
                 firstInput.value = firstCredential;
+                secondLabel.textContent = secondCredentialLabel;
             } else {
                 firstLabel.textContent = "";
                 firstInput.value = "";
