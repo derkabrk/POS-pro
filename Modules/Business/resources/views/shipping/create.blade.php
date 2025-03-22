@@ -27,21 +27,19 @@
 
 
                                 <div class="col-lg-6 mb-2"> 
-    <label>Select Service</label>
-    <div class="gpt-up-down-arrow position-relative">
-        <select name="shipping_company_id" id="shipping_company" class="form-control table-select w-100 role">
-            <option value="">Select Service</option>
-            @foreach ($shipping_companys as $shipping_company)
-                <option value="{{ $shipping_company->id }}" 
-                        data-credential="{{ $shipping_company->first_r_credential_lable}}"
-                        data-label="{{ $shipping_company->first_r_credential_lable}}"
-                        data-second-credential="{{ $shipping_company->second_r_credential_lable}}"
-                        data-second-label="{{ $shipping_company->second_r_credential_lable}}">
-                    {{ ucfirst($shipping_company->name) }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+                                <select name="shipping_company_id" id="shipping_company" class="form-control table-select w-100 role">
+    <option value="">Select Service</option>
+    @foreach ($shipping_companys as $shipping_company)
+        <option value="{{ $shipping_company->id }}" 
+                data-credential="{{ $shipping_company->first_r_credential }}"
+                data-label="{{ $shipping_company->first_r_credential_lable }}"
+                data-second-credential="{{ $shipping_company->second_r_credential }}"
+                data-second-label="{{ $shipping_company->second_r_credential_lable }}">
+            {{ ucfirst($shipping_company->name) }}
+        </option>
+    @endforeach
+</select>
+
 </div>
                                 <div class="col-lg-6 mb-2">
                                     <label id="first_r_credential_lable"></label>
@@ -83,31 +81,22 @@
         selectElement.addEventListener("change", function() {
             let selectedOption = selectElement.options[selectElement.selectedIndex];
 
-            let firstCredential = selectedOption.getAttribute("data-credential");
-            let firstCredentialLabel = selectedOption.getAttribute("data-label");
+            let firstCredential = selectedOption.getAttribute("data-credential") || "";
+            let firstCredentialLabel = selectedOption.getAttribute("data-label") || "First Required Credential";
 
-            let secondCredential = selectedOption.getAttribute("data-second-credential");
-            let secondCredentialLabel = selectedOption.getAttribute("data-second-label");
+            let secondCredential = selectedOption.getAttribute("data-second-credential") || "";
+            let secondCredentialLabel = selectedOption.getAttribute("data-second-label") || "Second Required Credential";
 
-            // Update first required credential
-            if (firstCredential && firstCredentialLabel) {
-                firstLabel.textContent = firstCredentialLabel;
-                firstInput.value = firstCredential;
-            } else {
-                firstLabel.textContent = "";
-                firstInput.value = "";
-            }
+            // Update first credential
+            firstLabel.textContent = firstCredentialLabel;
+            firstInput.value = firstCredential;
 
-            // Update second required credential
-            if (secondCredential && secondCredentialLabel) {
-                secondLabel.textContent = secondCredentialLabel;
-                secondInput.value = secondCredential;
-            } else {
-                secondLabel.textContent = "";
-                secondInput.value = "";
-            }
+            // Update second credential
+            secondLabel.textContent = secondCredentialLabel;
+            secondInput.value = secondCredential;
         });
     });
 </script>
+
 
 @endsection
