@@ -99,7 +99,7 @@ console.log("Second Credential Label:", secondCredentialLabel);
             // Update first required credential
             if (firstCredential && firstCredentialLabel) {
                 firstLabel.textContent = firstCredentialLabel;
-                secondLabel.textContent = secondCredentialLabel;
+           
                 firstInput.value = firstCredential;
             } else {
                 firstLabel.textContent = "";
