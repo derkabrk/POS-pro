@@ -64,4 +64,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get select and input elements
+        const selectElement = document.querySelector("select[name='shipping_company_id']");
+        const inputElement = document.querySelector("input[name='first_r_credential']");
+
+        // Add event listener on select change
+        selectElement.addEventListener("change", function() {
+            inputElement.value = selectElement.options[selectElement.selectedIndex].text.trim(); // Set text of selected option
+        });
+    });
+</script>
+
 @endsection
