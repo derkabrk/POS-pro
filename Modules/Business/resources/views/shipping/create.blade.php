@@ -33,7 +33,9 @@
             <option value="">Select Service</option>
             @foreach ($shipping_companys as $shipping_company)
                 <option value="{{ $shipping_company->id }}" 
-                        data-credential="{{ $shipping_company->first_r_credential_lable}}">
+                        data-credential="{{ $shipping_company->first_r_credential_lable}}" 
+                        data-other="{{ $shipping_company->second_r_credential_lable }}"
+                        >
                     {{ ucfirst($shipping_company->name) }}
                 </option>
             @endforeach
@@ -46,8 +48,8 @@
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
-                                    <label>Second Required Credential</label>
-                                    <input type="text" name="second_r_credential" class="form-control" placeholder="Please select a shipping service">
+                                    <label id="second_r_credential_lable"></label>
+                                    <input  type="text" name="second_r_credential" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
                                 <div class="col-lg-12">
@@ -71,16 +73,28 @@
         const inputElement = document.getElementById("first_r_credential_input");
         const labelElement = document.getElementById("first_r_credential_lable");
 
+
+        const inputElement2 = document.getElementById("second_r_credential_input");
+        const labelElement2 = document.getElementById("second_r_credential_lable");
+
         selectElement.addEventListener("change", function() {
             let selectedOption = selectElement.options[selectElement.selectedIndex];
             let credential = selectedOption.getAttribute("data-credential");
 
+            let credential2 = selectedOption.getAttribute("data-other");
+
             if (credential) {
-                labelElement.textContent = `(${credential})`;
+                labelElement.textContent = `${credential}`;
                 inputElement.value = credential;
+
+                labelElement2.textContent = `${credential2}`;
+                inputElement2.value = credential2;
             } else {
                 labelElement.textContent = "";
                 inputElement.value = "";
+
+                labelElement2.textContent = "";
+                inputElement2.value = "";
             }
         });
     });
