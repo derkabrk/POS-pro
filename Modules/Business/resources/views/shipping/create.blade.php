@@ -33,7 +33,7 @@
             <option value="">Select Service</option>
             @foreach ($shipping_companys as $shipping_company)
                 <option value="{{ $shipping_company->id }}" 
-                        data-credential="{{ $shipping_company->first_r_credential }}">
+                        data-credential="{{ $shipping_company->first_r_credential_lable}}">
                     {{ ucfirst($shipping_company->name) }}
                 </option>
             @endforeach
@@ -69,7 +69,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         const selectElement = document.getElementById("shipping_company");
         const inputElement = document.getElementById("first_r_credential_input");
-        const labelElement = document.getElementById("first_r_credential_label");
+        const labelElement = document.getElementById("first_r_credential_lable");
 
         selectElement.addEventListener("change", function() {
             let selectedOption = selectElement.options[selectElement.selectedIndex];
