@@ -33,8 +33,10 @@
             <option value="">Select Service</option>
             @foreach ($shipping_companys as $shipping_company)
                 <option value="{{ $shipping_company->id }}" 
-                        data-credential="{{ $shipping_company->first_r_credential_lable}}" 
-                        data-label="{{ $shipping_company->second_r_credential_lable}}">
+                        data-credential="{{ $shipping_company->first_r_credential }}"
+                        data-label="{{ $shipping_company->first_r_credential_label }}"
+                        data-second-credential="{{ $shipping_company->second_r_credential }}"
+                        data-second-label="{{ $shipping_company->second_r_credential_label }}">
                     {{ ucfirst($shipping_company->name) }}
                 </option>
             @endforeach
@@ -69,40 +71,43 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const selectElement = document.getElementById("shipping_company");
-        const inputElement = document.getElementById("first_r_credential_input");
-        const labelElement = document.getElementById("first_r_credential_lable");
 
+        // First Credential Elements
+        const firstInput = document.getElementById("first_r_credential_input");
+        const firstLabel = document.getElementById("first_r_credential_lable");
 
-        const inputElement2 = document.getElementById("second_r_credential_input");
-        const labelElement2 = document.getElementById("second_r_credential_lable");
+        // Second Credential Elements
+        const secondInput = document.getElementById("second_r_credential_input");
+        const secondLabel = document.getElementById("second_r_credential_lable");
 
         selectElement.addEventListener("change", function() {
             let selectedOption = selectElement.options[selectElement.selectedIndex];
 
-            let credential = selectedOption.getAttribute("data-credential");
+            let firstCredential = selectedOption.getAttribute("data-credential");
+            let firstCredentialLabel = selectedOption.getAttribute("data-label");
 
-            let credential2 = selectedOption.getAttribute("data-label");
+            let secondCredential = selectedOption.getAttribute("data-second-credential");
+            let secondCredentialLabel = selectedOption.getAttribute("data-second-label");
 
-            if (credential) {
-                labelElement.textContent = `${credential}`;
-                inputElement.value = credential;
-
+            // Update first required credential
+            if (firstCredential && firstCredentialLabel) {
+                firstLabel.textContent = firstCredentialLabel;
+                firstInput.value = firstCredential;
             } else {
-                labelElement.textContent = "";
-                inputElement.value = "";
+                firstLabel.textContent = "";
+                firstInput.value = "";
             }
 
-            if (credential2) {
-                labelElement2.textContent = `${credential2}`;
-                inputElement2.value = credential2;
-
+            // Update second required credential
+            if (secondCredential && secondCredentialLabel) {
+                secondLabel.textContent = secondCredentialLabel;
+                secondInput.value = secondCredential;
             } else {
-                labelElement2.textContent = "";
-                inputElement2.value = "";
+                secondLabel.textContent = "";
+                secondInput.value = "";
             }
         });
     });
 </script>
-
 
 @endsection
