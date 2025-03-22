@@ -69,7 +69,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         // Get the select element and the label
         const selectElement = document.querySelector("select[name='shipping_company_id']");
-        const labelElement = document.querySelector("label[for='first_r_credential']");
+        const labelElement = document.querySelector("label[for='first_r_credential_lable']");
 
         // Add event listener to update label when select changes
         selectElement.addEventListener("change", function() {
