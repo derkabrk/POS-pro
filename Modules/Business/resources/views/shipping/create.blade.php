@@ -34,8 +34,7 @@
             @foreach ($shipping_companys as $shipping_company)
                 <option value="{{ $shipping_company->id }}" 
                         data-credential="{{ $shipping_company->first_r_credential_lable}}" 
-                        data-other="{{ $shipping_company->second_r_credential_lable}}"
-                        >
+                        data-label="{{ $shipping_company->second_r_credential_lable}}">
                     {{ ucfirst($shipping_company->name) }}
                 </option>
             @endforeach
@@ -49,7 +48,7 @@
 
                                 <div class="col-lg-6 mb-2">
                                     <label id="second_r_credential_lable"></label>
-                                    <input  type="text" name="second_r_credential" class="form-control" placeholder="Please select a shipping service">
+                                    <input type="text" name="first_r_credential" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
                                 <div class="col-lg-12">
@@ -82,7 +81,7 @@
 
             let credential = selectedOption.getAttribute("data-credential");
 
-            let credential2 = selectedOption.getAttribute("data-other");
+            let credential2 = selectedOption.getAttribute("data-label");
 
             if (credential) {
                 labelElement.textContent = `${credential}`;
@@ -95,7 +94,6 @@
 
 
             if (credential2) {
-    
                 labelElement2.textContent = `${credential2}`;
                 inputElement2.value = credential2;
             } else {
