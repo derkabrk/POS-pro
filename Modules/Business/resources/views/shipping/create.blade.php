@@ -41,7 +41,7 @@
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
-                                    <label id="first_r_credential_lable">First Required Credential</label>
+                                    <label id="first_r_credential_lable"></label>
                                     <input type="text" name="first_r_credential" class="form-control" placeholder="Enter First Required Credential">
                                 </div>
 
@@ -67,14 +67,12 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Get the select element and the label
         const selectElement = document.querySelector("select[name='shipping_company_id']");
-        const labelElement = document.getElementById("label[for='first_r_credential_lable']");
+        const labelElement = document.getElementById("first_r_credential_lable");
 
-        // Add event listener to update label when select changes
         selectElement.addEventListener("change", function() {
             let selectedText = selectElement.options[selectElement.selectedIndex].text.trim();
-            
+
             if (selectedText === "Select Service") {
                 labelElement.textContent = "First Required Credential"; // Default text
             } else {
@@ -83,5 +81,6 @@
         });
     });
 </script>
+
 
 @endsection
