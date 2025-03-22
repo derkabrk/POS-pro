@@ -33,10 +33,10 @@
             <option value="">Select Service</option>
             @foreach ($shipping_companys as $shipping_company)
                 <option value="{{ $shipping_company->id }}" 
-                        data-credential="{{ $shipping_company->first_r_credential }}"
-                        data-label="{{ $shipping_company->first_r_credential_label }}"
-                        data-second-credential="{{ $shipping_company->second_r_credential }}"
-                        data-second-label="{{ $shipping_company->second_r_credential_label }}">
+                        data-credential="{{ $shipping_company->first_r_credential_lable}}"
+                        data-label="{{ $shipping_company->first_r_credential_lable}}"
+                        data-second-credential="{{ $shipping_company->second_r_credential_lable}}"
+                        data-second-label="{{ $shipping_company->second_r_credential_lable}}">
                     {{ ucfirst($shipping_company->name) }}
                 </option>
             @endforeach
