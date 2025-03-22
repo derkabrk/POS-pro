@@ -92,12 +92,11 @@
                 inputElement.value = "";
             }
 
-
             if (credential2) {
                 labelElement2.textContent = `${credential2}`;
                 inputElement2.value = credential2;
-            } else {
 
+            } else {
                 labelElement2.textContent = "";
                 inputElement2.value = "";
             }
