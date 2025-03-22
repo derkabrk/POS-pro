@@ -67,7 +67,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const selectElement = document.getElementById("shipping_company");
+        const selectElement = document.querySelector("select[name='shipping_company_id']");
         const labelElement = document.getElementById("first_r_credential_lable");
 
         selectElement.addEventListener("change", function() {
