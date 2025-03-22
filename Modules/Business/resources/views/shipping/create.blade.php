@@ -41,7 +41,7 @@
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
-                                    <label>First Required Credential</label>
+                                    <label name="first_r_credential_lable">First Required Credential</label>
                                     <input type="text" name="first_r_credential" class="form-control" placeholder="Enter First Required Credential">
                                 </div>
 
@@ -69,7 +69,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         // Get select and input elements
         const selectElement = document.querySelector("select[name='shipping_company_id']");
-        const inputElement = document.querySelector("input[name='first_r_credential']");
+        const inputElement = document.querySelector("input[name='first_r_credential_lable']");
 
         // Add event listener on select change
         selectElement.addEventListener("change", function() {
