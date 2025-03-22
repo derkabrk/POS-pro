@@ -20,13 +20,21 @@ class AcnooShippingController extends Controller
         return view('business::shipping.index', compact('shippings'));
     }
 
+    public function create()
+
+    
+    {
+        $shipping_companys = ShippingCompanies::latest()->get();
+        return view('business::shipping.index.create');
+    }
+
 
     public function store(Request $request)
     {
 
         $shipping_companys = ShippingCompanies::latest()->get();
 
-        
+
         $request->validate([
             'first_r_credential' => 'nullable|max:250',
             'second_r_credential' => 'required|max:250',
