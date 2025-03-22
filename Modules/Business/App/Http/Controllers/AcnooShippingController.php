@@ -57,6 +57,7 @@ class AcnooShippingController extends Controller
                 'shipping_company' => $shipping_company->name,
                 'shipping_company_id' => $shipping_company->id,
                 'is_active' =>  true,
+                'shops'  => json_encode([]),
             ]);
 
             DB::commit();
