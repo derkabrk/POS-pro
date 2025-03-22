@@ -1,7 +1,7 @@
 @extends('business::layouts.master')
 
 @section('title')
-    {{ __('Category') }}
+    Shipping Services
 @endsection
 
 @section('main_content')
@@ -16,7 +16,7 @@
                     
                 </div>
                 <div class="order-form-section p-16">
-                    <form action="{{ route('business.shipping.store') }}" method="POST" class="ajaxform_instant_reload">
+                    <form action="{{ route('business.shipping.store') }}"  enctype="multipart/form-data" method="POST" class="ajaxform_instant_reload">
                         @csrf
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">
@@ -27,11 +27,12 @@
 
 
                                 <div class="col-lg-6 mb-2"> 
-    <label>Select Service</label>
-    <div class="gpt-up-down-arrow position-relative">
-        <select name="shipping_company_id" id="shipping_company" class="form-control table-select w-100 role">
-            <option value="">Select Service</option>
-            @foreach ($shipping_companys as $shipping_company)
+                               <label>Select Service</label>
+                              <div class="gpt-up-down-arrow position-relative">
+               <select name="shipping_company_id" id="shipping_company" class="form-control table-select w-100 role">
+                            <option value="">Select Service</option>
+                            
+               @foreach ($shipping_companys as $shipping_company)
                 <option value="{{ $shipping_company->id }}" 
                         data-credential="{{ $shipping_company->first_r_credential_lable}}"
                         data-label="{{ $shipping_company->first_r_credential_lable}}"
@@ -42,7 +43,7 @@
             @endforeach
         </select>
     </div>
-</div>
+   </div>
                                 <div class="col-lg-6 mb-2">
                                     <label id="first_r_credential_lable"></label>
                                     <input type="text" name="first_r_credential" class="form-control" placeholder="Please select a shipping service">
@@ -80,6 +81,12 @@
         const secondInput = document.getElementById("second_r_credential_input");
         const secondLabel = document.getElementById("second_r_credential_lable");
 
+        console.log("First Credential:", firstCredential);
+console.log("First Credential Label:", firstCredentialLabel);
+console.log("Second Credential:", secondCredential);
+console.log("Second Credential Label:", secondCredentialLabel);
+
+
         selectElement.addEventListener("change", function() {
             let selectedOption = selectElement.options[selectElement.selectedIndex];
 
@@ -92,6 +99,7 @@
             // Update first required credential
             if (firstCredential && firstCredentialLabel) {
                 firstLabel.textContent = firstCredentialLabel;
+                secondLabel.textContent = secondCredentialLabel;
                 firstInput.value = firstCredential;
             } else {
                 firstLabel.textContent = "";
