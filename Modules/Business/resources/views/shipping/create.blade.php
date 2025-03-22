@@ -10,13 +10,13 @@
         <div class="card border-0">
             <div class="card-bodys">
                 <div class="table-header p-16">
-                    <h4>Add New Company</h4>
-                    @can('shipping-read')
-                        <a href="{{ route('admin.shipping.index') }}" class="add-order-btn rounded-2 {{ Route::is('admin.shipping.create') ? 'active' : '' }}"><i class="far fa-list me-1" aria-hidden="true"></i> {{ __('View List') }}</a>
-                    @endcan
+                    <h4>Add New Service</h4>
+                 
+                        <a href="{{ route('business::shipping.index') }}" class="add-order-btn rounded-2 {{ Route::is('business::shipping.create') ? 'active' : '' }}"><i class="far fa-list me-1" aria-hidden="true"></i> {{ __('View List') }}</a>
+                    
                 </div>
                 <div class="order-form-section p-16">
-                    <form action="{{ route('admin.shipping.store') }}" method="POST" class="ajaxform_instant_reload">
+                    <form action="{{ route('business::shipping.store') }}" method="POST" class="ajaxform_instant_reload">
                         @csrf
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">
