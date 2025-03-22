@@ -46,12 +46,12 @@
    </div>
                                 <div class="col-lg-6 mb-2">
                                     <label id="first_r_credential_lable"></label>
-                                    <input type="text" name="first_r_credential" class="form-control" placeholder="Please select a shipping service">
+                                    <input type="text" name="first_r_credential_input" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label id="second_r_credential_lable"></label>
-                                    <input type="text" name="second_r_credential" class="form-control" placeholder="Please select a shipping service">
+                                    <input type="text" name="second_r_credential_input" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
                                 <div class="col-lg-12">
@@ -99,7 +99,6 @@ console.log("Second Credential Label:", secondCredentialLabel);
             // Update first required credential
             if (firstCredential && firstCredentialLabel) {
                 firstLabel.textContent = firstCredentialLabel;
-           
                 firstInput.value = firstCredential;
             } else {
                 firstLabel.textContent = "";
