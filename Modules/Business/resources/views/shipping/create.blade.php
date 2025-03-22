@@ -67,16 +67,16 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const selectElement = document.querySelector("select[name='shipping_company_id']");
+        const selectElement = document.querySelector("select[first_r_credential='shipping_company_id']");
         const labelElement = document.getElementById("first_r_credential_lable");
 
         selectElement.addEventListener("change", function() {
             let selectedText = selectElement.options[selectElement.selectedIndex].text.trim();
 
             if (selectedText === "Select Service") {
-                labelElement.textContent = "First Required Credential"; // Default text
+                labelElement.textContent = ""; // Default text
             } else {
-                labelElement.textContent = `First Required Credential (${selectedText})`;
+                labelElement.textContent = `(${selectedText})`;
             }
         });
     });
