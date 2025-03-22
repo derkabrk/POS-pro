@@ -41,9 +41,9 @@
                     {{ ucfirst($shipping_company->name) }}
                 </option>
             @endforeach
-        </select>
-    </div>
-   </div>
+          </select>
+        </div>
+        </div>
                                 <div class="col-lg-6 mb-2">
                                     <label id="first_r_credential_lable"></label>
                                     <input type="text" name="first_r_credential" class="form-control" placeholder="Please select a shipping service">
@@ -82,10 +82,10 @@
         const secondInput = document.getElementById("second_r_credential_input");
         const secondLabel = document.getElementById("second_r_credential_lable");
 
-        console.log("First Credential:", firstCredential);
-        console.log("First Credential Label:", firstCredentialLabel);
-        console.log("Second Credential:", secondCredential);
-        console.log("Second Credential Label:", secondCredentialLabel);
+          console.log("First Credential:", firstCredential);
+          console.log("First Credential Label:", firstCredentialLabel);
+          console.log("Second Credential:", secondCredential);
+          console.log("Second Credential Label:", secondCredentialLabel);
 
 
         selectElement.addEventListener("change", function() {
@@ -100,9 +100,7 @@
             // Update first required credential
             if (firstCredential && firstCredentialLabel) {
                 firstLabel.textContent = firstCredentialLabel;
-              
                 firstInput.value = firstCredential;
-                secondLabel.textContent = secondCredentialLabel;
             } else {
                 firstLabel.textContent = "";
                 firstInput.value = "";
