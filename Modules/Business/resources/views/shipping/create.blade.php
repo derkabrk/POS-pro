@@ -42,12 +42,12 @@
 
                                 <div class="col-lg-6 mb-2">
                                     <label id="first_r_credential_lable"></label>
-                                    <input type="text" name="first_r_credential" class="form-control" placeholder="Enter First Required Credential">
+                                    <input type="text" name="first_r_credential" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
                                     <label>Second Required Credential</label>
-                                    <input type="text" name="second_r_credential" class="form-control" placeholder="Enter Second Required Credential">
+                                    <input type="text" name="second_r_credential" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
                                 <div class="col-lg-12">
@@ -67,16 +67,17 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const selectElement = document.querySelector("select[first_r_credential_lable='shipping_company_id']");
+        const selectElement = document.getElementById("shipping_company");
         const labelElement = document.getElementById("first_r_credential_lable");
 
         selectElement.addEventListener("change", function() {
-            let selectedText = selectElement.options[selectElement.selectedIndex].text.trim();
+            let selectedOption = selectElement.options[selectElement.selectedIndex];
+            let credential = selectedOption.getAttribute("first_r_credential_lable");
 
-            if (selectedText === "Select Service") {
-                labelElement.textContent = ""; // Default text
+            if (credential) {
+                labelElement.textContent = `(${credential})`;
             } else {
-                labelElement.textContent = `(${selectedText})`;
+                labelElement.textContent = "";
             }
         });
     });
