@@ -25,7 +25,7 @@ class AcnooShippingController extends Controller
     
     {
         $shipping_companys = ShippingCompanies::latest()->get();
-        return view('business::shipping.index.create');
+        return view('business::shipping.create');
     }
 
 
