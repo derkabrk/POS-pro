@@ -55,7 +55,8 @@ class AcnooShippingController extends Controller
                 'second_r_credential' => $request->second_r_credential,
                 'name' =>  $request->name,
                 'shipping_company' => $shipping_company->name,
-                'shipping_company_id' => $request->shipping_company_id,
+                'shipping_company_id' => $shipping_company->id,
+                'is_active' =>  true,
             ]);
 
             DB::commit();
