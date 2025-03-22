@@ -67,7 +67,11 @@ class AcnooShippingController extends Controller
             ]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return response()->json(__('Something went wrong.'), 403);
+            \Log::error("Error in transaction: " . $th->getMessage());
+            return response()->json([
+                'error' => __('Something went wrong.'),
+                'message' => $th->getMessage(),
+            ], 403);
         }
     }
 
