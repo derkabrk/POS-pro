@@ -81,10 +81,7 @@
         const secondInput = document.getElementById("second_r_credential_input");
         const secondLabel = document.getElementById("second_r_credential_lable");
 
-        console.log("First Credential:", firstCredential);
-console.log("First Credential Label:", firstCredentialLabel);
-console.log("Second Credential:", secondCredential);
-console.log("Second Credential Label:", secondCredentialLabel);
+
 
 
         selectElement.addEventListener("change", function() {
@@ -95,6 +92,11 @@ console.log("Second Credential Label:", secondCredentialLabel);
 
             let secondCredential = selectedOption.getAttribute("data-second-credential");
             let secondCredentialLabel = selectedOption.getAttribute("data-second-label");
+
+            console.log("First Credential:", firstCredential);
+console.log("First Credential Label:", firstCredentialLabel);
+console.log("Second Credential:", secondCredential);
+console.log("Second Credential Label:", secondCredentialLabel);
 
             // Update first required credential
             if (firstCredential && firstCredentialLabel) {
