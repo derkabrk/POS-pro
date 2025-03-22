@@ -42,12 +42,9 @@ class AcnooShippingController extends Controller
             'shipping_company_id' => 'required|exists:shipping_companies,id',
         ]);
 
-        DB::beginTransaction();
+    // DB::beginTransaction();
 
         try {
-
-
-            $user = auth()->user();
 
             if ($request->shipping_company_id) {
                 $shipping_company = ShippingCompanies::findOrFail($request->shipping_company_id);
