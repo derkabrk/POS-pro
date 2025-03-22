@@ -26,20 +26,20 @@
                                 </div>
 
 
-                                <div class="col-lg-6 mb-2">
-                                    <label> Select Service </label>
-                                    <div class="gpt-up-down-arrow position-relative">
-                                        <select name="shipping_company_id"
-                                                class="form-control table-select w-100 role">
-                                            <option value="">  Select Service </option>
-                                            @foreach ($shipping_companys as $shipping_company)
-                                                <option value="{{ $shipping_company->id }}"> {{ ucfirst($shipping_company->name) }} </option>
-                                            @endforeach
-                                        </select>
-                                        <span></span>
-                                    </div>
-                                </div>
-
+                                <div class="col-lg-6 mb-2"> 
+    <label>Select Service</label>
+    <div class="gpt-up-down-arrow position-relative">
+        <select name="shipping_company_id" id="shipping_company" class="form-control table-select w-100 role">
+            <option value="">Select Service</option>
+            @foreach ($shipping_companys as $shipping_company)
+                <option value="{{ $shipping_company->id }}" 
+                        data-credential="{{ $shipping_company->first_r_credential }}">
+                    {{ ucfirst($shipping_company->name) }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+</div>
                                 <div class="col-lg-6 mb-2">
                                     <label id="first_r_credential_lable"></label>
                                     <input type="text" name="first_r_credential" class="form-control" placeholder="Please select a shipping service">
@@ -67,17 +67,20 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const selectElement = document.querySelector("select[name='shipping_company_id']");
-        const labelElement = document.getElementById("first_r_credential_lable");
+        const selectElement = document.getElementById("shipping_company");
+        const inputElement = document.getElementById("first_r_credential_input");
+        const labelElement = document.getElementById("first_r_credential_label");
 
         selectElement.addEventListener("change", function() {
             let selectedOption = selectElement.options[selectElement.selectedIndex];
-            let credential = selectedOption.getAttribute("first_r_credential_lable");
+            let credential = selectedOption.getAttribute("data-credential");
 
             if (credential) {
                 labelElement.textContent = `(${credential})`;
+                inputElement.value = credential;
             } else {
                 labelElement.textContent = "";
+                inputElement.value = "";
             }
         });
     });
