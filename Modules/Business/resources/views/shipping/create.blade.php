@@ -34,7 +34,7 @@
             @foreach ($shipping_companys as $shipping_company)
                 <option value="{{ $shipping_company->id }}" 
                         data-credential="{{ $shipping_company->first_r_credential_lable}}" 
-                        data-other="{{ $shipping_company->second_r_credential_lable }}"
+                        data-other="{{ $shipping_company->second_r_credential_lable}}"
                         >
                     {{ ucfirst($shipping_company->name) }}
                 </option>
@@ -88,20 +88,14 @@
                 labelElement.textContent = `${credential}`;
                 inputElement.value = credential;
 
-                labelElement2.textContent = `${credential2}`;
-                inputElement2.value = credential2;
             } else {
                 labelElement.textContent = "";
                 inputElement.value = "";
-
-                labelElement2.textContent = "";
-                inputElement2.value = "";
             }
 
 
             if (credential2) {
     
-
                 labelElement2.textContent = `${credential2}`;
                 inputElement2.value = credential2;
             } else {
