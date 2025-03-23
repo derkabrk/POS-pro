@@ -82,20 +82,18 @@
 
                                 <div class="input-group">
                                     <select name ="party_id" class="form-select customer-select"
-                                            aria-label="Select Customer">
-                                        <option value="">{{ __('Select Customer') }}</option>
-                                        <option class="guest-option" value="guest">{{ __('Guest') }}</option>
-                                        @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id }}" data-type="{{ $customer->type }}">
-                                                {{ $customer->name }} ({{ $customer->type }}{{ $customer->due ? ' ' . currency_format($customer->due, currency:business_currency()) : '' }})
+                                            aria-label="Select Shipping Service">
+                                        <option value="">Select Shipping Service</option>
+                                        
+                                        @foreach ($shippings as $shipping)
+                                            <option value="{{ $shipping->id }}" data-type="{{ $shipping->type }}">
+                                                {{ $shipping->name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    <a type="button" href="#customer-create-modal" data-bs-toggle="modal"
-                                      class="btn btn-danger square-btn d-flex justify-content-center align-items-center"> <img src="{{ asset('assets/images/icons/plus-square.svg') }}" alt=""></a>
 
                                 </div>
-                                
+
                             </div>
                             <div class="col-12 d-none guest_phone">
                                 <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
