@@ -16,7 +16,7 @@
                   
                 </div>
                 <div class="order-form-section p-16">
-                    <form action="{{ route('business.shipping.update') }}"  enctype="multipart/form-data" method="POST" class="ajaxform_instant_reload">
+                    <form action="{{ route('business.shipping.update',$shipping->id) }}"  enctype="multipart/form-data" method="POST" class="ajaxform_instant_reload">
                         @csrf
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">
