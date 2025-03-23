@@ -22,6 +22,7 @@
 
                         <li>
                             <a href="{{ route('business.shipping.destroy', $shipping->id) }}" class="confirm-action" data-method="DELETE">
+                            @csrf
                                 <i class="fal fa-trash-alt"></i>
                                 {{ __('Delete') }}
                             </a>
