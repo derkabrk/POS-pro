@@ -10,6 +10,7 @@ use App\Models\Sale;
 use App\Models\Brand;
 use App\Models\Party;
 use App\Models\Product;
+use App\Models\Shipping;
 use App\Models\Business;
 use App\Models\Category;
 use App\Models\SaleReturn;
@@ -180,6 +181,7 @@ class AcnooSaleController extends Controller
         $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'sale');
 
         $categories = Category::where('business_id', auth()->user()->business_id)->latest()->get();
+        $shippings = Shipping::where('business_id', auth()->user()->business_id)->paginate(20);
         $brands = Brand::where('business_id', auth()->user()->business_id)->latest()->get();
         $vats = Vat::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $payment_types = PaymentType::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
@@ -188,7 +190,7 @@ class AcnooSaleController extends Controller
         $sale_id = (Sale::max('id') ?? 0) + 1;
         $invoice_no = 'S-' . str_pad($sale_id, 5, '0', STR_PAD_LEFT);
 
-        return view('business::sales.create', compact('customers', 'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
+        return view('business::sales.create', compact('customers','shippings' ,'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
     }
 
     /** Get Product wise prices */
