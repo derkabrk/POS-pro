@@ -5,6 +5,7 @@ namespace Modules\Business\App\Http\Controllers;
 use App\Models\Shipping;
 use App\Models\ShippingCompanies;
 use App\Models\User;
+use App\Models\Business;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
@@ -54,6 +55,7 @@ class AcnooShippingController extends Controller
                 'first_r_credential' => $request->first_r_credential,
                 'second_r_credential' => $request->second_r_credential,
                 'name' =>  $request->name,
+                'business_id' =>  auth()->user()->business_id,
                 'shipping_company' => $shipping_company->name,
                 'shipping_company_id' => $shipping_company->id,
                 'is_active' =>  $request->status ? 1 : 0,
