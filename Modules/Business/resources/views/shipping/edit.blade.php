@@ -22,7 +22,7 @@
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
                                     <label>Platform Name</label>
-                                    <input type="text" name="name" required class="form-control" placeholder="Company Name">
+                                    <input type="text" value = "{{ $shipping->name }}" name="name" required class="form-control" placeholder="Company Name">
                                 </div>
 
 
@@ -45,13 +45,13 @@
              </div>
                   </div>
                                 <div class="col-lg-6 mb-2">
-                                    <label id="first_r_credential_lable"></label>
-                                    <input type="text" name="first_r_credential" class="form-control" placeholder="Please select a shipping service">
+                                    <label id="first_r_credential_lable"> {{ $Shipping_company->first_r_credential_lable }} </label>
+                                    <input type="text" name="first_r_credential" value = "{{ $shipping->first_r_credential }}" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
-                                    <label id="second_r_credential_lable"></label>
-                                    <input type="text" name="second_r_credential" class="form-control" placeholder="Please select a shipping service">
+                                    <label id="second_r_credential_lable"> {{ $Shipping_company->second_r_credential_lable }} </label>
+                                    <input type="text" name="second_r_credential" value = "{{ $shipping->second_r_credential }}" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
                                 <div class="col-lg-12">
