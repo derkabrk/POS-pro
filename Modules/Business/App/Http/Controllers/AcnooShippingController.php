@@ -133,18 +133,20 @@ class AcnooShippingController extends Controller
         return view('business::shipping.edit', compact("shipping","shipping_company","shipping_companys"));
     }
 
-    public function destroy(Shipping $shipping)
+    public function destroy($id)
     {
         if (Shipping::findOrFail($id)) {
-            Shipping::delete($shipping->id);
+            Shipping::delete($id);
+            return response()->json([
+                'message' => __('Shipping service deleted successfully'),
+                'redirect' => route('business.shipping.index'),
+            ]);
+        }else{
+            return response()->json([
+                'error' => __('Something went wrong.'),
+                'message' => "Invalid Id",
+            ], 404);
         }
-
-        $shipping->delete();
-
-        return response()->json([
-            'message' => __('Shipping service deleted successfully'),
-            'redirect' => route('business.shipping.index'),
-        ]);
     }
 
 }
