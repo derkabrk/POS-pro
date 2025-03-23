@@ -62,7 +62,7 @@
                                     <div class="form-control d-flex justify-content-between align-items-center radio-switcher">
                                         <p class="dynamic-text mb-0">{{ $shipping->is_active == 1 ? 'Active' : 'Deactive' }}</p>
                                         <label class="switch m-0">
-                                            <input type="checkbox" name="status" class="change-text" {{ $shipping->status == 1 ? 'checked' : '' }}>
+                                            <input type="checkbox" name="status" class="change-text" {{ $shipping->is_active == 1 ? 'checked' : '' }}>
                                             <span class="slider round"></span>
                                         </label>
                                     </div>
