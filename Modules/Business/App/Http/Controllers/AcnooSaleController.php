@@ -323,7 +323,7 @@ class AcnooSaleController extends Controller
                 'lossProfit' => $subtotal - $totalPurchaseAmount - $discountAmount,
                 'paidAmount' => $paidAmount > $totalAmount ? $totalAmount: $paidAmount,
                 'dueAmount' => $dueAmount,
-                'sale_type'  => $request->sale_type,
+                'sale_type'  => $request->sale_type === "1" ? 1 : 0,
                 'payment_type_id' => $request->payment_type_id,
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
