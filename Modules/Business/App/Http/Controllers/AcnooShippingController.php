@@ -136,7 +136,8 @@ class AcnooShippingController extends Controller
     public function destroy($id)
     {
         if (Shipping::findOrFail($id)) {
-            Shipping::delete($id);
+            $shipping = Shipping::find($id);
+            $shipping->delete();
             return response()->json([
                 'message' => __('Shipping service deleted successfully'),
                 'redirect' => route('business.shipping.index'),
