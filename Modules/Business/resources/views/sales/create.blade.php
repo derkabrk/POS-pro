@@ -80,19 +80,16 @@
 
                                 </div>
 
-                                <div class="input-group">
-                                    <select name ="party_id" class="form-select customer-select"
-                                            aria-label="Select Shipping Service">
-                                        <option value="">Select Shipping Service</option>
-                                        
-                                        @foreach ($shippings as $shipping)
-                                            <option value="{{ $shipping->id }}" data-type="{{ $shipping->type }}">
-                                                {{ $shipping->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-
-                                </div>
+                                <div class="input-group" id="shipping-service-container" style="display: none;">
+    <select name="shipping_service_id" class="form-select shipping-select" aria-label="Select Shipping Service">
+        <option value="">Select Shipping Service</option>
+        @foreach ($shippings as $shipping)
+            <option value="{{ $shipping->id }}" data-type="{{ $shipping->type }}">
+                {{ $shipping->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
                             </div>
                             <div class="col-12 d-none guest_phone">
@@ -288,6 +285,29 @@
         <input type="hidden" value="{{ route('business.carts.index') }}" id="get-cart">
         <input type="hidden" value="{{ route('business.sales.cart-data') }}" id="get-cart-data">
         <input type="hidden" value="{{ route('business.carts.remove-all') }}" id="clear-cart">
+
+
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const saleTypeSelect = document.getElementById("form-ware");
+        const shippingServiceDiv = document.getElementById("shipping-service-container");
+
+        function toggleShippingService() {
+            if (saleTypeSelect.value === "1") {
+                shippingServiceDiv.style.display = "block"; // Show div
+            } else {
+                shippingServiceDiv.style.display = "none"; // Hide div
+            }
+        }
+
+        // Run function on dropdown change event
+        saleTypeSelect.addEventListener("change", toggleShippingService);
+
+        // Run function on page load (in case the value is already 1)
+        toggleShippingService();
+    });
+</script>
+
         @endsection
 
         @push('modal')
