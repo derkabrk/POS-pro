@@ -80,7 +80,7 @@
 
                                 </div>
 
-                                <div class="input-group w-100" id="shipping-service-container" style="display: none;">
+                                <div class="input-group w-100 pt-3" id="shipping-service-container" style="display: none;">
     <select name="shipping_service_id" class="form-select shipping-select w-100" aria-label="Select Shipping Service">
         <option value="">Select Shipping Service</option>
         @foreach ($shippings as $shipping)
