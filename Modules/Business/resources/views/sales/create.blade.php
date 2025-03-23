@@ -153,7 +153,7 @@
 
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="sale-title">Sale type</h6>
-                                        <select name="sale_type" class="form-select" id='form-ware'>
+                                        <select name="sale_type" class="form-select" id='form'>
                                            
                                                 <option value="0">Business Sale</option>
                                                 <option value="1">E-commerce Sale</option>
@@ -289,7 +289,7 @@
 
         <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const saleTypeSelect = document.getElementById("form-ware");
+        const saleTypeSelect = document.getElementById("form");
         const shippingServiceDiv = document.getElementById("shipping-service-container");
 
         function toggleShippingService() {
