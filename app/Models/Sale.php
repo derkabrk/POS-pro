@@ -24,7 +24,6 @@ class Sale extends Model
         'discount_type',
         'sale_type',
         'delivery_fees',
-        'expire_date',
         'shipping_charge',
         'dueAmount',
         'isPaid',
@@ -103,6 +102,5 @@ class Sale extends Model
         'delivery_fees' => 'double',
         'shipping_charge' => 'double',
         'meta' => 'json',
-        'expire_date' => 'date'
     ];
 }
