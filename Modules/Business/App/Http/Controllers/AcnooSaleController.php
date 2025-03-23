@@ -239,6 +239,7 @@ class AcnooSaleController extends Controller
             'discount_type' => 'nullable|in:flat,percent',
             'shipping_charge' => 'nullable|numeric',
             'saleDate' => 'nullable|date',
+            'sale_type' => 'required|integer|in:0,1'
         ]);
 
         $business_id = auth()->user()->business_id;
@@ -322,6 +323,7 @@ class AcnooSaleController extends Controller
                 'lossProfit' => $subtotal - $totalPurchaseAmount - $discountAmount,
                 'paidAmount' => $paidAmount > $totalAmount ? $totalAmount: $paidAmount,
                 'dueAmount' => $dueAmount,
+                'sale_type'  => request->sale_type,
                 'payment_type_id' => $request->payment_type_id,
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
