@@ -391,7 +391,10 @@ class AcnooSaleController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['message' => __('Somethings went wrong!'),'error' => $e->getMessage()], 404);
+            return response()->json([
+                'message' => __('Something went wrong!'),
+                'error' => $e->getMessage() // Optional: Include actual error message for debugging
+            ], 500);
         }
     }
 
