@@ -22,6 +22,8 @@ class Sale extends Model
         'discountAmount',
         'discount_percent',
         'discount_type',
+        'sale_type',
+        'delivery_fees',
         'shipping_charge',
         'dueAmount',
         'isPaid',
@@ -97,6 +99,7 @@ class Sale extends Model
         'vat_percent' => 'double',
         'paidAmount' => 'double',
         'totalAmount' => 'double',
+        'delivery_fees' => 'double',
         'shipping_charge' => 'double',
         'meta' => 'json',
     ];
