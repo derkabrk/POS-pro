@@ -25,27 +25,26 @@
                                     <input type="text" value = "{{ $shipping->name }}" name="name" required class="form-control" placeholder="Company Name">
                                 </div>
 
-
                                 <div class="col-lg-6 mb-2"> 
                                <label>Select Service</label>
                               <div class="gpt-up-down-arrow position-relative">
                               <select name="shipping_company_id" id="shipping_company" class="form-control table-select w-100 role">
-    <option value="">Select Service</option>
+                           <option value="">Select Service</option>
 
-    @foreach ($shipping_companys as $shipping_company)
-        <option value="{{ $shipping_company->id }}" 
-            data-credential="{{ $shipping_company->first_r_credential_lable }}"
-            data-label="{{ $shipping_company->first_r_credential_lable }}"
-            data-second-credential="{{ $shipping_company->second_r_credential_lable }}"
-            data-second-label="{{ $shipping_company->second_r_credential_lable }}"
+                           @foreach ($shipping_companys as $shipping_company)
+                          <option value="{{ $shipping_company->id }}" 
+                         data-credential="{{ $shipping_company->first_r_credential_lable }}"
+                         data-label="{{ $shipping_company->first_r_credential_lable }}"
+                         data-second-credential="{{ $shipping_company->second_r_credential_lable }}"
+                         data-second-label="{{ $shipping_company->second_r_credential_lable }}"
             
            
-            {{ isset($shipping) && $shipping->id == $shipping_company->id ? 'selected' : '' }}>
+                           {{ isset($shipping) && $shipping->id == $shipping_company->id ? 'selected' : '' }}>
 
-            {{ ucfirst($shipping_company->name) }}
+                          {{ ucfirst($shipping_company->name) }}
         </option>
-    @endforeach
-</select>
+           @endforeach
+           </select>
              </div>
                   </div>
                                 <div class="col-lg-6 mb-2">
@@ -61,7 +60,7 @@
                                 <div class="col-lg-6 mb-2">
                                     <label>{{ __('Status') }}</label>
                                     <div class="form-control d-flex justify-content-between align-items-center radio-switcher">
-                                        <p class="dynamic-text mb-0">{{ $shipping->status == 1 ? 'Active' : 'Deactive' }}</p>
+                                        <p class="dynamic-text mb-0">{{ $shipping->is_active == 1 ? 'Active' : 'Deactive' }}</p>
                                         <label class="switch m-0">
                                             <input type="checkbox" name="status" class="change-text" {{ $shipping->status == 1 ? 'checked' : '' }}>
                                             <span class="slider round"></span>

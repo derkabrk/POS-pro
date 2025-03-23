@@ -131,6 +131,11 @@
                                                placeholder="0" readonly>
                                     </div>
                                     <div class="row amount-container  align-items-center mb-2">
+                                        <h6 class="payment-title">Delivery fees</h6>
+                                        <input type="number" name = "delivery_fees" step="any" id="delivery_fees" class="form-control"
+                                               placeholder="0" readonly>
+                                    </div>
+                                    <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">{{ __('Payment Type') }}</h6>
                                         <select name="payment_type_id" class="form-select" id='form-ware'>
                                             @foreach($payment_types as $type)
@@ -138,6 +143,17 @@
                                             @endforeach
                                         </select>
                                     </div>
+
+                                    <div class="row amount-container  align-items-center mb-2">
+                                        <h6 class="sale-title">Sale type</h6>
+                                        <select name="sale_type" class="form-select" id='form-ware'>
+                                           
+                                                <option value="0">Business Sale</option>
+                                                <option value="1">E-commerce Sale</option>
+                                            
+                                        </select>
+                                    </div>
+
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">{{ __('Note') }}</h6>
                                         <input type="text" name="note" class="form-control" placeholder="{{ __('Type note...') }}">
