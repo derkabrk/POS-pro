@@ -85,18 +85,6 @@
                             </div>
 
                         </div>
-
-
-                        <div class="col-12" id="customer-select-container" style="display: none;">
-    <div class="input-group">
-        <select name="party_id" class="form-select customer-select" aria-label="Select Customer">
-            <option value="">Select Shipping Service</option>
-        </select>
-    </div>
-</div>
-
-                        </div>
-
                     </div>
                     <div class="cart-payment">
                         <div class="table-responsive">
@@ -285,10 +273,6 @@
         <input type="hidden" value="{{ route('business.carts.index') }}" id="get-cart">
         <input type="hidden" value="{{ route('business.sales.cart-data') }}" id="get-cart-data">
         <input type="hidden" value="{{ route('business.carts.remove-all') }}" id="clear-cart">
-
-
-         
-        
         @endsection
 
         @push('modal')
