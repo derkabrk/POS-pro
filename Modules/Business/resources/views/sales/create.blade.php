@@ -87,13 +87,14 @@
                         </div>
 
 
-        <div class="col-12" id="customer-select-container" style="display: none;">
-                     <div class="input-group">
-             <select name="party_id" class="form-select customer-select" aria-label="Select Customer">
-                   <option value="">Select Shipping Service</option>
-                   </select>
-                      </div>
-                     </div>
+                        <div class="col-12" id="customer-select-container" style="display: none;">
+    <div class="input-group">
+        <select name="party_id" class="form-select customer-select" aria-label="Select Customer">
+            <option value="">Select Shipping Service</option>
+        </select>
+    </div>
+</div>
+
                         </div>
 
                     </div>
@@ -286,27 +287,7 @@
         <input type="hidden" value="{{ route('business.carts.remove-all') }}" id="clear-cart">
 
 
-        <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const saleTypeSelect = document.getElementById("form-ware");
-        const customerSelectDiv = document.getElementById("customer-select-container");
-
-        function toggleCustomerSelect() {
-            // Check if selected value is "1" (E-commerce Sale)
-            if (saleTypeSelect.value === "1") {
-                customerSelectDiv.style.display = "block"; // Show div
-            } else {
-                customerSelectDiv.style.display = "none"; // Hide div
-            }
-        }
-
-        // Run function on change event
-        saleTypeSelect.addEventListener("change", toggleCustomerSelect);
-
-        // Run function on page load (in case the value is already 1)
-        toggleCustomerSelect();
-    });
-</script>
+         
         
         @endsection
 
