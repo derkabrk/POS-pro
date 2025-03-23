@@ -135,6 +135,7 @@
                                         <input type="number" name = "delivery_fees" step="any" id="delivery_fees" class="form-control"
                                                placeholder="0" readonly>
                                     </div>
+                                    
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">{{ __('Payment Type') }}</h6>
                                         <select name="payment_type_id" class="form-select" id='form-ware'>
