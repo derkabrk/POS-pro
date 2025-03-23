@@ -79,9 +79,9 @@ class AcnooShippingController extends Controller
     
     public function edit($id)
     {
-        $Shipping = Shipping::find($id);
-        $Shipping_company = ShippingCompanies::findOrFail($Shipping->shipping_company_id);
-        return view('business::shipping.edit', compact("Shipping","Shipping_company"));
+        $shipping = Shipping::find($id);
+        $shipping_company = ShippingCompanies::findOrFail($shipping->shipping_company_id);
+        return view('business::shipping.edit', compact("shipping","shipping_company"));
     }
 
     public function destroy(Shipping $shipping)
