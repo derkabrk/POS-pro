@@ -21,6 +21,7 @@ class Shipping extends Model
      */
     protected $fillable = [
         'shipping_company_id',
+        'business_id',
         'name',
         'shipping_company',
         'first_r_credential',
@@ -36,5 +37,10 @@ class Shipping extends Model
     public function shipping_company()
     {
         return $this->belongsTo(ShippingCompanies::class, 'shipping_company_id');
+    }
+
+    public function business()
+    {
+    return $this->belongsTo(Business::class, 'business_id');
     }
 }
