@@ -17,7 +17,7 @@ class AcnooShippingController extends Controller
 
     public function index()
     {
-        $shippings = Shipping::latest()->paginate(20);
+        $shippings = Shipping::where('business_id', auth()->user()->business_id)->paginate(20);
         return view('business::shipping.index', compact('shippings'));
     }
 
@@ -66,7 +66,7 @@ class AcnooShippingController extends Controller
 
             return response()->json([
                 'message' => __('Shipping service saved successfully.'),
-                'redirect' => route('business.shipping.dates'),
+                'redirect' => route('business.shipping.index'),
             ]);
         } catch (\Throwable $th) {
             DB::rollback();
