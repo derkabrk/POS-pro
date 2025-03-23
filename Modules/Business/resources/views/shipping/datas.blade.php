@@ -21,7 +21,7 @@
                         <li><a  href="{{ route('business.shipping.edit', $shipping->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
 
                         <li>
-                            <a href="{{ route('business.shipping.destroy', $shipping->id) }}" class="confirm-action" data-method="DELETE">
+                            <a href="{{ route('business.shipping.destroy', $shipping) }}" class="confirm-action" data-method="DELETE">
                             @csrf
                                 <i class="fal fa-trash-alt"></i>
                                 {{ __('Delete') }}
