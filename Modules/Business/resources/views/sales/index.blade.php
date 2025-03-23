@@ -63,7 +63,34 @@
                                 <th class="text-start">{{ __('Party Name') }}</th>
                                 <th class="text-start">{{ __('Total') }}</th>
                                 <th class="text-start">{{ __('Discount') }}</th>
-                                <th class="text-start">{{ __('Paid') }}</th>
+                                @php
+    $showPaidColumn = false;
+@endphp
+
+@foreach($sales as $sale)
+    @if($sale->sale_type != 0)
+        @php
+            $showPaidColumn = true;
+            break;
+        @endphp
+    @endif
+@endforeach
+
+@if (!$showPaidColumn)
+    @foreach($salesWithReturns as $sale)
+        @if($sale->sale_type != 0)
+            @php
+                $showPaidColumn = true;
+                break;
+            @endphp
+        @endif
+    @endforeach
+@endif
+
+{{-- Show <th> only if sale_type is not 0 in any record --}}
+@if($showPaidColumn)
+    <th class="text-start">{{ __('Paid') }}</th>
+@endif
                                 <th class="text-start">{{ __('Due') }}</th>
                                 <th class="text-start">{{ __('Payment') }}</th>
                                 <th>{{ __('Status') }}</th>
