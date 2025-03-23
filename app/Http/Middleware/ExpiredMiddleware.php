@@ -92,6 +92,7 @@ class ExpiredMiddleware
 
                 'business.shipping.store',
                 'business.shipping.update',
+                'business.shipping.edit',
                 'business.shipping.destroy',
                 'business.shipping.deleteAll',
 
