@@ -17,9 +17,7 @@
                     <i class="far fa-ellipsis-v"></i>
                 </button>
                 <ul class="dropdown-menu">
-         
                         <li><a  href="{{ route('business.shipping.edit', $shipping->id) }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a></li>
-
                         <li>
                             <a href="{{ route('business.shipping.destroy', $shipping) }}" class="confirm-action" data-method="DELETE">
                             @csrf
