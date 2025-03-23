@@ -29,19 +29,23 @@
                                 <div class="col-lg-6 mb-2"> 
                                <label>Select Service</label>
                               <div class="gpt-up-down-arrow position-relative">
-               <select name="shipping_company_id" id="shipping_company" class="form-control table-select w-100 role">
-                            <option value="">Select Service</option>
-                            
-               @foreach ($shipping_companys as $shipping_company)
-                <option value="{{ $shipping_company->id }}" 
-                        data-credential="{{ $shipping_company->first_r_credential_lable}}"
-                        data-label="{{ $shipping_company->first_r_credential_lable}}"
-                        data-second-credential="{{ $shipping_company->second_r_credential_lable}}"
-                        data-second-label="{{ $shipping_company->second_r_credential_lable}}">
-                    {{ ucfirst($shipping_company->name) }}
-                </option>
-            @endforeach
-                 </select>
+                              <select name="shipping_company_id" id="shipping_company" class="form-control table-select w-100 role">
+    <option value="">Select Service</option>
+
+    @foreach ($shipping_companys as $shipping_company)
+        <option value="{{ $shipping_company->id }}" 
+            data-credential="{{ $shipping_company->first_r_credential_lable }}"
+            data-label="{{ $shipping_company->first_r_credential_lable }}"
+            data-second-credential="{{ $shipping_company->second_r_credential_lable }}"
+            data-second-label="{{ $shipping_company->second_r_credential_lable }}"
+            
+            {{-- Check if this option should be pre-selected --}}
+            {{ isset($shipping) && $shipping->id == $shipping_company->id ? 'selected' : '' }}>
+
+            {{ ucfirst($shipping_company->name) }}
+        </option>
+    @endforeach
+</select>
              </div>
                   </div>
                                 <div class="col-lg-6 mb-2">
