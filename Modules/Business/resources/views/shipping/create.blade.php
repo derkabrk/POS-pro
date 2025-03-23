@@ -54,6 +54,20 @@
                                     <input type="text" name="second_r_credential" class="form-control" placeholder="Please select a shipping service">
                                 </div>
 
+                                
+                                <div class="col-lg-6 mb-2">
+                                    <div class="col-lg-12">
+                                        <label>{{ __('Status') }}</label>
+                                        <div class="form-control d-flex justify-content-between align-items-center radio-switcher">
+                                            <p class="dynamic-text mb-0">{{ __('Active') }}</p>
+                                            <label class="switch m-0">
+                                                <input type="checkbox" name="status" class="change-text" checked>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
                                         <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>

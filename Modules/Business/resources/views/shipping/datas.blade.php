@@ -9,7 +9,7 @@
         <td>{{ $loop->index+1 }}</td>
         <td class="text-start">{{ $shipping->name }}</td>
         <td class="text-start">{{ $shipping->shipping_company }}</td>
-        <td class="text-start">{{ $shipping->is_active }}</td>
+        <td class="text-start"> {{ $shipping->is_active == 1 ? 'Active' : 'Deactive' }}</td>
 
         <td class="print-d-none">
             <div class="dropdown table-action">
