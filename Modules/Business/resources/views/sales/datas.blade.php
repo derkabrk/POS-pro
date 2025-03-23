@@ -12,11 +12,13 @@
         <td class="text-start">{{ currency_format($sale->paidAmount, 'icon', 2, business_currency()) }}</td>
         <td class="text-start">{{ currency_format($sale->dueAmount, 'icon', 2, business_currency()) }}</td>
         <td class="text-start">{{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</td>
-        <td>
-            <div class="{{ $sale->dueAmount == 0 ? 'paid-badge' : ($sale->dueAmount > 0 && $sale->dueAmount < $sale->totalAmount ? 'unpaid-badge' : 'unpaid-badge-2') }}">
-                {{ $sale->dueAmount == 0 ? 'Paid' : ($sale->dueAmount > 0 && $sale->dueAmount < $sale->totalAmount ? 'Partial Paid' : 'Unpaid') }}
-            </div>
-        </td>
+        @if($sale->sale_type != 0)
+    <td>
+        <div class="{{ $sale->dueAmount == 0 ? 'paid-badge' : ($sale->dueAmount > 0 && $sale->dueAmount < $sale->totalAmount ? 'unpaid-badge' : 'unpaid-badge-2') }}">
+            {{ $sale->dueAmount == 0 ? 'Paid' : ($sale->dueAmount > 0 && $sale->dueAmount < $sale->totalAmount ? 'Partial Paid' : 'Unpaid') }}
+        </div>
+    </td>
+@endif
 
         <td class="print-d-none">
             <div class="dropdown table-action">
