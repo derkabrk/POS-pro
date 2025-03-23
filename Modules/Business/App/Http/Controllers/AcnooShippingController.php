@@ -112,7 +112,7 @@ class AcnooShippingController extends Controller
 
             return response()->json([
                 'message' => __('Shipping service updated successfully.'),
-                'redirect' => route('business.shipping.dates'),
+                'redirect' => route('business.shipping.index'),
             ]);
         } catch (\Throwable $th) {
             DB::rollback();

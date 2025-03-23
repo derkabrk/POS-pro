@@ -39,7 +39,7 @@
             data-second-credential="{{ $shipping_company->second_r_credential_lable }}"
             data-second-label="{{ $shipping_company->second_r_credential_lable }}"
             
-            {{-- Check if this option should be pre-selected --}}
+           
             {{ isset($shipping) && $shipping->id == $shipping_company->id ? 'selected' : '' }}>
 
             {{ ucfirst($shipping_company->name) }}
