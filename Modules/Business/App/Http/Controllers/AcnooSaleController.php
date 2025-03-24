@@ -97,9 +97,14 @@ class AcnooSaleController extends Controller
     if ($request->has('sale_type') && $request->sale_type !== '') {
         $query->where('sale_type', intval($request->sale_type));
     }
-    $sales = $query->paginate($request->per_page ?? 10);
+    $sales = $query->latest()->paginate($request->per_page ?? 10);
+    if ($request->ajax()) {
+        return response()->json([
+            'data' => view('business::sales.datas', compact('sales'))->render()
+        ]);
+    }
 
-    return view('business::sales.datas', compact('sales'))->render();
+    return redirect(url()->previous());
 }
 
     public function productFilter(Request $request)
