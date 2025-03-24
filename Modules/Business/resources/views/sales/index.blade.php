@@ -47,8 +47,13 @@
                 </svg>
             </span>
         </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">{{ __('Filter') }}</button>
+
     </div>
 </form>
+
 
                     </div>
                 </div>

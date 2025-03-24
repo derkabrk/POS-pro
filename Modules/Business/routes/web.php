@@ -17,6 +17,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::resource('sales', Business\AcnooSaleController::class);
     Route::post('sales/filter', [Business\AcnooSaleController::class, 'acnooFilter'])->name('sales.filter');
     Route::post('sales/filter_sale', [AcnooSaleController::class, 'filter'])->name('sales.filter_sale');
+    Route::get('sales/{id}', [AcnooSaleController::class, 'show'])->name('sales.show');
 
     Route::post('sales/delete-all', [Business\AcnooSaleController::class,'deleteAll'])->name('sales.delete-all');
     Route::get('/get-product-prices', [Business\AcnooSaleController::class, 'getProductPrices'])->name('products.prices');
