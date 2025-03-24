@@ -166,4 +166,43 @@ console.log("Second Credential Label:", secondCredentialLabel);
     });
 </script>
 
+<style>
+    /* Hide default checkbox */
+    input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #c52127;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        position: relative;
+    }
+
+    /* Checkbox when checked */
+    input[type="checkbox"]:checked {
+        background-color: #c52127;
+        border: 2px solid #c52127;
+    }
+
+    /* Checkmark */
+    input[type="checkbox"]::before {
+        content: "✔";
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+
+    input[type="checkbox"]:checked::before {
+        display: block;
+    }
+</style>
+
 @endsection
