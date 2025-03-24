@@ -124,15 +124,16 @@ class AcnooShippingController extends Controller
                 $shipping_company = ShippingCompanies::findOrFail($request->shipping_company_id);
             }
 
-            $shipping = Shipping::update([
+            $shipping = Shipping::find($id); // Find the record by ID
+            $shipping->update([
                 'first_r_credential' => $request->first_r_credential,
                 'second_r_credential' => $request->second_r_credential,
-                'name' =>  $request->name,
+                'name' => $request->name,
                 'shipping_company' => $shipping_company->name,
                 'shipping_company_id' => $shipping_company->id,
-                'is_active' =>  $request->status ? 1 : 0,
-                'shops'  => json_encode([]),
-               'shipping_wilayas' => json_encode($selections),
+                'is_active' => $request->status ? 1 : 0,
+                'shops' => json_encode([]),
+                'shipping_wilayas' => json_encode($selections),
             ]);
 
             DB::commit();
