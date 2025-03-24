@@ -187,9 +187,14 @@ class AcnooSaleController extends Controller
         if (!File::exists($jsonPath)) {
             abort(500, "Wilaya JSON file not found!"); // Error handling
         }
+
+        
         
         $json = File::get($jsonPath);
         $wilayas = json_decode($json, true);
+
+        $communesJson = File::get(storage_path('app/Commune_Of_Algeria.json'));
+        $communes = json_decode($communesJson, true);
 
         $categories = Category::where('business_id', auth()->user()->business_id)->latest()->get();
         $shippings = Shipping::where('business_id', auth()->user()->business_id)->paginate(20);
@@ -201,7 +206,7 @@ class AcnooSaleController extends Controller
         $sale_id = (Sale::max('id') ?? 0) + 1;
         $invoice_no = 'S-' . str_pad($sale_id, 5, '0', STR_PAD_LEFT);
 
-        return view('business::sales.create', compact('customers','wilayas','shippings' ,'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
+        return view('business::sales.create', compact('customers','wilayas','communes','shippings' ,'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
     }
 
     /** Get Product wise prices */
