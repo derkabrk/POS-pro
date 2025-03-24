@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Business\App\Exports\ExportCurrentStock;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+
 class AcnooShippingController extends Controller
 {
 
@@ -25,8 +27,10 @@ class AcnooShippingController extends Controller
 
     
     {
+        $json = File::get(storage_path('app/Wilaya_Of_Algeria.json'));
+        $wilayas = json_decode($json, true);
         $shipping_companys = ShippingCompanies::latest()->get();
-        return view('business::shipping.create' ,compact('shipping_companys'));
+        return view('business::shipping.create' ,compact('shipping_companys','wilayas'));
     }
 
 

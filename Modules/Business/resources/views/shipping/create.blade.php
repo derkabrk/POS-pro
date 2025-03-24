@@ -68,6 +68,27 @@
                                     </div>
                                 </div>
 
+
+                                <div class="col-lg-6 mb-2">
+                                    <div class="col-lg-12">
+                                        <label>Shipping Wilayas</label>
+                                        @foreach ($wilayas as $wilaya)
+    <div>
+        <label>
+            <input type="checkbox" name="stepdesk[]" value="{{ $wilaya['id'] }}"> 
+            Stepdesk - {{ $wilaya['name'] }}
+        </label>
+    </div>
+    <div>
+        <label>
+            <input type="checkbox" name="delivery_home[]" value="{{ $wilaya['id'] }}"> 
+            Delivery Home - {{ $wilaya['name'] }}
+        </label>
+    </div>
+@endforeach
+                                    </div>
+                                </div>
+
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
                                         <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
