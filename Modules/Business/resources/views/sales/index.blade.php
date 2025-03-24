@@ -26,17 +26,7 @@
             <span></span>
         </div>
 
-        <form action="{{ route('business.sales.filter_sale') }}" method="post" class="filter-form" table="#sales-data">
-        @csrf
-        <div class="gpt-up-down-arrow position-relative">
-            <select name="sale_type" id="sale_type_filter" class="form-control">
-                <option value="">{{ __('All Sales') }}</option>
-                <option value="0">{{ __('Business Sale') }}</option>
-                <option value="1">{{ __('E-commerce Sale') }}</option>
-            </select>
-        </div>
-
-        </form>
+      
 
     
         <div class="table-search position-relative">
@@ -50,6 +40,17 @@
         </div>
     </div>
 </form>
+<form action="{{ route('business.sales.filter_sale') }}" method="post" class="filter-form" table="#sales-data">
+        @csrf
+        <div class="gpt-up-down-arrow position-relative">
+            <select name="sale_type" id="sale_type_filter" class="form-control">
+                <option value="">{{ __('All Sales') }}</option>
+                <option value="0">{{ __('Business Sale') }}</option>
+                <option value="1">{{ __('E-commerce Sale') }}</option>
+            </select>
+        </div>
+
+        </form>
 
                     </div>
                 </div>
