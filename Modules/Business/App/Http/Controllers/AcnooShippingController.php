@@ -147,12 +147,12 @@ class AcnooShippingController extends Controller
         $shipping_company = ShippingCompanies::findOrFail($shipping->shipping_company_id);
         $shipping_companys  = ShippingCompanies::latest()->get();
         $selections = $shipping ? json_decode($shipping->shipping_wilayas, true) : [];
-        $stepdeskSelections = $selections['stepdesk'];
-        $deliverySelections = $selections['delivery_home'];
+        $selectedStepdesk  = $selections['stepdesk'];
+        $selectedDelivery  = $selections['delivery_home'];
         $json = File::get(storage_path('app/Wilaya_Of_Algeria.json'));
         $wilayas = json_decode($json, true);
         return view('business::shipping.edit', compact("shipping","shipping_company","shipping_companys", 
-        "wilayas","stepdeskSelections","deliverySelections"));
+        "wilayas","selectedStepdesk","selectedDelivery"));
     }
 
     public function destroy($id)
