@@ -77,8 +77,14 @@
         <thead class="table-dark">
             <tr>
                 <th style="width: 40%;">Wilaya</th>
-                <th style="width: 30%;">Stepdesk</th>
-                <th style="width: 30%;">Delivery Home</th>
+                <th style="width: 30%;">
+                    Stepdesk <br>
+                    <input type="checkbox" id="selectAllStepdesk">
+                </th>
+                <th style="width: 30%;">
+                    Delivery Home <br>
+                    <input type="checkbox" id="selectAllDeliveryHome">
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -86,10 +92,10 @@
                 <tr>
                     <td>{{ $wilaya['name'] }}</td>
                     <td class="text-center">
-                        <input type="checkbox" name="stepdesk[]" value="{{ $wilaya['id'] }}">
+                        <input type="checkbox" name="stepdesk[]" class="stepdesk-checkbox" value="{{ $wilaya['id'] }}">
                     </td>
                     <td class="text-center">
-                        <input type="checkbox" name="delivery_home[]" value="{{ $wilaya['id'] }}">
+                        <input type="checkbox" name="delivery_home[]" class="delivery-checkbox" value="{{ $wilaya['id'] }}">
                     </td>
                 </tr>
             @endforeach
@@ -117,6 +123,24 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const selectAllStepdesk = document.getElementById("selectAllStepdesk");
+        const selectAllDeliveryHome = document.getElementById("selectAllDeliveryHome");
+
+        selectAllStepdesk.addEventListener("change", function () {
+            document.querySelectorAll(".stepdesk-checkbox").forEach(checkbox => {
+                checkbox.checked = selectAllStepdesk.checked;
+            });
+        });
+
+        selectAllDeliveryHome.addEventListener("change", function () {
+            document.querySelectorAll(".delivery-checkbox").forEach(checkbox => {
+                checkbox.checked = selectAllDeliveryHome.checked;
+            });
+        });
+    });
+    
         const selectElement = document.getElementById("shipping_company");
 
         // First Credential Elements
