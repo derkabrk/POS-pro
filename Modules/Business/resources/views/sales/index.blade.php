@@ -62,7 +62,7 @@
                                 <th class="text-start">{{ __('Invoice No') }}</th>
                                 <th class="text-start">{{ __('Party Name') }}</th>
                                 <th class="text-start">{{ __('Total') }}</th>
-                                <th class="text-start">{{ __('Discount') }}</th>
+                                <th class="text-start">Sale type</th>
                                 @php
     $showPaidColumn = false;
 @endphp
