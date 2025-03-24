@@ -195,9 +195,13 @@ class AcnooSaleController extends Controller
         if (!File::exists($communesPath)) {
             abort(500, "Commune JSON file not found!");
         }
-        
+    
         $communesJson = File::get($communesPath);
         $communes = json_decode($communesJson, true);
+    
+        if (empty($communes)) {
+            dd("Error: Communes data is empty!", $communes);
+        }
 
         $categories = Category::where('business_id', auth()->user()->business_id)->latest()->get();
         $shippings = Shipping::where('business_id', auth()->user()->business_id)->paginate(20);
