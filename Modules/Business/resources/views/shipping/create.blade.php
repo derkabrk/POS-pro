@@ -122,9 +122,7 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         const selectAllStepdesk = document.getElementById("selectAllStepdesk");
         const selectAllDeliveryHome = document.getElementById("selectAllDeliveryHome");
 
@@ -140,7 +138,12 @@
             });
         });
     });
-    
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        
         const selectElement = document.getElementById("shipping_company");
 
         // First Credential Elements
