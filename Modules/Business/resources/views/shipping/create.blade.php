@@ -176,7 +176,7 @@ console.log("Second Credential Label:", secondCredentialLabel);
         height: 18px;
         border: 2px solid #c52127;
         border-radius: 4px;
-        background-color: white;
+        background-color: #e4e5e7;
         cursor: pointer;
         position: relative;
     }
