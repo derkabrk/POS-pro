@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\File;
 
 class AcnooSaleController extends Controller
 {
@@ -32,7 +33,7 @@ class AcnooSaleController extends Controller
             return redirect()->back()->with('error', __('You have no permission to access.'));
         }
 
-        $json = File::get(storage_path('app/Wilaya_Of_Algeria.json')); // Adjust path if necessary
+        $json = File::get(storage_path('app/Wilaya_Of_Algeria.json'));
         $wilayas = json_decode($json, true);
 
         $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
