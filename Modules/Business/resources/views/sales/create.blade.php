@@ -330,16 +330,16 @@
         const wilayaContainer = document.getElementById("wilaya-container");
         const communeContainer = document.getElementById("commune-container");
 
-        // Load all Wilayas and Communes from Blade JSON
+     
         let allWilayas = @json($wilayas ?? []);
         let allCommunes = @json($communes ?? []);
 
-        // Ensure `allCommunes` is an array (fallback in case of null)
+       
         if (!Array.isArray(allCommunes)) {
             allCommunes = [];
         }
 
-        // Ensure `allWilayas` is an array (fallback in case of null)
+       
         if (!Array.isArray(allWilayas)) {
             allWilayas = [];
         }
