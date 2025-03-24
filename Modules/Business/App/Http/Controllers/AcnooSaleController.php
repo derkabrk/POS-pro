@@ -57,7 +57,9 @@ class AcnooSaleController extends Controller
         $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
             ->pluck('sale_id')
             ->toArray();
-
+            if ($request->has('sale_type') && $request->sale_type !== '') {
+                $query->where('sale_type', $request->sale_type);
+            }
           
         $query = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'details', 'details.product:id,productName,category_id', 'details.product.category:id,categoryName', 'payment_type:id,name')
             ->where('business_id', auth()->user()->business_id);
@@ -79,14 +81,11 @@ class AcnooSaleController extends Controller
             });
         });
 
+        
         $sales = $query->latest()->paginate($request->per_page ?? 10);
-        if ($request->ajax()) {
-            return response()->json([
-                'data' => view('business::sales.datas', compact('sales', 'salesWithReturns'))->render()
-            ]);
-        }
-
-        return redirect(url()->previous());
+         return response()->json([
+            'html' => view('business::sales.datas', compact('sales'))->render()
+        ]);
     }
 
     public function filter(Request $request)
@@ -95,16 +94,12 @@ class AcnooSaleController extends Controller
 
     // Apply sale_type filter if selected
     if ($request->has('sale_type') && $request->sale_type !== '') {
-        $query->where('sale_type', intval($request->sale_type));
+        $query->where('sale_type', intval($request->sale_type) );
     }
     $sales = $query->latest()->paginate($request->per_page ?? 10);
-    if ($request->ajax()) {
-        return response()->json([
-            'data' => view('business::sales.datas', compact('sales'))->render()
-        ]);
-    }
-
-    return redirect(url()->previous());
+     return response()->json([
+        'html' => view('business::sales.datas', compact('sales'))->render()
+    ]);
 }
 
     public function productFilter(Request $request)
