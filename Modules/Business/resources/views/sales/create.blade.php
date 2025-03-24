@@ -94,9 +94,9 @@
                             </div>
                             <div id="wilaya-container" style="display: none; margin-top: 10px;">
     <label for="wilaya-select">Select Wilaya</label>
-    <select name="shipping_wilaya_id" class="form-select w-100" id="wilaya-select">
-        <option value="">Select Wilaya</option>
-    </select>
+    <select name="shipping_wilaya_id" class="form-select" id="wilaya-select">
+    <option value="">Select Wilaya</option>                              
+     </select>
 </div>
                             <div class="col-12 d-none guest_phone">
                                 <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
