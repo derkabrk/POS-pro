@@ -121,33 +121,6 @@
         </div>
     </div>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const saleTypeFilter = document.getElementById("sale_type_filter");
-        const filterForm = document.querySelector(".filter-form");
-        const salesData = document.getElementById("sales-data");
-
-        saleTypeFilter.addEventListener("change", function () {
-            const formData = new FormData(filterForm);
-
-            fetch(filterForm.action, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                }
-            })
-            .then(response => response.json()) 
-            .then(data => {
-                // ✅ Replace table data instead of appending
-                salesData.innerHTML = data.html;
-            })
-            .catch(error => console.error("Error fetching sales data:", error));
-        });
-    });
-</script>
-
-
 @endsection
 
 @push('modal')
