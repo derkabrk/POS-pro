@@ -434,7 +434,10 @@ class AcnooSaleController extends Controller
         }
     }
 
-  
+    public function show($id)
+    {
+        return view('business::show');
+    }
 
     public function edit($id)
     {
