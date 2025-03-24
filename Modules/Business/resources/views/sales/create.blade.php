@@ -92,25 +92,11 @@
                           </div>
 
                             </div>
-
-
-<div class="row">
-    <!-- Wilaya Dropdown -->
-    <div class="col-md-6">
-    <div id="wilaya-container" class="mt-2 d-none" style="max-width: 300px;">
+                            <div id="wilaya-container" class="mt-2 d-none" style="max-width: 300px;">
     <label for="wilaya-select">Select Wilaya</label>
     <select name="shipping_wilaya_id" class="form-select w-100" id="wilaya-select">
         <option value="">Select Wilaya</option>
     </select>
-</div>
-
-    <!-- Commune Dropdown (Initially Hidden) -->
-    <div class="col-md-6" id="commune-container" style="display: none;">
-        <label for="commune-select">Select Commune</label>
-        <select name="shipping_commune_id" class="form-select" id="commune-select">
-            <option value="">Select Commune</option>
-        </select>
-    </div>
 </div>
                             <div class="col-12 d-none guest_phone">
                                 <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
