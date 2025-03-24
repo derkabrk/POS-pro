@@ -92,11 +92,11 @@
                           </div>
 
                             </div>
-                            <div id="wilaya-container" style="display: none; margin-top: 10px;">
+                            <div id="wilaya-container" style="display: none; margin-top: 10px; max-width: 300px;">
     <label for="wilaya-select">Select Wilaya</label>
-    <select name="shipping_wilaya_id" class="form-select" id="wilaya-select">
-    <option value="">Select Wilaya</option>                              
-     </select>
+    <select name="shipping_wilaya_id" class="form-select" id="wilaya-select" style="width: 100%;">
+        <option value="">Select Wilaya</option>
+    </select>
 </div>
                             <div class="col-12 d-none guest_phone">
                                 <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
