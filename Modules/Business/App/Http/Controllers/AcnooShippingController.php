@@ -93,7 +93,7 @@ class AcnooShippingController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
 
         $shipping_companys = ShippingCompanies::latest()->get();
