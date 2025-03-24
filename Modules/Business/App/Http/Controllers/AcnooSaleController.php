@@ -190,7 +190,7 @@ class AcnooSaleController extends Controller
         $json = File::get($jsonPath);
         $wilayas = json_decode($json, true);
 
-        $communesPath = storage_path('app/Commune_Of_Algeria.json');
+        $communesPath = storage_path('app/communes.json');
 
         if (!File::exists($communesPath)) {
             abort(500, "Commune JSON file not found!");
