@@ -68,6 +68,42 @@
                                     </div>
                                 </div>
 
+                                <form action="{{ route('updateSelections') }}" method="POST">
+    @csrf
+    <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 40%;">Wilaya</th>
+                    <th style="width: 30%;">
+                        Stepdesk <br>
+                        <input type="checkbox" id="selectAllStepdesk">
+                    </th>
+                    <th style="width: 30%;">
+                        Delivery Home <br>
+                        <input type="checkbox" id="selectAllDeliveryHome">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($wilayas as $wilaya)
+                    <tr>
+                        <td>{{ $wilaya['name'] }}</td>
+                        <td class="text-center">
+                            <input type="checkbox" name="stepdesk[]" class="stepdesk-checkbox" value="{{ $wilaya['id'] }}"
+                                {{ in_array($wilaya['id'], $selectedStepdesk) ? 'checked' : '' }}>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" name="delivery_home[]" class="delivery-checkbox" value="{{ $wilaya['id'] }}"
+                                {{ in_array($wilaya['id'], $selectedDelivery) ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</form>
+
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
                                         <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
@@ -83,6 +119,25 @@
     </div>
 </div>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAllStepdesk = document.getElementById("selectAllStepdesk");
+        const selectAllDeliveryHome = document.getElementById("selectAllDeliveryHome");
+
+        selectAllStepdesk.addEventListener("change", function () {
+            document.querySelectorAll(".stepdesk-checkbox").forEach(checkbox => {
+                checkbox.checked = selectAllStepdesk.checked;
+            });
+        });
+
+        selectAllDeliveryHome.addEventListener("change", function () {
+            document.querySelectorAll(".delivery-checkbox").forEach(checkbox => {
+                checkbox.checked = selectAllDeliveryHome.checked;
+            });
+        });
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -131,5 +186,44 @@
         });
     });
 </script>
+
+<style>
+    /* Hide default checkbox */
+    input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #c52127;
+        border-radius: 4px;
+        background-color: #e4e5e7;
+        cursor: pointer;
+        position: relative;
+    }
+
+    /* Checkbox when checked */
+    input[type="checkbox"]:checked {
+        background-color: #c52127;
+        border: 2px solid #c52127;
+    }
+
+    /* Checkmark */
+    input[type="checkbox"]::before {
+        content: "✔";
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+
+    input[type="checkbox"]:checked::before {
+        display: block;
+    }
+</style>
 
 @endsection
