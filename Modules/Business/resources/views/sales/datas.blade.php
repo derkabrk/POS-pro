@@ -39,7 +39,7 @@
                             {{ __('Sales Return') }}
                         </a>
                     </li>
-                    @if(!in_array($sale->id, $salesWithReturns))
+                    @if(isset($salesWithReturns) && in_array($sale->id, $salesWithReturns))
                         <li>
                             <a href="{{ route('business.sales.edit', $sale->id) }}">
                                 <i class="fal fa-edit"></i>
