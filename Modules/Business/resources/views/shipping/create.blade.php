@@ -72,28 +72,31 @@
                                 <div class="col-lg-6 mb-2">
                                     <div class="col-lg-12">
                                         <label>Shipping Wilayas</label>
-                                        <table class="table">
-    <thead>
-        <tr>
-            <th>Wilaya</th>
-            <th>Stepdesk</th>
-            <th>Delivery Home</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($wilayas as $wilaya)
+                                        <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
             <tr>
-                <td>{{ $wilaya['name'] }}</td>
-                <td>
-                    <input type="checkbox" name="stepdesk[]" value="{{ $wilaya['id'] }}">
-                </td>
-                <td>
-                    <input type="checkbox" name="delivery_home[]" value="{{ $wilaya['id'] }}">
-                </td>
+                <th style="width: 40%;">Wilaya</th>
+                <th style="width: 30%;">Stepdesk</th>
+                <th style="width: 30%;">Delivery Home</th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach ($wilayas as $wilaya)
+                <tr>
+                    <td>{{ $wilaya['name'] }}</td>
+                    <td class="text-center">
+                        <input type="checkbox" name="stepdesk[]" value="{{ $wilaya['id'] }}">
+                    </td>
+                    <td class="text-center">
+                        <input type="checkbox" name="delivery_home[]" value="{{ $wilaya['id'] }}">
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
                                     </div>
                                 </div>
 
