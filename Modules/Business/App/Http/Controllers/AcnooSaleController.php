@@ -32,6 +32,9 @@ class AcnooSaleController extends Controller
             return redirect()->back()->with('error', __('You have no permission to access.'));
         }
 
+        $json = File::get(storage_path('app/Wilaya_Of_Algeria.json')); // Adjust path if necessary
+        $wilayas = json_decode($json, true);
+
         $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
             ->pluck('sale_id')
             ->toArray();
@@ -46,7 +49,7 @@ class AcnooSaleController extends Controller
 
         $sales = $query->paginate(20);
 
-        return view('business::sales.index', compact('sales', 'salesWithReturns'));
+        return view('business::sales.index', compact('sales', 'salesWithReturns','wilayas'));
     }
 
     public function acnooFilter(Request $request)
