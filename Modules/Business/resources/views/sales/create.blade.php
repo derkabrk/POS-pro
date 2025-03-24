@@ -81,17 +81,23 @@
                                 </div>
 
                   <div class="input-group w-100 pt-3" id="shipping-service-container" style="display: none;">
-                  <select name="shipping_service_id" class="form-select shipping-select w-100" aria-label="Select Shipping Service">
-                  <option value="">Select Shipping Service</option>
-                   @foreach ($shippings as $shipping)
-                     <option value="{{ $shipping->id }}" data-type="{{ $shipping->type }}">
-                    {{ $shipping->name }}
-                       </option>
-                        @endforeach
-                       </select>
+                  <select name="shipping_service_id" class="form-select shipping-select w-100" aria-label="Select Shipping Service" id="shipping_service">
+    <option value="">Select Shipping Service</option>
+    @foreach ($shippings as $shipping)
+        <option value="{{ $shipping->id }}" data-wilayas="{{ json_encode($shipping->shipping_wilayas) }}">
+            {{ $shipping->name }}
+        </option>
+    @endforeach
+</select>
                           </div>
 
                             </div>
+                            <div id="wilaya-container" style="display: none; margin-top: 10px;">
+    <label for="wilaya-select">Select Wilaya</label>
+    <select name="shipping_wilaya_id" class="form-select w-100" id="wilaya-select">
+        <option value="">Select Wilaya</option>
+    </select>
+</div>
                             <div class="col-12 d-none guest_phone">
                                 <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
                             </div>
@@ -307,6 +313,47 @@
         toggleShippingService();
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const shippingSelect = document.getElementById("shipping_service");
+        const wilayaSelect = document.getElementById("wilaya-select");
+        const wilayaContainer = document.getElementById("wilaya-container");
+
+        // Load all Wilayas from the JSON file
+        let allWilayas = @json($wilayas);
+
+        shippingSelect.addEventListener("change", function () {
+            let selectedOption = shippingSelect.options[shippingSelect.selectedIndex];
+            let shippingWilayas = selectedOption.getAttribute("data-wilayas");
+
+            // Clear previous options
+            wilayaSelect.innerHTML = '<option value="">Select Wilaya</option>';
+
+            if (shippingWilayas) {
+                let selectedWilayaIds = JSON.parse(shippingWilayas);
+
+                // Filter matched Wilayas
+                let matchedWilayas = allWilayas.filter(wilaya => selectedWilayaIds.includes(wilaya.id));
+
+                // Populate Wilaya dropdown
+                matchedWilayas.forEach(wilaya => {
+                    let option = document.createElement("option");
+                    option.value = wilaya.id;
+                    option.textContent = wilaya.name;
+                    wilayaSelect.appendChild(option);
+                });
+
+                // Show the Wilaya dropdown
+                wilayaContainer.style.display = "block";
+            } else {
+                // Hide the Wilaya dropdown if no selection
+                wilayaContainer.style.display = "none";
+            }
+        });
+    });
+</script>
+
 
         @endsection
 
