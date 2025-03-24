@@ -449,7 +449,9 @@ class AcnooSaleController extends Controller
             ->pluck('sale_id')
             ->toArray();
     
-        return view('business::sales.show', compact('sale', 'salesWithReturns'));
+        return response()->json([
+            'html' => view('business::sales.show', compact('sales','salesWithReturns'))->render()
+        ]);
     }
     
     
