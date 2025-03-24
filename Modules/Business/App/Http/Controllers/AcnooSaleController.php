@@ -33,8 +33,7 @@ class AcnooSaleController extends Controller
             return redirect()->back()->with('error', __('You have no permission to access.'));
         }
 
-        $json = File::get(storage_path('app/Wilaya_Of_Algeria.json'));
-        $wilayas = json_decode($json, true);
+
 
         $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
             ->pluck('sale_id')
@@ -50,7 +49,7 @@ class AcnooSaleController extends Controller
 
         $sales = $query->paginate(20);
 
-        return view('business::sales.index', compact('sales', 'salesWithReturns','wilayas'));
+        return view('business::sales.index', compact('sales', 'salesWithReturns',));
     }
 
     public function acnooFilter(Request $request)
@@ -184,6 +183,14 @@ class AcnooSaleController extends Controller
 
         $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'sale');
 
+        $jsonPath = storage_path('app/Wilaya_Of_Algeria.json'); // Ensure correct path
+        if (!File::exists($jsonPath)) {
+            abort(500, "Wilaya JSON file not found!"); // Error handling
+        }
+        
+        $json = File::get($jsonPath);
+        $wilayas = json_decode($json, true);
+
         $categories = Category::where('business_id', auth()->user()->business_id)->latest()->get();
         $shippings = Shipping::where('business_id', auth()->user()->business_id)->paginate(20);
         $brands = Brand::where('business_id', auth()->user()->business_id)->latest()->get();
@@ -194,7 +201,7 @@ class AcnooSaleController extends Controller
         $sale_id = (Sale::max('id') ?? 0) + 1;
         $invoice_no = 'S-' . str_pad($sale_id, 5, '0', STR_PAD_LEFT);
 
-        return view('business::sales.create', compact('customers','shippings' ,'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
+        return view('business::sales.create', compact('customers','wilayas','shippings' ,'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
     }
 
     /** Get Product wise prices */
