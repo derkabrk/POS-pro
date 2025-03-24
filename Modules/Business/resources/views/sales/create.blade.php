@@ -324,16 +324,17 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const shippingServiceSelect = document.getElementById("shipping-service-select");
+        const shippingServiceSelect = document.getElementById("shipping_service");
         const wilayaSelect = document.getElementById("wilaya-select");
         const communeSelect = document.getElementById("commune-select");
         const wilayaContainer = document.getElementById("wilaya-container");
         const communeContainer = document.getElementById("commune-container");
 
-        // Load all Wilayas and Communes
+        // Load all Wilayas and Communes from Blade JSON
         let allWilayas = @json($wilayas);
         let allCommunes = @json($communes);
 
+        // When Shipping Service is selected
         shippingServiceSelect.addEventListener("change", function () {
             let selectedShipping = shippingServiceSelect.options[shippingServiceSelect.selectedIndex];
             let shippingWilayas = selectedShipping.getAttribute("data-wilayas");
@@ -346,7 +347,7 @@
             if (shippingWilayas) {
                 let selectedWilayaIds = JSON.parse(shippingWilayas);
 
-                // Filter matched Wilayas
+                // Filter Wilayas that match the Shipping Service
                 let matchedWilayas = allWilayas.filter(wilaya => selectedWilayaIds.includes(wilaya.id));
 
                 matchedWilayas.forEach(wilaya => {
@@ -362,6 +363,7 @@
             }
         });
 
+        // When Wilaya is selected
         wilayaSelect.addEventListener("change", function () {
             let selectedWilayaId = wilayaSelect.value;
 
@@ -369,7 +371,7 @@
             communeSelect.innerHTML = '<option value="">Select Commune</option>';
 
             if (selectedWilayaId) {
-                // Filter matched Communes based on selected Wilaya
+                // Filter Communes based on the selected Wilaya
                 let matchedCommunes = allCommunes.filter(commune => commune.wilaya_id == selectedWilayaId);
 
                 matchedCommunes.forEach(commune => {
@@ -386,6 +388,7 @@
         });
     });
 </script>
+
 
 
         @endsection
