@@ -126,6 +126,38 @@
         </div>
     </div>
 
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const saleTypeFilter = document.getElementById("sale_type_filter");
+        const filterForm = document.querySelector(".filter-form");
+        const salesData = document.getElementById("sales-data");
+
+        saleTypeFilter.addEventListener("change", function () {
+            const formData = new FormData(filterForm);
+
+            fetch(filterForm.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // ✅ Instead of appending, replace the entire sales table content
+                if (data.html) {
+                    salesData.innerHTML = data.html;
+                } else {
+                    salesData.innerHTML = "<tr><td colspan='10' class='text-center'>No Sales Found</td></tr>";
+                }
+            })
+            .catch(error => console.error("Error fetching sales data:", error));
+        });
+    });
+</script>
+
+
 @endsection
 
 @push('modal')

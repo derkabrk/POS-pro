@@ -52,38 +52,33 @@ class AcnooSaleController extends Controller
         return view('business::sales.index', compact('sales', 'salesWithReturns',));
     }
 
-    public function acnooFilter(Request $request)
+    public function acnoofilter(Request $request)
     {
-        $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
-            ->pluck('sale_id')
-            ->toArray();
-          
-        $query = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'details', 'details.product:id,productName,category_id', 'details.product.category:id,categoryName', 'payment_type:id,name')
+        $query = Sale::with('user', 'party', 'details', 'payment_type')
             ->where('business_id', auth()->user()->business_id);
-
-        if ($request->has('today')) {
-            $query->whereDate('created_at', Carbon::today());
+    
+        // Apply sale_type filter
+        if ($request->filled('sale_type')) {
+            $query->where('sale_type', $request->sale_type);
         }
-
-        $query->when($request->search, function ($query) use ($request) {
+    
+        // Apply search filter
+        if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
-                $q->where('paymentType', 'like', '%' . $request->search . '%')
-                    ->orWhereHas('party', function ($q) use ($request) {
-                        $q->where('name', 'like', '%' . $request->search . '%')
-                        ->orWhere('invoiceNumber', 'like', '%' . $request->search . '%');
-                    })
-                    ->orWhereHas('payment_type', function ($q) use ($request) {
-                        $q->where('name', 'like', '%' . $request->search . '%');
-                    });
+                $q->where('invoiceNumber', 'like', '%' . $request->search . '%')
+                  ->orWhereHas('party', function ($q) use ($request) {
+                      $q->where('name', 'like', '%' . $request->search . '%');
+                  });
             });
-        });
-
-        
-        $sales = $query->latest()->paginate($request->per_page ?? 10);
-         return response()->json([
+        }
+    
+        $sales = $query->paginate($request->per_page ?? 10);
+    
+        return response()->json([
             'html' => view('business::sales.datas', compact('sales'))->render()
         ]);
     }
+    
 
     public function filter(Request $request)
 {
