@@ -400,10 +400,6 @@
         });
     });
 </script>
-
-
-
-
         @endsection
 
         @push('modal')
