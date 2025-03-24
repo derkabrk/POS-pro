@@ -183,23 +183,21 @@ class AcnooSaleController extends Controller
 
         $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'sale');
 
-        $jsonPath = storage_path('app/Wilaya_Of_Algeria.json'); // Ensure correct path
+        $jsonPath = storage_path('app/Wilaya_Of_Algeria.json'); 
         if (!File::exists($jsonPath)) {
-            abort(500, "Wilaya JSON file not found!"); // Error handling
+            abort(500, "Wilaya JSON file not found!");
         }
-
-        $communesJson = File::get(storage_path('app/Commune_Of_Algeria.json'));// Ensure correct path
-        if (!File::exists($communesJson)) {
-            abort(500, "Wilaya JSON file not found!"); // Error handling
-        }
-
-        
-        
         $json = File::get($jsonPath);
         $wilayas = json_decode($json, true);
 
-        $json1 = File::get($communesJson);
-        $communes = json_decode($json1, true);
+        $communesPath = storage_path('app/Commune_Of_Algeria.json');
+
+        if (!File::exists($communesPath)) {
+            abort(500, "Commune JSON file not found!");
+        }
+        
+        $communesJson = File::get($communesPath);
+        $communes = json_decode($communesJson, true);
 
         $categories = Category::where('business_id', auth()->user()->business_id)->latest()->get();
         $shippings = Shipping::where('business_id', auth()->user()->business_id)->paginate(20);
