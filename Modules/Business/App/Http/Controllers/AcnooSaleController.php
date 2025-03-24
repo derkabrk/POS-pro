@@ -429,7 +429,7 @@ class AcnooSaleController extends Controller
 
     public function show($id)
     {
-       return view('business::sales.show', compact('id'));
+       return view('business::sales.dates', compact('id'));
     }
 
     public function edit($id)
