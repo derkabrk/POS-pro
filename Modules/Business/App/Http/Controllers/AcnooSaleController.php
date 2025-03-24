@@ -58,9 +58,7 @@ class AcnooSaleController extends Controller
             ->pluck('sale_id')
             ->toArray();
 
-            if ($request->has('sale_type') && $request->sale_type !== '') {
-                $query->where('sale_type', $request->sale_type);
-            }
+          
         $query = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'details', 'details.product:id,productName,category_id', 'details.product.category:id,categoryName', 'payment_type:id,name')
             ->where('business_id', auth()->user()->business_id);
 
