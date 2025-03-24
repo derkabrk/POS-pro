@@ -27,12 +27,14 @@ class Shipping extends Model
         'first_r_credential',
         'second_r_credential',
         'shops',
+        'shipping_wilayas',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'shops' => 'array',
+        'shipping_wilayas' => 'array',
     ];
     public function shipping_company()
     {
