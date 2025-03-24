@@ -106,6 +106,16 @@ class AcnooShippingController extends Controller
             'shipping_company_id' => 'required|exists:shipping_companies,id',
         ]);
 
+        $stepdeskSelections = $request->input('stepdesk', []);
+        $deliverySelections = $request->input('delivery_home', []);
+    
+        // Store updated selections as JSON array
+        $selections = [
+            'stepdesk' => $stepdeskSelections,
+            'delivery_home' => $deliverySelections
+        ];
+    
+
      DB::beginTransaction();
 
         try {
@@ -122,6 +132,7 @@ class AcnooShippingController extends Controller
                 'shipping_company_id' => $shipping_company->id,
                 'is_active' =>  $request->status ? 1 : 0,
                 'shops'  => json_encode([]),
+               'shipping_wilayas' => json_encode($selections),
             ]);
 
             DB::commit();
