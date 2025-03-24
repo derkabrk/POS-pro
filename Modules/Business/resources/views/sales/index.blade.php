@@ -26,6 +26,8 @@
             <span></span>
         </div>
 
+        <form action="{{ route('business.sales.filter_sale') }}" method="post" class="filter-form" table="#sales-data">
+        @csrf
         <div class="gpt-up-down-arrow position-relative">
             <select name="sale_type" id="sale_type_filter" class="form-control">
                 <option value="">{{ __('All Sales') }}</option>
@@ -34,6 +36,9 @@
             </select>
         </div>
 
+        </form>
+
+    
         <div class="table-search position-relative">
             <input type="text" name="search" class="form-control" placeholder="{{ __('Search...') }}">
             <span class="position-absolute">
