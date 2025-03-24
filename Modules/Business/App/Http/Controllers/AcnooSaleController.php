@@ -436,16 +436,22 @@ class AcnooSaleController extends Controller
 
     public function show($id)
     {
-        // Fetch sale details with relationships
+        // Fetch sale details
         $sale = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'details', 
             'details.product:id,productName,category_id', 
             'details.product.category:id,categoryName', 
             'payment_type:id,name')
             ->where('business_id', auth()->user()->business_id)
-            ->findOrFail($id); // Ensure it exists
+            ->findOrFail($id);
     
-        return view('business::sales.show', compact('sale'));
+        // Fetch sales with returns
+        $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
+            ->pluck('sale_id')
+            ->toArray();
+    
+        return view('business::sales.show', compact('sale', 'salesWithReturns'));
     }
+    
     
 
     public function edit($id)
