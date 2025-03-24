@@ -331,8 +331,18 @@
         const communeContainer = document.getElementById("commune-container");
 
         // Load all Wilayas and Communes from Blade JSON
-        let allWilayas = @json($wilayas);
-        let allCommunes = @json($communes);
+        let allWilayas = @json($wilayas ?? []);
+        let allCommunes = @json($communes ?? []);
+
+        // Ensure `allCommunes` is an array (fallback in case of null)
+        if (!Array.isArray(allCommunes)) {
+            allCommunes = [];
+        }
+
+        // Ensure `allWilayas` is an array (fallback in case of null)
+        if (!Array.isArray(allWilayas)) {
+            allWilayas = [];
+        }
 
         // When Shipping Service is selected
         shippingServiceSelect.addEventListener("change", function () {
@@ -348,7 +358,7 @@
                 let selectedWilayaIds = JSON.parse(shippingWilayas);
 
                 // Filter Wilayas that match the Shipping Service
-                let matchedWilayas = allWilayas.filter(wilaya => selectedWilayaIds.includes(wilaya.id));
+                let matchedWilayas = allWilayas.filter(wilaya => selectedWilayaIds.includes(parseInt(wilaya.id)));
 
                 matchedWilayas.forEach(wilaya => {
                     let option = document.createElement("option");
@@ -371,23 +381,26 @@
             communeSelect.innerHTML = '<option value="">Select Commune</option>';
 
             if (selectedWilayaId) {
-                // Filter Communes based on the selected Wilaya
-                let matchedCommunes = allCommunes.filter(commune => commune.wilaya_id == selectedWilayaId);
+                // Ensure communes exist before filtering
+                if (allCommunes.length > 0) {
+                    let matchedCommunes = allCommunes.filter(commune => commune.wilaya_id == selectedWilayaId);
 
-                matchedCommunes.forEach(commune => {
-                    let option = document.createElement("option");
-                    option.value = commune.id;
-                    option.textContent = commune.name;
-                    communeSelect.appendChild(option);
-                });
+                    matchedCommunes.forEach(commune => {
+                        let option = document.createElement("option");
+                        option.value = commune.id;
+                        option.textContent = commune.name;
+                        communeSelect.appendChild(option);
+                    });
 
-                communeContainer.style.display = "block";
+                    communeContainer.style.display = "block";
+                }
             } else {
                 communeContainer.style.display = "none";
             }
         });
     });
 </script>
+
 
 
 
