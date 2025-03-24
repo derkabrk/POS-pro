@@ -16,6 +16,8 @@
                     <form action="{{ route('business.sales.filter') }}" method="post" class="filter-form" table="#sales-data">
     @csrf
     <div class="table-top-left d-flex gap-3 margin-l-16">
+        
+        <!-- Per Page Dropdown -->
         <div class="gpt-up-down-arrow position-relative">
             <select name="per_page" class="form-control">
                 <option value="10">{{ __('Show- 10') }}</option>
@@ -26,9 +28,16 @@
             <span></span>
         </div>
 
-      
+        <!-- Sale Type Dropdown -->
+        <div class="gpt-up-down-arrow position-relative">
+            <select name="sale_type" id="sale_type_filter" class="form-control">
+                <option value="">{{ __('All Sales') }}</option>
+                <option value="0">{{ __('Business Sale') }}</option>
+                <option value="1">{{ __('E-commerce Sale') }}</option>
+            </select>
+        </div>
 
-    
+        <!-- Search Input -->
         <div class="table-search position-relative">
             <input type="text" name="search" class="form-control" placeholder="{{ __('Search...') }}">
             <span class="position-absolute">
@@ -40,17 +49,6 @@
         </div>
     </div>
 </form>
-<form action="{{ route('business.sales.filter_sale') }}" method="post" class="filter-form" table="#sales-data">
-        @csrf
-        <div class="gpt-up-down-arrow position-relative">
-            <select name="sale_type" id="sale_type_filter" class="form-control">
-                <option value="">{{ __('All Sales') }}</option>
-                <option value="0">{{ __('Business Sale') }}</option>
-                <option value="1">{{ __('E-commerce Sale') }}</option>
-            </select>
-        </div>
-
-        </form>
 
                     </div>
                 </div>
@@ -139,14 +137,16 @@
                     "X-CSRF-TOKEN": "{{ csrf_token() }}"
                 }
             })
-            .then(response => response.text())
-            .then(html => {
-                salesData.innerHTML = html;
+            .then(response => response.json()) 
+            .then(data => {
+                // ✅ Replace table data instead of appending
+                salesData.innerHTML = data.html;
             })
             .catch(error => console.error("Error fetching sales data:", error));
         });
     });
 </script>
+
 
 @endsection
 
