@@ -68,8 +68,7 @@
                                     </div>
                                 </div>
 
-                                <form action="{{ route('updateSelections') }}" method="POST">
-    @csrf
+                               
     <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
@@ -102,7 +101,6 @@
             </tbody>
         </table>
     </div>
-</form>
 
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
