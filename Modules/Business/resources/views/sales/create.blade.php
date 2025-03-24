@@ -92,9 +92,9 @@
                           </div>
 
                             </div>
-                <div id="wilaya-container" class="mt-2 d-none" style="max-width: 300px;">
+                            <div id="wilaya-container" style="display: none; margin-top: 10px; max-width: 300px;">
     <label for="wilaya-select">Select Wilaya</label>
-    <select name="shipping_wilaya_id" class="form-select w-100" id="wilaya-select">
+    <select name="shipping_wilaya_id" class="form-select" id="wilaya-select" style="width: 100%;">
         <option value="">Select Wilaya</option>
     </select>
 </div>
