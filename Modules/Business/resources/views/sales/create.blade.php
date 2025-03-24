@@ -98,6 +98,14 @@
         <option value="">Select Wilaya</option>
     </select>
 </div>
+
+<div id="commune-container" style="display: none; margin-top: 10px; max-width: 300px;">
+    <label for="commune-select">Select Commune</label>
+    <select name="commune_id" class="form-select" id="commune-select" style="width: 100%;">
+        <option value="">Select Commune</option>
+    </select>
+</div>
+
                             <div class="col-12 d-none guest_phone">
                                 <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
                             </div>
@@ -316,19 +324,24 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const shippingSelect = document.getElementById("shipping_service");
+        const shippingServiceSelect = document.getElementById("shipping-service-select");
         const wilayaSelect = document.getElementById("wilaya-select");
+        const communeSelect = document.getElementById("commune-select");
         const wilayaContainer = document.getElementById("wilaya-container");
+        const communeContainer = document.getElementById("commune-container");
 
-        // Load all Wilayas from the JSON file
+        // Load all Wilayas and Communes
         let allWilayas = @json($wilayas);
+        let allCommunes = @json($communes);
 
-        shippingSelect.addEventListener("change", function () {
-            let selectedOption = shippingSelect.options[shippingSelect.selectedIndex];
-            let shippingWilayas = selectedOption.getAttribute("data-wilayas");
+        shippingServiceSelect.addEventListener("change", function () {
+            let selectedShipping = shippingServiceSelect.options[shippingServiceSelect.selectedIndex];
+            let shippingWilayas = selectedShipping.getAttribute("data-wilayas");
 
             // Clear previous options
             wilayaSelect.innerHTML = '<option value="">Select Wilaya</option>';
+            communeSelect.innerHTML = '<option value="">Select Commune</option>';
+            communeContainer.style.display = "none";
 
             if (shippingWilayas) {
                 let selectedWilayaIds = JSON.parse(shippingWilayas);
@@ -336,7 +349,6 @@
                 // Filter matched Wilayas
                 let matchedWilayas = allWilayas.filter(wilaya => selectedWilayaIds.includes(wilaya.id));
 
-                // Populate Wilaya dropdown
                 matchedWilayas.forEach(wilaya => {
                     let option = document.createElement("option");
                     option.value = wilaya.id;
@@ -344,11 +356,32 @@
                     wilayaSelect.appendChild(option);
                 });
 
-                // Show the Wilaya dropdown
                 wilayaContainer.style.display = "block";
             } else {
-                // Hide the Wilaya dropdown if no selection
                 wilayaContainer.style.display = "none";
+            }
+        });
+
+        wilayaSelect.addEventListener("change", function () {
+            let selectedWilayaId = wilayaSelect.value;
+
+            // Clear previous Commune options
+            communeSelect.innerHTML = '<option value="">Select Commune</option>';
+
+            if (selectedWilayaId) {
+                // Filter matched Communes based on selected Wilaya
+                let matchedCommunes = allCommunes.filter(commune => commune.wilaya_id == selectedWilayaId);
+
+                matchedCommunes.forEach(commune => {
+                    let option = document.createElement("option");
+                    option.value = commune.id;
+                    option.textContent = commune.name;
+                    communeSelect.appendChild(option);
+                });
+
+                communeContainer.style.display = "block";
+            } else {
+                communeContainer.style.display = "none";
             }
         });
     });
