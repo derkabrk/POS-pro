@@ -72,20 +72,28 @@
                                 <div class="col-lg-6 mb-2">
                                     <div class="col-lg-12">
                                         <label>Shipping Wilayas</label>
-                                        @foreach ($wilayas as $wilaya)
-    <div>
-        <label>
-            <input type="checkbox" name="stepdesk[]" value="{{ $wilaya['id'] }}"> 
-            Stepdesk - {{ $wilaya['name'] }}
-        </label>
-    </div>
-    <div>
-        <label>
-            <input type="checkbox" name="delivery_home[]" value="{{ $wilaya['id'] }}"> 
-            Delivery Home - {{ $wilaya['name'] }}
-        </label>
-    </div>
-@endforeach
+                                        <table class="table">
+    <thead>
+        <tr>
+            <th>Wilaya</th>
+            <th>Stepdesk</th>
+            <th>Delivery Home</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($wilayas as $wilaya)
+            <tr>
+                <td>{{ $wilaya['name'] }}</td>
+                <td>
+                    <input type="checkbox" name="stepdesk[]" value="{{ $wilaya['id'] }}">
+                </td>
+                <td>
+                    <input type="checkbox" name="delivery_home[]" value="{{ $wilaya['id'] }}">
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
                                     </div>
                                 </div>
 
