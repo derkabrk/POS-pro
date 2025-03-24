@@ -92,7 +92,7 @@
                           </div>
 
                             </div>
-                            <div id="wilaya-container" class="mt-2 d-none" style="max-width: 300px;">
+                <div id="wilaya-container" class="mt-2 d-none" style="max-width: 300px;">
     <label for="wilaya-select">Select Wilaya</label>
     <select name="shipping_wilaya_id" class="form-select w-100" id="wilaya-select">
         <option value="">Select Wilaya</option>
@@ -349,43 +349,6 @@
             } else {
                 // Hide the Wilaya dropdown if no selection
                 wilayaContainer.style.display = "none";
-            }
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const wilayaSelect = document.getElementById("wilaya-select");
-        const communeSelect = document.getElementById("commune-select");
-        const communeContainer = document.getElementById("commune-container");
-
-        // Load all communes from the JSON file
-        let allCommunes = @json($communes);
-
-        wilayaSelect.addEventListener("change", function () {
-            let selectedWilayaId = wilayaSelect.value;
-
-            // Clear previous options
-            communeSelect.innerHTML = '<option value="">Select Commune</option>';
-
-            if (selectedWilayaId) {
-                // Filter matched Communes
-                let matchedCommunes = allCommunes.filter(commune => commune.wilaya_id == selectedWilayaId);
-
-                // Populate Commune dropdown
-                matchedCommunes.forEach(commune => {
-                    let option = document.createElement("option");
-                    option.value = commune.id;
-                    option.textContent = commune.name;
-                    communeSelect.appendChild(option);
-                });
-
-                // Show the Commune dropdown
-                communeContainer.style.display = "block";
-            } else {
-                // Hide the Commune dropdown if no Wilaya is selected
-                communeContainer.style.display = "none";
             }
         });
     });
