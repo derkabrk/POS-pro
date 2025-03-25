@@ -126,7 +126,7 @@
             saveStatusBtn.innerHTML = "Updating...";
 
             fetch(`/business/sales/update-status/${saleId}`, {
-                method: "POST",
+                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
