@@ -473,20 +473,34 @@ class AcnooSaleController extends Controller
                 'request_data' => $request->all()
             ]);
     
-            // Validate the request
+            // Validate request
             $validated = $request->validate([
                 'sale_status' => 'required|integer|in:1,2,3,4,5,6,7,8,9,10,11,12',
             ]);
     
             // Ensure only E-commerce sales can update status
             if ($sale->sale_type != 1) {
-                return response()->json(['success' => false, 'message' => 'Only E-commerce sales can be updated'], 403);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Only E-commerce sales can be updated'
+                ], 403);
             }
     
-            // Update Sale Status
+            // Ensure `sale_status` column exists
+            if (!Schema::hasColumn('sales', 'sale_status')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Database column `sale_status` not found!'
+                ], 500);
+            }
+    
+            // Update sale status
             $sale->update(['sale_status' => $validated['sale_status']]);
     
-            return response()->json(['success' => true, 'message' => 'Sale status updated successfully']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Sale status updated successfully'
+            ]);
         } catch (\Exception $e) {
             \Log::error("Sale Status Update Failed: " . $e->getMessage());
     
@@ -497,6 +511,7 @@ class AcnooSaleController extends Controller
             ], 500);
         }
     }
+    
     
     
     
