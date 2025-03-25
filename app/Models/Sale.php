@@ -106,20 +106,21 @@ class Sale extends Model
     ];
 
     public const STATUS = [
-        'Pending' => 1,
-        'Called 1' => 2,
-        'Called 2' => 3,
-        'Called 3' => 4,
-        'Called 4' => 5,
-        'Canceled' => 6,
-        'Confirmed' => 7,
-        'Shipping' => 8,
-        'Returned' => 9,
-        'Delivered' => 10,
-        'Paid' => 11,
-        'Cash Out' => 12,
+        1 => 'Pending',
+        2 => 'Called 1',
+        3 => 'Called 2',
+        4 => 'Called 3',
+        5 => 'Called 4',
+        6 => 'Canceled',
+        7 => 'Confirmed',
+        8 => 'Shipping',
+        9 => 'Returned',
+        10 => 'Delivered',
+        11 => 'Paid',
+        12 => 'Cash Out',
     ];
 
+    // Accessor to get status name
     public function getStatusNameAttribute()
     {
         return self::STATUS[$this->sale_status] ?? 'Unknown';
