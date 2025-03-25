@@ -5,6 +5,7 @@
 @endsection
 
 @section('main_content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="erp-table-section">
         <div class="container-fluid">
             <div class="card">

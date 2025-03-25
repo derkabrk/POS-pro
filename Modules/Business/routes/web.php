@@ -18,7 +18,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('sales/filter', [Business\AcnooSaleController::class, 'acnooFilter'])->name('sales.filter');
     Route::post('sales/filter_sale', [AcnooSaleController::class, 'filter'])->name('sales.filter_sale');
     Route::get('sales/{id}', [AcnooSaleController::class, 'show'])->name('sales.show');
-    Route::patch('sales/update-status/{sale}', [AcnooSaleController::class, 'updateStatus'])->name('sales.updateStatus');
+    Route::post('sales/update-status/{sale}', [AcnooSaleController::class, 'updateStatus'])->name('sales.updateStatus');
 
     
 

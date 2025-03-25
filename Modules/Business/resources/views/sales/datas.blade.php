@@ -85,28 +85,16 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let updateStatusModal = document.getElementById("updateStatusModal");
         let saleIdInput = document.getElementById("saleId");
         let saleStatusSelect = document.getElementById("sale_status");
         let saveStatusBtn = document.getElementById("saveStatusBtn");
 
-        // Ensure modal values are set when clicking "Update Status"
+        // Open Modal and Set Current Status
         document.querySelectorAll(".update-status-btn").forEach(button => {
             button.addEventListener("click", function () {
                 let saleId = this.getAttribute("data-sale-id");
                 let currentStatus = this.getAttribute("data-current-status");
 
-                if (!saleId || saleId === "null") {
-                    alert("Sale ID is missing! Please check the button data attributes.");
-                    return;
-                }
-
-                if (!currentStatus || currentStatus === "null") {
-                    alert("Current status is missing! Please check the button data attributes.");
-                    return;
-                }
-
-                // Set modal input values
                 saleIdInput.value = saleId;
                 saleStatusSelect.value = currentStatus;
             });
@@ -118,48 +106,45 @@
             let newStatus = saleStatusSelect.value;
 
             if (!saleId || !newStatus) {
-                alert("Invalid Sale ID or Status! Make sure they are selected.");
+                alert("Invalid Sale ID or Status!");
                 return;
             }
 
             saveStatusBtn.disabled = true;
             saveStatusBtn.innerHTML = "Updating...";
 
-            fetch(`/business/sales/update-status/${saleId}`, { 
-            method: "patch",
-            headers: {
-           "Content-Type": "application/json",
-           "Accept": "application/json", // Ensure JSON response
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-              body: JSON.stringify({ sale_status: newStatus })
-         })
-         .then(response => {
-          if (!response.ok) {
-        return response.text().then(text => { throw new Error(text); }); // Get Laravel error message
-           }
-           return response.json();
-           })
-           .then(data => {
-           saveStatusBtn.disabled = false;
-           saveStatusBtn.innerHTML = "Update Status";
+            fetch(`/business/sales/update-status`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    sale_id: saleId,
+                    sale_status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                saveStatusBtn.disabled = false;
+                saveStatusBtn.innerHTML = "Update Status";
 
-          if (data.success) {
-          alert("Sale status updated successfully!");
-          location.reload();
-          } else {
-          alert("Error: " + data.message);
-        }
-      })
-      .catch(error => {
-      saveStatusBtn.disabled = false;
-      saveStatusBtn.innerHTML = "Update Status";
-      console.error("Error updating sale status:", error);
-      alert("Something went wrong. Check the console for details.");
-      });
-
+                if (data.success) {
+                    alert("Sale status updated successfully!");
+                    location.reload();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                saveStatusBtn.disabled = false;
+                saveStatusBtn.innerHTML = "Update Status";
+                console.error("Error updating sale status:", error);
+                alert("Something went wrong. Check the console for details.");
+            });
         });
     });
 </script>
+
 
 
