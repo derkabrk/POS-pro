@@ -106,23 +106,29 @@ class Sale extends Model
     ];
 
     public const STATUS = [
-        1 => 'Pending',
-        2 => 'Called 1',
-        3 => 'Called 2',
-        4 => 'Called 3',
-        5 => 'Called 4',
-        6 => 'Canceled',
-        7 => 'Confirmed',
-        8 => 'Shipping',
-        9 => 'Returned',
-        10 => 'Delivered',
-        11 => 'Paid',
-        12 => 'Cash Out',
+        1 => ['name' => 'Pending', 'color' => 'bg-warning'], // Yellow
+        2 => ['name' => 'Called 1', 'color' => 'bg-info'], // Light Blue
+        3 => ['name' => 'Called 2', 'color' => 'bg-info'], // Light Blue
+        4 => ['name' => 'Called 3', 'color' => 'bg-info'], // Light Blue
+        5 => ['name' => 'Called 4', 'color' => 'bg-info'], // Light Blue
+        6 => ['name' => 'Canceled', 'color' => 'bg-danger'], // Red
+        7 => ['name' => 'Confirmed', 'color' => 'bg-primary'], // Blue
+        8 => ['name' => 'Shipping', 'color' => 'bg-secondary'], // Grey
+        9 => ['name' => 'Returned', 'color' => 'bg-dark'], // Dark Grey
+        10 => ['name' => 'Delivered', 'color' => 'bg-success'], // Green
+        11 => ['name' => 'Paid', 'color' => 'bg-success'], // Green
+        12 => ['name' => 'Cash Out', 'color' => 'bg-primary'], // Blue
     ];
+
 
     // Accessor to get status name
     public function getStatusNameAttribute()
     {
         return self::STATUS[$this->sale_status] ?? 'Unknown';
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return self::STATUS[$this->sale_status]['color'] ?? 'bg-secondary';
     }
 }
