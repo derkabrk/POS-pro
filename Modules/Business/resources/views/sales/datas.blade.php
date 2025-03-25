@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
         saveStatusBtn.innerHTML = "Updating...";
 
         fetch(`/business/sales/update-status`, {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
