@@ -83,6 +83,7 @@
     </div>
 </div>
 
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     let saleIdInput = document.getElementById("saleId");
