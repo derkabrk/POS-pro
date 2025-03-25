@@ -17,13 +17,16 @@
         $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
         @endphp
         <td>
+
         <button 
-        class="btn btn-sm {{  $status['color'] }} text-white px-2 py-1 rounded-pill update-status"
+        class="btn btn-sm {{  $status['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
+        data-bs-toggle="modal"
+        data-bs-target="#updateStatusModal"
         data-sale-id="{{ $sale->id }}"
         data-current-status="{{ $sale->sale_status }}"
-        >
-        {{ $status['name'] }}
-       </button>
+         >
+        {{ $status['name']  }}
+    </button>
         </td>
         @endif
 
@@ -52,61 +55,78 @@
 
    
 @endforeach
+
+<div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateStatusModalLabel">Update Sale Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateStatusForm">
+                    @csrf
+                    <input type="hidden" id="saleId" name="sale_id">
+                    <label for="sale_status">Select New Status:</label>
+                    <select id="sale_status" name="sale_status" class="form-control">
+                        @foreach (\App\Models\Sale::STATUS as $id => $status)
+                            <option value="{{ $id }}">{{ $status['name'] }}</option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveStatusBtn">Update Status</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".update-status").forEach(button => {
+        let updateStatusModal = document.getElementById("updateStatusModal");
+        let saleIdInput = document.getElementById("saleId");
+        let saleStatusSelect = document.getElementById("sale_status");
+        let saveStatusBtn = document.getElementById("saveStatusBtn");
+
+        // When the modal opens, set the current values
+        document.querySelectorAll(".update-status-btn").forEach(button => {
             button.addEventListener("click", function () {
                 let saleId = this.dataset.saleId;
                 let currentStatus = this.dataset.currentStatus;
 
-                let statusOptions = {
-                    1: "Pending", 2: "Called 1", 3: "Called 2", 4: "Called 3", 
-                    5: "Called 4", 6: "Canceled", 7: "Confirmed", 8: "Shipping", 
-                    9: "Returned", 10: "Delivered", 11: "Paid", 12: "Cash Out"
-                };
+                saleIdInput.value = saleId;
+                saleStatusSelect.value = currentStatus;
+            });
+        });
 
-                let selectHTML = '<select id="statusDropdown" class="form-control">';
-                for (const [id, name] of Object.entries(statusOptions)) {
-                    selectHTML += `<option value="${id}" ${id == currentStatus ? 'selected' : ''}>${name}</option>`;
+        // When the update button is clicked, send AJAX request
+        saveStatusBtn.addEventListener("click", function () {
+            let saleId = saleIdInput.value;
+            let newStatus = saleStatusSelect.value;
+
+            fetch(`/business/sales/update-status/${saleId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ sale_status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Reload page to update status
+                } else {
+                    alert("Error updating sale status.");
                 }
-                selectHTML += '</select>';
-
-                Swal.fire({
-                    title: "Update Sale Status",
-                    html: selectHTML,
-                    showCancelButton: true,
-                    confirmButtonText: "Update",
-                    preConfirm: () => {
-                        return document.getElementById("statusDropdown").value;
-                    }
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        let newStatus = result.value;
-
-                        // Send AJAX request to update status
-                        fetch(`/business/sales/update-status/${saleId}`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                            },
-                            body: JSON.stringify({ sale_status: newStatus })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                location.reload(); // Reload page to reflect change
-                            } else {
-                                Swal.fire("Error", "Failed to update status", "error");
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error updating sale status:", error);
-                            Swal.fire("Error", "Something went wrong", "error");
-                        });
-                    }
-                });
+            })
+            .catch(error => {
+                console.error("Error updating sale status:", error);
+                alert("Something went wrong.");
             });
         });
     });
 </script>
+
