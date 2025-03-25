@@ -50,7 +50,9 @@
         </td>
     </tr>
 
-    <script>
+   
+@endforeach
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".update-status").forEach(button => {
             button.addEventListener("click", function () {
@@ -108,5 +110,3 @@
         });
     });
 </script>
-
-@endforeach
