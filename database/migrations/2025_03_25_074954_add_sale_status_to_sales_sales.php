@@ -4,25 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+return new class extends Migration {
+    public function up()
     {
         Schema::table('sales', function (Blueprint $table) {
-            $table->integer('sale_status')->default(1)->change();
+            if (!Schema::hasColumn('sales', 'sale_status')) {
+                $table->integer('sale_status')->default(1)->after('sale_type'); 
+            } else {
+                $table->integer('sale_status')->default(1)->change(); 
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('sales', function (Blueprint $table) {
-            $table->string('sale_status')->change();
+            if (Schema::hasColumn('sales', 'sale_status')) {
+                $table->dropColumn('sale_status');
+            }
         });
     }
 };
