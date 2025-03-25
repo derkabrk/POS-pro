@@ -22,7 +22,7 @@
         class="btn btn-sm {{  $status['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
         data-bs-toggle="modal"
         data-bs-target="#updateStatusModal"
-        data-sale-id="{{ $sale->id }}"
+        data-sale-id="{{ $sale->id}}"
         data-current-status="{{ $sale->sale_status }}"
          >
         {{ $status['name']  }}
@@ -84,48 +84,75 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    let saveStatusBtn = document.getElementById("saveStatusBtn");
+    document.addEventListener("DOMContentLoaded", function () {
+        let updateStatusModal = document.getElementById("updateStatusModal");
+        let saleIdInput = document.getElementById("saleId");
+        let saleStatusSelect = document.getElementById("sale_status");
+        let saveStatusBtn = document.getElementById("saveStatusBtn");
 
-    saveStatusBtn.addEventListener("click", function () {
-        let saleId = document.getElementById("saleId").value;
-        let newStatus = document.getElementById("sale_status").value;
+        // Ensure modal values are set when clicking "Update Status"
+        document.querySelectorAll(".update-status-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let saleId = this.getAttribute("data-sale-id");
+                let currentStatus = this.getAttribute("data-current-status");
 
-        if (!saleId || !newStatus) {
-            alert("Invalid Sale ID or Status!");
-            return;
-        }
+                if (!saleId || saleId === "null") {
+                    alert("Sale ID is missing! Please check the button data attributes.");
+                    return;
+                }
 
-        saveStatusBtn.disabled = true;
-        saveStatusBtn.innerHTML = "Updating...";
+                if (!currentStatus || currentStatus === "null") {
+                    alert("Current status is missing! Please check the button data attributes.");
+                    return;
+                }
 
-        fetch(`/business/sales/update-status/${saleId}`, {
-            method: "POST", // Change from PATCH to POST
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ sale_status: newStatus })
-        })
-        .then(response => response.json())
-        .then(data => {
-            saveStatusBtn.disabled = false;
-            saveStatusBtn.innerHTML = "Update Status";
+                // Set modal input values
+                saleIdInput.value = saleId;
+                saleStatusSelect.value = currentStatus;
+            });
+        });
 
-            if (data.success) {
-                alert("Sale status updated successfully!");
-                location.reload();
-            } else {
-                alert("Error: " + data.message);
+        // Handle Save Button Click
+        saveStatusBtn.addEventListener("click", function () {
+            let saleId = saleIdInput.value;
+            let newStatus = saleStatusSelect.value;
+
+            if (!saleId || !newStatus) {
+                alert("Invalid Sale ID or Status! Make sure they are selected.");
+                return;
             }
-        })
-        .catch(error => {
-            saveStatusBtn.disabled = false;
-            saveStatusBtn.innerHTML = "Update Status";
-            console.error("Error updating sale status:", error);
-            alert("Something went wrong. Check the console for details.");
+
+            saveStatusBtn.disabled = true;
+            saveStatusBtn.innerHTML = "Updating...";
+
+            fetch(`/business/sales/update-status/${saleId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ sale_status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                saveStatusBtn.disabled = false;
+                saveStatusBtn.innerHTML = "Update Status";
+
+                if (data.success) {
+                    alert("Sale status updated successfully!");
+                    location.reload();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                saveStatusBtn.disabled = false;
+                saveStatusBtn.innerHTML = "Update Status";
+                console.error("Error updating sale status:", error);
+                alert("Something went wrong. Check the console for details.");
+            });
         });
     });
-});
-
 </script>
+
+
