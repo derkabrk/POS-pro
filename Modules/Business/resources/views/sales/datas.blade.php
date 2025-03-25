@@ -126,7 +126,7 @@
             saveStatusBtn.innerHTML = "Updating...";
 
             fetch(`/business/sales/update-status/${saleId}`, { 
-    method: "PATCH",
+    method: "post",
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json", // Ensure JSON response
