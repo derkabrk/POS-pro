@@ -131,7 +131,7 @@
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: { sale_status: newStatus }
+                body: JSON.stringify({ sale_status: newStatus })
             })
             .then(response => response.json())
             .then(data => {
