@@ -463,14 +463,14 @@ class AcnooSaleController extends Controller
     }
     
 
-    public function updateStatus(Request $request, Sale $sale)
+    public function updateStatus(Request $request,  $id)
     {
         try {
             // Validate the request
             $validated = $request->validate([
                 'sale_status' => 'required|integer|in:1,2,3,4,5,6,7,8,9,10,11,12',
             ]);
-    
+            $sale = Sale::findOrFail('id', $id);
             // Ensure only E-commerce sales can update status
             if ($sale->sale_type == 1) {
                 $sale->update(['sale_status' => $validated['sale_status']]);
