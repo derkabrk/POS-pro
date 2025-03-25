@@ -12,11 +12,15 @@
         <td class="text-start">${{ number_format($sale->paidAmount, 2) }}</td>
         <td class="text-start">${{ number_format($sale->dueAmount, 2) }}</td>
         <td class="text-start">{{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</td>
-        @if($sale->sale_type != 0)
+        @if ($sale->sale_type == 1)
     <td>
-        <div class="{{ $sale->dueAmount == 0 ? 'paid-badge' : ($sale->dueAmount > 0 && $sale->dueAmount < $sale->totalAmount ? 'unpaid-badge' : 'unpaid-badge-2') }}">
-            {{ $sale->dueAmount == 0 ? 'Paid' : ($sale->dueAmount > 0 && $sale->dueAmount < $sale->totalAmount ? 'Partial Paid' : 'Unpaid') }}
-        </div>
+    <select name="sale_status" class="form-control">
+        @foreach (\App\Models\Sale::STATUS as $id => $status)
+            <option value="{{ $id }}" {{ $sale->sale_status == $id ? 'selected' : '' }}>
+                {{ $status }}
+            </option>
+        @endforeach
+    </select>
     </td>
 @endif
 

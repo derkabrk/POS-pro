@@ -260,7 +260,7 @@ class AcnooSaleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated =  $request->validate([
             'invoiceNumber' => 'required|string',
             'customer_phone' => 'nullable|string',
             'receive_amount' => 'nullable|numeric',
@@ -270,7 +270,8 @@ class AcnooSaleController extends Controller
             'discount_type' => 'nullable|in:flat,percent',
             'shipping_charge' => 'nullable|numeric',
             'saleDate' => 'nullable|date',
-            'sale_type' => 'required|integer|in:0,1'
+            'sale_type' => 'required|integer|in:0,1',
+            'sale_status' => 'nullable|integer',
         ]);
 
         $business_id = auth()->user()->business_id;
@@ -278,6 +279,17 @@ class AcnooSaleController extends Controller
 
         if ($carts->count() < 1) {
             return response()->json(['message' => __('Cart is empty. Add items first!')], 400);
+        }
+
+        $saleData = [
+            'sale_type' => $validated['sale_type'],
+        ];
+    
+      
+        if ($validated['sale_type'] == 1) {
+            $saleData['sale_status'] = $validated['sale_status'] ?? 1;
+        } else {
+            $saleData['sale_status'] = 7;
         }
 
         DB::beginTransaction();
@@ -358,6 +370,7 @@ class AcnooSaleController extends Controller
                 'payment_type_id' => $request->payment_type_id,
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
+                'sale_status' => $saleData['sale_status'],
                     'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,
