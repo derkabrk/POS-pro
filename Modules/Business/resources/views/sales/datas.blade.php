@@ -4,30 +4,35 @@
             <input type="checkbox" name="ids[]" class="delete-checkbox-item multi-delete" value="{{ $sale->id }}">
         </td>
         <td>{{ $loop->iteration }}</td>
-        <td class="text-start">{{ $sale->created_at->format('d M, Y') }}</td>
+        <td class="text-start">
+            {{ $sale->created_at ? $sale->created_at->format('d M, Y') : 'N/A' }}
+        </td>
         <td class="text-start">{{ $sale->invoiceNumber }}</td>
         <td class="text-start">{{ $sale->party->name ?? 'N/A' }}</td>
         <td class="text-start">${{ number_format($sale->totalAmount, 2) }}</td>
         <td class="text-start">{{ $sale->sale_type == 0 ? 'Business' : 'E-commerce' }}</td>
         <td class="text-start">${{ number_format($sale->paidAmount, 2) }}</td>
         <td class="text-start">${{ number_format($sale->dueAmount, 2) }}</td>
-        <td class="text-start">{{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</td>
-        @if ($sale->sale_type == 1)
-        @php
-        $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
-        @endphp
-        <td>
-
-        <button 
-        class="btn btn-sm {{  $status['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
-        data-bs-toggle="modal"
-        data-bs-target="#updateStatusModal"
-        data-sale-id="{{ $sale->id }}"
-        data-current-status="{{ $sale->sale_status }}"
-         >
-        {{ $status['name']  }}
-    </button>
+        <td class="text-start">
+            {{ $sale->payment_type_id ? ($sale->payment_type->name ?? 'N/A') : $sale->paymentType }}
         </td>
+
+        {{-- Display Sale Status Only for E-commerce Sales --}}
+        @if ($sale->sale_type == 1)
+            @php
+                $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
+            @endphp
+            <td>
+                <button 
+                    class="btn btn-sm {{ $status['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#updateStatusModal"
+                    data-sale-id="{{ $sale->id }}"
+                    data-current-status="{{ $sale->sale_status }}"
+                >
+                    {{ $status['name'] }}
+                </button>
+            </td>
         @endif
 
         <td class="print-d-none">
@@ -52,10 +57,9 @@
             </div>
         </td>
     </tr>
-
-   
 @endforeach
 
+<!-- Update Status Modal -->
 <div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -83,23 +87,22 @@
     </div>
 </div>
 
+@push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let updateStatusModal = document.getElementById("updateStatusModal");
         let saleIdInput = document.getElementById("saleId");
         let saleStatusSelect = document.getElementById("sale_status");
         let saveStatusBtn = document.getElementById("saveStatusBtn");
 
+        // Open Modal and Set Current Status
         document.querySelectorAll(".update-status-btn").forEach(button => {
             button.addEventListener("click", function () {
-                let saleId = this.dataset.saleId;
-                let currentStatus = this.dataset.currentStatus;
-
-                saleIdInput.value = saleId;
-                saleStatusSelect.value = currentStatus;
+                saleIdInput.value = this.dataset.saleId;
+                saleStatusSelect.value = this.dataset.currentStatus;
             });
         });
 
+        // AJAX Update Request
         saveStatusBtn.addEventListener("click", function () {
             let saleId = saleIdInput.value;
             let newStatus = saleStatusSelect.value;
@@ -132,3 +135,4 @@
         });
     });
 </script>
+@endpush
