@@ -466,24 +466,38 @@ class AcnooSaleController extends Controller
     public function updateStatus(Request $request, Sale $sale)
     {
         try {
+            // Log the incoming request
+            \Log::info("Updating Sale Status", [
+                'sale_id' => $sale->id ?? 'N/A',
+                'sale_status' => $request->sale_status ?? 'N/A',
+                'request_data' => $request->all()
+            ]);
+    
             // Validate the request
             $validated = $request->validate([
                 'sale_status' => 'required|integer|in:1,2,3,4,5,6,7,8,9,10,11,12',
             ]);
     
             // Ensure only E-commerce sales can update status
-            if ($sale->sale_type == 1) {
-                $sale->update(['sale_status' => $validated['sale_status']]);
-    
-                return response()->json(['success' => true, 'message' => 'Sale status updated successfully']);
+            if ($sale->sale_type != 1) {
+                return response()->json(['success' => false, 'message' => 'Only E-commerce sales can be updated'], 403);
             }
     
-            return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale'], 403);
+            // Update Sale Status
+            $sale->update(['sale_status' => $validated['sale_status']]);
+    
+            return response()->json(['success' => true, 'message' => 'Sale status updated successfully']);
         } catch (\Exception $e) {
             \Log::error("Sale Status Update Failed: " . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Server error occurred. Check logs.'], 500);
+    
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error occurred. Check logs.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
+    
     
     
 
