@@ -22,7 +22,7 @@
         data-sale-id="{{ $sale->id }}"
         data-current-status="{{ $sale->sale_status }}"
         >
-        {{  {{ $status['name'] }}}}
+        {{ $status['name'] }}
        </button>
         </td>
         @endif
