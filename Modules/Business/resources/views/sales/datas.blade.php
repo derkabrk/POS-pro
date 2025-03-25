@@ -13,7 +13,15 @@
         <td class="text-start">${{ number_format($sale->dueAmount, 2) }}</td>
         <td class="text-start">{{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</td>
         @if ($sale->sale_type == 1)
-    <td>{{ \App\Models\Sale::STATUS[$sale->sale_status] ?? 'Unknown' }}</td>
+        @php
+    $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
+@endphp
+
+<td>
+    <span class="badge {{ $status['color'] }} text-white px-2 py-1 rounded-pill">
+        {{ $status['name'] }}
+    </span>
+</td>
 @endif
 
         <td class="print-d-none">
