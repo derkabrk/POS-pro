@@ -4,35 +4,30 @@
             <input type="checkbox" name="ids[]" class="delete-checkbox-item multi-delete" value="{{ $sale->id }}">
         </td>
         <td>{{ $loop->iteration }}</td>
-        <td class="text-start">
-            {{ $sale->created_at ? $sale->created_at->format('d M, Y') : 'N/A' }}
-        </td>
+        <td class="text-start">{{ $sale->created_at->format('d M, Y') }}</td>
         <td class="text-start">{{ $sale->invoiceNumber }}</td>
         <td class="text-start">{{ $sale->party->name ?? 'N/A' }}</td>
         <td class="text-start">${{ number_format($sale->totalAmount, 2) }}</td>
         <td class="text-start">{{ $sale->sale_type == 0 ? 'Business' : 'E-commerce' }}</td>
         <td class="text-start">${{ number_format($sale->paidAmount, 2) }}</td>
         <td class="text-start">${{ number_format($sale->dueAmount, 2) }}</td>
-        <td class="text-start">
-            {{ $sale->payment_type_id ? ($sale->payment_type->name ?? 'N/A') : $sale->paymentType }}
-        </td>
-
-        {{-- Display Sale Status Only for E-commerce Sales --}}
+        <td class="text-start">{{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</td>
         @if ($sale->sale_type == 1)
-            @php
-                $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
-            @endphp
-            <td>
-                <button 
-                    class="btn btn-sm {{ $status['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
-                    data-bs-toggle="modal"
-                    data-bs-target="#updateStatusModal"
-                    data-sale-id="{{ $sale->id }}"
-                    data-current-status="{{ $sale->sale_status }}"
-                >
-                    {{ $status['name'] }}
-                </button>
-            </td>
+        @php
+        $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
+        @endphp
+        <td>
+
+        <button 
+        class="btn btn-sm {{  $status['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
+        data-bs-toggle="modal"
+        data-bs-target="#updateStatusModal"
+        data-sale-id="{{ $sale->id }}"
+        data-current-status="{{ $sale->sale_status }}"
+         >
+        {{ $status['name']  }}
+    </button>
+        </td>
         @endif
 
         <td class="print-d-none">
@@ -57,9 +52,10 @@
             </div>
         </td>
     </tr>
+
+   
 @endforeach
 
-<!-- Update Status Modal -->
 <div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -87,7 +83,6 @@
     </div>
 </div>
 
-@push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         let updateStatusModal = document.getElementById("updateStatusModal");
@@ -95,58 +90,42 @@
         let saleStatusSelect = document.getElementById("sale_status");
         let saveStatusBtn = document.getElementById("saveStatusBtn");
 
-        // Attach event listener to all "Update Status" buttons
+        // When the modal opens, set the current values
         document.querySelectorAll(".update-status-btn").forEach(button => {
             button.addEventListener("click", function () {
-                let saleId = this.getAttribute("data-sale-id");
-                let currentStatus = this.getAttribute("data-current-status");
+                let saleId = this.dataset.saleId;
+                let currentStatus = this.dataset.currentStatus;
 
-                // Set values in modal
                 saleIdInput.value = saleId;
                 saleStatusSelect.value = currentStatus;
             });
         });
 
-        // Handle Save Button Click
+        // When the update button is clicked, send AJAX request
         saveStatusBtn.addEventListener("click", function () {
             let saleId = saleIdInput.value;
             let newStatus = saleStatusSelect.value;
-
-            if (!saleId || !newStatus) {
-                alert("Invalid Sale ID or Status!");
-                return;
-            }
-
-            saveStatusBtn.disabled = true;
-            saveStatusBtn.innerHTML = "Updating...";
 
             fetch(`/business/sales/update-status/${saleId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
                 },
                 body: JSON.stringify({ sale_status: newStatus })
             })
             .then(response => response.json())
             .then(data => {
-                saveStatusBtn.disabled = false;
-                saveStatusBtn.innerHTML = "Update Status";
-
                 if (data.success) {
-                    alert("Sale status updated successfully!");
-                    location.reload();
+                    location.reload(); // Reload page to update status
                 } else {
-                    alert("Error: " + data.message);
+                    alert("Error updating sale status.");
                 }
             })
             .catch(error => {
-                saveStatusBtn.disabled = false;
-                saveStatusBtn.innerHTML = "Update Status";
                 console.error("Error updating sale status:", error);
-                alert("Something went wrong. Check the console for details.");
+                alert("Something went wrong.");
             });
         });
     });
 </script>
-@endpush
