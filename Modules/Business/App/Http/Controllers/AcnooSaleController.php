@@ -467,16 +467,10 @@ class AcnooSaleController extends Controller
     {
         try {
             // Validate sale_status as an integer from allowed values
-            $validated = $request->validate([
-                'sale_status' => 'required|integer|in:1,2,3,4,5,6,7,8,9,10,11,12',
-            ]);
-    
-            // Ensure only E-commerce sales can update status
-            if ($sale->sale_type == 1) {
-                $sale->update(['sale_status' => $validated['sale_status']]);
+
     
                 return response()->json(['success' => true, 'message' => 'Sale status updated successfully']);
-            }
+            
     
             return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale'], 403);
         } catch (\Exception $e) {
