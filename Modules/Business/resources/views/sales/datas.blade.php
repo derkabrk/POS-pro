@@ -126,37 +126,37 @@
             saveStatusBtn.innerHTML = "Updating...";
 
             fetch(`/business/sales/update-status/${saleId}`, { 
-    method: "post",
-    headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json", // Ensure JSON response
-        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    },
-    body: JSON.stringify({ sale_status: newStatus })
-})
-.then(response => {
-    if (!response.ok) {
+            method: "patch",
+            headers: {
+           "Content-Type": "application/json",
+           "Accept": "application/json", // Ensure JSON response
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+              body: JSON.stringify({ sale_status: newStatus })
+         })
+         .then(response => {
+          if (!response.ok) {
         return response.text().then(text => { throw new Error(text); }); // Get Laravel error message
-    }
-    return response.json();
-})
-.then(data => {
-    saveStatusBtn.disabled = false;
-    saveStatusBtn.innerHTML = "Update Status";
+           }
+           return response.json();
+           })
+           .then(data => {
+           saveStatusBtn.disabled = false;
+           saveStatusBtn.innerHTML = "Update Status";
 
-    if (data.success) {
-        alert("Sale status updated successfully!");
-        location.reload();
-    } else {
-        alert("Error: " + data.message);
-    }
-})
-.catch(error => {
-    saveStatusBtn.disabled = false;
-    saveStatusBtn.innerHTML = "Update Status";
-    console.error("Error updating sale status:", error);
-    alert("Something went wrong. Check the console for details.");
-});
+          if (data.success) {
+          alert("Sale status updated successfully!");
+          location.reload();
+          } else {
+          alert("Error: " + data.message);
+        }
+      })
+      .catch(error => {
+      saveStatusBtn.disabled = false;
+      saveStatusBtn.innerHTML = "Update Status";
+      console.error("Error updating sale status:", error);
+      alert("Something went wrong. Check the console for details.");
+      });
 
         });
     });
