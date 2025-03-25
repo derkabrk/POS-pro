@@ -90,18 +90,16 @@
 @push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let updateStatusModal = document.getElementById("updateStatusModal");
         let saleIdInput = document.getElementById("saleId");
         let saleStatusSelect = document.getElementById("sale_status");
         let saveStatusBtn = document.getElementById("saveStatusBtn");
 
-        // Attach event listener to all "Update Status" buttons
+        // Open Modal and Set Current Status
         document.querySelectorAll(".update-status-btn").forEach(button => {
             button.addEventListener("click", function () {
                 let saleId = this.getAttribute("data-sale-id");
                 let currentStatus = this.getAttribute("data-current-status");
 
-                // Set the selected values in the modal
                 saleIdInput.value = saleId;
                 saleStatusSelect.value = currentStatus;
             });
@@ -117,8 +115,8 @@
                 return;
             }
 
-            saveStatusBtn.disabled = true; // Prevent multiple clicks
-            saveStatusBtn.innerHTML = "Updating..."; // Show processing text
+            saveStatusBtn.disabled = true;
+            saveStatusBtn.innerHTML = "Updating...";
 
             fetch(`/business/sales/update-status/${saleId}`, {
                 method: "PATCH",
@@ -149,5 +147,6 @@
         });
     });
 </script>
+
 
 @endpush
