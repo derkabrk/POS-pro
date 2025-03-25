@@ -463,19 +463,25 @@ class AcnooSaleController extends Controller
     }
     
 
-    public function updateStatus(Request $request, Sale $sale)
+    public function updateStatus(Request $request)
     {
-        try {
-            // Validate sale_status as an integer from allowed values
+        // Validate input
+        $request->validate([
+            'sale_id' => 'required|exists:sales,id',
+            'sale_status' => 'required|integer',
+        ]);
 
-    
-                return response()->json(['success' => true, 'message' => 'Sale status updated successfully']);
-            
-    
-            return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale'], 403);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-        }
+        // Find sale
+        $sale = Sale::findOrFail($request->sale_id);
+
+        // Update status
+        $sale->update(['sale_status' => $request->sale_status]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sale status updated successfully!',
+            'status' => $sale->sale_status,
+        ]);
     }
     
     
