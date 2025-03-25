@@ -125,7 +125,7 @@
             saveStatusBtn.disabled = true;
             saveStatusBtn.innerHTML = "Updating...";
 
-            fetch(`/business/sales/update-status/${saleId}`, { 
+            fetch(`/sales/update-status/${saleId}`, { 
     method: "post",
     headers: {
         "Content-Type": "application/json",
