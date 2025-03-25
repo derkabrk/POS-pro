@@ -465,18 +465,26 @@ class AcnooSaleController extends Controller
 
     public function updateStatus(Request $request, Sale $sale)
     {
-    $validated = $request->validate([
-        'sale_status' => 'required|integer|in:1,2,3,4,5,6,7,8,9,10,11,12',
-    ]);
-
-    if ($sale->sale_type == 1) { // Only allow updates for E-commerce sales
-        $sale->update(['sale_status' => $validated['sale_status']]);
-        return response()->json(['success' => true]);
+        try {
+            // Validate the request
+            $validated = $request->validate([
+                'sale_status' => 'required|integer|in:1,2,3,4,5,6,7,8,9,10,11,12',
+            ]);
+    
+            // Ensure only E-commerce sales can update status
+            if ($sale->sale_type == 1) {
+                $sale->update(['sale_status' => $validated['sale_status']]);
+    
+                return response()->json(['success' => true, 'message' => 'Sale status updated successfully']);
+            }
+    
+            return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale'], 403);
+        } catch (\Exception $e) {
+            \Log::error("Sale Status Update Failed: " . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Server error occurred. Check logs.'], 500);
+        }
     }
-
-    return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale']);
-      }
-
+    
     
 
     public function edit($id)
