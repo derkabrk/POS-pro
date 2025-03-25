@@ -106,7 +106,7 @@
             let saleId = saleIdInput.value;
             let newStatus = saleStatusSelect.value;
 
-            fetch(`/business/sales/update-status/${saleId}`, {
+            fetch(`/business/sales/updateStatus/${saleId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
