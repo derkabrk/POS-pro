@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         saveStatusBtn.disabled = true;
         saveStatusBtn.innerHTML = "Updating...";
 
-        fetch(`/business/sales/update-status`, {
+        fetch(`sales/update-status`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
