@@ -90,24 +90,35 @@
 @push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        let updateStatusModal = document.getElementById("updateStatusModal");
         let saleIdInput = document.getElementById("saleId");
         let saleStatusSelect = document.getElementById("sale_status");
         let saveStatusBtn = document.getElementById("saveStatusBtn");
 
-        // Open Modal and Set Current Status
+        // Attach event listener to all "Update Status" buttons
         document.querySelectorAll(".update-status-btn").forEach(button => {
             button.addEventListener("click", function () {
-                saleIdInput.value = this.dataset.saleId;
-                saleStatusSelect.value = this.dataset.currentStatus;
+                let saleId = this.getAttribute("data-sale-id");
+                let currentStatus = this.getAttribute("data-current-status");
+
+                // Set the selected values in the modal
+                saleIdInput.value = saleId;
+                saleStatusSelect.value = currentStatus;
             });
         });
 
-        // AJAX Update Request
+        // Handle Save Button Click
         saveStatusBtn.addEventListener("click", function () {
             let saleId = saleIdInput.value;
             let newStatus = saleStatusSelect.value;
 
+            if (!saleId || !newStatus) {
+                alert("Invalid Sale ID or Status!");
+                return;
+            }
+
             saveStatusBtn.disabled = true; // Prevent multiple clicks
+            saveStatusBtn.innerHTML = "Updating..."; // Show processing text
 
             fetch(`/business/sales/update-status/${saleId}`, {
                 method: "PATCH",
@@ -120,19 +131,23 @@
             .then(response => response.json())
             .then(data => {
                 saveStatusBtn.disabled = false;
+                saveStatusBtn.innerHTML = "Update Status";
 
                 if (data.success) {
-                    location.reload(); 
+                    alert("Sale status updated successfully!");
+                    location.reload();
                 } else {
                     alert("Error: " + data.message);
                 }
             })
             .catch(error => {
                 saveStatusBtn.disabled = false;
+                saveStatusBtn.innerHTML = "Update Status";
                 console.error("Error updating sale status:", error);
-                alert("Something went wrong. Check console for details.");
+                alert("Something went wrong. Check the console for details.");
             });
         });
     });
 </script>
+
 @endpush
