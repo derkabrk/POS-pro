@@ -90,7 +90,6 @@
         let saleStatusSelect = document.getElementById("sale_status");
         let saveStatusBtn = document.getElementById("saveStatusBtn");
 
-        // When the modal opens, set the current values
         document.querySelectorAll(".update-status-btn").forEach(button => {
             button.addEventListener("click", function () {
                 let saleId = this.dataset.saleId;
@@ -101,32 +100,35 @@
             });
         });
 
-        // When the update button is clicked, send AJAX request
         saveStatusBtn.addEventListener("click", function () {
             let saleId = saleIdInput.value;
             let newStatus = saleStatusSelect.value;
 
+            saveStatusBtn.disabled = true; // Prevent multiple clicks
+
             fetch(`/business/sales/update-status/${saleId}`, {
-                method: "POST",
+                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify({ sale_status: newStatus })
             })
             .then(response => response.json())
             .then(data => {
+                saveStatusBtn.disabled = false;
+
                 if (data.success) {
-                    location.reload(); // Reload page to update status
+                    location.reload(); 
                 } else {
-                    alert("Error updating sale status.");
+                    alert("Error: " + data.message);
                 }
             })
             .catch(error => {
+                saveStatusBtn.disabled = false;
                 console.error("Error updating sale status:", error);
-                alert("Something went wrong.");
+                alert("Something went wrong. Check console for details.");
             });
         });
     });
 </script>
-
