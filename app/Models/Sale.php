@@ -30,6 +30,7 @@ class Sale extends Model
         'vat_amount',
         'vat_percent',
         'vat_id',
+        'sale_status',
         'paidAmount',
         'lossProfit',
         'totalAmount',
@@ -103,4 +104,24 @@ class Sale extends Model
         'shipping_charge' => 'double',
         'meta' => 'json',
     ];
+
+    public const STATUS = [
+        'Pending' => 1,
+        'Called 1' => 2,
+        'Called 2' => 3,
+        'Called 3' => 4,
+        'Called 4' => 5,
+        'Canceled' => 6,
+        'Confirmed' => 7,
+        'Shipping' => 8,
+        'Returned' => 9,
+        'Delivered' => 10,
+        'Paid' => 11,
+        'Cash Out' => 12,
+    ];
+
+    public function getStatusNameAttribute()
+    {
+        return self::STATUS[$this->sale_status] ?? 'Unknown';
+    }
 }
