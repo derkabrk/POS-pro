@@ -13,15 +13,7 @@
         <td class="text-start">${{ number_format($sale->dueAmount, 2) }}</td>
         <td class="text-start">{{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</td>
         @if ($sale->sale_type == 1)
-    <td>
-    <select name="sale_status" class="form-control">
-        @foreach (\App\Models\Sale::STATUS as $id => $status)
-            <option value="{{ $id }}" {{ $sale->sale_status == $id ? 'selected' : '' }}>
-                {{ $status }}
-            </option>
-        @endforeach
-    </select>
-    </td>
+    <td>{{ \App\Models\Sale::STATUS[$sale->sale_status] ?? 'Unknown' }}</td>
 @endif
 
         <td class="print-d-none">
