@@ -176,8 +176,8 @@
                                     </div>
 
                                     <div class="row amount-container  align-items-center mb-2">
-                                        <h6 class="payment-title">{{ __('Note') }}</h6>
-                                        <input type="text" name="note" class="form-control" placeholder="{{ __('Type note...') }}">
+                                        <h6 class="payment-title">Delivery Address</h6>
+                                        <input type="text" name="delivery_address" class="form-control" placeholder="{{ __('Type note...') }}">
                                     </div>
                                 </div>
                                 <div class="mt-3">
