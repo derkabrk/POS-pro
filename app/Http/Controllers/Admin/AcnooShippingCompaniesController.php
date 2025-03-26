@@ -100,7 +100,7 @@ class AcnooShippingCompaniesController extends Controller
         $shippingCompany->update($validatedData);
 
         return response()->json([
-            'message'   => __('Category updated successfully'),
+            'message'   => __('Shipping Company info updated successfully'),
             'redirect'  => route('admin.shipping-companies.index')
         ]);
     }
