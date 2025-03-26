@@ -61,74 +61,7 @@
     @include('business::sales.update-status')
 @endpush
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let saleIdInput = document.getElementById("saleId");
-        let saleStatusSelect = document.getElementById("sale_status");
-        let saveStatusBtn = document.getElementById("saveStatusBtn");
 
-        document.querySelectorAll(".update-status-btn").forEach(button => {
-            button.addEventListener("click", function () {
-                let saleId = this.getAttribute("data-sale-id");
-                let currentStatus = this.getAttribute("data-current-status");
-
-                saleIdInput.value = saleId;
-                saleStatusSelect.value = currentStatus;
-            });
-        });
-
-        saveStatusBtn.addEventListener("click", function () {
-            let saleId = saleIdInput.value;
-            let newStatus = saleStatusSelect.value;
-
-            if (!saleId || !newStatus) {
-                alert("Invalid Sale ID or Status!");
-                return;
-            }
-
-            saveStatusBtn.disabled = true;
-            saveStatusBtn.innerHTML = "Updating...";
-
-            // **Use Laravel's route helper to ensure the correct URL**
-            let updateUrl = "{{ route('business.sales.updateStatus') }}";
-
-            fetch(updateUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ 
-                    sale_id: saleId,
-                    sale_status: newStatus 
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text); });
-                }
-                return response.json();
-            })
-            .then(data => {
-                saveStatusBtn.disabled = false;
-                saveStatusBtn.innerHTML = "Update Status";
-
-                if (data.success) {
-                    alert("Sale status updated successfully!");
-                    location.reload();
-                } else {
-                    alert("Error: " + data.message);
-                }
-            })
-            .catch(error => {
-                saveStatusBtn.disabled = false;
-                saveStatusBtn.innerHTML = "Update Status";
-                console.error("Error updating sale status:", error);
-                alert("Something went wrong. Check the console for details.");
-            });
-        });
-    });
-</script>
 
 
 
