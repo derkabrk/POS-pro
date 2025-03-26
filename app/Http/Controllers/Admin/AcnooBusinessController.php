@@ -42,7 +42,7 @@ class AcnooBusinessController extends Controller
         $search = $request->input('search');
 
         if ($request->has('type') && $request->type !== '') {
-            $search->where('type', intval($request->type));
+            $search->where('type', $request->type);
         }
 
         $businesses = Business::when($search, function ($q) use ($search) {
