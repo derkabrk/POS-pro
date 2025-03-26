@@ -31,9 +31,8 @@ class Business extends Model
         "type",
     ];
 
-    protected $casts = [
-        'type' => BusinessType::class,
-    ];
+
+    
 
 
     public function getTypeTextAttribute()
