@@ -40,6 +40,11 @@ class AcnooBusinessController extends Controller
     {
         $search = $request->input('search');
 
+
+        if ($request->filled('type')) {
+            $search->where('type', $request->type);
+        }
+
         $businesses = Business::when($search, function ($q) use ($search) {
             $q->where(function ($q) use ($search) {
                 $q->where('companyName', 'like', '%' . $search . '%')
@@ -84,7 +89,7 @@ class AcnooBusinessController extends Controller
             'shopOpeningBalance' => 'nullable|numeric',
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
-            'type' => 'required|in:e-commerce,business,both'
+            'type' => 'required|integer|in:0,1,2',
         ]);
 
         DB::beginTransaction();
@@ -106,8 +111,6 @@ class AcnooBusinessController extends Controller
                 'user_id' => $user->id,
                 'type'=>  request->type,
             ]);
-
-            
 
             User::create([
                 'business_id'=>$business->id,
@@ -174,7 +177,7 @@ class AcnooBusinessController extends Controller
             'shopOpeningBalance' => 'nullable|numeric',
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
-            'type' => 'required|in:e-commerce,business,both'
+            'type' => 'required|integer|in:0,1,2',
         ]);
 
         DB::beginTransaction();
