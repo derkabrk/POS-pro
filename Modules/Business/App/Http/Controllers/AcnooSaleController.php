@@ -270,8 +270,10 @@ class AcnooSaleController extends Controller
             'discount_type' => 'nullable|in:flat,percent',
             'shipping_charge' => 'nullable|numeric',
             'saleDate' => 'nullable|date',
-            'sale_type' => 'required|integer|in:0,1',
-            'sale_status' => 'nullable|integer',
+            'sale_type' => ['required', 'integer'],
+            'sale_status' => ['nullable', 'integer', 'in:1,2,3,4,5,6,7,8,9,10'],
+            'shipping_service_id' => ['nullable', 'exists:shipping_services,id'],
+            'delivery_address' => ['nullable', 'string', 'max:255'],
         ]);
 
         $business_id = auth()->user()->business_id;
@@ -281,18 +283,24 @@ class AcnooSaleController extends Controller
             return response()->json(['message' => __('Cart is empty. Add items first!')], 400);
         }
 
-        $saleData = [
-            'sale_type' => $validated['sale_type'],
-        ];
-
 
         if ($validated['sale_type'] == 1) {
-            $saleData['sale_status'] = $validated['sale_status'] ?? 1;
-            $saleData['shipping_service_id'] = $validated['shipping_service_id'] ?? null;
-            $saleData['delivery_address'] = $validated['delivery_address'] ?? null;
-        } else {
-            $saleData['sale_status'] = 7;
+            if (!isset($validated['sale_status'])) {
+                return back()->withErrors(['sale_status' => 'Sale status is required for E-commerce sales.']);
+            }
+        
+            if (!isset($validated['shipping_service_id'])) {
+                return back()->withErrors(['shipping_service_id' => 'Shipping service is required for E-commerce sales.']);
+            }
+        
+            if (!isset($validated['delivery_address']) || empty($validated['delivery_address'])) {
+                return back()->withErrors(['delivery_address' => 'Delivery address is required for E-commerce sales.']);
+            }
         }
+        
+        $saleData['sale_status'] = $validated['sale_status'] ?? 1;
+        $saleData['shipping_service_id'] = $validated['shipping_service_id'] ?? null;
+        $saleData['delivery_address'] = $validated['delivery_address'] ?? null;
 
         DB::beginTransaction();
         try {
@@ -373,7 +381,7 @@ class AcnooSaleController extends Controller
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
                 'sale_status' => $saleData['sale_status'],
-                'products' => $validated->productIds,
+                'products' => $productIds,
                 'shipping_service_id' =>  $saleData['shipping_service_id'],
                 'delivery_address' => $saleData['delivery_address'],
                 'meta' => [
