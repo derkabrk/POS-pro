@@ -75,7 +75,7 @@ class AcnooBusinessController extends Controller
 
         // Apply sale_type filter if selected
         if ($request->has('type') && $request->type !== '') {
-            $query->where(column: 'type', intval($request->type));
+            $query->where('type', intval($request->type));
         }
         $business = $query->latest()->paginate($request->per_page ?? 10);
         if ($request->ajax()) {
