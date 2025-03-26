@@ -41,8 +41,8 @@
             let saleId = this.getAttribute("data-sale-id");  // Get sale_id from button
             let currentStatus = this.getAttribute("data-current-status");  // Get current status
 
-            saleIdInput.value = saleId;  // Set hidden input value
-            saleStatusSelect.value = currentStatus;  // Preselect the current status
+            saleIdInput.value = saleId;
+            saleStatusSelect.value = currentStatus;  
         });
     });
 
