@@ -69,6 +69,24 @@ class AcnooBusinessController extends Controller
         return redirect(url()->previous());
     }
 
+    public function filter(Request $request)
+    {
+        $query = Business::query();
+
+        // Apply sale_type filter if selected
+        if ($request->has('type') && $request->type !== '') {
+            $query->where(column: 'type', intval($request->type));
+        }
+        $business = $query->latest()->paginate($request->per_page ?? 10);
+        if ($request->ajax()) {
+            return response()->json([
+                'data' => view('admin.business.datas', compact('business'))->render()
+            ]);
+        }
+
+        return redirect(url()->previous());
+    }
+
     public function create()
     {
         $plans = Plan::where('status', 1)->latest()->get();
