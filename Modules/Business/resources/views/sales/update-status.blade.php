@@ -22,7 +22,7 @@
         @endif
     @endforeach
 </select>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12"> 
                             <div class="button-group text-center mt-3">
                                 <button type="reset" class="theme-btn border-btn m-2">{{ __('Reset') }}</button>
                                 <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
@@ -51,10 +51,22 @@
         });
     });
 
+    document.querySelectorAll(".update-status-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let saleId = this.dataset.saleId;
+            let currentStatus = this.dataset.currentStatus;
+
+            document.getElementById("saleId").value = saleId;
+    });
+});
+
     // Handle "Save Status" button click
     saveStatusBtn.addEventListener("click", function () {
         let saleId = saleIdInput.value;
         let newStatus = saleStatusSelect.value;
     });
+
+
+   
 });
 </script>
