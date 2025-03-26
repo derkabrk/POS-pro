@@ -30,6 +30,15 @@
                                 <span></span>
                             </div>
 
+                            <div class="gpt-up-down-arrow position-relative">
+                                <select name="sale_type" id="sale_type_filter" class="form-control">
+                                    <option value="1">{{ __('E-commerce') }}</option>
+                                    <option value="2">{{ __('Both') }}</option>
+                                    <option value="0">{{ __('Physical') }}</option>
+                                   
+                                </select>
+                            </div>
+
                             <div class="table-search position-relative">
                                 <input class="form-control searchInput" type="text" name="search"
                                     placeholder="{{ __('Search...') }}" value="{{ request('search') }}">

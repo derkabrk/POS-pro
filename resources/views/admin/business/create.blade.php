@@ -59,10 +59,11 @@
                                     <div class="gpt-up-down-arrow position-relative">
                                         <select name="type"
                                                 class="form-control table-select w-100 role">
-                                        
-                                                <option value="e-commerce"> E-commerce </option>
-                                                <option value="business"> Business </option>
-                                                <option value="both"> Both</option>
+
+                                                <option value="1"> E-commerce </option>
+                                                <option value="2"> Both </option>
+                                                <option value="0"> Physical </option>
+                                                
                                            
                                         </select>
                                         <span></span>

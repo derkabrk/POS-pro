@@ -13,7 +13,7 @@ return new class extends Migration
 
     {
         Schema::table('businesses', function (Blueprint $table) {
-            $table->enum('type', ['e-commerce', 'business', 'both']);
+            $table->integer('type')->default(1)->nullable(false);
         });
     }
 
