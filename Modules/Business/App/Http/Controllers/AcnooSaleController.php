@@ -49,50 +49,50 @@ class AcnooSaleController extends Controller
 
         $sales = $query->paginate(20);
 
-        return view('business::sales.index', compact('sales', 'salesWithReturns',));
+        return view('business::sales.index', compact('sales', 'salesWithReturns', ));
     }
 
     public function acnoofilter(Request $request)
     {
         $query = Sale::with('user', 'party', 'details', 'payment_type')
             ->where('business_id', auth()->user()->business_id);
-    
+
         // Apply sale_type filter
         if ($request->filled('sale_type')) {
             $query->where('sale_type', $request->sale_type);
         }
-    
+
         // Apply search filter
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('invoiceNumber', 'like', '%' . $request->search . '%')
-                  ->orWhereHas('party', function ($q) use ($request) {
-                      $q->where('name', 'like', '%' . $request->search . '%');
-                  });
+                    ->orWhereHas('party', function ($q) use ($request) {
+                        $q->where('name', 'like', '%' . $request->search . '%');
+                    });
             });
         }
-    
+
         $sales = $query->paginate($request->per_page ?? 10);
-    
+
         return response()->json([
             'html' => view('business::sales.datas', compact('sales'))->render()
         ]);
     }
-    
+
 
     public function filter(Request $request)
-{
-    $query = Sale::query();
+    {
+        $query = Sale::query();
 
-    // Apply sale_type filter if selected
-    if ($request->has('sale_type') && $request->sale_type !== '') {
-        $query->where('sale_type', intval($request->sale_type) );
+        // Apply sale_type filter if selected
+        if ($request->has('sale_type') && $request->sale_type !== '') {
+            $query->where('sale_type', intval($request->sale_type));
+        }
+        $sales = $query->latest()->paginate($request->per_page ?? 10);
+        return response()->json([
+            'html' => view('business::sales.datas', compact('sales'))->render()
+        ]);
     }
-    $sales = $query->latest()->paginate($request->per_page ?? 10);
-     return response()->json([
-        'html' => view('business::sales.datas', compact('sales'))->render()
-    ]);
-}
 
     public function productFilter(Request $request)
     {
@@ -189,7 +189,7 @@ class AcnooSaleController extends Controller
 
         $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'sale');
 
-        $jsonPath = storage_path('app/Wilaya_Of_Algeria.json'); 
+        $jsonPath = storage_path('app/Wilaya_Of_Algeria.json');
         if (!File::exists($jsonPath)) {
             abort(500, "Wilaya JSON file not found!");
         }
@@ -201,10 +201,10 @@ class AcnooSaleController extends Controller
         if (!File::exists($communesPath)) {
             abort(500, "Commune JSON file not found!");
         }
-    
+
         $communesJson = File::get($communesPath);
         $communes = json_decode($communesJson, true);
-    
+
         if (empty($communes)) {
             dd("Error: Communes data is empty!", $communes);
         }
@@ -219,7 +219,7 @@ class AcnooSaleController extends Controller
         $sale_id = (Sale::max('id') ?? 0) + 1;
         $invoice_no = 'S-' . str_pad($sale_id, 5, '0', STR_PAD_LEFT);
 
-        return view('business::sales.create', compact('customers','wilayas','communes','shippings' ,'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
+        return view('business::sales.create', compact('customers', 'wilayas', 'communes', 'shippings', 'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
     }
 
     /** Get Product wise prices */
@@ -260,7 +260,7 @@ class AcnooSaleController extends Controller
 
     public function store(Request $request)
     {
-        $validated =  $request->validate([
+        $validated = $request->validate([
             'invoiceNumber' => 'required|string',
             'customer_phone' => 'nullable|string',
             'receive_amount' => 'nullable|numeric',
@@ -284,10 +284,12 @@ class AcnooSaleController extends Controller
         $saleData = [
             'sale_type' => $validated['sale_type'],
         ];
-    
-      
+
+
         if ($validated['sale_type'] == 1) {
             $saleData['sale_status'] = $validated['sale_status'] ?? 1;
+            $saleData['shipping_service_id'] = $request['shipping_service_id'] ?? null;
+            $saleData['delivery_address'] = $request['delivery_address'] ?? null;
         } else {
             $saleData['sale_status'] = 7;
         }
@@ -317,7 +319,7 @@ class AcnooSaleController extends Controller
             // VAT
             $vat = Vat::find($request->vat_id);
             $vatAmount = 0;
-            if ($vat){
+            if ($vat) {
                 $vatAmount = ($subtotal * $vat->rate) / 100;
             }
 
@@ -364,14 +366,17 @@ class AcnooSaleController extends Controller
                 'discount_percent' => $request->discount_type == 'percent' ? $request->discountAmount : 0,
                 'totalAmount' => $totalAmount,
                 'lossProfit' => $subtotal - $totalPurchaseAmount - $discountAmount,
-                'paidAmount' => $paidAmount > $totalAmount ? $totalAmount: $paidAmount,
+                'paidAmount' => $paidAmount > $totalAmount ? $totalAmount : $paidAmount,
                 'dueAmount' => $dueAmount,
-                'sale_type'  => $request->sale_type === "1" ? 1 : 0,
+                'sale_type' => $request->sale_type === "1" ? 1 : 0,
                 'payment_type_id' => $request->payment_type_id,
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
                 'sale_status' => $saleData['sale_status'],
-                    'meta' => [
+                'products' => $request->productIds,
+                'shipping_service_id' =>  $saleData['shipping_service_id'],
+                'delivery_address' => $saleData['delivery_address'],
+                'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,
                 ]
@@ -445,23 +450,27 @@ class AcnooSaleController extends Controller
     public function show($id)
     {
         // Fetch sale details
-        $sale = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'details', 
-            'details.product:id,productName,category_id', 
-            'details.product.category:id,categoryName', 
-            'payment_type:id,name')
+        $sale = Sale::with(
+            'user:id,name',
+            'party:id,name,email,phone,type',
+            'details',
+            'details.product:id,productName,category_id',
+            'details.product.category:id,categoryName',
+            'payment_type:id,name'
+        )
             ->where('business_id', auth()->user()->business_id)
             ->findOrFail($id);
-    
+
         // Fetch sales with returns
         $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
             ->pluck('sale_id')
             ->toArray();
-    
+
         return response()->json([
-            'html' => view('business::sales.show', compact('sales','salesWithReturns'))->render()
+            'html' => view('business::sales.show', compact('sales', 'salesWithReturns'))->render()
         ]);
     }
-    
+
     public function edit($id)
     {
         // Clears all cart items
@@ -567,7 +576,7 @@ class AcnooSaleController extends Controller
             // Vat
             $vat = Vat::find($request->vat_id);
             $vatAmount = 0;
-            if ($vat){
+            if ($vat) {
                 $vatAmount = ($subtotal * $vat->rate) / 100;
             }
 
@@ -611,7 +620,7 @@ class AcnooSaleController extends Controller
                 'discount_percent' => $request->discount_type == 'percent' ? $request->discountAmount : 0,
                 'totalAmount' => $totalAmount,
                 'lossProfit' => $subtotal - $totalPurchaseAmount - $discountAmount,
-                'paidAmount' => $paidAmount > $totalAmount ? $totalAmount: $paidAmount,
+                'paidAmount' => $paidAmount > $totalAmount ? $totalAmount : $paidAmount,
                 'dueAmount' => $dueAmount,
                 'payment_type_id' => $request->payment_type_id,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
@@ -721,13 +730,13 @@ class AcnooSaleController extends Controller
 
     public function getInvoice($sale_id)
     {
-           $sale = Sale::where('business_id', auth()->user()->business_id)->with('user:id,name', 'party:id,name,phone', 'business:id,phoneNumber,companyName,vat_name,vat_no', 'details:id,price,quantities,product_id,sale_id', 'details.product:id,productName','payment_type:id,name')->findOrFail($sale_id);
+        $sale = Sale::where('business_id', auth()->user()->business_id)->with('user:id,name', 'party:id,name,phone', 'business:id,phoneNumber,companyName,vat_name,vat_no', 'details:id,price,quantities,product_id,sale_id', 'details.product:id,productName', 'payment_type:id,name')->findOrFail($sale_id);
 
-          $sale_returns = SaleReturn::with('sale:id,party_id,isPaid,totalAmount,dueAmount,paidAmount,invoiceNumber', 'sale.party:id,name', 'details','details.saleDetail.product:id,productName')
-                                    ->where('business_id', auth()->user()->business_id)
-                                    ->where('sale_id', $sale_id)
-                                    ->latest()
-                                    ->get();
+        $sale_returns = SaleReturn::with('sale:id,party_id,isPaid,totalAmount,dueAmount,paidAmount,invoiceNumber', 'sale.party:id,name', 'details', 'details.saleDetail.product:id,productName')
+            ->where('business_id', auth()->user()->business_id)
+            ->where('sale_id', $sale_id)
+            ->latest()
+            ->get();
 
         // sum of  return_qty
         $sale->details = $sale->details->map(function ($detail) use ($sale_returns) {
@@ -739,7 +748,7 @@ class AcnooSaleController extends Controller
             return $detail;
         });
 
-    // Calculate the initial discount for each product during sale returns
+        // Calculate the initial discount for each product during sale returns
         $total_discount = 0;
         $product_discounts = [];
 
@@ -808,49 +817,49 @@ class AcnooSaleController extends Controller
         }
     }
 
-    public function generatePDF(Request $request,$sale_id)
+    public function generatePDF(Request $request, $sale_id)
     {
         $sale = Sale::where('business_id', auth()->user()->business_id)->with('user:id,name', 'party:id,name,phone', 'business:id,phoneNumber,companyName,vat_name,vat_no', 'details:id,price,quantities,product_id,sale_id', 'details.product:id,productName', 'payment_type:id,name')->findOrFail($sale_id);
 
-        $sale_returns = SaleReturn::with('sale:id,party_id,isPaid,totalAmount,dueAmount,paidAmount,invoiceNumber', 'sale.party:id,name', 'details','details.saleDetail.product:id,productName')
-                    ->where('business_id', auth()->user()->business_id)
-                    ->where('sale_id', $sale_id)
-                    ->latest()
-                    ->get();
+        $sale_returns = SaleReturn::with('sale:id,party_id,isPaid,totalAmount,dueAmount,paidAmount,invoiceNumber', 'sale.party:id,name', 'details', 'details.saleDetail.product:id,productName')
+            ->where('business_id', auth()->user()->business_id)
+            ->where('sale_id', $sale_id)
+            ->latest()
+            ->get();
 
         // sum of  return_qty
         $sale->details = $sale->details->map(function ($detail) use ($sale_returns) {
-        $return_qty_sum = $sale_returns->flatMap(function ($return) use ($detail) {
-        return $return->details->where('saleDetail.id', $detail->id)->pluck('return_qty');
-        })->sum();
+            $return_qty_sum = $sale_returns->flatMap(function ($return) use ($detail) {
+                return $return->details->where('saleDetail.id', $detail->id)->pluck('return_qty');
+            })->sum();
 
-        $detail->quantities = $detail->quantities + $return_qty_sum;
+            $detail->quantities = $detail->quantities + $return_qty_sum;
             return $detail;
         });
 
-        $pdf = Pdf::loadView('business::sales.pdf', compact('sale','sale_returns'));
+        $pdf = Pdf::loadView('business::sales.pdf', compact('sale', 'sale_returns'));
         return $pdf->download('sales-invoice.pdf');
     }
 
-    public function sendMail(Request $request,$sale_id)
+    public function sendMail(Request $request, $sale_id)
     {
         $sale = Sale::with('user:id,name', 'party:id,name,phone', 'business:id,phoneNumber,companyName,vat_name,vat_no', 'details:id,price,quantities,product_id,sale_id', 'details.product:id,productName', 'payment_type:id,name')
-        ->findOrFail($sale_id);
+            ->findOrFail($sale_id);
 
-        $sale_returns = SaleReturn::with('sale:id,party_id,isPaid,totalAmount,dueAmount,paidAmount,invoiceNumber', 'sale.party:id,name', 'details','details.saleDetail.product:id,productName')
-                    ->where('business_id', auth()->user()->business_id)
-                    ->where('sale_id', $sale_id)
-                    ->latest()
-                    ->get();
+        $sale_returns = SaleReturn::with('sale:id,party_id,isPaid,totalAmount,dueAmount,paidAmount,invoiceNumber', 'sale.party:id,name', 'details', 'details.saleDetail.product:id,productName')
+            ->where('business_id', auth()->user()->business_id)
+            ->where('sale_id', $sale_id)
+            ->latest()
+            ->get();
 
         // sum of  return_qty
         $sale->details = $sale->details->map(function ($detail) use ($sale_returns) {
-        $return_qty_sum = $sale_returns->flatMap(function ($return) use ($detail) {
-        return $return->details->where('saleDetail.id', $detail->id)->pluck('return_qty');
-        })->sum();
+            $return_qty_sum = $sale_returns->flatMap(function ($return) use ($detail) {
+                return $return->details->where('saleDetail.id', $detail->id)->pluck('return_qty');
+            })->sum();
 
-        $detail->quantities = $detail->quantities + $return_qty_sum;
-         return $detail;
+            $detail->quantities = $detail->quantities + $return_qty_sum;
+            return $detail;
         });
         $pdf = Pdf::loadView('business::sales.pdf', compact('sale', 'sale_returns'));
 
@@ -858,10 +867,10 @@ class AcnooSaleController extends Controller
         // Send email with PDF attachment
         Mail::raw('Please find attached your sales invoice.', function ($message) use ($pdf) {
             $message->to(auth()->user()->email)
-                    ->subject('Sales Invoice')
-                    ->attachData($pdf->output(), 'sales-invoice.pdf', [
-                        'mime' => 'application/pdf',
-                    ]);
+                ->subject('Sales Invoice')
+                ->attachData($pdf->output(), 'sales-invoice.pdf', [
+                    'mime' => 'application/pdf',
+                ]);
         });
 
         return response()->json([
@@ -890,8 +899,8 @@ class AcnooSaleController extends Controller
         ]);
 
         return response()->json([
-            'message'   => __('Customer created successfully'),
-            'redirect'  => route('business.sales.create')
+            'message' => __('Customer created successfully'),
+            'redirect' => route('business.sales.create')
         ]);
 
     }
@@ -900,7 +909,7 @@ class AcnooSaleController extends Controller
 
     public function updatestatus(Request $request)
     {
-    
+
         $request->validate([
             'sale_id' => 'required|exists:sales,id',
             'sale_status' => 'required|integer',
@@ -913,9 +922,9 @@ class AcnooSaleController extends Controller
 
 
         if ($sale->sale_type == 1) {
-            
+
             if ($sale->sale_status == 7) {
-               
+
 
                 $sale->update(['sale_status' => $request['sale_status']]);
                 return response()->json([
@@ -923,34 +932,32 @@ class AcnooSaleController extends Controller
                     'redirect' => route('business.sales.index'),
                 ]);
 
-            }
-            else
-             {
-            $sale->update(['sale_status' => $request['sale_status']]);
-            return response()->json([
-                'message' => __('Sale Status updated Successfully'),
-                'redirect' => route('business.sales.index'),
-            ]);
+            } else {
+                $sale->update(['sale_status' => $request['sale_status']]);
+                return response()->json([
+                    'message' => __('Sale Status updated Successfully'),
+                    'redirect' => route('business.sales.index'),
+                ]);
 
             }
-            
+
         } else {
             return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale']);
         }
     }
 
     public function getNextStatuses($currentStatus)
-{
-    $statuses = Sale::getNextStatuses($currentStatus);
-    $statusList = [];
+    {
+        $statuses = Sale::getNextStatuses($currentStatus);
+        $statusList = [];
 
-    foreach ($statuses as $id) {
-        if (isset(Sale::STATUS[$id])) {
-            $statusList[] = ['id' => $id, 'name' => Sale::STATUS[$id]['name']];
+        foreach ($statuses as $id) {
+            if (isset(Sale::STATUS[$id])) {
+                $statusList[] = ['id' => $id, 'name' => Sale::STATUS[$id]['name']];
+            }
         }
-    }
 
-    return response()->json($statusList);
-}
+        return response()->json($statusList);
+    }
 
 }

@@ -24,7 +24,7 @@
             <tr>
                 <td class="text-start">{{ $loop->index+1 }}</td>
                 <td class="text-start">{{ $stock->productName }}</td>
-                <td class="text-start">{{ currency_format($stock->productPurchasePrice), 'icon', 2, business_currency() }}</td>
+                <td class="text-start">{{ currency_format($stock->productPurchasePrice, 'icon', 2, business_currency()) }}</td>
                 <td class="text-start">{{ $stock->productStock }}</td>
                 <td class="text-start">{{ currency_format($stock->productSalePrice, 'icon', 2, business_currency()) }}</td>
                 <td class="text-start">{{ currency_format($stock->productSalePrice * $stock->productStock, 'icon', 2, business_currency()) }}</td>
