@@ -17,6 +17,9 @@ class Sale extends Model
      */
     protected $fillable = [
         'business_id',
+        'delivery_address',
+        'shipping_service_id',
+        'products',
         'party_id',
         'user_id',
         'discountAmount',
@@ -45,6 +48,11 @@ class Sale extends Model
     public function business() : BelongsTo
     {
         return $this->belongsTo(Business::class);
+    }
+
+    public function shippings() : BelongsTo
+    {
+        return $this->belongsTo(Shippings::class);
     }
 
     public function details()
@@ -105,6 +113,16 @@ class Sale extends Model
         'meta' => 'json',
     ];
 
+        public function getProductsAttribute($value)
+        {
+        return json_decode($value, true) ?? [];
+        }
+
+         public function setProductsAttribute($value)
+         {
+         $this->attributes['products'] = json_encode($value);
+         }
+
     public const STATUS = [
         1 => ['name' => 'Pending', 'color' => 'bg-warning'], // Yellow
         2 => ['name' => 'Called 1', 'color' => 'bg-info'], // Light Blue
@@ -119,6 +137,8 @@ class Sale extends Model
         11 => ['name' => 'Paid', 'color' => 'bg-success'], // Green
         12 => ['name' => 'Cash Out', 'color' => 'bg-primary'], // Blue
     ];
+
+
 
 
     // Accessor to get status name
