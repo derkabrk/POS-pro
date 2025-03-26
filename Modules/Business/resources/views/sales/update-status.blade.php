@@ -11,21 +11,16 @@
                         class="ajaxform_instant_reload">
                         @csrf
                         <input type="hidden" id="saleId" name="sale_id">
-                    <label for="sale_status">Select New Status:</label>
-                    <select id="sale_status" name="sale_status" class="form-control">
-    @php
-        $nextStatuses = \App\Models\Sale::getNextStatuses($sale->sale_status);
-    @endphp
-    @foreach ($nextStatuses as $id)
-        @if(isset(\App\Models\Sale::STATUS[$id]))
-            <option value="{{ $id }}">{{ \App\Models\Sale::STATUS[$id]['name'] }}</option>
-        @endif
-    @endforeach
-</select>
-                        <div class="col-lg-12"> 
+
+                        <label for="sale_status">Select New Status:</label>
+                        <select id="sale_status" name="sale_status" class="form-control">
+                            <!-- Options will be dynamically populated -->
+                        </select>
+
+                        <div class="col-lg-12">
                             <div class="button-group text-center mt-3">
                                 <button type="reset" class="theme-btn border-btn m-2">{{ __('Reset') }}</button>
-                                <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
+                                <button type="submit" class="theme-btn m-2 submit-btn" id="saveStatusBtn">{{ __('Save') }}</button>
                             </div>
                         </div>
                     </form>
@@ -34,39 +29,35 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    let saleIdInput = document.getElementById("saleId");  // Hidden input for sale_id
-    let saleStatusSelect = document.getElementById("sale_status");  // Dropdown for status
-    let saveStatusBtn = document.getElementById("saveStatusBtn");  // Save button
 
-    // Handle "Update Status" button click
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let saleIdInput = document.getElementById("saleId");  
+    let saleStatusSelect = document.getElementById("sale_status"); 
+    let saveStatusBtn = document.getElementById("saveStatusBtn"); 
+
     document.querySelectorAll(".update-status-btn").forEach(button => {
         button.addEventListener("click", function () {
-            let saleId = this.getAttribute("data-sale-id");  // Get sale_id from button
-            let currentStatus = this.getAttribute("data-current-status");  // Get current status
+            let saleId = this.getAttribute("data-sale-id"); 
+            let currentStatus = this.getAttribute("data-current-status");
 
             saleIdInput.value = saleId;  
-            saleStatusSelect.value = currentStatus;  
+
+            // Fetch allowed statuses dynamically
+            fetch(`/business/sales/next-statuses/${currentStatus}`)
+                .then(response => response.json())
+                .then(data => {
+                    saleStatusSelect.innerHTML = "";
+
+                    data.forEach(status => {
+                        let option = document.createElement("option");
+                        option.value = status.id;
+                        option.textContent = status.name;
+                        saleStatusSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error("Error fetching statuses:", error));
         });
     });
-
-    document.querySelectorAll(".update-status-btn").forEach(button => {
-        button.addEventListener("click", function () {
-            let saleId = this.dataset.saleId;
-            let currentStatus = this.dataset.currentStatus;
-
-            document.getElementById("saleId").value = saleId;
-    });
-});
-
-    // Handle "Save Status" button click
-    saveStatusBtn.addEventListener("click", function () {
-        let saleId = saleIdInput.value;
-        let newStatus = saleStatusSelect.value;
-    });
-
-
-   
 });
 </script>

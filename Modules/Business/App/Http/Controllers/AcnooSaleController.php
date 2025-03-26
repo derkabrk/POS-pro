@@ -922,4 +922,19 @@ class AcnooSaleController extends Controller
             return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale']);
         }
     }
+
+    public function getNextStatuses($currentStatus)
+{
+    $statuses = Sale::getNextStatuses($currentStatus);
+    $statusList = [];
+
+    foreach ($statuses as $id) {
+        if (isset(Sale::STATUS[$id])) {
+            $statusList[] = ['id' => $id, 'name' => Sale::STATUS[$id]['name']];
+        }
+    }
+
+    return response()->json($statusList);
+}
+
 }
