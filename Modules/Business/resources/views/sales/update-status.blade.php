@@ -13,13 +13,15 @@
                         <input type="hidden" id="saleId" name="sale_id">
                     <label for="sale_status">Select New Status:</label>
                     <select id="sale_status" name="sale_status" class="form-control">
-                   @php
-                   $nextStatuses = \App\Models\Sale::getNextStatuses($sale->sale_status);
-                    @endphp
-                    @foreach ($nextStatuses as $id)
-                    <option value="{{ $id }}">{{ \App\Models\Sale::STATUS[$id]['name'] }}</option>
-                      @endforeach
-                      </select>
+    @php
+        $nextStatuses = \App\Models\Sale::getNextStatuses($sale->sale_status);
+    @endphp
+    @foreach ($nextStatuses as $id)
+        @if(isset(\App\Models\Sale::STATUS[$id]))
+            <option value="{{ $id }}">{{ \App\Models\Sale::STATUS[$id]['name'] }}</option>
+        @endif
+    @endforeach
+</select>
                         <div class="col-lg-12">
                             <div class="button-group text-center mt-3">
                                 <button type="reset" class="theme-btn border-btn m-2">{{ __('Reset') }}</button>
