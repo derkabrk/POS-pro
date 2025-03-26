@@ -171,6 +171,23 @@ class AcnooBusinessController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        // Fetch sale details
+        $businesss = Business::with()
+            ->where('business_id', auth()->user()->business_id)
+            ->findOrFail($id);
+
+        // Fetch sales with returns
+        $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
+            ->pluck('sale_id')
+            ->toArray();
+
+        return response()->json([
+            'html' => view('business::sales.show', compact('sales', 'salesWithReturns'))->render()
+        ]);
+    }
+
     public function edit(string $id)
     {
         $plans = Plan::latest()->get();
