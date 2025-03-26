@@ -373,7 +373,7 @@ class AcnooSaleController extends Controller
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
                 'sale_status' => $saleData['sale_status'],
-                'products' => productIds,
+                'products' => $productIds,
                 'shipping_service_id' =>  $saleData['shipping_service_id'],
                 'delivery_address' => $saleData['delivery_address'],
                 'meta' => [
