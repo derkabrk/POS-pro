@@ -10,12 +10,12 @@
         <td>{{ $loop->index + 1 }} <i class="{{ request('id') == $business->id ? 'fas fa-bell text-red' : '' }}"></i></td>
         <td>{{ $business->companyName }}</td>
         <td>{{ $business->category->name ?? '' }}</td>
-        <td>{{ {{  @php
+        <td>{{ @php
             $types = [0 => 'Physical', 1 => 'E-commerce', 2 => 'Both'];
         @endphp
         
         {{ $types[$business->type] ?? 'Unknown' }}
-          }} }}</td>
+          }}</td>
         <td>{{ $business->phoneNumber }}</td>
         <td>{{ $business->enrolled_plan->plan->subscriptionName ?? '' }}</td>
         <td>{{ formatted_date($business->subscriptionDate) }}</td>
