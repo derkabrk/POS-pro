@@ -478,9 +478,8 @@ class AcnooSaleController extends Controller
         $sale->update(['sale_status' => $request->sale_status]);
 
         return response()->json([
-            'success' => true,
-            'message' => 'Sale status updated successfully!',
-            'status' => $sale->sale_status,
+            'message' => __('Payemnt Type created cuccessfully'),
+            'redirect' => route('business.sales.index'),
         ]);
     }
     
