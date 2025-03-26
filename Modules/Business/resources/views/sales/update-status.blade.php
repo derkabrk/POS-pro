@@ -29,3 +29,27 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let saleIdInput = document.getElementById("saleId");  // Hidden input for sale_id
+    let saleStatusSelect = document.getElementById("sale_status");  // Dropdown for status
+    let saveStatusBtn = document.getElementById("saveStatusBtn");  // Save button
+
+    // Handle "Update Status" button click
+    document.querySelectorAll(".update-status-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let saleId = this.getAttribute("data-sale-id");  // Get sale_id from button
+            let currentStatus = this.getAttribute("data-current-status");  // Get current status
+
+            saleIdInput.value = saleId;  // Set hidden input value
+            saleStatusSelect.value = currentStatus;  // Preselect the current status
+        });
+    });
+
+    // Handle "Save Status" button click
+    saveStatusBtn.addEventListener("click", function () {
+        let saleId = saleIdInput.value;
+        let newStatus = saleStatusSelect.value;
+    });
+});
+</script>
