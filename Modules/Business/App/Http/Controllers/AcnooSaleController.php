@@ -272,7 +272,7 @@ class AcnooSaleController extends Controller
             'saleDate' => 'nullable|date',
             'sale_type' => ['required', 'integer'],
             'sale_status' => ['nullable', 'integer', 'in:1,2,3,4,5,6,7,8,9,10'],
-            'shipping_service_id' => ['nullable', 'exists:shipping_services,id'],
+            'shipping_service_id' => ['nullable', 'exists:shippings,id'],
             'delivery_address' => ['nullable', 'string', 'max:255'],
         ]);
 
