@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            <form action="{{ route('business.sales.update-status.store') }}" method="post" enctype="multipart/form-data"
+            <form action="{{ route('business.sales.update-status') }}" method="POST" enctype="multipart/form-data"
                         class="ajaxform_instant_reload">
                     @csrf
                     <input type="hidden" id="saleId" name="sale_id">
