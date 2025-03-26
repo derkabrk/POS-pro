@@ -2,12 +2,12 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5">Update Sale Statu</h1>
+                <h1 class="modal-title fs-5">Update Sale Status</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="personal-info">
-                    <form action="{{ route('business.sales.updateStatus') }}" method="post" enctype="multipart/form-data"
+                    <form action="{{ route('business.sales.updatestatus') }}" method="post" enctype="multipart/form-data"
                         class="ajaxform_instant_reload">
                         @csrf
                         <input type="hidden" id="saleId" name="sale_id">
