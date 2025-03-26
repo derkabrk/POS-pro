@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('sales', function (Blueprint $table) {
             $table->text('delivery_address')->nullable()->after('sale_status'); // Adding delivery_address
             $table->foreignId('shipping_service_id')->nullable()->constrained('shippings')->nullOnDelete()->after('delivery_address');
-            $table->json('products')->nullable()->after('shipping_service_id'); // Foreign key
+            $table->json('products')->nullable(); // Foreign key
         });
     }
 
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->dropColumn('delivery_address');
             $table->dropForeign(['shipping_service_id']);
             $table->dropColumn('shipping_service_id');
-            $table->dropColumn('products');
+             $table->dropColumn('products');
         });
     }
 };

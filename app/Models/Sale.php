@@ -52,7 +52,7 @@ class Sale extends Model
 
     public function shippings() : BelongsTo
     {
-        return $this->belongsTo(Shippings::class);
+        return $this->belongsTo(Shipping::class);
     }
 
     public function details()
@@ -83,6 +83,8 @@ class Sale extends Model
     {
         return $this->belongsTo(PaymentType::class);
     }
+
+    
 
     public static function boot()
     {
