@@ -278,7 +278,7 @@ class AcnooSaleController extends Controller
         $carts = Cart::content()->filter(fn($item) => $item->options->type == 'sale');
 
         if ($carts->count() < 1) {
-            return response()->json(['message' => __('Cart is empty. Add items first!')], 400);
+            return response()->json(['message' => __('Cart      is empty. Add items first!')], 400);
         }
 
         $saleData = [
@@ -372,7 +372,7 @@ class AcnooSaleController extends Controller
                 'payment_type_id' => $request->payment_type_id,
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
-                'sale_status' => $saleData['sale_status'],
+                'sale_status' => $saleData['sale_status'],  
                 'products' => $request->productIds,
                 'shipping_service_id' =>  $saleData['shipping_service_id'],
                 'delivery_address' => $saleData['delivery_address'],
