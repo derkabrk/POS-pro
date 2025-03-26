@@ -20,10 +20,12 @@
                     </select>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveStatusBtn">Update Status</button>
-            </div>
+            <div class="col-lg-12">
+                            <div class="button-group text-center mt-3">
+                                <button type="reset" class="theme-btn border-btn m-2">{{ __('Reset') }}</button>
+                                <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
+                            </div>
+                        </div>
         </div>
     </div>
 </div>
