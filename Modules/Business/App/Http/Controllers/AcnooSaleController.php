@@ -906,24 +906,20 @@ class AcnooSaleController extends Controller
             'sale_status' => 'required|integer',
         ]);
 
-
-
-
         $sale = Sale::findOrFail($request->sale_id);
 
-        
+
         $sale->update(['sale_status' => $request->sale_status]);
 
 
         if ($sale->sale_type == 1) {
             $sale->update(['sale_status' => $validated['sale_status']]);
             return response()->json([
-                'message' => __('Payemnt Type created cuccessfully'),
+                'message' => __('Sale Status updated Successfully'),
                 'redirect' => route('business.sales.index'),
             ]);
-        }else{
+        } else {
             return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale']);
         }
-        
     }
 }
