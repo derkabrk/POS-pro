@@ -913,7 +913,7 @@ class AcnooSaleController extends Controller
 
 
         if ($sale->sale_type == 1) {
-            $sale->update(['sale_status' => $validated['sale_status']]);
+            $sale->update(['sale_status' => $request['sale_status']]);
             return response()->json([
                 'message' => __('Sale Status updated Successfully'),
                 'redirect' => route('business.sales.index'),

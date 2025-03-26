@@ -140,7 +140,7 @@ class Sale extends Model
             3 => [4, 6, 7], // Called 2 → Called 3, Confirmed, Canceled
             4 => [5, 6, 7], // Called 3 → Called 4, Confirmed, Canceled
             5 => [7],       // Called 4 → Canceled
-            6 => [8, 7],    // Confirmed → Shipping, Canceled
+            7 => [8, 7],    // Confirmed → Shipping, Canceled
             8 => [9, 10],   // Shipping → Delivered, Returned
             9 => [11],      // Delivered → Paid
             11 => [12],     // Paid → Cash Out
