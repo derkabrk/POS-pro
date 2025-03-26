@@ -13,9 +13,6 @@
                         <input type="hidden" id="saleId" name="sale_id">
                     <label for="sale_status">Select New Status:</label>
                     <select id="sale_status" name="sale_status" class="form-control">
-                        @foreach (\App\Models\Sale::STATUS as $id => $status)
-                            <option value="{{ $id }}">{{ $status['name'] }}</option>
-                        @endforeach
                     </select>
                         <div class="col-lg-12">
                             <div class="button-group text-center mt-3">
@@ -71,6 +68,16 @@
                 }
             });
         });
+    });
+
+    saveStatusBtn.addEventListener("click", function () {
+        let saleId = saleIdInput.value;
+        let newStatus = saleStatusSelect.value;
+
+        if (!saleId || !newStatus) {
+            alert("Invalid Sale ID or Status!");
+            return;
+        }
     });
 
 </script>
