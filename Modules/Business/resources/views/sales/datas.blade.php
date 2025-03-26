@@ -116,7 +116,7 @@
             let updateUrl = "{{ route('business.sales.updateStatus') }}";
 
             fetch(updateUrl, {
-                method: "PATCH",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
