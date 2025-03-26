@@ -86,7 +86,7 @@ class AcnooSaleController extends Controller
 
         // Apply sale_type filter if selected
         if ($request->has('sale_type') && $request->sale_type !== '') {
-            $query->where('sale_type', intval($request->sale_type));
+            $query->where(column: 'sale_type', intval($request->sale_type));
         }
         $sales = $query->latest()->paginate($request->per_page ?? 10);
         return response()->json([

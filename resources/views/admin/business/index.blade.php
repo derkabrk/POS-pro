@@ -16,7 +16,7 @@
                     @endcan
                 </div>
                 <div class="table-top-form p-16-0">
-                    <form action="{{ route('admin.business.filter') }}" method="POST" id="filter-form" class="filter-form" table="#business-data">
+                    <form action="{{ route('admin.business.filter_business') }}" method="POST" id="filter-form" class="filter-form" table="#business-data">
                         @csrf
 
                         <div class="table-top-left d-flex gap-3 margin-l-16">
