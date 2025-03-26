@@ -279,9 +279,7 @@ class AcnooSaleController extends Controller
         $business_id = auth()->user()->business_id;
         $carts = Cart::content()->filter(fn($item) => $item->options->type == 'sale');
 
-        if ($carts->count() < 1) {
-            return response()->json(['message' => __('Cart is empty. Add items first!')], 400);
-        }
+
 
 
         if ($validated['sale_type'] == 1) {
