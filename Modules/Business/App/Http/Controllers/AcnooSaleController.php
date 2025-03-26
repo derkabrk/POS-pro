@@ -462,29 +462,6 @@ class AcnooSaleController extends Controller
         ]);
     }
     
-
-    public function updateStatus(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'sale_id' => 'required|exists:sales,id',
-            'sale_status' => 'required|integer',
-        ]);
-
-        // Find sale
-        $sale = Sale::findOrFail($request->sale_id);
-
-        // Update status
-        $sale->update(['sale_status' => $request->sale_status]);
-
-        return response()->json([
-            'message' => __('Payemnt Type created cuccessfully'),
-            'redirect' => route('business.sales.index'),
-        ]);
-    }
-    
-    
-
     public function edit($id)
     {
         // Clears all cart items
@@ -917,5 +894,27 @@ class AcnooSaleController extends Controller
             'redirect'  => route('business.sales.create')
         ]);
 
+    }
+
+
+
+    public function updatestatus(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'sale_id' => 'required|exists:sales,id',
+            'sale_status' => 'required|integer',
+        ]);
+
+        // Find sale
+        $sale = Sale::findOrFail($request->sale_id);
+
+        // Update status
+        $sale->update(['sale_status' => $request->sale_status]);
+
+        return response()->json([
+            'message' => __('Payemnt Type created cuccessfully'),
+            'redirect' => route('business.sales.index'),
+        ]);
     }
 }
