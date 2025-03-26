@@ -35,6 +35,17 @@ class Business extends Model
         'type' => BusinessType::class,
     ];
 
+
+    public function getTypeTextAttribute()
+{
+    $types = [
+        0 => 'Physical',
+        1 => 'E-commerce',
+        2 => 'Both',
+    ];
+
+    return $types[$this->type] ?? 'Unknown';
+}
     public function enrolled_plan()
     {
         return $this->belongsTo(PlanSubscribe::class, 'plan_subscribe_id');
