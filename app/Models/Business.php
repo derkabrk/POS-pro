@@ -31,10 +31,6 @@ class Business extends Model
         "type",
     ];
 
-
-    
-
-
     public function getTypeTextAttribute()
 {
     $types = [

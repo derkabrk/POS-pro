@@ -16,7 +16,7 @@
                     @endcan
                 </div>
                 <div class="table-top-form p-16-0">
-                    <form action="{{ route('admin.business.filter') }}" method="post" class="filter-form" table="#business-data">
+                    <form action="{{ route('admin.business.filter') }}" method="POST" id="filter-form" class="filter-form" table="#business-data">
                         @csrf
 
                         <div class="table-top-left d-flex gap-3 margin-l-16">
@@ -31,7 +31,7 @@
                             </div>
 
                             <div class="gpt-up-down-arrow position-relative">
-                                <select name="sale_type" id="sale_type_filter" class="form-control">
+                                <select name="type" id="sale_type_filter" class="form-control">
                                     <option value="1">{{ __('E-commerce') }}</option>
                                     <option value="2">{{ __('Both') }}</option>
                                     <option value="0">{{ __('Physical') }}</option>
