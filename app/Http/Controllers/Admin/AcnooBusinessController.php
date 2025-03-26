@@ -38,11 +38,11 @@ class AcnooBusinessController extends Controller
 
     public function acnooFilter(Request $request)
     {
+
         $search = $request->input('search');
 
-
-        if ($request->filled('type')) {
-            $search->where('type', $request->type);
+        if ($request->has('type') && $request->type !== '') {
+            $query->where('type', intval($request->type));
         }
 
         $businesses = Business::when($search, function ($q) use ($search) {
@@ -174,17 +174,10 @@ class AcnooBusinessController extends Controller
     public function show($id)
     {
         // Fetch sale details
-        $businesss = Business::with()
-            ->where('business_id', auth()->user()->business_id)
-            ->findOrFail($id);
-
-        // Fetch sales with returns
-        $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
-            ->pluck('sale_id')
-            ->toArray();
+        $businesss = Business::findOrFail($id);
 
         return response()->json([
-            'html' => view('business::sales.show', compact('sales', 'salesWithReturns'))->render()
+            'html' => view('business::sales.show', compact('businesss',))->render()
         ]);
     }
 
