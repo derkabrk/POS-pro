@@ -146,6 +146,6 @@ class Sale extends Model
             11 => [12],     // Paid → Cash Out
         ];
 
-        return $transitions[$currentStatus] ?? [];
+        return isset($transitions[$currentStatus]) ? $transitions[$currentStatus] : [];
     }
 }
