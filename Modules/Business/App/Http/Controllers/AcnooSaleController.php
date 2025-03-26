@@ -288,8 +288,8 @@ class AcnooSaleController extends Controller
 
         if ($validated['sale_type'] == 1) {
             $saleData['sale_status'] = $validated['sale_status'] ?? 1;
-            $saleData['shipping_service_id'] = $request['shipping_service_id'] ?? null;
-            $saleData['delivery_address'] = $request['delivery_address'] ?? null;
+            $saleData['shipping_service_id'] = $validated['shipping_service_id'] ?? null;
+            $saleData['delivery_address'] = $validated['delivery_address'] ?? null;
         } else {
             $saleData['sale_status'] = 7;
         }
