@@ -917,7 +917,7 @@ class AcnooSaleController extends Controller
             if ($sale->sale_status == 7) {
 
 
-                $products = Product::whereIn('id', json_encode($sale->productIds))->get();
+                $products = Product::whereIn('id', json_decode($sale->productIds, true))->get();
 
                 $customer = Party::findOrFail('id', $sale->party_id)->get();
 
@@ -956,7 +956,7 @@ class AcnooSaleController extends Controller
                     "express" => false,
                     "note_to_driver" => "",
                     "products" => [
-                        
+
                         "product_id" => "90a570bd-dd80-4d80-b0a2-597e9524504d",
 
                         "quantity" => 1,
