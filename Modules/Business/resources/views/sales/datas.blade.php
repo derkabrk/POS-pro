@@ -15,7 +15,7 @@
         @if ($sale->sale_type == 1) 
         @php
             $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
-            $disabledStatuses = ['Cash Out', 'Cancelled']; // List of statuses to disable the button
+            $disabledStatuses = ['Cash Out', 'Canceled']; // List of statuses to disable the button
         @endphp
         <td>
             <button 
