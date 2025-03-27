@@ -979,11 +979,7 @@ class AcnooSaleController extends Controller
                     ]);
 
                 } else {
-                    return response()->json([
-                        'message' => __('Sale update faild'),
-                        'error' => $response->error(),
-                    ]);
-
+                    return response()->json(['error' => $response->body()], 400);
                 }
 
             } else {
