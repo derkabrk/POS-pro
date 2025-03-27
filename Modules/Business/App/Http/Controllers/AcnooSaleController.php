@@ -276,6 +276,8 @@ class AcnooSaleController extends Controller
             $saleData['sale_status'] = $validated['sale_status'] ?? 1;
             $saleData['shipping_service_id'] = $request['shipping_service_id'] ?? null;
             $saleData['delivery_address'] = $request['delivery_address'] ?? null;
+            $saleData['wilaya_id'] = $request['wilaya_id'] ?? null;
+            $saleData['commune_id'] = $request['commune_id'] ?? null;
         } else {
             $saleData['sale_status'] = 7;
         }
@@ -360,7 +362,9 @@ class AcnooSaleController extends Controller
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
                 'sale_status' => $saleData['sale_status'],
                 'products' => $productIds,
-                'shipping_service_id' =>  $saleData['shipping_service_id'],
+                'wilaya_id'=> $saleData['wilaya_id'],
+                'commune_id'=> $saleData['commune_id'],
+                'shipping_service_id' => $saleData['shipping_service_id'],
                 'delivery_address' => $saleData['delivery_address'],
                 'meta' => [
                     'customer_phone' => $request->customer_phone,
@@ -911,6 +915,15 @@ class AcnooSaleController extends Controller
 
             if ($sale->sale_status == 7) {
 
+
+                $products = Product::whereIn('id', $sale->productIds)->get();
+                $shippingService = ShippingService::find($sale->shipping_service_id);
+                $shippingCompany = ShippingCompanies::find($shippingService->shipping_company_id);
+                
+
+                if (!$shippingService) {
+                    return response()->json(['message' => 'Shipping service not found'], 404);
+                }
 
                 $sale->update(['sale_status' => $request['sale_status']]);
                 return response()->json([
