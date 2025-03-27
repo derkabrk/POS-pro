@@ -65,20 +65,25 @@
 
                             <div class="col-12 ">
                                 <div class="input-group">
-                                    <select name ="party_id" class="form-select customer-select"
-                                            aria-label="Select Customer">
+                                    <select name="party_id" class="form-select customer-select" aria-label="Select Customer">
                                         <option value="">{{ __('Select Customer') }}</option>
-                                        <option class="guest-option" value="guest">{{ __('Guest') }}</option>
+                                        <option class="guest-option" value="guest" {{ request('customer_id') == 'guest' ? 'selected' : '' }}>
+                                            {{ __('Guest') }}
+                                        </option>
                                         @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id }}" data-type="{{ $customer->type }}">
-                                                {{ $customer->name }} ({{ $customer->type }}{{ $customer->due ? ' ' . currency_format($customer->due, currency:business_currency()) : '' }})
+                                            <option value="{{ $customer->id }}" data-type="{{ $customer->type }}"
+                                                {{ request('customer_id') == $customer->id ? 'selected' : '' }}>
+                                                {{ $customer->name }} ({{ $customer->type }}
+                                                {{ $customer->due ? ' ' . currency_format($customer->due, currency:business_currency()) : '' }})
                                             </option>
                                         @endforeach
                                     </select>
                                     <a type="button" href="#customer-create-modal" data-bs-toggle="modal"
-                                      class="btn btn-danger square-btn d-flex justify-content-center align-items-center"> <img src="{{ asset('assets/images/icons/plus-square.svg') }}" alt=""></a>
-
+                                       class="btn btn-danger square-btn d-flex justify-content-center align-items-center">
+                                        <img src="{{ asset('assets/images/icons/plus-square.svg') }}" alt="">
+                                    </a>
                                 </div>
+                                
 
                   <div class="input-group w-100 pt-3" id="shipping-service-container" style="display: none;">
                   <select name="shipping_service_id" class="form-select shipping-select w-100" aria-label="Select Shipping Service" id="shipping_service">

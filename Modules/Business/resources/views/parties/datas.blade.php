@@ -18,6 +18,10 @@
                     <i class="far fa-ellipsis-v"></i>
                 </button>
                 <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{ route('business.sales.create', ['customer_id' => $party->id]) }}"><i class="fal fa-add"></i>{{ __('Add') }}</a>
+                    </li>
+
                         <li>
                             <a href="#parties-view" class="parties-view-btn" data-bs-toggle="modal"
                                 data-name="{{ $party->name }}" data-email="{{ $party->email }}"
