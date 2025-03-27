@@ -50,6 +50,7 @@ class UserRoleController extends Controller
                 'salesListPermission' => $request->salesListPermission == 'on' ? true : false,
                 'stockPermission' => $request->stockPermission == 'on' ? true : false,
                 'addIncomePermission' => $request->addIncomePermission == 'on' ? true : false,
+                'shippingPermission' => $request->shippingPermission == 'on' ? true : false,
             ]
         ]);
 
@@ -97,6 +98,7 @@ class UserRoleController extends Controller
                 'salesListPermission' => $request->salesListPermission == 'on' ? true : false,
                 'stockPermission' => $request->stockPermission == 'on' ? true : false,
                 'addIncomePermission' => $request->addIncomePermission == 'on' ? true : false,
+                'shippingPermission' => $request->shippingPermission == 'on' ? true : false,
             ]
         ]);
 

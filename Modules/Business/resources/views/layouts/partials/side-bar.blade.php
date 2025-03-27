@@ -183,7 +183,7 @@
             @endif
 
 
-            @if (auth()->user()->role != 'staff' || visible_permission('addIncomePermission'))
+            @if (auth()->user()->role != 'staff' || visible_permission('shippingPermission'))
             <li
                     class="dropdown {{ (Request::routeIs('business.parties.index') && request('type') == 'Supplier') || (Request::routeIs('business.parties.create') && request('type') == 'Supplier') || (Request::routeIs('business.parties.edit') && request('type') == 'Supplier') ? 'active' : '' }}">
                     <a href="#">

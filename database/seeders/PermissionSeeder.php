@@ -73,6 +73,7 @@ class PermissionSeeder extends Seeder
                 'blogs' => 'r,c,u,d',
                 'messages' => 'r,c,u,d',
                 'terms' => 'r,u',
+                
             ]
         ];
 
