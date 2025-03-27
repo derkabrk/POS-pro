@@ -21,6 +21,8 @@ class Sale extends Model
         'shipping_service_id',
         'products',
         'party_id',
+        'wilaya_id',
+        'commune_id',
         'user_id',
         'discountAmount',
         'discount_percent',

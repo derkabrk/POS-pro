@@ -8,8 +8,11 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('sales', function (Blueprint $table) {
+            $table->integer('wilaya_id');
+            $table->integer('commune_id');
             if (!Schema::hasColumn('sales', 'sale_status')) {
                 $table->integer('sale_status')->default(1)->after('sale_type'); 
+                
             } else {
                 $table->integer('sale_status')->default(1)->change(); 
             }
@@ -21,6 +24,8 @@ return new class extends Migration {
         Schema::table('sales', function (Blueprint $table) {
             if (Schema::hasColumn('sales', 'sale_status')) {
                 $table->dropColumn('sale_status');
+                $table->dropColumn('wilaya_id');
+                $table->dropColumn('commune_id');
             }
         });
     }
