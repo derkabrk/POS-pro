@@ -32,6 +32,7 @@
 
                             <div class="gpt-up-down-arrow position-relative">
                                 <select name="type" id="sale_type_filter" class="form-control">
+                                    <option value="all">{{ __('All') }}</option>
                                     <option value="1">{{ __('E-commerce') }}</option>
                                     <option value="2">{{ __('Both') }}</option>
                                     <option value="0">{{ __('Physical') }}</option>
