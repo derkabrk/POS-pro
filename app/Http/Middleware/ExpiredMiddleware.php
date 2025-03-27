@@ -89,7 +89,6 @@ class ExpiredMiddleware
                 'business.vats.update',
                 'business.vats.destroy',
                 'business.vats.deleteAll',
-
                 'business.shipping.store',
                 'business.shipping.update',
                 'business.shipping.edit',

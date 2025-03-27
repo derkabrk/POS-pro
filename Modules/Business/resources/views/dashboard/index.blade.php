@@ -16,7 +16,8 @@
                         visible_permission('addIncomePermission') ||
                         visible_permission('addExpensePermission') ||
                         visible_permission('partiesPermission') ||
-                        visible_permission('stockPermission')
+                        visible_permission('stockPermission')||
+                        visible_permission('shippingPermission')
                     );
 
                     $SalePurchasePermission = (
