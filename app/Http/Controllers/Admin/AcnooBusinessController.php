@@ -115,8 +115,6 @@ class AcnooBusinessController extends Controller
 
             $user = auth()->user();
 
-            $enumValue = BusinessType::from($request->input('type'));
-
             $business = Business::create([
                 'companyName' => $request->companyName,
                 'address' => $request->address,
@@ -208,9 +206,6 @@ class AcnooBusinessController extends Controller
         ]);
 
         DB::beginTransaction();
-
-        $enumValue = BusinessType::from($request->input('type'));
-
 
         try {
             
