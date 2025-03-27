@@ -23,6 +23,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 class AcnooSaleController extends Controller
 {
