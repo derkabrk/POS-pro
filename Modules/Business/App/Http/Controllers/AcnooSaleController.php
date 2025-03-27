@@ -80,20 +80,6 @@ class AcnooSaleController extends Controller
     }
 
 
-    public function filter(Request $request)
-    {
-        $query = Sale::query();
-
-        // Apply sale_type filter if selected
-        if ($request->has('sale_type') && $request->sale_type !== '') {
-            $query->where(column: 'sale_type', intval($request->sale_type));
-        }
-        $sales = $query->latest()->paginate($request->per_page ?? 10);
-        return response()->json([
-            'html' => view('business::sales.datas', compact('sales'))->render()
-        ]);
-    }
-
     public function productFilter(Request $request)
     {
         $total_products_count = Product::where('business_id', auth()->user()->business_id)->count();
