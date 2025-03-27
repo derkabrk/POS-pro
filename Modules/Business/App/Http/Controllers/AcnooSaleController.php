@@ -921,7 +921,7 @@ class AcnooSaleController extends Controller
                  $products = Product::whereIn('id', $productIds)->get();
 
 
-                $customer = Party::findOrFail('id', $sale->party_id)->get();
+                $customer = Party::where('id', $sale->party_id)->first();
 
                 if (!$customer) {
                     return response()->json(['message' => 'customer not found'], 404);
