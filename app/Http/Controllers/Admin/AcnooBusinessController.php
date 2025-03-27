@@ -6,7 +6,6 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\Gateway;
 use App\Models\Business;
-use App\Enums\BusinessType;
 use App\Helpers\HasUploader;
 use Illuminate\Http\Request;
 use App\Models\PlanSubscribe;
