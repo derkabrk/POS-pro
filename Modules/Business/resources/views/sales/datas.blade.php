@@ -12,23 +12,25 @@
         <td class="text-start">${{ number_format($sale->paidAmount, 2) }}</td>
         <td class="text-start">${{ number_format($sale->dueAmount, 2) }}</td>
         <td class="text-start">{{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</td>
-        @if ($sale->sale_type == 1)
+        @if ($sale->sale_type == 1) 
         @php
-        $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
+            $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
+            $disabledStatuses = ['Cash Out', 'Cancelled']; // List of statuses to disable the button
         @endphp
         <td>
-
-        <button 
-        class="btn btn-sm {{  $status['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
-        data-bs-toggle="modal"
-        data-bs-target="#updateStatusModal"
-        data-sale-id="{{ $sale->id}}"
-        data-current-status="{{ $sale->sale_status }}"
-         >
-        {{ $status['name']  }}
-    </button>
+            <button 
+                class="btn btn-sm {{ $status['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#updateStatusModal"
+                data-sale-id="{{ $sale->id }}"
+                data-current-status="{{ $sale->sale_status }}"
+                {{ in_array($status['name'], $disabledStatuses) ? 'disabled' : '' }} 
+            >
+                {{ $status['name'] }}
+            </button>
         </td>
-        @endif
+    @endif
+    
 
         <td class="print-d-none">
             <div class="dropdown table-action">
