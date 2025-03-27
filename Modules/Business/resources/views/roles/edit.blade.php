@@ -153,7 +153,7 @@
                                                             </div>
                                                             <div class="d-flex col-lg-4  mb-2">
                                                                 <div class="custom-control custom-checkbox mr-3 me-lg-5 d-flex align-items-center gap-2">
-                                                                    <input type="checkbox" name="shippingPermission" class="custom-control-input user-check-box" id="due_list">
+                                                                    <input type="checkbox" name="shippingPermission" class="custom-control-input user-check-box" id="shipping">
                                                                     <label class="custom-control-label fw-bold" for="shipping">Shipping</label>
                                                                 </div>
                                                                    </div>
