@@ -276,7 +276,7 @@ class AcnooSaleController extends Controller
             $saleData['sale_status'] = $validated['sale_status'] ?? 1;
             $saleData['shipping_service_id'] = $request['shipping_service_id'] ?? null;
             $saleData['delivery_address'] = $request['delivery_address'] ?? null;
-            $saleData['wilaya_id'] = $request['wilaya_id'] ?? null;
+            $saleData['wilaya_id'] = $request['shipping_wilaya_id'] ?? null;
             $saleData['commune_id'] = $request['commune_id'] ?? null;
         } else {
             $saleData['sale_status'] = 7;
