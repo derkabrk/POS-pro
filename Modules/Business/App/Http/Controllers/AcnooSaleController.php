@@ -11,6 +11,7 @@ use App\Models\Brand;
 use App\Models\Party;
 use App\Models\Product;
 use App\Models\Shipping;
+use App\Models\ShippingCompanies;
 use App\Models\Business;
 use App\Models\Category;
 use App\Models\SaleReturn;
@@ -362,8 +363,8 @@ class AcnooSaleController extends Controller
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
                 'sale_status' => $saleData['sale_status'],
                 'products' => $productIds,
-                'wilaya_id'=> $saleData['wilaya_id'],
-                'commune_id'=> $saleData['commune_id'],
+                'wilaya_id' => $saleData['wilaya_id'],
+                'commune_id' => $saleData['commune_id'],
                 'shipping_service_id' => $saleData['shipping_service_id'],
                 'delivery_address' => $saleData['delivery_address'],
                 'meta' => [
@@ -916,20 +917,71 @@ class AcnooSaleController extends Controller
             if ($sale->sale_status == 7) {
 
 
-                $products = Product::whereIn('id', $sale->productIds)->get();
+                $products = Product::whereIn('id', json_encode($sale->productIds))->get();
+
+                $customer = Party::findOrFail('id', $sale->party_id)->get();
+
+                if (!$customer) {
+                    return response()->json(['message' => 'customer not found'], 404);
+                }
+
+
+                if (!$products) {
+                    return response()->json(['message' => 'products list not found'], 404);
+                }
+
+                if (!$sale->wilaya_id && !$sale->commune_id) {
+                    return response()->json(['message' => 'wilaya_id or commune_id not found'], 404);
+                }
+
                 $shippingService = ShippingService::find($sale->shipping_service_id);
                 $shippingCompany = ShippingCompanies::find($shippingService->shipping_company_id);
-                
 
-                if (!$shippingService) {
+
+                if (!$shippingService && !$shippingCompany) {
                     return response()->json(['message' => 'Shipping service not found'], 404);
                 }
 
-                $sale->update(['sale_status' => $request['sale_status']]);
-                return response()->json([
-                    'message' => __('Sale Status updated Successfully'),
-                    'redirect' => route('business.sales.index'),
-                ]);
+                $apiUrl = "https://b.maystro-delivery.com/api/stores/orders/";
+
+                $payload = [
+                    "external_order_id" => $sale->id,
+                    "source" => 4,
+                    "wilaya" => $sale->wilaya_id,
+                    "commune" => $sale->commune_id,
+                    "destination_text" => $sale->delivery_address,
+                    "customer_phone" => $customer->phone,
+                    "customer_name" => $customer->name,
+                    "product_price" => $sale->totalAmount,
+                    "express" => false,
+                    "note_to_driver" => "",
+                    "products" => [
+                        
+                        "product_id" => "90a570bd-dd80-4d80-b0a2-597e9524504d",
+
+                        "quantity" => 1,
+
+                        "logistical_description" => "produit1"
+                    ], // Array of products
+                ];
+
+                $response = Http::post($apiUrl, $payload);
+
+                if ($response->successful()) {
+
+                    $sale->update(['sale_status' => $request['sale_status']]);
+                    return response()->json([
+                        'message' => __('Sale Status updated Successfully'),
+                        'redirect' => route('business.sales.index'),
+                    ]);
+
+                } else {
+                    return response()->json([
+                        'message' => __('Sale update faild'),
+                        'error' => $response->error(),
+                    ]);
+
+                }
 
             } else {
                 $sale->update(['sale_status' => $request['sale_status']]);
@@ -937,11 +989,10 @@ class AcnooSaleController extends Controller
                     'message' => __('Sale Status updated Successfully'),
                     'redirect' => route('business.sales.index'),
                 ]);
-
             }
-
         } else {
             return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale']);
+
         }
     }
 
