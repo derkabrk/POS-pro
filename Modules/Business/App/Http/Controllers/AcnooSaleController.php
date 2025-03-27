@@ -947,6 +947,8 @@ class AcnooSaleController extends Controller
 
                 $apiUrl = "https://b.maystro-delivery.com/api/stores/orders/";
 
+                $authToken = $shippingService->first_r_credential;
+
                 $payload = [
                     "external_order_id" => $sale->id,
                     "source" => 4,
@@ -968,7 +970,10 @@ class AcnooSaleController extends Controller
                     ], // Array of products
                 ];
 
-                $response = Http::post($apiUrl, $payload);
+                $response = Http::withHeaders([
+                    'Authorization' => "Token $authToken",
+                    'Accept' => 'application/json',
+                ])->post($apiUrl, $payload);
 
                 if ($response->successful()) {
 
