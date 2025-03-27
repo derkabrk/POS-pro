@@ -961,14 +961,14 @@ class AcnooSaleController extends Controller
                     "express" => false,
                     "note_to_driver" => "",
                     "products"=> [
-                        {
+                        [
                             "product_id" => "90a570bd-dd80-4f80-b0a2-597d9524544d",
                             "logistical_description" => "carte",
                             "quantity" => 1,
                             "defective" => false,
                             "is_exchange" => false,
                             "exchange_reason" => null
-                        }
+                            ]
                     ],
                 ];
 
