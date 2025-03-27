@@ -38,15 +38,16 @@ class AcnooBusinessController extends Controller
 
     public function acnooFilter(Request $request)
     {
-
-        $search = $request->input('search');
-
+        $search = $request->input('search'); // This is a string, not a query builder
+    
+        $businesses = Business::query(); // Initialize the query builder
+    
         if ($request->has('type') && $request->type !== '') {
-            $search->where('type', $request->type);
+            $businesses->where('type', $request->type);
         }
-
-        $businesses = Business::when($search, function ($q) use ($search) {
-            $q->where(function ($q) use ($search) {
+    
+        if (!empty($search)) {
+            $businesses->where(function ($q) use ($search) {
                 $q->where('companyName', 'like', '%' . $search . '%')
                     ->orWhere('phoneNumber', 'like', '%' . $search . '%')
                     ->orWhereHas('category', function ($q) use ($search) {
@@ -56,18 +57,19 @@ class AcnooBusinessController extends Controller
                         $q->where('subscriptionName', 'like', '%' . $search . '%');
                     });
             });
-        })
-            ->latest()
-            ->paginate($request->per_page ?? 20);
-
+        }
+    
+        $businesses = $businesses->latest()->paginate($request->per_page ?? 20);
+    
         if ($request->ajax()) {
             return response()->json([
                 'data' => view('admin.business.datas', compact('businesses'))->render()
             ]);
         }
-
+    
         return redirect(url()->previous());
     }
+    
 
     public function filter(Request $request)
     {
