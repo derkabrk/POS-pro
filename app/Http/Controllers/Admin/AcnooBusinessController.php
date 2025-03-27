@@ -38,11 +38,11 @@ class AcnooBusinessController extends Controller
 
     public function acnooFilter(Request $request)
     {
-        $search = $request->input('search'); // This is a string, not a query builder
+        $search = $request->input('search'); // Get search term
+        $businesses = Business::query(); // Initialize query builder
     
-        $businesses = Business::query(); // Initialize the query builder
-    
-        if ($request->has('type') && $request->type !== '') {
+        // Check if type is set and not empty, and it's not "all"
+        if ($request->has('type') && $request->type !== '' && $request->type !== 'all') {
             $businesses->where('type', $request->type);
         }
     
@@ -69,6 +69,7 @@ class AcnooBusinessController extends Controller
     
         return redirect(url()->previous());
     }
+    
     
 
     public function filter(Request $request)
