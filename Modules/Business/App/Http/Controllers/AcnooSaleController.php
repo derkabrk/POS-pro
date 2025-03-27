@@ -936,7 +936,7 @@ class AcnooSaleController extends Controller
                     return response()->json(['message' => 'wilaya_id or commune_id not found'], 404);
                 }
 
-                $shippingService = ShippingService::find($sale->shipping_service_id);
+                $shippingService = Shipping::find($sale->shipping_service_id);
                 $shippingCompany = ShippingCompanies::find($shippingService->shipping_company_id);
 
 
