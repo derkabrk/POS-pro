@@ -960,14 +960,16 @@ class AcnooSaleController extends Controller
                     "product_price" => $sale->totalAmount,
                     "express" => false,
                     "note_to_driver" => "",
-                    "products" => [
-
-                        "product_id" => "90a570bd-dd80-4d80-b0a2-597e9524504d",
-
-                        "quantity" => 1,
-
-                        "logistical_description" => "produit1"
-                    ], // Array of products
+                    "products"=> [
+                        {
+                            "product_id": "90a570bd-dd80-4f80-b0a2-597d9524544d",
+                            "logistical_description": "carte",
+                            "quantity": 1,
+                            "defective": false,
+                            "is_exchange": false,
+                            "exchange_reason": null
+                        }
+                    ],
                 ];
 
                 $response = Http::withHeaders([
