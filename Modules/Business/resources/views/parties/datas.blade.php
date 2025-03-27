@@ -19,7 +19,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="{{ route('business.sales.create', ['customer_id' => $party->id]) }}"><i class="fal fa-add"></i>{{ __('Add') }}</a>
+                        <a href="{{ route('business.sales.create', ['customer_id' => $party->id]) }}"><i class="fa-light fa-plus"></i>{{ __('Add') }}</a>
                     </li>
 
                         <li>
