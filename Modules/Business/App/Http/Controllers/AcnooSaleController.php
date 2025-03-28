@@ -963,7 +963,7 @@ class AcnooSaleController extends Controller
                     "products"=> [
                         [
 
-                            "product_id" =>  "343417",
+                            "product_id" =>  "cd09abfe-54e4-49ed-a3e0-4d330261a90d",
 
                             "quantity" =>  1,
       
