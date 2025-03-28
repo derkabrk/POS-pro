@@ -962,7 +962,7 @@ class AcnooSaleController extends Controller
                     "note_to_driver" => "",
                     "products"=> [
                         [
-                            "product_id" => "tomyros_hsyy",
+                            "product_id" => "343417",
                             "logistical_description" => "carte",
                             "quantity" => 1,
                             "defective" => false,
