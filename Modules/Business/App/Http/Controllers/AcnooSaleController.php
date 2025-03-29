@@ -959,8 +959,8 @@ class AcnooSaleController extends Controller
 
                 if ($shippingService->shipping_company_id == 1) {
 
-                    $headers["token"] = first_r_credential;
-                    $headers["cle"] = second_r_credential;
+                    $headers["token"] = $shippingService->first_r_credential;
+                    $headers["cle"] = $shippingService->second_r_credential;
 
                     $payload = [
 
