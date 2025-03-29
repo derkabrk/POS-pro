@@ -964,7 +964,7 @@ class AcnooSaleController extends Controller
 
                     $payload = [
 
-                        "Tracking" => "982636473", 
+                        "Tracking" =>  $sale->tracking_id, 
 
                         "DeliveryType"  => "0", 
                 
@@ -990,7 +990,7 @@ class AcnooSaleController extends Controller
                 
                         "TProduct"  => "Article1",
                 
-                        "id_Externe"  => "02", 
+                        "id_Externe"  =>  $sale->tracking_id, 
                 
                         "Source"  => "" 
                     ];
@@ -1002,7 +1002,7 @@ class AcnooSaleController extends Controller
                     $headers["Authorization"] = "Token $authToken";
 
                     $payload = [
-                        "external_order_id" => $sale->id,
+                        "external_order_id" => $sale->tracking_id,
                         "source" => 4,
                         "wilaya" => $sale->wilaya_id,
                         "commune" => $sale->commune_id,
