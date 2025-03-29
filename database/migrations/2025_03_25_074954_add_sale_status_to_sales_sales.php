@@ -8,6 +8,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('sales', function (Blueprint $table) {
+            $table->string('tracking_id')->unique();
             if (!Schema::hasColumn('sales', 'sale_status')) {
                 $table->integer('sale_status')->default(1)->after('sale_type'); 
             } else {

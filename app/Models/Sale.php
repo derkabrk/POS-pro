@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Sale extends Model
 {
@@ -19,6 +20,7 @@ class Sale extends Model
         'business_id',
         'delivery_address',
         'shipping_service_id',
+        'tracking_id',
         'products',
         'party_id',
         'wilaya_id',
@@ -96,6 +98,10 @@ class Sale extends Model
             $id = Sale::where('business_id', auth()->user()->business_id)->count() + 1;
             $model->invoiceNumber = "S" . str_pad($id, 2, '0', STR_PAD_LEFT);
         });
+        static::creating(function ($model) {
+            $model->tracking_id = 'TRK-' . Str::upper(Str::random(10));
+        });
+
     }
 
     /**
@@ -173,4 +179,6 @@ class Sale extends Model
 
         return isset($transitions[$currentStatus]) ? $transitions[$currentStatus] : [];
     }
+
+    
 }
