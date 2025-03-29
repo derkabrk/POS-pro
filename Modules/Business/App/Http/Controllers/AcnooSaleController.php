@@ -919,7 +919,7 @@ class AcnooSaleController extends Controller
 
 
                 $productIds = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
-                 $products = Product::whereIn('id', $productIds)->get();
+                $products = Product::whereIn('id', $productIds)->get();
 
 
                 $customer = Party::where('id', $sale->party_id)->first();
@@ -945,36 +945,90 @@ class AcnooSaleController extends Controller
                     return response()->json(['message' => 'Shipping service not found'], 404);
                 }
 
-                $apiUrl = "https://b.maystro-delivery.com/api/stores/orders/";
+                $apiUrl = $shippingService->createapi_url;
 
-                $authToken = $shippingService->first_r_credential;
+               
 
                 $payload = [
-                    "external_order_id" => $sale->id,
-                    "source" => 4,
-                    "wilaya" => $sale->wilaya_id,
-                    "commune" => $sale->commune_id,
-                    "destination_text" => $sale->delivery_address,
-                    "customer_phone" => $customer->phone,
-                    "customer_name" => $customer->name,
-                    "product_price" => $sale->totalAmount,
-                    "express" => false,
-                    "note_to_driver" => "",
-                    "products"=> [
-                        [
-
-                            "product_id" =>  "cd09abfe-54e4-49ed-a3e0-4d330261a90d",
-
-                            "quantity" =>  1,
-      
-                            "logistical_description" =>  "test_prodt"
-                            ]
-                    ],
+                ];
+                $headers = [
+                    'Accept' => 'application/json',
                 ];
 
+
+                if ($shippingService->shipping_company_id == 1) {
+
+                    $headers["token"] = first_r_credential;
+                    $headers["cle"] = second_r_credential;
+
+                    $payload = [
+
+                        "Tracking" => "982636473", 
+
+                        "DeliveryType"  => "0", 
+                
+                        "PackageType"  => "0", 
+                
+                        "Confirmed "  => "",
+                
+                        "Client"  => $customer->name,
+                
+                        "MobileA" => $customer->phone,
+                
+                        "MobileB"  => "0880808080",
+                
+                        "Address"  => $sale->delivery_address,
+                
+                        "IDWilaya"  => $sale->wilaya_id,
+                
+                        "Commune"  => "Maraval",
+                
+                        "Total"  => $sale->totalAmount,
+                
+                        "Note"  => "",
+                
+                        "TProduct"  => "Article1",
+                
+                        "id_Externe"  => "02", 
+                
+                        "Source"  => "" 
+                    ];
+
+                } else if ($shippingService->shipping_company_id == 2) {
+                    
+                    $authToken = $shippingService->first_r_credential;
+
+                    $headers["Authorization"] = "Token $authToken";
+
+                    $payload = [
+                        "external_order_id" => $sale->id,
+                        "source" => 4,
+                        "wilaya" => $sale->wilaya_id,
+                        "commune" => $sale->commune_id,
+                        "destination_text" => $sale->delivery_address,
+                        "customer_phone" => $customer->phone,
+                        "customer_name" => $customer->name,
+                        "product_price" => $sale->totalAmount,
+                        "express" => false,
+                        "note_to_driver" => "",
+                        "products" => [
+                            [
+
+                                "product_id" => "cd09abfe-54e4-49ed-a3e0-4d330261a90d",
+
+                                "quantity" => 1,
+
+                                "logistical_description" => "test_prodt"
+                            ]
+                        ],
+                    ];
+                }
+
+
+
                 $response = Http::withHeaders([
-                    'Authorization' => "Token $authToken",
-                    'Accept' => 'application/json',
+                   
+                    
                 ])->post($apiUrl, $payload);
 
                 if ($response->successful()) {
