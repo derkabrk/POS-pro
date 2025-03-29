@@ -945,7 +945,7 @@ class AcnooSaleController extends Controller
                     return response()->json(['message' => 'Shipping service not found'], 404);
                 }
 
-                $apiUrl = $shippingService->createapi_url;
+                $apiUrl = $shippingService->create_api_url;
                
 
                 $payload = [
