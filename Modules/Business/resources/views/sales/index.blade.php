@@ -71,7 +71,7 @@
                                 </th>
                                 <th>{{ __('SL') }}.</th>
                                 <th class="text-start">{{ __('Date') }}</th>
-                                <th class="text-start">{{ __('Invoice No') }}</th>
+                                <th class="text-start">{{ __('Tracking') }}</th>
                                 <th class="text-start">{{ __('Party Name') }}</th>
                                 <th class="text-start">{{ __('Total') }}</th>
                                 <th class="text-start">Sale type</th>
