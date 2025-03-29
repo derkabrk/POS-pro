@@ -946,11 +946,12 @@ class AcnooSaleController extends Controller
                 }
 
                 $apiUrl = $shippingService->createapi_url;
-
                
 
                 $payload = [
+
                 ];
+
                 $headers = [
                     'Accept' => 'application/json',
                 ];
@@ -995,7 +996,7 @@ class AcnooSaleController extends Controller
                     ];
 
                 } else if ($shippingService->shipping_company_id == 2) {
-                    
+
                     $authToken = $shippingService->first_r_credential;
 
                     $headers["Authorization"] = "Token $authToken";
@@ -1026,10 +1027,7 @@ class AcnooSaleController extends Controller
 
 
 
-                $response = Http::withHeaders([
-                   
-                    
-                ])->post($apiUrl, $payload);
+                $response = Http::withHeaders($headers)->post($apiUrl, $payload);
 
                 if ($response->successful()) {
 
