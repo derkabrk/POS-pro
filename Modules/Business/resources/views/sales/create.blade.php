@@ -184,7 +184,7 @@
                                     </select>
                                 </div>
 
-                               <div class="shipping-container" style="display: none;">
+                               <div class="input-group w-100 pt-3" id="shipping-container" style="display: none;">
                                 <div class="shipping_info  align-items-center mb-2">
                                     <h6 class="sale-title">Delivery Type</h6>
 
