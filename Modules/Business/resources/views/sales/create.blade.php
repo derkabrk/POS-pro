@@ -335,11 +335,11 @@
             if (saleTypeSelect.value === "1") {
                 shippingServiceDiv.style.display = "block";
                 amount_infoContainer.style.display = "none";
-                shippingContainerDiv.style.display = "block"; 
+                shippingContainerDiv.style.display = "none"; 
             } else {
                 shippingServiceDiv.style.display = "none";
                 amount_infoContainer.style.display = "block";
-                shippingContainerDiv.style.display = "none"; // Hide div
+                shippingContainerDiv.style.display = "block"; // Hide div
             }
         }
 
