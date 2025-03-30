@@ -8,7 +8,7 @@
         <td class="text-start">{{ $sale->tracking_id ?? 'N/A'}}</td>
         <td class="text-start">{{ $sale->party->name ?? 'N/A' }}</td>
         <td class="text-start">${{ number_format($sale->totalAmount, 2) }}</td>
-        <td class="text-start">{{ $sale->sale_type == 0 ? 'Business' : 'E-commerce' }}</td>
+        <td class="text-start">{{ $sale->sale_type == 0 ? 'Physical' : 'E-commerce' }}</td>
         <td class="text-start">${{ number_format($sale->paidAmount, 2) }}</td>
         <td class="text-start">${{ number_format($sale->dueAmount, 2) }}</td>
         <td class="text-start">{{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</td>

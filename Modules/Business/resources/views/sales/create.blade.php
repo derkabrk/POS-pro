@@ -101,7 +101,7 @@
                           <label for="wilaya-select">Select Wilaya</label>
                           <select name="shipping_wilaya_id" class="form-select" id="wilaya-select" style="width: 100%;">
                    <option value="">Select Wilaya</option>
-             </select>
+                            </select>
                </div>
 
                <div id="commune-container" style="display: none; margin-top: 10px; max-width: 300px;">
@@ -172,17 +172,19 @@
 
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="sale-title">Sale type</h6>
+
                                         <select name="sale_type" class="form-select" id='form'>
-                                           
-                                                <option value="0">Business Sale</option>
+
                                                 <option value="1">E-commerce Sale</option>
+                                                <option value="0">Physical  Sale</option>
+                                                
                                             
                                         </select>
                                     </div>
 
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">Delivery Address</h6>
-                                        <input type="text" name="delivery_address" class="form-control" placeholder="{{ __('Type note...') }}">
+                                        <input type="address" name="delivery_address" class="form-control" placeholder="{{ __('Type note...') }}">
                                     </div>
                                 </div>
                                 <div class="mt-3">
