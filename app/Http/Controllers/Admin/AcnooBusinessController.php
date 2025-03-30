@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Gateway;
 use App\Models\Business;
 use App\Helpers\HasUploader;
+use App\Models\Vat;
 use Illuminate\Http\Request;
 use App\Models\PlanSubscribe;
 use App\Models\BusinessCategory;
@@ -127,6 +128,14 @@ class AcnooBusinessController extends Controller
                 'type'=>  request->type,
             ]);
 
+            $vat = Vat::create([
+                'name' => "Inital",
+                'business_id' => $business->id,
+                'rate' =>  0,
+                'phoneNumber' => $request->phoneNumber,
+                "status" => 1,
+            ]);
+            
             User::create([
                 'business_id'=>$business->id,
                 'name' => $request->companyName,
