@@ -204,8 +204,7 @@
                                         <div class="col-6 w-100 d-flex justify-content-between gap-2">
                                             <div class="d-flex d-flex align-items-center gap-2">
                                                 <select name="vat_id" class="form-select vat_select" id='form-ware'>
-                                                    <option value="">{{ __('Select') }}</option>
-                                                    <option value="0">0%</option>
+                                                    <option value="0" data-rate="0">0%</option>
                                                     @foreach($vats as $vat)
                                                         <option value="{{ $vat->id }}" data-rate="{{ $vat->rate }}">{{ $vat->name }} ({{ $vat->rate }}%)</option>
                                                     @endforeach
