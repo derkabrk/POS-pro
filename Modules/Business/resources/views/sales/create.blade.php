@@ -335,7 +335,7 @@
             if (saleTypeSelect.value === "1") {
                 shippingServiceDiv.style.display = "block";
                 amount_infoContainer.style.display = "none";
-                amount_infoContainer.style.display = "block"; // Show div
+                shippingContainerDiv.style.display = "block"; 
             } else {
                 shippingServiceDiv.style.display = "none";
                 amount_infoContainer.style.display = "block";
