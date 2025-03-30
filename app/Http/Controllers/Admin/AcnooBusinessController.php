@@ -132,10 +132,9 @@ class AcnooBusinessController extends Controller
                 'name' => "Inital",
                 'business_id' => $business->id,
                 'rate' =>  0,
-                'phoneNumber' => $request->phoneNumber,
                 "status" => 1,
             ]);
-            
+
             User::create([
                 'business_id'=>$business->id,
                 'name' => $request->companyName,

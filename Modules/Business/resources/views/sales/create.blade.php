@@ -145,7 +145,7 @@
                         <!-- Make Payment Section start -->
                         <div class="grid row py-3 payment-section">
                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                <div class="amount-info-container">
+                                <div class="amount-info-container" style="display: none;">
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">{{ __('Receive Amount') }}</h6>
                                         <input name="receive_amount" type="number" step="any" id="receive_amount"
@@ -170,22 +170,23 @@
                                         </select>
                                     </div>
 
-                                    <div class="row amount-container  align-items-center mb-2">
-                                        <h6 class="sale-title">Sale type</h6>
+                               
+                                </div>
+                                <div class="shipping_info  align-items-center mb-2">
+                                    <h6 class="sale-title">Sale type</h6>
 
-                                        <select name="sale_type" class="form-select" id='form'>
+                                    <select name="sale_type" class="form-select" id='form'>
 
-                                                <option value="1">E-commerce Sale</option>
-                                                <option value="0">Physical  Sale</option>
-                                                
+                                            <option value="1">E-commerce Sale</option>
+                                            <option value="0">Physical  Sale</option>
                                             
-                                        </select>
-                                    </div>
+                                        
+                                    </select>
+                                </div>
 
-                                    <div class="row amount-container  align-items-center mb-2">
-                                        <h6 class="payment-title">Delivery Address</h6>
-                                        <input type="address" name="delivery_address" class="form-control" placeholder="{{ __('Type note...') }}">
-                                    </div>
+                                <div class="shipping_info  align-items-center mb-2">
+                                    <h6 class="payment-title">Delivery Address</h6>
+                                    <input type="address" name="delivery_address" class="form-control" placeholder="{{ __('Type note...') }}">
                                 </div>
                                 <div class="mt-3">
                                     <button class="save-btn cancel-sale-btn"
@@ -310,13 +311,17 @@
         <script>
     document.addEventListener("DOMContentLoaded", function () {
         const saleTypeSelect = document.getElementById("form");
+        const amount_infoContainer = document.getElementById("amount-info-container");
         const shippingServiceDiv = document.getElementById("shipping-service-container");
+
 
         function toggleShippingService() {
             if (saleTypeSelect.value === "1") {
-                shippingServiceDiv.style.display = "block"; // Show div
+                shippingServiceDiv.style.display = "block";
+                amount_infoContainer.style.display = "none"; // Show div
             } else {
-                shippingServiceDiv.style.display = "none"; // Hide div
+                shippingServiceDiv.style.display = "none";
+                amount_infoContainer.style.display = "block"; // Hide div
             }
         }
 
