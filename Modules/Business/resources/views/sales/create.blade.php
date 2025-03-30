@@ -185,7 +185,7 @@
                                 </div>
 
                                <div class="input-group w-100 pt-3" id="shipping-container" style="display: none;">
-                                <div class="shipping_info  align-items-center mb-2">
+                              
                                     <h6 class="sale-title">Delivery Type</h6>
 
                                     <select name="sale_type" class="form-select" id='form'>
@@ -194,12 +194,12 @@
                                             <option value="0">Home</option>
                                             
                                     </select>
-                                </div>
                                 
-                                <div class="shipping_info  align-items-center mb-2">
+                                
+                               
                                     <h6 class="payment-title">Delivery Address</h6>
                                     <input type="address" name="delivery_address" class="form-control" placeholder="{{ __('Type note...') }}">
-                                </div>
+                               
                                </div>
                                 <div class="mt-3">
                                     <button class="save-btn cancel-sale-btn"
