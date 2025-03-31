@@ -318,7 +318,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         const saleTypeSelect = document.getElementById("form");
         const amount_infoContainer = document.getElementById("amount-info-container");
-        const shippingContainerDiv = document.getElementById("shipping-container");
+        const shippingServiceDiv = document.getElementById("shipping-service-container");
       
 
         
