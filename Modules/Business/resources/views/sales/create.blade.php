@@ -323,16 +323,16 @@
 
         
 
-        const shippingContainerDiv = document.getElementById("shipping-container");
+        const shippingContainer = document.getElementById("shipping-container");
         function toggleShippingService() {
             if (saleTypeSelect.value === "1") {
                 shippingServiceDiv.style.display = "block";
                 amount_infoContainer.style.display = "none";
-                shippingContainerDiv.style.display = "block"; 
+                shippingContainer.style.display = "block"; 
             } else {
                 shippingServiceDiv.style.display = "none";
                 amount_infoContainer.style.display = "block";
-                shippingContainerDiv.style.display = "none"; // Hide div
+                shippingContainer.style.display = "none"; // Hide div
             }
         }
 
