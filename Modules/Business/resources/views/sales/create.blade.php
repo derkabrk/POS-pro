@@ -145,6 +145,18 @@
                         <!-- Make Payment Section start -->
                         <div class="grid row py-3 payment-section">
                             <div class="col-sm-12 col-md-6 col-lg-6">
+                                
+                                
+                                <div class="shipping_info  align-items-center mb-2">
+                                    <h6 class="sale-title">Sale type</h6>
+
+                                    <select name="sale_type" class="form-select" id='form'>
+
+                                            <option value="1">E-commerce Sale</option>
+                                            <option value="0">Physical  Sale</option>
+                                            
+                                    </select>
+                                </div>
                                 <div class="amount-info-container" id="amount-info-container" style="display: none;">
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">{{ __('Receive Amount') }}</h6>
@@ -171,17 +183,6 @@
                                     </div>
 
                                
-                                </div>
-                                
-                                <div class="shipping_info  align-items-center mb-2">
-                                    <h6 class="sale-title">Sale type</h6>
-
-                                    <select name="sale_type" class="form-select" id='form'>
-
-                                            <option value="1">E-commerce Sale</option>
-                                            <option value="0">Physical  Sale</option>
-                                            
-                                    </select>
                                 </div>
 <div class="shipping-container align-items-center mb-2"" id="shipping-container" style="display: none;">
     <h6 class="sale-title">Delivery Type</h6>
