@@ -183,15 +183,15 @@
                                             
                                     </select>
                                 </div>
-                                <div class="shipping-container" id="shipping-container" style="display: none; margin-top: 10px; max-width: 300px;">
-                                    <h6 class="sale-title">Delivery Type</h6>
-                                    <select name="sale_type" class="form-select" id="saleTypeSelect">
-                                        <option value="1">StopDesk</option>
-                                        <option value="0">Home</option>
-                                    </select>
-                                        <h6 class="payment-title">Delivery Address</h6>
-                                        <input type="text" name="delivery_address" class="form-control" placeholder="Delivery Address">
-                                                    </div>
+<div class="shipping-container align-items-center mb-2"" id="shipping-container" style="display: none;">
+    <h6 class="sale-title">Delivery Type</h6>
+    <select name="sale_type" class="form-select" id="saleTypeSelect">
+        <option value="1">StopDesk</option>
+        <option value="0">Home</option>
+    </select>
+        <h6 class="payment-title">Delivery Address</h6>
+        <input type="text" name="delivery_address" class="form-control" placeholder="Delivery Address">
+                    </div>
                                
                                 <div class="mt-3">
                                     <button class="save-btn cancel-sale-btn"
