@@ -22,6 +22,7 @@ class Sale extends Model
         'shipping_service_id',
         'tracking_id',
         'delivery_type',
+        'parcel_type',
         'products',
         'party_id',
         'wilaya_id',
