@@ -210,6 +210,16 @@
                                             <input type="number" step="any" name="vat_amount" id="vat_amount" min="0" class="form-control right-start-input" placeholder="{{ __('0') }}" readonly>
                                         </div>
                                     </div>
+                                    <div class="shipping-container align-items-center mb-2" id="shipping-container" style="display: none;">
+                                        <h6 class="sale-title">Delivery Type</h6>
+                                        <select name="sale_type" class="form-select" id="saleTypeSelect">
+                                            <option value="1">StopDesk</option>
+                                            <option value="0">Home</option>
+                                        </select>
+                                    
+                                        <h6 class="payment-title">Delivery Address</h6>
+                                        <input type="text" name="delivery_address" class="form-control" placeholder="Type note...">
+                                    </div>
                                     <div class="row save-amount-container  align-items-center mb-2">
                                         <h6 class="payment-title col-6">{{ __('Discount') }}</h6>
                                         <div class="col-6 w-100 d-flex justify-content-between gap-2">
@@ -243,16 +253,7 @@
                         </div>
                         <!-- Make Payment Section end -->
 
-                        <div class="shipping-container align-items-center mb-2" id="shipping-container" style="display: none;">
-                            <h6 class="sale-title">Delivery Type</h6>
-                            <select name="sale_type" class="form-select" id="saleTypeSelect">
-                                <option value="1">StopDesk</option>
-                                <option value="0">Home</option>
-                            </select>
-                        
-                            <h6 class="payment-title">Delivery Address</h6>
-                            <input type="text" name="delivery_address" class="form-control" placeholder="Type note...">
-                        </div>
+                       
 
                     </div>
                 </form>
