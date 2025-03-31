@@ -181,17 +181,18 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-                               
                                 </div>
-<div class="shipping-container align-items-center mb-2"" id="shipping-container" style="display: none;">
+<div class="shipping-container align-items-center mb-2"" id="shipping-container" style="display: none;  margin-top:30px">
     <h6 class="sale-title">Delivery Type</h6>
     <select name="sale_type" class="form-select" id="saleTypeSelect">
         <option value="1">StopDesk</option>
         <option value="0">Home</option>
     </select>
-        <h6 class="payment-title">Delivery Address</h6>
+    <div  style="margin-top:30px">
+        <h6 class="payment-title" >Delivery Address</h6>
         <input type="text" name="delivery_address" class="form-control" placeholder="Delivery Address">
+    </div>
+
                     </div>
                                
                                 <div class="mt-3">
