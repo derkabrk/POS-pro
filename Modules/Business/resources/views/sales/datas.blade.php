@@ -12,6 +12,7 @@
         <td class="text-start">
             {{ $sale->sale_type == 0 ? 'Physical' : ($sale->delivery_type == 0 ? 'Home' : 'StepDesk') }}
         </td>
+        <td class="text-start">${{ number_format($sale->dueAmount, decimals: 2) }}</td>
         @if ($sale->sale_type == 1) 
         @php
             $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
