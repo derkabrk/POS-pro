@@ -184,7 +184,7 @@
                                 </div>
 <div class="shipping-container align-items-center mb-2"" id="shipping-container" style="display: none;  margin-top:30px">
     <h6 class="sale-title">Delivery Type</h6>
-    <select name="sale_type" class="form-select" id="saleTypeSelect">
+    <select name="delivery_type" class="form-select" id="saleTypeSelect">
         <option value="1">StopDesk</option>
         <option value="0">Home</option>
     </select>
