@@ -21,6 +21,7 @@ class Sale extends Model
         'delivery_address',
         'shipping_service_id',
         'tracking_id',
+        'delivery_type',
         'products',
         'party_id',
         'wilaya_id',
@@ -120,6 +121,7 @@ class Sale extends Model
         'totalAmount' => 'double',
         'delivery_fees' => 'double',
         'shipping_charge' => 'double',
+        'delivery_type' => 'integer',
         'meta' => 'json',
     ];
 
