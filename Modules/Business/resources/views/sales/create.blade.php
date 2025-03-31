@@ -183,7 +183,15 @@
                                             
                                     </select>
                                 </div>
-
+                                <div class="shipping-container" id="shipping-container" style="display: none; margin-top: 10px; max-width: 300px;">
+                                    <h6 class="sale-title">Delivery Type</h6>
+                                    <select name="sale_type" class="form-select" id="saleTypeSelect">
+                                        <option value="1">StopDesk</option>
+                                        <option value="0">Home</option>
+                                    </select>
+                                        <h6 class="payment-title">Delivery Address</h6>
+                                        <input type="text" name="delivery_address" class="form-control" placeholder="Delivery Address">
+                                                    </div>
                                
                                 <div class="mt-3">
                                     <button class="save-btn cancel-sale-btn"
@@ -211,15 +219,7 @@
                                         </div>
                                     </div>
                                 
-<div id="shipping-container" style="display: none; margin-top: 10px; max-width: 300px;">
-    <h6 class="sale-title">Delivery Type</h6>
-    <select name="sale_type" class="form-select" id="saleTypeSelect">
-        <option value="1">StopDesk</option>
-        <option value="0">Home</option>
-    </select>
-        <h6 class="payment-title">Delivery Address</h6>
-        <input type="text" name="delivery_address" class="form-control" placeholder="Type note...">
-                    </div>
+
                                     <div class="row save-amount-container  align-items-center mb-2">
                                         <h6 class="payment-title col-6">{{ __('Discount') }}</h6>
                                         <div class="col-6 w-100 d-flex justify-content-between gap-2">
@@ -323,9 +323,6 @@
         const saleTypeSelect = document.getElementById("form");
         const amount_infoContainer = document.getElementById("amount-info-container");
         const shippingServiceDiv = document.getElementById("shipping-service-container");
-      
-
-        
 
         const shippingContainer = document.getElementById("shipping-container");
         function toggleShippingService() {
