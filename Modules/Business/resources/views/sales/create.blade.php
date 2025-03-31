@@ -184,16 +184,7 @@
                                     </select>
                                 </div>
 
-                                <div class="input-group w-100 pt-3" id="shipping-container" style="display: none;">
-                                    <h6 class="sale-title">Delivery Type</h6>
-                                    <select name="sale_type" class="form-select" id="saleTypeSelect">
-                                        <option value="1">StopDesk</option>
-                                        <option value="0">Home</option>
-                                    </select>
-                                
-                                    <h6 class="payment-title">Delivery Address</h6>
-                                    <input type="text" name="delivery_address" class="form-control" placeholder="Type note...">
-                                </div>
+                               
                                 <div class="mt-3">
                                     <button class="save-btn cancel-sale-btn"
                                             data-route="{{ route('business.carts.remove-all') }}">{{ __('Cancel') }}</button>
@@ -251,6 +242,18 @@
                             </div>
                         </div>
                         <!-- Make Payment Section end -->
+
+                        <div class="shipping-container align-items-center mb-2" id="shipping-container" style="display: none;">
+                            <h6 class="sale-title">Delivery Type</h6>
+                            <select name="sale_type" class="form-select" id="saleTypeSelect">
+                                <option value="1">StopDesk</option>
+                                <option value="0">Home</option>
+                            </select>
+                        
+                            <h6 class="payment-title">Delivery Address</h6>
+                            <input type="text" name="delivery_address" class="form-control" placeholder="Type note...">
+                        </div>
+
                     </div>
                 </form>
             </div>
