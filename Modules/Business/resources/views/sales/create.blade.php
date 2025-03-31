@@ -145,7 +145,7 @@
                         <!-- Make Payment Section start -->
                         <div class="grid row py-3 payment-section">
                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                <div class="amount-info-container" style="display: none;">
+                                <div class="amount-info-container" id="amount-info-container" style="display: none;">
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">{{ __('Receive Amount') }}</h6>
                                         <input name="receive_amount" type="number" step="any" id="receive_amount"
@@ -216,15 +216,10 @@
     <select name="sale_type" class="form-select" id="saleTypeSelect">
         <option value="1">StopDesk</option>
         <option value="0">Home</option>
-
+    </select>
         <h6 class="payment-title">Delivery Address</h6>
         <input type="text" name="delivery_address" class="form-control" placeholder="Type note...">
                     </div>
-
-                              
-                    
-
-                                    
                                     <div class="row save-amount-container  align-items-center mb-2">
                                         <h6 class="payment-title col-6">{{ __('Discount') }}</h6>
                                         <div class="col-6 w-100 d-flex justify-content-between gap-2">
