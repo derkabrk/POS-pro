@@ -99,11 +99,7 @@
     @endforeach
 @endif
 
-{{-- Show <th> only if sale_type is not 0 in any record --}}
-@if($showPaidColumn)
-    <th class="text-start">{{ __('Paid') }}</th>
-@endif
-                                <th class="text-start">{{ $sale->sale_type == 0 ? __('Due') : "Delivery Type" }}</th>
+                                <th class="text-start">{{"Delivery Type" }}</th>
                                 <th class="text-start">{{ __('Payment') }}</th>
                                 <th>{{ __('Status') }}</th>
                                 <th>{{ __('Action') }}</th>
