@@ -55,6 +55,7 @@ class Sale extends Model
         return $this->belongsTo(Business::class);
     }
 
+    
     public function shippings() : BelongsTo
     {
         return $this->belongsTo(Shipping::class);
