@@ -188,6 +188,12 @@
         <option value="1">StopDesk</option>
         <option value="0">Home</option>
     </select>
+
+    <h6 class="sale-title">Parcel Type</h6>
+    <select name="parcel_type" class="form-select">
+        <option value="1">New Order</option>
+        <option value="0">Exchange</option>
+    </select>
     <div  style="margin-top:30px">
         <h6 class="payment-title" >Delivery Address</h6>
         <input type="text" name="delivery_address" class="form-control" placeholder="Delivery Address">

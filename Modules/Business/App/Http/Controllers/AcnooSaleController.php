@@ -261,6 +261,7 @@ class AcnooSaleController extends Controller
             'sale_type' => 'required|integer|in:0,1',
             'sale_status' => 'nullable|integer',
             'delivery_type' => 'nullable|integer',
+            'parcel_type' => 'nullable|integer',
         ]);
 
         $business_id = auth()->user()->business_id;
@@ -370,6 +371,7 @@ class AcnooSaleController extends Controller
                 'shipping_service_id' => $saleData['shipping_service_id'],
                 'delivery_address' => $saleData['delivery_address'],
                 'delivery_type' => $request->delivery_type,
+                'parcel_type' => $request->parcel_type,
                 'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\PaymentType;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\Gateway;
@@ -132,6 +133,18 @@ class AcnooBusinessController extends Controller
                 'name' => "Inital",
                 'business_id' => $business->id,
                 'rate' =>  0,
+                "status" => 1,
+            ]);
+
+            $payment_type = PaymentType::create([
+                'name' => "COD",
+                'business_id' => $business->id,
+                "status" => 1,
+            ]);
+
+            $payment_type = PaymentType::create([
+                'name' => "Cash",
+                'business_id' => $business->id,
                 "status" => 1,
             ]);
 
