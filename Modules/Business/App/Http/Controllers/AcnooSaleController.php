@@ -1032,19 +1032,21 @@ class AcnooSaleController extends Controller
 
 
 
-                $response = Http::withHeaders($headers)->post($apiUrl, $payload);
+                //$response = Http::withHeaders($headers)->post($apiUrl, $payload);
 
-                if ($response->successful()) {
+                $sale->update(['sale_status' => $request['sale_status']]);
+                return response()->json([
+                    'message' => __('Sale Status updated Successfully'),
+                    'redirect' => route('business.sales.index'),
+                ]);
 
-                    $sale->update(['sale_status' => $request['sale_status']]);
-                    return response()->json([
-                        'message' => __('Sale Status updated Successfully'),
-                        'redirect' => route('business.sales.index'),
-                    ]);
+             //   if ($response->successful()) {
 
-                } else {
+                   
+
+              //  } else {
                     return response()->json(['error' => $response->body()], 400);
-                }
+               // }
 
             } else {
                 $sale->update(['sale_status' => $request['sale_status']]);
