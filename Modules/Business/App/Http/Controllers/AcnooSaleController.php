@@ -1010,7 +1010,7 @@ class AcnooSaleController extends Controller
 
                     $headers["Authorization"] = "Token $authToken";
 
-                    $result = storeNonExistingProducts("Token $authToken", $products);
+                    //$result = storeNonExistingProducts("Token $authToken", $products);
 
                     $payload = [
                         "external_order_id" => $sale->tracking_id,
