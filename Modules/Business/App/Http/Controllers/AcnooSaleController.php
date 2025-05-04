@@ -1069,9 +1069,9 @@ class AcnooSaleController extends Controller
 
         return response()->json($statusList);
     }
-   public function storeNonExistingProducts(string $authToken, array $productsToCheck): array
+
+  public  function storeNonExistingProducts(string $authToken, array $productsToCheck): array
     {
-        // Step 1: Fetch all existing products
         $productListResult = Http::withHeaders([
             'Authorization' => $authToken,
         ])->get('https://backend.maystro-delivery.com/api/stores/product/');
@@ -1097,40 +1097,58 @@ class AcnooSaleController extends Controller
         $storeId = $results[0]['store'];
         $existingIds = collect($results)->pluck('product_id')->filter()->values()->all();
     
-        $nonExisting = collect($productsToCheck)->filter(function ($product) use ($existingIds) {
-            return !in_array($product['id'], $existingIds);
-        })->values();
-    
         $createdProducts = [];
         $failed = [];
+        $skippedInvalidIds = [];
     
-        foreach ($nonExisting as $product) {
+        foreach ($productsToCheck as $product) {
+            $id = $product['id'];
+    
+            // Skip if ID is not numeric
+            if (!is_numeric($id)) {
+                $skippedInvalidIds[] = $id;
+                continue;
+            }
+    
+            // Skip if product already exists
+            if (in_array((int) $id, $existingIds)) {
+                continue;
+            }
+    
+            // Attempt to create the product
             $createResult = Http::withHeaders([
                 'Authorization' => $authToken,
             ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
                 'store_id' => $storeId,
                 'logistical_description' => $product['productName'],
-                'product_id' => $product['id'],
+                'product_id' => (int) $id,
             ]);
     
             if ($createResult->successful()) {
                 $createdProducts[] = $product;
             } else {
                 $failed[] = [
-                    'product_id' => $product['id'],
+                    'product_id' => $id,
                     'status' => $createResult->status(),
                     'error' => $createResult->body(),
                 ];
             }
         }
     
+        // Get skipped IDs that already existed
+        $skippedExisting = array_values(array_filter(array_map(function ($p) use ($existingIds) {
+            return in_array($p['id'], $existingIds) ? $p['id'] : null;
+        }, $productsToCheck)));
+    
         return [
             'store_id_used' => $storeId,
             'created_products' => $createdProducts,
-            'skipped_existing_ids' => array_values(array_intersect($existingIds, array_column($productsToCheck, 'id'))),
+            'skipped_existing_ids' => $skippedExisting,
+            'skipped_invalid_ids' => $skippedInvalidIds,
             'failed' => $failed,
         ];
     }
+    
     
     
 
