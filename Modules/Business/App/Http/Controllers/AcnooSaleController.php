@@ -1071,85 +1071,72 @@ class AcnooSaleController extends Controller
     }
 
   public  function storeNonExistingProducts(string $authToken, array $productsToCheck): array
-    {
-        $productListResult = Http::withHeaders([
-            'Authorization' => $authToken,
-        ])->get('https://backend.maystro-delivery.com/api/stores/product/');
-    
-        if ($productListResult->failed()) {
-            return [
-                'error' => 'Failed to fetch product list',
-                'status' => $productListResult->status(),
-                'body' => $productListResult->body(),
-            ];
-        }
-    
-        $json = $productListResult->json();
-        $results = $json['results'] ?? [];
-    
-        if (empty($results) || !isset($results[0]['store'])) {
-            return [
-                'error' => 'Unable to extract store_id from results',
-                'details' => $json,
-            ];
-        }
-    
-        $storeId = $results[0]['store'];
-        $existingIds = collect($results)->pluck('product_id')->filter()->values()->all();
-    
-        $createdProducts = [];
-        $failed = [];
-        $skippedInvalidIds = [];
-    
-        foreach ($productsToCheck as $product) {
-            $id = $product['id'];
-    
-            // Skip if ID is not numeric
-            if (!is_numeric($id)) {
-                $skippedInvalidIds[] = $id;
-                continue;
-            }
-    
-            // Skip if product already exists
-            if (in_array((int) $id, $existingIds)) {
-                continue;
-            }
-    
-            // Attempt to create the product
-            $createResult = Http::withHeaders([
-                'Authorization' => $authToken,
-            ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
-                'store_id' => $storeId,
-                'logistical_description' => $product['productName'],
-                'product_id' => (int) $id,
-            ]);
-    
-            if ($createResult->successful()) {
-                $createdProducts[] = $product;
-            } else {
-                $failed[] = [
-                    'product_id' => $id,
-                    'status' => $createResult->status(),
-                    'error' => $createResult->body(),
-                ];
-            }
-        }
-    
-        // Get skipped IDs that already existed
-        $skippedExisting = array_values(array_filter(array_map(function ($p) use ($existingIds) {
-            return in_array($p['id'], $existingIds) ? $p['id'] : null;
-        }, $productsToCheck)));
-    
-        return [
-            'store_id_used' => $storeId,
-            'created_products' => $createdProducts,
-            'skipped_existing_ids' => $skippedExisting,
-            'skipped_invalid_ids' => $skippedInvalidIds,
-            'failed' => $failed,
-        ];
-    }
-    
-    
+  {
+      $productListResult = Http::withHeaders([
+          'Authorization' => $authToken,
+      ])->get('https://backend.maystro-delivery.com/api/stores/product/');
+  
+      if ($productListResult->failed()) {
+          return [
+              'error' => 'Failed to fetch product list',
+              'status' => $productListResult->status(),
+              'body' => $productListResult->body(),
+          ];
+      }
+  
+      $json = $productListResult->json();
+      $results = $json['results'] ?? [];
+  
+      if (empty($results) || !isset($results[0]['store'])) {
+          return [
+              'error' => 'Unable to extract store_id from results',
+              'details' => $json,
+          ];
+      }
+  
+      $storeId = $results[0]['store'];
+      $existingIds = collect($results)->pluck('product_id')->filter()->values()->all();
+  
+      $createdProducts = [];
+      $failed = [];
+  
+      foreach ($productsToCheck as $product) {
+          $id = (string) $product['id'];
+  
+          if (in_array($id, $existingIds)) {
+              continue; // already exists
+          }
+  
+          $createResult = Http::withHeaders([
+              'Authorization' => $authToken,
+          ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
+              'store_id' => $storeId,
+              'logistical_description' => $product['productName'],
+              'product_id' => $id, // now treated as string
+          ]);
+  
+          if ($createResult->successful()) {
+              $createdProducts[] = $product;
+          } else {
+              $failed[] = [
+                  'product_id' => $id,
+                  'status' => $createResult->status(),
+                  'error' => $createResult->body(),
+              ];
+          }
+      }
+  
+      $skippedExisting = array_values(array_filter(array_map(function ($p) use ($existingIds) {
+          return in_array((string) $p['id'], $existingIds) ? $p['id'] : null;
+      }, $productsToCheck)));
+  
+      return [
+          'store_id_used' => $storeId,
+          'created_products' => $createdProducts,
+          'skipped_existing_ids' => $skippedExisting,
+          'failed' => $failed,
+      ];
+  }
     
 
 
