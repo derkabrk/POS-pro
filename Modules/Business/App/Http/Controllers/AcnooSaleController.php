@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Collection;
+
 
 class AcnooSaleController extends Controller
 {
@@ -970,9 +972,9 @@ class AcnooSaleController extends Controller
 
                         "Tracking" =>  $sale->tracking_id, 
 
-                        "DeliveryType"  => "0", 
+                        "DeliveryType"  => $sale->delivery_type, 
                 
-                        "PackageType"  => "0", 
+                        "PackageType"  => $sale->parcel_type,
                 
                         "Confirmed "  => "",
                 
@@ -980,7 +982,7 @@ class AcnooSaleController extends Controller
                 
                         "MobileA" => $customer->phone,
                 
-                        "MobileB"  => "0880808080",
+                        "MobileB"  => $customer->phone,
                 
                         "Address"  => $sale->delivery_address,
                 
@@ -1001,9 +1003,14 @@ class AcnooSaleController extends Controller
 
                 } else if ($shippingService->shipping_company_id == 2) {
 
+                     
+                    
+
                     $authToken = $shippingService->first_r_credential;
 
                     $headers["Authorization"] = "Token $authToken";
+
+                    $result = storeNonExistingProducts("Token $authToken", $products);
 
                     $payload = [
                         "external_order_id" => $sale->tracking_id,
@@ -1016,34 +1023,30 @@ class AcnooSaleController extends Controller
                         "product_price" => $sale->totalAmount,
                         "express" => false,
                         "note_to_driver" => "",
-                        "products" => [
-                            [
-
-                                "product_id" => "cd09abfe-54e4-49ed-a3e0-4d330261a90d",
-
-                                "quantity" => 1,
-
-                                "logistical_description" => "test_prodt"
-                            ]
-                        ],
+                        "products" => collect($result['created_products'] ?? [])->map(fn($p) => [
+                            'product_id' => (string) $p['id'],
+                            'productName' => $p['productName'],
+                        ])->values()->all();
                     ];
                 }
 
 
 
-                $response = Http::withHeaders($headers)->post($apiUrl, $payload);
+                //$response = Http::withHeaders($headers)->post($apiUrl, $payload);
 
-                if ($response->successful()) {
+                $sale->update(['sale_status' => $request['sale_status']]);
+                return response()->json([
+                    'message' => __('Sale Status updated Successfully'),
+                    'redirect' => route('business.sales.index'),
+                ]);
 
-                    $sale->update(['sale_status' => $request['sale_status']]);
-                    return response()->json([
-                        'message' => __('Sale Status updated Successfully'),
-                        'redirect' => route('business.sales.index'),
-                    ]);
+             //   if ($response->successful()) {
 
-                } else {
+                   
+
+              //  } else {
                     return response()->json(['error' => $response->body()], 400);
-                }
+               // }
 
             } else {
                 $sale->update(['sale_status' => $request['sale_status']]);
@@ -1070,6 +1073,60 @@ class AcnooSaleController extends Controller
         }
 
         return response()->json($statusList);
+    }
+
+    function storeNonExistingProducts(string $authToken, array $productsToCheck): array
+    {
+        $response = Http::withHeaders([
+            'Authorization' => $authToken,
+        ])->get('https://backend.maystro-delivery.com/api/stores/product/');
+    
+        $json = $response->json();
+        $results = $json['results'] ?? [];
+    
+        if (empty($results) || !isset($results[0]['store'])) {
+            return ['created_products' => [], 'error' => 'store_id not found'];
+        }
+    
+        $storeId = $results[0]['store'];
+    
+        $existingIds = collect($results)
+            ->pluck('product_id')
+            ->map(fn($id) => (string) $id)
+            ->all();
+    
+        $createdProducts = [];
+    
+        foreach ($productsToCheck as $product) {
+            $localId = (string) $product['id'];
+    
+            if (in_array($localId, $existingIds)) {
+                continue;
+            }
+    
+            $create = Http::withHeaders([
+                'Authorization' => $authToken,
+            ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
+                'store_id' => $storeId,
+                'logistical_description' => $product['productName'],
+                'product_id' => $localId,
+            ]);
+    
+            if ($create->successful() || $create->status() === 201) {
+                $createdProducts[] = $product;
+            } else {
+                \Log::error("Maystro product creation failed", [
+                    'product' => $product,
+                    'status' => $create->status(),
+                    'response' => $create->body(),
+                ]);
+            }
+        }
+    
+        return [
+            'store_id_used' => $storeId,
+            'created_products' => $createdProducts,
+        ];
     }
 
 }
