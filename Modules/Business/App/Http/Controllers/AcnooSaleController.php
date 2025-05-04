@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Collection;
+
 
 class AcnooSaleController extends Controller
 {
@@ -970,9 +972,9 @@ class AcnooSaleController extends Controller
 
                         "Tracking" =>  $sale->tracking_id, 
 
-                        "DeliveryType"  => "0", 
+                        "DeliveryType"  => $sale->delivery_type, 
                 
-                        "PackageType"  => "0", 
+                        "PackageType"  => $sale->parcel_type,
                 
                         "Confirmed "  => "",
                 
@@ -980,7 +982,7 @@ class AcnooSaleController extends Controller
                 
                         "MobileA" => $customer->phone,
                 
-                        "MobileB"  => "0880808080",
+                        "MobileB"  => $customer->phone,
                 
                         "Address"  => $sale->delivery_address,
                 
@@ -1001,9 +1003,14 @@ class AcnooSaleController extends Controller
 
                 } else if ($shippingService->shipping_company_id == 2) {
 
+                     
+                    
+
                     $authToken = $shippingService->first_r_credential;
 
                     $headers["Authorization"] = "Token $authToken";
+
+                    $result = storeNonExistingProducts("Token $authToken", $products);
 
                     $payload = [
                         "external_order_id" => $sale->tracking_id,
@@ -1071,5 +1078,77 @@ class AcnooSaleController extends Controller
 
         return response()->json($statusList);
     }
+
+    
+
+
+  public  function storeNonExistingProducts(string $authToken, array $productsToCheck): array
+    {
+        // Step 1: Fetch all existing products
+        $productListResult = Http::withHeaders([
+            'Authorization' => $authToken,
+        ])->get('https://backend.maystro-delivery.com/api/stores/product/');
+    
+        if ($productListResult->failed()) {
+            return [
+                'error' => 'Failed to fetch product list',
+                'status' => $productListResult->status(),
+                'body' => $productListResult->body(),
+            ];
+        }
+    
+        $json = $productListResult->json();
+        $results = $json['results'] ?? [];
+    
+        if (empty($results) || !isset($results[0]['store'])) {
+            return [
+                'error' => 'Unable to extract store_id from results',
+                'details' => $json,
+            ];
+        }
+    
+        $storeId = $results[0]['store'];
+    
+        // Step 2: Extract existing product IDs from Maystro data
+        $existingIds = collect($results)->pluck('product_id')->filter()->values()->all();
+    
+        // Step 3: Filter non-existing products from your list
+        $nonExisting = collect($productsToCheck)->filter(function ($product) use ($existingIds) {
+            return !in_array($product['id'], $existingIds);
+        })->values();
+    
+        // Step 4: Create non-existing products
+        $created = [];
+        $failed = [];
+    
+        foreach ($nonExisting as $product) {
+            $createResult = Http::withHeaders([
+                'Authorization' => $authToken,
+            ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
+                'store_id' => $storeId,
+                'logistical_description' => $product['productName'], // Mapped from your input
+                'product_id' => $product['id'],
+            ]);
+    
+            if ($createResult->successful()) {
+                $created[] = $product['id'];
+            } else {
+                $failed[] = [
+                    'product_id' => $product['id'],
+                    'status' => $createResult->status(),
+                    'error' => $createResult->body(),
+                ];
+            }
+        }
+    
+        return [
+            'store_id_used' => $storeId,
+            'created' => $created,
+            'skipped_existing' => array_values(array_intersect($existingIds, array_column($productsToCheck, 'id'))),
+            'failed' => $failed,
+        ];
+    }
+    
+
 
 }
