@@ -1023,7 +1023,7 @@ class AcnooSaleController extends Controller
                         "product_price" => $sale->totalAmount,
                         "express" => false,
                         "note_to_driver" => "",
-                        "products" => result,
+                        "products" => result["created_products"],
                     ];
                 }
 
@@ -1069,11 +1069,7 @@ class AcnooSaleController extends Controller
 
         return response()->json($statusList);
     }
-
-    
-
-
-  public  function storeNonExistingProducts(string $authToken, array $productsToCheck): array
+   public function storeNonExistingProducts(string $authToken, array $productsToCheck): array
     {
         // Step 1: Fetch all existing products
         $productListResult = Http::withHeaders([
@@ -1099,17 +1095,13 @@ class AcnooSaleController extends Controller
         }
     
         $storeId = $results[0]['store'];
-    
-        // Step 2: Extract existing product IDs from Maystro data
         $existingIds = collect($results)->pluck('product_id')->filter()->values()->all();
     
-        // Step 3: Filter non-existing products from your list
         $nonExisting = collect($productsToCheck)->filter(function ($product) use ($existingIds) {
             return !in_array($product['id'], $existingIds);
         })->values();
     
-        // Step 4: Create non-existing products
-        $created = [];
+        $createdProducts = [];
         $failed = [];
     
         foreach ($nonExisting as $product) {
@@ -1117,12 +1109,12 @@ class AcnooSaleController extends Controller
                 'Authorization' => $authToken,
             ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
                 'store_id' => $storeId,
-                'logistical_description' => $product['productName'], // Mapped from your input
+                'logistical_description' => $product['productName'],
                 'product_id' => $product['id'],
             ]);
     
             if ($createResult->successful()) {
-                $created[] = $product['id'];
+                $createdProducts[] = $product;
             } else {
                 $failed[] = [
                     'product_id' => $product['id'],
@@ -1134,11 +1126,12 @@ class AcnooSaleController extends Controller
     
         return [
             'store_id_used' => $storeId,
-            'created' => $created,
-            'skipped_existing' => array_values(array_intersect($existingIds, array_column($productsToCheck, 'id'))),
+            'created_products' => $createdProducts,
+            'skipped_existing_ids' => array_values(array_intersect($existingIds, array_column($productsToCheck, 'id'))),
             'failed' => $failed,
         ];
     }
+    
     
 
 
