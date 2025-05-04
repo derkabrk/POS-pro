@@ -1099,20 +1099,29 @@ class AcnooSaleController extends Controller
   
       $createdProducts = [];
       $failed = [];
+      $skippedInvalidIds = [];
   
       foreach ($productsToCheck as $product) {
-          $id = (string) $product['id'];
+          $id = $product['id'];
   
-          if (in_array($id, $existingIds)) {
-              continue; // already exists
+          // ❌ Skip non-numeric product_id to prevent 400 error
+          if (!ctype_digit((string) $id)) {
+              $skippedInvalidIds[] = $id;
+              continue;
           }
   
+          // ✅ Skip if already exists
+          if (in_array((int)$id, $existingIds)) {
+              continue;
+          }
+  
+          // ✅ Try to create product
           $createResult = Http::withHeaders([
               'Authorization' => $authToken,
           ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
               'store_id' => $storeId,
               'logistical_description' => $product['productName'],
-              'product_id' => $id, // now treated as string
+              'product_id' => (int) $id,
           ]);
   
           if ($createResult->successful()) {
@@ -1126,14 +1135,16 @@ class AcnooSaleController extends Controller
           }
       }
   
+      // Get skipped IDs that already existed
       $skippedExisting = array_values(array_filter(array_map(function ($p) use ($existingIds) {
-          return in_array((string) $p['id'], $existingIds) ? $p['id'] : null;
+          return in_array((int) $p['id'], $existingIds) ? $p['id'] : null;
       }, $productsToCheck)));
   
       return [
           'store_id_used' => $storeId,
           'created_products' => $createdProducts,
           'skipped_existing_ids' => $skippedExisting,
+          'skipped_invalid_ids' => $skippedInvalidIds,
           'failed' => $failed,
       ];
   }
