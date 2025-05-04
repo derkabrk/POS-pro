@@ -1010,7 +1010,7 @@ class AcnooSaleController extends Controller
 
                     $headers["Authorization"] = "Token $authToken";
 
-                    //$result = storeNonExistingProducts("Token $authToken", $products);
+                    $result = storeNonExistingProducts("Token $authToken", $products);
 
                     $payload = [
                         "external_order_id" => $sale->tracking_id,
@@ -1023,7 +1023,10 @@ class AcnooSaleController extends Controller
                         "product_price" => $sale->totalAmount,
                         "express" => false,
                         "note_to_driver" => "",
-                        "products" => result["created_products"],
+                        "products" => collect($result['created_products'] ?? [])->map(fn($p) => [
+                            'product_id' => (string) $p['id'],
+                            'productName' => $p['productName'],
+                        ])->values()->all();
                     ];
                 }
 
@@ -1071,67 +1074,57 @@ class AcnooSaleController extends Controller
     }
 
     function storeNonExistingProducts(string $authToken, array $productsToCheck): array
-{
-    $response = Http::withHeaders([
-        'Authorization' => $authToken,
-    ])->get('https://backend.maystro-delivery.com/api/stores/product/');
-
-    if ($response->failed()) {
-        return ['error' => 'Failed to fetch Maystro products', 'status' => $response->status()];
-    }
-
-    $results = $response->json('results') ?? [];
-
-    if (empty($results) || !isset($results[0]['store'])) {
-        return ['error' => 'No store ID found in Maystro response'];
-    }
-
-    $storeId = $results[0]['store'];
-
-    // ✅ Extract only Maystro's product_id values (not UUID id)
-    $existingProductIds = collect($results)
-        ->pluck('product_id')
-        ->map(fn($id) => (string) $id)
-        ->all();
-
-    $created = [];
-    $failed = [];
-    $skipped = [];
-
-    foreach ($productsToCheck as $product) {
-        $localIdStr = (string) ($product['id'] ?? '');
-
-        if (in_array($localIdStr, $existingProductIds)) {
-            $skipped[] = $product['id'];
-            continue;
-        }
-
-        // ✅ POST only your local numeric ID as product_id
-        $create = Http::withHeaders([
+    {
+        $response = Http::withHeaders([
             'Authorization' => $authToken,
-        ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
-            'store_id' => "ab7f04d5-97d5-4c97-bc32-5bb79fe0e706",
-            'logistical_description' => $product['productName'],
-            'product_id' => "dasdsdada",
-        ]);
-
-        if ($create->successful()) {
-            $created[] = $product;
-        } else {
-            $failed[] = [
-                'id' => $localIdStr,
-                'error' => $create->body(),
-                'status' => $create->status(),
-            ];
+        ])->get('https://backend.maystro-delivery.com/api/stores/product/');
+    
+        $json = $response->json();
+        $results = $json['results'] ?? [];
+    
+        if (empty($results) || !isset($results[0]['store'])) {
+            return ['created_products' => [], 'error' => 'store_id not found'];
         }
+    
+        $storeId = $results[0]['store'];
+    
+        $existingIds = collect($results)
+            ->pluck('product_id')
+            ->map(fn($id) => (string) $id)
+            ->all();
+    
+        $createdProducts = [];
+    
+        foreach ($productsToCheck as $product) {
+            $localId = (string) $product['id'];
+    
+            if (in_array($localId, $existingIds)) {
+                continue;
+            }
+    
+            $create = Http::withHeaders([
+                'Authorization' => $authToken,
+            ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
+                'store_id' => $storeId,
+                'logistical_description' => $product['productName'],
+                'product_id' => $localId,
+            ]);
+    
+            if ($create->successful() || $create->status() === 201) {
+                $createdProducts[] = $product;
+            } else {
+                \Log::error("Maystro product creation failed", [
+                    'product' => $product,
+                    'status' => $create->status(),
+                    'response' => $create->body(),
+                ]);
+            }
+        }
+    
+        return [
+            'store_id_used' => $storeId,
+            'created_products' => $createdProducts,
+        ];
     }
-
-    return [
-        'store_id_used' => $storeId,
-        'created_products' => $created,
-        'skipped_existing_ids' => $skipped,
-        'failed' => $failed,
-    ];
-}
 
 }
