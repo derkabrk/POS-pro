@@ -1023,16 +1023,7 @@ class AcnooSaleController extends Controller
                         "product_price" => $sale->totalAmount,
                         "express" => false,
                         "note_to_driver" => "",
-                        "products" => [
-                            [
-
-                                "product_id" => "cd09abfe-54e4-49ed-a3e0-4d330261a90d",
-
-                                "quantity" => 1,
-
-                                "logistical_description" => "test_prodt"
-                            ]
-                        ],
+                        "products" => result,
                     ];
                 }
 
