@@ -1070,7 +1070,7 @@ class AcnooSaleController extends Controller
         return response()->json($statusList);
     }
 
-  public function storeNonExistingProducts(string $authToken, array $productsToCheck): array
+  public storeNonExistingProducts(string $authToken, array $productsToCheck): array
   {
       $productListResult = Http::withHeaders([
           'Authorization' => $authToken,
@@ -1096,11 +1096,11 @@ class AcnooSaleController extends Controller
   
       $storeId = $results[0]['store'];
   
-      // ✅ Extract only numeric product_id values from Maystro for safe comparison
-      $existingIds = collect($results)
+      // ✅ Extract Maystro product_id list (as strings)
+      $existingProductIds = collect($results)
           ->pluck('product_id')
-          ->filter(fn($id) => preg_match('/^\d+$/', $id)) // Keep only numeric product_ids
-          ->map(fn($id) => (string) $id)
+          ->map(fn($pid) => (string) $pid)
+          ->filter()
           ->values()
           ->all();
   
@@ -1109,49 +1109,40 @@ class AcnooSaleController extends Controller
       $skippedInvalidIds = [];
   
       foreach ($productsToCheck as $product) {
-          $id = $product['id'];
-          $idStr = (string) $id;
+          $localId = $product['id'];
+          $localIdStr = (string) $localId;
   
-          // ✅ Make sure your own ID is numeric
-          if (!preg_match('/^\d+$/', $idStr)) {
-              $skippedInvalidIds[] = $product;
+          // ✅ Only compare against product_id (not Maystro's UUID `id`)
+          if (in_array($localIdStr, $existingProductIds)) {
               continue;
           }
   
-          // ✅ Skip if already in Maystro
-          if (in_array($idStr, $existingIds)) {
-              continue;
-          }
-  
-          // ✅ Create new product in Maystro
+          // ✅ Send only required fields to Maystro
           $createResult = Http::withHeaders([
               'Authorization' => $authToken,
           ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
               'store_id' => $storeId,
               'logistical_description' => $product['productName'],
-              'product_id' => $idStr,
+              'product_id' => $localIdStr,
           ]);
   
           if ($createResult->successful()) {
               $createdProducts[] = $product;
           } else {
               $failed[] = [
-                  'product_id' => $idStr,
+                  'product_id' => $localIdStr,
                   'status' => $createResult->status(),
                   'error' => $createResult->body(),
               ];
           }
       }
   
-      $skippedExisting = array_values(array_filter(array_map(function ($p) use ($existingIds) {
-          return in_array((string) $p['id'], $existingIds) ? $p['id'] : null;
-      }, $productsToCheck)));
-  
       return [
           'store_id_used' => $storeId,
           'created_products' => $createdProducts,
-          'skipped_existing_ids' => $skippedExisting,
-          'skipped_invalid_ids' => $skippedInvalidIds,
+          'skipped_existing_ids' => array_values(array_filter(array_map(function ($p) use ($existingProductIds) {
+              return in_array((string) $p['id'], $existingProductIds) ? $p['id'] : null;
+          }, $productsToCheck))),
           'failed' => $failed,
       ];
   }
