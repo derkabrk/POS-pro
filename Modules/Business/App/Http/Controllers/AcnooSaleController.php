@@ -1112,7 +1112,7 @@ class AcnooSaleController extends Controller
         ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
             'store_id' => "ab7f04d5-97d5-4c97-bc32-5bb79fe0e706",
             'logistical_description' => $product['productName'],
-            'product_id' => $localIdStr,
+            'product_id' => "dasdsdada",
         ]);
 
         if ($create->successful()) {
