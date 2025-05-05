@@ -447,6 +447,7 @@ class AcnooSaleController extends Controller
 
     public function storeNonExistingProducts(string $authToken, array $products): array 
     {
+        // Step 1: Fetch existing Maystro products
         $response = Http::withHeaders([
             'Authorization' => $authToken,
         ])->get('https://backend.maystro-delivery.com/api/stores/product/?limit=500');
@@ -460,19 +461,19 @@ class AcnooSaleController extends Controller
         }
     
         $storeId = $results[0]['store'] ?? null;
-    
         if (!$storeId) {
             \Log::error('store_id not found in first Maystro product');
             return [];
         }
     
-        // Map existing products using your numeric product_id
+        // Step 2: Map existing Maystro products by your original product_id
         $maystroMap = collect($results)->mapWithKeys(function ($item) {
             return [(string) $item['product_id'] => $item];
         });
     
         $finalProducts = [];
     
+        // Step 3: Loop through local products
         foreach ($products as $product) {
             $product = (array) $product;
             $id = isset($product['id']) ? (string) $product['id'] : null;
@@ -483,24 +484,24 @@ class AcnooSaleController extends Controller
                 continue;
             }
     
+            // Step 4: If product exists in Maystro
             if (isset($maystroMap[$id])) {
                 $existing = $maystroMap[$id];
     
-                // Ensure both keys exist before adding
-                if (!isset($existing['id']) || !isset($existing['logistical_description'])) {
+                if (!isset($existing['product_id']) || !isset($existing['logistical_description'])) {
                     \Log::warning('Maystro existing product missing keys', ['product' => $existing]);
                     continue;
                 }
     
                 $finalProducts[] = [
-                    'product_id' => $existing['id'], // Maystro UUID
+                    'product_id' => (string) $existing['product_id'], // ✅ Must be numeric string
                     'logistical_description' => $existing['logistical_description'],
                     'quantity' => 1
                 ];
                 continue;
             }
     
-            // Product does not exist → create it
+            // Step 5: Create missing product in Maystro
             $create = Http::withHeaders([
                 'Authorization' => $authToken,
             ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
@@ -512,13 +513,13 @@ class AcnooSaleController extends Controller
             if ($create->successful() || $create->status() === 201) {
                 $created = $create->json();
     
-                if (!isset($created['id']) || !isset($created['logistical_description'])) {
-                    \Log::error('Maystro create product response missing keys', ['response' => $created]);
+                if (!isset($created['logistical_description'])) {
+                    \Log::error('Maystro create product response missing fields', ['response' => $created]);
                     continue;
                 }
     
                 $finalProducts[] = [
-                    'product_id' => $created['id'],
+                    'product_id' => $id, // ✅ send your original store-assigned product ID
                     'logistical_description' => $created['logistical_description'],
                     'quantity' => 1
                 ];
@@ -533,6 +534,7 @@ class AcnooSaleController extends Controller
     
         return $finalProducts;
     }
+    
     
 
     
