@@ -486,7 +486,7 @@ class AcnooSaleController extends Controller
             if (isset($maystroMap[$id])) {
                 $existing = $maystroMap[$id];
                 $finalProducts[] = [
-                    'id' => $existing['id'],
+                    'product_id' => $existing['id'],
                     'logistical_description' => $existing['logistical_description'],
                     'quantity' => 1
                 ];
@@ -506,7 +506,7 @@ class AcnooSaleController extends Controller
             if ($create->successful() || $create->status() === 201) {
                 $created = $create->json();
                 $finalProducts[] = [
-                    'id' => $created['id'],
+                    'product_id' => $created['id'],
                     'logistical_description' => $created['logistical_description'],
                     'quantity' => 1
                 ];
@@ -1090,7 +1090,11 @@ class AcnooSaleController extends Controller
                 "product_price" => $sale->totalAmount,
                 "express" => false,
                 "note_to_driver" => "",
-                "products" => $createdProducts,
+                "products" => $collect($finalProducts)->map(fn($p) => [
+                    'id' => $p['id'],
+                    'logistical_description' => $p['logistical_description'],
+                    'quantity' => $p['quantity'] ?? 1
+                ])->toArray(),
             ];
         }
     
