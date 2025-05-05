@@ -1071,7 +1071,7 @@ foreach ($products as $product) {
         "Tracking"      => $sale->tracking_id,    
         "TypeLivraison" => (int) $sale->delivery_type,   
         "TypeColis"     => (int) $sale->parcel_type,    
-        "Confirmee"     => (int) ($sale->confirmed ?? 0),
+        "Confirmee"     => 0,
         "Client"        => $customer->name,
         "MobileA"       => $customer->phone,
         "MobileB"       => $customer->phone,
