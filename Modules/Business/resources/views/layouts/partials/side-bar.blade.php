@@ -204,6 +204,27 @@
                 </li>
             @endif
 
+            @if (auth()->user()->role != 'staff' || visible_permission('orderSourcePermission'))
+                <li class="dropdown {{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'active' : '' }}">
+                    <a href="#">
+                        <span class="sidebar-icon">
+                            <img src="{{ asset('assets/images/sidebar/order-source.svg') }}"> <!-- Add an appropriate icon -->
+                        </span>
+                        {{ __('Order Sources') }}
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{{ Request::routeIs('business.orderSource.index') ? 'active' : '' }}"
+                               href="{{ route('business.orderSource.index') }}">{{ __('All Order Sources') }}</a>
+                        </li>
+                        <li>
+                            <a class="{{ Request::routeIs('business.orderSource.create') ? 'active' : '' }}"
+                               href="{{ route('business.orderSource.create') }}">{{ __('Add Order Source') }}</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
             @if (auth()->user()->role != 'staff' || visible_permission('addExpensePermission'))
                 <li
                     class="dropdown {{ Request::routeIs('business.expense-categories.index', 'business.expenses.index') ? 'active' : '' }}">
