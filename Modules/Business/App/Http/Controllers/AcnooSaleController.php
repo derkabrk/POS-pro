@@ -1062,27 +1062,27 @@ class AcnooSaleController extends Controller
     
         if ($shippingService->shipping_company_id == 1) {
             $headers["token"] = $shippingService->first_r_credential;
-            $headers["cle"] = $shippingService->second_r_credential;
+            $headers["key"] = $shippingService->second_r_credential;
     
             $colis = [];
 
-foreach ($products as $product) {
-    $colis[] = [
-        "Tracking"      => $sale->tracking_id,    
-        "TypeLivraison" => (int) $sale->delivery_type,   
-        "TypeColis"     => (int) $sale->parcel_type,    
-        "Confirmee"     => 0,
-        "Client"        => $customer->name,
-        "MobileA"       => $customer->phone,
-        "MobileB"       => $customer->phone,
-        "Adresse"       => $sale->delivery_address,
-        "IDWilaya"      => (int) $sale->wilaya_id,
-        "Commune"       => "Maraval",
-        "Total"         => (float) $sale->totalAmount,
-        "Note"          => "",
-        "TProduit"      => $product->productName,
-        "id_Externe"    => $sale->tracking_id . '-' . $product->id,
-        "Source"        => ""
+           foreach ($products as $product) {
+           $colis[] = [
+          "Tracking"      => $sale->tracking_id,
+          "TypeLivraison" => (int) ($sale->delivery_type ?? 0),
+          "TypeColis"     => (int) ($sale->parcel_type ?? 0),  
+          "Confirmee"     => 0,
+          "Client"        => $customer->name,
+          "MobileA"       => $customer->phone,
+          "MobileB"       => $customer->phone,
+          "Adresse"       => $sale->delivery_address,
+          "IDWilaya"      => (int) $sale->wilaya_id,
+          "Commune"       => "Maraval",
+          "Total"         => (float) $sale->totalAmount,
+          "Note"          => "",
+          "TProduit"      => $product->productName,
+          "id_Externe"    => $sale->tracking_id . '-' . $product->id,
+          "Source"        => ""
     ];
 }
 $payload = [
