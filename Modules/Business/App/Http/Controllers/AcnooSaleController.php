@@ -1064,27 +1064,30 @@ class AcnooSaleController extends Controller
             $headers["token"] = $shippingService->first_r_credential;
             $headers["cle"] = $shippingService->second_r_credential;
     
-            $payload = [
-                "colis" => [
-                    [
-                        "Tracking" => $sale->tracking_id,
-                        "DeliveryType" => $sale->delivery_type,
-                        "PackageType" => $sale->parcel_type,
-                        "Confirmed" => "",
-                        "Client" => $customer->name,
-                        "MobileA" => $customer->phone,
-                        "MobileB" => $customer->phone,
-                        "Address" => $sale->delivery_address,
-                        "IDWilaya" => $sale->wilaya_id,
-                        "Commune" => "Maraval",
-                        "Total" => $sale->totalAmount,
-                        "Note" => "",
-                        "TProduct" => "Article1",
-                        "id_Externe" => $sale->tracking_id,
-                        "Source" => ""
-                    ]
-                ]
-            ];
+            $colis = [];
+
+foreach ($products as $product) {
+    $colis[] = [
+        "Tracking"      => $sale->tracking_id,    
+        "TypeLivraison" => (int) $sale->delivery_type,   
+        "TypeColis"     => (int) $sale->parcel_type,    
+        "Confirmee"     => (int) ($sale->confirmed ?? 0),
+        "Client"        => $customer->name,
+        "MobileA"       => $customer->phone,
+        "MobileB"       => $customer->phone,
+        "Adresse"       => $sale->delivery_address,
+        "IDWilaya"      => (int) $sale->wilaya_id,
+        "Commune"       => "Maraval",
+        "Total"         => (float) $sale->totalAmount,
+        "Note"          => "",
+        "TProduit"      => $product->productName,
+        "id_Externe"    => $sale->tracking_id . '-' . $product->id,
+        "Source"        => ""
+    ];
+}
+$payload = [
+    "Colis" => $colis
+];
     
         } elseif ($shippingService->shipping_company_id == 2) {
 
