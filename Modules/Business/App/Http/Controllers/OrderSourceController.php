@@ -66,6 +66,14 @@ class OrderSourceController extends Controller
     }
 
     /**
+     * Show the form for editing the specified order source.
+     */
+    public function edit(OrderSource $orderSource)
+    {
+        return view('business::orderSource.edit', compact('orderSource'));
+    }
+
+    /**
      * Update the specified order source in storage.
      */
     public function update(Request $request, OrderSource $orderSource)
