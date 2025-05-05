@@ -1022,7 +1022,7 @@ class AcnooSaleController extends Controller
             ]);
         }
     
-        // Status is 7 → proceed with shipping logic
+       
         $productIds = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
         $products = Product::whereIn('id', $productIds)->get();
 
@@ -1082,12 +1082,15 @@ class AcnooSaleController extends Controller
             ];
     
         } elseif ($shippingService->shipping_company_id == 2) {
+
+
             $authToken = $shippingService->first_r_credential;
+
             $headers["Authorization"] = "Token $authToken";
     
-            // ✅ Store products in Maystro before shipping
+            
 
-            $createdProducts = $this->storeNonExistingProducts("Token $authToken", $cleanedProducts);
+           // $createdProducts = $this->storeNonExistingProducts("Token $authToken", $cleanedProducts);
 
     
             $payload = [
@@ -1108,7 +1111,7 @@ class AcnooSaleController extends Controller
             ];
         }
     
-        // ✅ Send to shipping API
+        
         $response = Http::withHeaders($headers)->post($apiUrl, $payload);
     
         if ($response->successful()) {
