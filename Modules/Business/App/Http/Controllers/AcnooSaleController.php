@@ -1090,9 +1090,9 @@ class AcnooSaleController extends Controller
                 "product_price" => $sale->totalAmount,
                 "express" => false,
                 "note_to_driver" => "",
-                "products" =>  collect($finalProducts)->map(function ($p) {
+                "products" =>  collect($createdProducts)->map(function ($p) {
                     return [
-                        'product_id' => $p['id'], // ✅ UUID from Maystro
+                        'product_id' => $p['id'], 
                         'logistical_description' => $p['logistical_description'],
                         'quantity' => $p['quantity'] ?? 1
                     ];
