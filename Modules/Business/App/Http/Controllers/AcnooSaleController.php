@@ -445,96 +445,82 @@ class AcnooSaleController extends Controller
         }
     }
 
-    public function storeNonExistingProducts(string $authToken, array $products): array
-{
-    // Fetch existing products from Maystro
-    $response = Http::withHeaders([
-        'Authorization' => $authToken,
-    ])->get('https://backend.maystro-delivery.com/api/stores/product/');
-
-    if ($response->failed()) {
-        \Log::error('Maystro fetch failed', [
-            'status' => $response->status(),
-            'body' => $response->body(),
-        ]);
-        return [
-            'created' => [],
-            'skipped' => [],
-            'failed' => [],
-        ];
-    }
-
-    $json = $response->json();
-    $results = $json['list']['results'] ?? [];
-
-    if (empty($results) || !isset($results[0]['store'])) {
-        \Log::error('Maystro response missing store ID or results');
-        return [
-            'created' => [],
-            'skipped' => [],
-            'failed' => [],
-        ];
-    }
-
-    $storeId = $results[0]['store'] ?? null;
-
-    // Extract existing product_ids
-    $existingProductIds = collect($results)
-        ->pluck('product_id')
-        ->filter(fn($id) => preg_match('/^\d+$/', $id))
-        ->map(fn($id) => (string) $id)
-        ->all();
-
-    \Log::info('Checking products against Maystro list', ['existing_ids_count' => count($existingProductIds)]);
-
-    $createdProducts = [];
-    $skippedProducts = [];
-    $failedProducts = [];
-
-    foreach ($products as $product) {
-        $id = (string) ($product['id'] ?? null);
-        $name = $product['productName'] ?? null;
-
-        if (!$id || !$name || !preg_match('/^\d+$/', $id)) {
-            \Log::warning('Invalid product format', ['product' => $product]);
-            $skippedProducts[] = $product;
-            continue;
-        }
-
-        if (in_array($id, $existingProductIds)) {
-            \Log::info('Skipping existing product', ['id' => $id]);
-            $skippedProducts[] = $product;
-            continue;
-        }
-
-        // Attempt to create product in Maystro
-        $postResponse = Http::withHeaders([
+    public function storeNonExistingProducts(string $authToken, array $products): array 
+    {
+        $response = Http::withHeaders([
             'Authorization' => $authToken,
-        ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
-            'store_id' => $storeId,
-            'logistical_description' => $name,
-            'product_id' => $id,
-        ]);
-
-        if ($postResponse->successful() || $postResponse->status() === 201) {
-            \Log::info('Created product in Maystro', ['product_id' => $id]);
-            $createdProducts[] = $product;
-        } else {
-            \Log::error('Failed to create product in Maystro', [
-                'product_id' => $id,
-                'status' => $postResponse->status(),
-                'response' => $postResponse->body(),
-            ]);
-            $failedProducts[] = $product;
+        ])->get('https://backend.maystro-delivery.com/api/stores/product/?limit=500');
+    
+        $json = $response->json();
+        $results = $json['list']['results'] ?? [];
+    
+        if (empty($results)) {
+            \Log::error('Maystro response missing product list or empty');
+            return [];
         }
+    
+        $storeId = $results[0]['store'] ?? null;
+    
+        if (!$storeId) {
+            \Log::error('store_id not found in first Maystro product');
+            return [];
+        }
+    
+       
+        $maystroMap = collect($results)->mapWithKeys(function ($item) {
+            return [(string)$item['product_id'] => $item];
+        });
+    
+        $finalProducts = [];
+    
+        foreach ($products as $product) {
+            $product = (array) $product;
+            $id = isset($product['id']) ? (string) $product['id'] : null;
+            $name = $product['productName'] ?? $product['product_name'] ?? null;
+    
+            if (!$id || !$name || !ctype_digit($id)) {
+                \Log::warning('Invalid product format', ['product' => $product]);
+                continue;
+            }
+    
+            if (isset($maystroMap[$id])) {
+                $existing = $maystroMap[$id];
+                $finalProducts[] = [
+                    'product_id' => $existing['id'],
+                    'logistical_description' => $existing['logistical_description'],
+                    'quantity' => 1
+                ];
+                continue;
+            }
+    
+            
+            
+            $create = Http::withHeaders([
+                'Authorization' => $authToken,
+            ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
+                'store_id' => $storeId,
+                'logistical_description' => $name,
+                'product_id' => $id,
+            ]);
+    
+            if ($create->successful() || $create->status() === 201) {
+                $created = $create->json();
+                $finalProducts[] = [
+                    'product_id' => $created['id'],
+                    'logistical_description' => $created['logistical_description'],
+                    'quantity' => 1
+                ];
+            } else {
+                \Log::error('Maystro product creation failed', [
+                    'product_id' => $id,
+                    'status' => $create->status(),
+                    'body' => $create->body(),
+                ]);
+            }
+        }
+    
+        return $finalProducts;
     }
-
-    return [
-        'created' => $createdProducts,
-        'skipped' => $skippedProducts,
-        'failed' => $failedProducts,
-    ];
-}
 
     
 
@@ -1104,16 +1090,7 @@ class AcnooSaleController extends Controller
                 "product_price" => $sale->totalAmount,
                 "express" => false,
                 "note_to_driver" => "",
-                "products" => [
-                            [
-
-                                "product_id" => "cd09abfe-54e4-49ed-a3e0-4d330261a90d",
-
-                                "quantity" => 1,
-
-                                "logistical_description" => "test_prodt"
-                            ]
-                        ],
+                "products" => $createdProducts,
             ];
         }
     
