@@ -440,7 +440,7 @@ class AcnooSaleController extends Controller
             DB::rollback();
             return response()->json([
                 'message' => __('Something went wrong!'),
-                'error' => $e->getMessage() // Optional: Include actual error message for debugging
+                'error' => $e->getMessage() 
             ], 500);
         }
     }
@@ -466,9 +466,9 @@ class AcnooSaleController extends Controller
             return [];
         }
     
-       
+        // Map existing products using your numeric product_id
         $maystroMap = collect($results)->mapWithKeys(function ($item) {
-            return [(string)$item['product_id'] => $item];
+            return [(string) $item['product_id'] => $item];
         });
     
         $finalProducts = [];
@@ -479,22 +479,28 @@ class AcnooSaleController extends Controller
             $name = $product['productName'] ?? $product['product_name'] ?? null;
     
             if (!$id || !$name || !ctype_digit($id)) {
-                \Log::warning('Invalid product format', ['product' => $product]);
+                \Log::warning('Invalid product format - skipping', ['product' => $product]);
                 continue;
             }
     
             if (isset($maystroMap[$id])) {
                 $existing = $maystroMap[$id];
+    
+                // Ensure both keys exist before adding
+                if (!isset($existing['id']) || !isset($existing['logistical_description'])) {
+                    \Log::warning('Maystro existing product missing keys', ['product' => $existing]);
+                    continue;
+                }
+    
                 $finalProducts[] = [
-                    'product_id' => $existing['id'],
+                    'product_id' => $existing['id'], // Maystro UUID
                     'logistical_description' => $existing['logistical_description'],
                     'quantity' => 1
                 ];
                 continue;
             }
     
-            
-            
+            // Product does not exist → create it
             $create = Http::withHeaders([
                 'Authorization' => $authToken,
             ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
@@ -505,6 +511,12 @@ class AcnooSaleController extends Controller
     
             if ($create->successful() || $create->status() === 201) {
                 $created = $create->json();
+    
+                if (!isset($created['id']) || !isset($created['logistical_description'])) {
+                    \Log::error('Maystro create product response missing keys', ['response' => $created]);
+                    continue;
+                }
+    
                 $finalProducts[] = [
                     'product_id' => $created['id'],
                     'logistical_description' => $created['logistical_description'],
@@ -521,6 +533,7 @@ class AcnooSaleController extends Controller
     
         return $finalProducts;
     }
+    
 
     
 
@@ -1090,13 +1103,7 @@ class AcnooSaleController extends Controller
                 "product_price" => $sale->totalAmount,
                 "express" => false,
                 "note_to_driver" => "",
-                "products" =>  collect($createdProducts)->map(function ($p) {
-                    return [
-                        'product_id' => $p['id'], 
-                        'logistical_description' => $p['logistical_description'],
-                        'quantity' => $p['quantity'] ?? 1
-                    ];
-                })->toArray(),
+                "products" =>  $createdProducts,
             ];
         }
     
