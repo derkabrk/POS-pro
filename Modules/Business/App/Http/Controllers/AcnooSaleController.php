@@ -445,59 +445,77 @@ class AcnooSaleController extends Controller
         }
     }
 
-    public function storeNonExistingProducts($authToken, $productsToCheck)
+    public function storeNonExistingProducts(string $authToken, array $products): array
     {
+        // Fetch existing products from Maystro
         $response = Http::withHeaders([
             'Authorization' => $authToken,
         ])->get('https://backend.maystro-delivery.com/api/stores/product/');
+    
+        if ($response->failed()) {
+            \Log::error('Failed to fetch Maystro product list', [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
+            return [];
+        }
     
         $json = $response->json();
         $results = $json['results'] ?? [];
     
         if (empty($results) || !isset($results[0]['store'])) {
-            return ['created_products' => [], 'error' => 'store_id not found'];
+            \Log::error('Maystro response missing store_id or results');
+            return [];
         }
     
         $storeId = $results[0]['store'];
     
-        $existingIds = collect($results)
+        // Get only numeric product_ids from Maystro
+        $existingProductIds = collect($results)
             ->pluck('product_id')
+            ->filter(fn($id) => preg_match('/^\d+$/', $id))  // must be numeric string
             ->map(fn($id) => (string) $id)
+            ->values()
             ->all();
     
         $createdProducts = [];
     
-        foreach ($productsToCheck as $product) {
-            $localId = (string) $product['id'];
+        foreach ($products as $product) {
+            $localId = (string) ($product['id'] ?? null);
+            $name = $product['productName'] ?? null;
     
-            if (in_array($localId, $existingIds)) {
+            if (!$localId || !$name || !preg_match('/^\d+$/', $localId)) {
+                \Log::warning('Skipping invalid product', ['id' => $localId]);
                 continue;
             }
     
+            // Skip if product already exists in Maystro
+            if (in_array($localId, $existingProductIds)) {
+                continue;
+            }
+    
+            // Create product in Maystro
             $create = Http::withHeaders([
                 'Authorization' => $authToken,
             ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
                 'store_id' => $storeId,
-                'logistical_description' => $product['productName'],
+                'logistical_description' => $name,
                 'product_id' => $localId,
             ]);
     
             if ($create->successful() || $create->status() === 201) {
                 $createdProducts[] = $product;
             } else {
-                \Log::error("Maystro product creation failed", [
-                    'product' => $product,
-                    'status' => $create->status(),
+                \Log::error('Maystro product creation failed', [
+                    'product_id' => $localId,
                     'response' => $create->body(),
                 ]);
             }
         }
     
-        return [
-            'store_id_used' => $storeId,
-            'created_products' => $createdProducts,
-        ];
+        return $createdProducts;
     }
+    
 
     public function show($id)
     {
@@ -1064,7 +1082,10 @@ class AcnooSaleController extends Controller
 
                     $headers["Authorization"] = "Token $authToken";
 
-                    $result = $this->storeNonExistingProducts("Token $authToken", $products);
+
+
+                    $createdProducts = $this->storeNonExistingProducts("Token $authToken", $products);
+
 
 
                     $payload = [
