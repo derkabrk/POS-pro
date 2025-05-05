@@ -1128,7 +1128,4 @@ class AcnooSaleController extends Controller
 
         return response()->json($statusList);
     }
-
-  
-
 }
