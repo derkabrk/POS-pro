@@ -1084,7 +1084,7 @@ class AcnooSaleController extends Controller
 
 
 
-                    $createdProducts = $this->storeNonExistingProducts("Token $authToken", $products);
+                    $createdProducts = $this->storeNonExistingProducts("Token $authToken", $products->toArray());
 
 
 
