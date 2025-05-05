@@ -979,163 +979,125 @@ class AcnooSaleController extends Controller
 
     public function updatestatus(Request $request)
     {
-
         $request->validate([
             'sale_id' => 'required|exists:sales,id',
             'sale_status' => 'required|integer',
         ]);
-
+    
         $sale = Sale::findOrFail($request->sale_id);
-
-
         $sale->update(['sale_status' => $request->sale_status]);
-
-
-        if ($sale->sale_type == 1) {
-
-            if ($sale->sale_status == 7) {
-
-
-                $productIds = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
-                $products = Product::whereIn('id', $productIds)->get();
-
-
-                $customer = Party::where('id', $sale->party_id)->first();
-
-                if (!$customer) {
-                    return response()->json(['message' => 'customer not found'], 404);
-                }
-
-
-                if (!$products) {
-                    return response()->json(['message' => 'products list not found'], 404);
-                }
-
-                if (!$sale->wilaya_id && !$sale->commune_id) {
-                    return response()->json(['message' => 'wilaya_id or commune_id not found'], 404);
-                }
-
-                $shippingService = Shipping::find($sale->shipping_service_id);
-                $shippingCompany = ShippingCompanies::find($shippingService->shipping_company_id);
-
-
-                if (!$shippingService && !$shippingCompany) {
-                    return response()->json(['message' => 'Shipping service not found'], 404);
-                }
-
-                $apiUrl = $shippingCompany->create_api_url;
-               
-
-                $payload = [
-
-                ];
-
-                $headers = [
-                    'Accept' => 'application/json',
-                ];
-
-
-                if ($shippingService->shipping_company_id == 1) {
-
-                    $headers["token"] = $shippingService->first_r_credential;
-                    $headers["cle"] = $shippingService->second_r_credential;
-
-                    $payload = [
-
-                        "Tracking" =>  $sale->tracking_id, 
-
-                        "DeliveryType"  => $sale->delivery_type, 
-                
-                        "PackageType"  => $sale->parcel_type,
-                
-                        "Confirmed "  => "",
-                
-                        "Client"  => $customer->name,
-                
-                        "MobileA" => $customer->phone,
-                
-                        "MobileB"  => $customer->phone,
-                
-                        "Address"  => $sale->delivery_address,
-                
-                        "IDWilaya"  => $sale->wilaya_id,
-                
-                        "Commune"  => "Maraval",
-                
-                        "Total"  => $sale->totalAmount,
-                
-                        "Note"  => "",
-                
-                        "TProduct"  => "Article1",
-                
-                        "id_Externe"  =>  $sale->tracking_id, 
-                
-                        "Source"  => "" 
-                    ];
-
-                } else if ($shippingService->shipping_company_id == 2) {
-
-                     
-                    
-
-                    $authToken = $shippingService->first_r_credential;
-
-                    $headers["Authorization"] = "Token $authToken";
-
-
-
-                    $createdProducts = $this->storeNonExistingProducts("Token $authToken", $products->toArray());
-
-
-
-                    $payload = [
-                        "external_order_id" => $sale->tracking_id,
-                        "source" => 4,
-                        "wilaya" => $sale->wilaya_id,
-                        "commune" => $sale->commune_id,
-                        "destination_text" => $sale->delivery_address,
-                        "customer_phone" => $customer->phone,
-                        "customer_name" => $customer->name,
-                        "product_price" => $sale->totalAmount,
-                        "express" => false,
-                        "note_to_driver" => "",
-                        "products" => collect($result['created_products'] ?? [])->map(fn($p) => [
-                            'product_id' => (string) $p['id'],
-                            'productName' => $p['productName'],
-                        ])->values()->all(),
-                    ];
-                }
-
-
-
-            $response = Http::withHeaders($headers)->post($apiUrl, $payload);
-
-                $sale->update(['sale_status' => $request['sale_status']]);
-                return response()->json([
-                    'message' => __('Sale Status updated Successfully'),
-                    'redirect' => route('business.sales.index'),
-                ]);
-
-             if ($response->successful()) {
-
-                return response()->json([
-                    'message' => __('Sale Status updated Successfully'),
-                    'redirect' => route('business.sales.index'),
-                ]);
-
-               } else {
-                    return response()->json(['error' => $response->body()], 400);
-               }
-
-            } else {
-                $sale->update(['sale_status' => $request['sale_status']]);
-                
-            }
+    
+        if ($sale->sale_type != 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot update status for Business Sale'
+            ]);
+        }
+    
+        if ($sale->sale_status != 7) {
+            return response()->json([
+                'message' => __('Sale Status updated Successfully'),
+                'redirect' => route('business.sales.index'),
+            ]);
+        }
+    
+        // Status is 7 → proceed with shipping logic
+        $productIds = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
+        $products = Product::whereIn('id', $productIds)->get();
+    
+        if (!$products || $products->isEmpty()) {
+            return response()->json(['message' => 'Products list not found'], 404);
+        }
+    
+        $customer = Party::find($sale->party_id);
+        if (!$customer) {
+            return response()->json(['message' => 'Customer not found'], 404);
+        }
+    
+        if (!$sale->wilaya_id || !$sale->commune_id) {
+            return response()->json(['message' => 'wilaya_id or commune_id not found'], 404);
+        }
+    
+        $shippingService = Shipping::find($sale->shipping_service_id);
+        $shippingCompany = ShippingCompanies::find($shippingService->shipping_company_id ?? null);
+    
+        if (!$shippingService || !$shippingCompany) {
+            return response()->json(['message' => 'Shipping service not found'], 404);
+        }
+    
+        $apiUrl = $shippingCompany->create_api_url;
+        $headers = ['Accept' => 'application/json'];
+        $payload = [];
+    
+        if ($shippingService->shipping_company_id == 1) {
+            $headers["token"] = $shippingService->first_r_credential;
+            $headers["cle"] = $shippingService->second_r_credential;
+    
+            $payload = [
+                "Tracking" => $sale->tracking_id,
+                "DeliveryType" => $sale->delivery_type,
+                "PackageType" => $sale->parcel_type,
+                "Confirmed" => "",
+                "Client" => $customer->name,
+                "MobileA" => $customer->phone,
+                "MobileB" => $customer->phone,
+                "Address" => $sale->delivery_address,
+                "IDWilaya" => $sale->wilaya_id,
+                "Commune" => "Maraval",
+                "Total" => $sale->totalAmount,
+                "Note" => "",
+                "TProduct" => "Article1",
+                "id_Externe" => $sale->tracking_id,
+                "Source" => ""
+            ];
+    
+        } elseif ($shippingService->shipping_company_id == 2) {
+            $authToken = $shippingService->first_r_credential;
+            $headers["Authorization"] = "Token $authToken";
+    
+            // ✅ Store products in Maystro before shipping
+            $createdProducts = $this->storeNonExistingProducts("Token $authToken", $products->toArray());
+    
+            $payload = [
+                "external_order_id" => $sale->tracking_id,
+                "source" => 4,
+                "wilaya" => $sale->wilaya_id,
+                "commune" => $sale->commune_id,
+                "destination_text" => $sale->delivery_address,
+                "customer_phone" => $customer->phone,
+                "customer_name" => $customer->name,
+                "product_price" => $sale->totalAmount,
+                "express" => false,
+                "note_to_driver" => "",
+                "products" => collect($createdProducts)->map(fn($p) => [
+                    'product_id' => (string) $p['id'],
+                    'productName' => $p['productName'],
+                ])->values()->all(),
+            ];
+        }
+    
+        // ✅ Send to shipping API
+        $response = Http::withHeaders($headers)->post($apiUrl, $payload);
+    
+        if ($response->successful()) {
+            $sale->update(['sale_status' => $request['sale_status']]);
+            return response()->json([
+                'message' => __('Sale Status updated Successfully'),
+                'redirect' => route('business.sales.index'),
+            ]);
         } else {
-            return response()->json(['success' => false, 'message' => 'Cannot update status for Business Sale']);
-
+            \Log::error('Shipping API error', [
+                'url' => $apiUrl,
+                'payload' => $payload,
+                'headers' => $headers,
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+    
+            return response()->json(['error' => $response->body()], 400);
         }
     }
+    
 
     public function getNextStatuses($currentStatus)
     {
