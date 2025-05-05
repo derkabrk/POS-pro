@@ -1090,7 +1090,7 @@ class AcnooSaleController extends Controller
     
             
 
-           // $createdProducts = $this->storeNonExistingProducts("Token $authToken", $cleanedProducts);
+           $createdProducts = $this->storeNonExistingProducts("Token $authToken", $cleanedProducts);
 
     
             $payload = [
@@ -1104,10 +1104,16 @@ class AcnooSaleController extends Controller
                 "product_price" => $sale->totalAmount,
                 "express" => false,
                 "note_to_driver" => "",
-                "products" => collect($createdProducts)->map(fn($p) => [
-                    'product_id' => (string) $p['id'],
-                    'productName' => $p['productName'],
-                ])->values()->all(),
+                "products" => [
+                            [
+
+                                "product_id" => "cd09abfe-54e4-49ed-a3e0-4d330261a90d",
+
+                                "quantity" => 1,
+
+                                "logistical_description" => "test_prodt"
+                            ]
+                        ],
             ];
         }
     
