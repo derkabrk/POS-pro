@@ -11,8 +11,7 @@
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>Order Sources List</h4>
-                   
-                    <a type="button" href="{{ route('business.orderSource.create') }}" class="add-order-btn rounded-2 btn btn-primary">
+                    <a href="{{ route('business.orderSource.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus-circle me-1"></i>Add New Order Source
                     </a>
                 </div>
@@ -21,19 +20,19 @@
             <div class="responsive-table m-0">
                 <table class="table" id="datatable">
                     <thead>
-                    <tr>
-                        <th>{{ __('SL') }}.</th>
-                        <th class="text-start">Name</th>
-                        <th class="text-start">API Key</th>
-                        <th class="text-start">Status</th>
-                        <th class="text-start">Action</th>
-                    </tr>
+                        <tr>
+                            <th>SL</th>
+                            <th>Name</th>
+                            <th>API Key</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody>
                         @foreach ($orderSources as $key => $orderSource)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td>{{ $orderSource->name }}</td>
+                            <td>{{ $orderSource->display_name }}</td> <!-- Display concatenated name -->
                             <td>{{ $orderSource->api_key }}</td>
                             <td>{{ $orderSource->status ? 'Active' : 'Inactive' }}</td>
                             <td>

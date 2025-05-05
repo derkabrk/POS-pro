@@ -13,12 +13,17 @@ class OrderSourceController extends Controller
      */
     public function index()
     {
-        $orderSources = OrderSource::latest()->paginate(20);
+        // Fetch all order sources
+        $orderSources = OrderSource::latest()->get();
 
-        return response()->json([
-            'message' => __('Order sources fetched successfully.'),
-            'data' => $orderSources,
-        ]);
+        // Manipulate data (e.g., concatenate name and status)
+        $orderSources = $orderSources->map(function ($orderSource) {
+            $orderSource->display_name = $orderSource->name . ' (' . ($orderSource->status ? 'Active' : 'Inactive') . ')';
+            return $orderSource;
+        });
+
+        // Pass data to the view
+        return view('business::orderSource.index', compact('orderSources'));
     }
 
 
