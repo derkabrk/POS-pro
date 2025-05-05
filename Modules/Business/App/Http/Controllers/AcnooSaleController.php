@@ -1025,6 +1025,15 @@ class AcnooSaleController extends Controller
         // Status is 7 → proceed with shipping logic
         $productIds = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
         $products = Product::whereIn('id', $productIds)->get();
+
+
+        $cleanedProducts = $products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'productName' => $product->productName,
+            ];
+        })->toArray();
+
     
         if (!$products || $products->isEmpty()) {
             return response()->json(['message' => 'Products list not found'], 404);
@@ -1077,7 +1086,9 @@ class AcnooSaleController extends Controller
             $headers["Authorization"] = "Token $authToken";
     
             // ✅ Store products in Maystro before shipping
-            $createdProducts = $this->storeNonExistingProducts("Token $authToken", $products->toArray());
+
+            $createdProducts = $this->storeNonExistingProducts("Token $authToken", $cleanedProducts);
+
     
             $payload = [
                 "external_order_id" => $sale->tracking_id,
