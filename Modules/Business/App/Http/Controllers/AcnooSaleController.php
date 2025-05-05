@@ -446,75 +446,96 @@ class AcnooSaleController extends Controller
     }
 
     public function storeNonExistingProducts(string $authToken, array $products): array
-    {
-        // Fetch existing products from Maystro
-        $response = Http::withHeaders([
-            'Authorization' => $authToken,
-        ])->get('https://backend.maystro-delivery.com/api/stores/product/');
-    
-        if ($response->failed()) {
-            \Log::error('Failed to fetch Maystro product list', [
-                'status' => $response->status(),
-                'body' => $response->body()
-            ]);
-            return [];
-        }
-    
-        $json = $response->json();
-        $results = $json['results'] ?? [];
-    
-        if (empty($results) || !isset($results[0]['store'])) {
-            \Log::error('Maystro response missing store_id or results');
-            return [];
-        }
-    
-        $storeId = $results[0]['store'];
-    
-        // Get only numeric product_ids from Maystro
-        $existingProductIds = collect($results)
-            ->pluck('product_id')
-            ->filter(fn($id) => preg_match('/^\d+$/', $id))  // must be numeric string
-            ->map(fn($id) => (string) $id)
-            ->values()
-            ->all();
-    
-        $createdProducts = [];
-    
-        foreach ($products as $product) {
-            $localId = (string) ($product['id'] ?? null);
-            $name = $product['productName'] ?? null;
-    
-            if (!$localId || !$name || !preg_match('/^\d+$/', $localId)) {
-                \Log::warning('Skipping invalid product', ['id' => $localId]);
-                continue;
-            }
-    
-            // Skip if product already exists in Maystro
-            if (in_array($localId, $existingProductIds)) {
-                continue;
-            }
-    
-            // Create product in Maystro
-            $create = Http::withHeaders([
-                'Authorization' => $authToken,
-            ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
-                'store_id' => $storeId,
-                'logistical_description' => $name,
-                'product_id' => $localId,
-            ]);
-    
-            if ($create->successful() || $create->status() === 201) {
-                $createdProducts[] = $product;
-            } else {
-                \Log::error('Maystro product creation failed', [
-                    'product_id' => $localId,
-                    'response' => $create->body(),
-                ]);
-            }
-        }
-    
-        return $createdProducts;
+{
+    // Fetch existing products from Maystro
+    $response = Http::withHeaders([
+        'Authorization' => $authToken,
+    ])->get('https://backend.maystro-delivery.com/api/stores/product/');
+
+    if ($response->failed()) {
+        \Log::error('Maystro fetch failed', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+        return [
+            'created' => [],
+            'skipped' => [],
+            'failed' => [],
+        ];
     }
+
+    $json = $response->json();
+    $results = $json['results'] ?? [];
+
+    if (empty($results) || !isset($results[0]['store'])) {
+        \Log::error('Maystro response missing store ID or results');
+        return [
+            'created' => [],
+            'skipped' => [],
+            'failed' => [],
+        ];
+    }
+
+    $storeId = $results[0]['store'];
+
+    // Extract existing product_ids
+    $existingProductIds = collect($results)
+        ->pluck('product_id')
+        ->filter(fn($id) => preg_match('/^\d+$/', $id))
+        ->map(fn($id) => (string) $id)
+        ->all();
+
+    \Log::info('Checking products against Maystro list', ['existing_ids_count' => count($existingProductIds)]);
+
+    $createdProducts = [];
+    $skippedProducts = [];
+    $failedProducts = [];
+
+    foreach ($products as $product) {
+        $id = (string) ($product['id'] ?? null);
+        $name = $product['productName'] ?? null;
+
+        if (!$id || !$name || !preg_match('/^\d+$/', $id)) {
+            \Log::warning('Invalid product format', ['product' => $product]);
+            $skippedProducts[] = $product;
+            continue;
+        }
+
+        if (in_array($id, $existingProductIds)) {
+            \Log::info('Skipping existing product', ['id' => $id]);
+            $skippedProducts[] = $product;
+            continue;
+        }
+
+        // Attempt to create product in Maystro
+        $postResponse = Http::withHeaders([
+            'Authorization' => $authToken,
+        ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
+            'store_id' => $storeId,
+            'logistical_description' => $name,
+            'product_id' => $id,
+        ]);
+
+        if ($postResponse->successful() || $postResponse->status() === 201) {
+            \Log::info('Created product in Maystro', ['product_id' => $id]);
+            $createdProducts[] = $product;
+        } else {
+            \Log::error('Failed to create product in Maystro', [
+                'product_id' => $id,
+                'status' => $postResponse->status(),
+                'response' => $postResponse->body(),
+            ]);
+            $failedProducts[] = $product;
+        }
+    }
+
+    return [
+        'created' => $createdProducts,
+        'skipped' => $skippedProducts,
+        'failed' => $failedProducts,
+    ];
+}
+
     
 
     public function show($id)
