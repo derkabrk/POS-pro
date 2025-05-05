@@ -465,7 +465,7 @@ class AcnooSaleController extends Controller
     }
 
     $json = $response->json();
-    $results = $json['results'] ?? [];
+    $results = $json['list']['results'] ?? [];
 
     if (empty($results) || !isset($results[0]['store'])) {
         \Log::error('Maystro response missing store ID or results');
@@ -476,7 +476,7 @@ class AcnooSaleController extends Controller
         ];
     }
 
-    $storeId = $results[0]['store'];
+    $storeId = $results[0]['store'] ?? null;
 
     // Extract existing product_ids
     $existingProductIds = collect($results)
