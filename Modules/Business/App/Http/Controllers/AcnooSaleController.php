@@ -1026,7 +1026,7 @@ class AcnooSaleController extends Controller
                         "products" => collect($result['created_products'] ?? [])->map(fn($p) => [
                             'product_id' => (string) $p['id'],
                             'productName' => $p['productName'],
-                        ])->values()->all();
+                        ])->values()->all(),
                     ];
                 }
 
@@ -1075,7 +1075,7 @@ class AcnooSaleController extends Controller
         return response()->json($statusList);
     }
 
-    function storeNonExistingProducts(string $authToken, array $productsToCheck): array
+  public  function storeNonExistingProducts(string $authToken, array $productsToCheck): array
     {
         $response = Http::withHeaders([
             'Authorization' => $authToken,
