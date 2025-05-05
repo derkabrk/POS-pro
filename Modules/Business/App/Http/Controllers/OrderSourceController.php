@@ -21,9 +21,7 @@ class OrderSourceController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new order source.
-     */
+
     public function create()
     {
         return view('business::orderSource.create');
