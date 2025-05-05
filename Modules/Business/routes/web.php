@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Business\App\Http\Controllers as Business;
 
+
 Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['users', 'expired']], function () {
 
     Route::get('dashboard', [Business\DashboardController::class, 'index'])->name('dashboard.index');
@@ -253,4 +254,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
         Route::get('/{id}', 'mtView')->name('mtView');
         Route::get('view/all/', 'mtReadAll')->name('mtReadAll');
     });
+
+    // OrderSource Routes
+    Route::resource('orderSource', Business\OrderSourceController::class);
 });
