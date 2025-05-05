@@ -445,6 +445,60 @@ class AcnooSaleController extends Controller
         }
     }
 
+    public function storeNonExistingProducts($authToken, $productsToCheck)
+    {
+        $response = Http::withHeaders([
+            'Authorization' => $authToken,
+        ])->get('https://backend.maystro-delivery.com/api/stores/product/');
+    
+        $json = $response->json();
+        $results = $json['results'] ?? [];
+    
+        if (empty($results) || !isset($results[0]['store'])) {
+            return ['created_products' => [], 'error' => 'store_id not found'];
+        }
+    
+        $storeId = $results[0]['store'];
+    
+        $existingIds = collect($results)
+            ->pluck('product_id')
+            ->map(fn($id) => (string) $id)
+            ->all();
+    
+        $createdProducts = [];
+    
+        foreach ($productsToCheck as $product) {
+            $localId = (string) $product['id'];
+    
+            if (in_array($localId, $existingIds)) {
+                continue;
+            }
+    
+            $create = Http::withHeaders([
+                'Authorization' => $authToken,
+            ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
+                'store_id' => $storeId,
+                'logistical_description' => $product['productName'],
+                'product_id' => $localId,
+            ]);
+    
+            if ($create->successful() || $create->status() === 201) {
+                $createdProducts[] = $product;
+            } else {
+                \Log::error("Maystro product creation failed", [
+                    'product' => $product,
+                    'status' => $create->status(),
+                    'response' => $create->body(),
+                ]);
+            }
+        }
+    
+        return [
+            'store_id_used' => $storeId,
+            'created_products' => $createdProducts,
+        ];
+    }
+
     public function show($id)
     {
         // Fetch sale details
@@ -1075,58 +1129,6 @@ class AcnooSaleController extends Controller
         return response()->json($statusList);
     }
 
-   public function storeNonExistingProducts($authToken, $productsToCheck)
-    {
-        $response = Http::withHeaders([
-            'Authorization' => $authToken,
-        ])->get('https://backend.maystro-delivery.com/api/stores/product/');
-    
-        $json = $response->json();
-        $results = $json['results'] ?? [];
-    
-        if (empty($results) || !isset($results[0]['store'])) {
-            return ['created_products' => [], 'error' => 'store_id not found'];
-        }
-    
-        $storeId = $results[0]['store'];
-    
-        $existingIds = collect($results)
-            ->pluck('product_id')
-            ->map(fn($id) => (string) $id)
-            ->all();
-    
-        $createdProducts = [];
-    
-        foreach ($productsToCheck as $product) {
-            $localId = (string) $product['id'];
-    
-            if (in_array($localId, $existingIds)) {
-                continue;
-            }
-    
-            $create = Http::withHeaders([
-                'Authorization' => $authToken,
-            ])->post('https://backend.maystro-delivery.com/api/stores/product/', [
-                'store_id' => $storeId,
-                'logistical_description' => $product['productName'],
-                'product_id' => $localId,
-            ]);
-    
-            if ($create->successful() || $create->status() === 201) {
-                $createdProducts[] = $product;
-            } else {
-                \Log::error("Maystro product creation failed", [
-                    'product' => $product,
-                    'status' => $create->status(),
-                    'response' => $create->body(),
-                ]);
-            }
-        }
-    
-        return [
-            'store_id_used' => $storeId,
-            'created_products' => $createdProducts,
-        ];
-    }
+  
 
 }
