@@ -1065,21 +1065,25 @@ class AcnooSaleController extends Controller
             $headers["cle"] = $shippingService->second_r_credential;
     
             $payload = [
-                "Tracking" => $sale->tracking_id,
-                "DeliveryType" => $sale->delivery_type,
-                "PackageType" => $sale->parcel_type,
-                "Confirmed" => "",
-                "Client" => $customer->name,
-                "MobileA" => $customer->phone,
-                "MobileB" => $customer->phone,
-                "Address" => $sale->delivery_address,
-                "IDWilaya" => $sale->wilaya_id,
-                "Commune" => "Maraval",
-                "Total" => $sale->totalAmount,
-                "Note" => "",
-                "TProduct" => "Article1",
-                "id_Externe" => $sale->tracking_id,
-                "Source" => ""
+                "colis" => [
+                    [
+                        "Tracking" => $sale->tracking_id,
+                        "DeliveryType" => $sale->delivery_type,
+                        "PackageType" => $sale->parcel_type,
+                        "Confirmed" => "",
+                        "Client" => $customer->name,
+                        "MobileA" => $customer->phone,
+                        "MobileB" => $customer->phone,
+                        "Address" => $sale->delivery_address,
+                        "IDWilaya" => $sale->wilaya_id,
+                        "Commune" => "Maraval",
+                        "Total" => $sale->totalAmount,
+                        "Note" => "",
+                        "TProduct" => "Article1",
+                        "id_Externe" => $sale->tracking_id,
+                        "Source" => ""
+                    ]
+                ]
             ];
     
         } elseif ($shippingService->shipping_company_id == 2) {
