@@ -486,7 +486,7 @@ class AcnooSaleController extends Controller
             if (isset($maystroMap[$id])) {
                 $existing = $maystroMap[$id];
                 $finalProducts[] = [
-                    'product_id' => $existing['id'],
+                    'id' => $existing['id'],
                     'logistical_description' => $existing['logistical_description'],
                     'quantity' => 1
                 ];
@@ -506,7 +506,7 @@ class AcnooSaleController extends Controller
             if ($create->successful() || $create->status() === 201) {
                 $created = $create->json();
                 $finalProducts[] = [
-                    'product_id' => $created['id'],
+                    'id' => $created['id'],
                     'logistical_description' => $created['logistical_description'],
                     'quantity' => 1
                 ];
