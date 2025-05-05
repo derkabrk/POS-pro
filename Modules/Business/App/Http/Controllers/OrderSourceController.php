@@ -13,11 +13,11 @@ class OrderSourceController extends Controller
      */
     public function index()
     {
-        // Fetch all order sources
-        $orderSources = OrderSource::latest()->get();
+        // Fetch paginated order sources
+        $orderSources = OrderSource::latest()->paginate(10); // Use paginate instead of get()
 
         // Manipulate data (e.g., concatenate name and status)
-        $orderSources = $orderSources->map(function ($orderSource) {
+        $orderSources->getCollection()->transform(function ($orderSource) {
             $orderSource->display_name = $orderSource->name . ' (' . ($orderSource->status ? 'Active' : 'Inactive') . ')';
             return $orderSource;
         });
