@@ -57,11 +57,11 @@
         const buttonText = document.getElementById('buttonText');
 
         if (form) {
-            form.addEventListener('submit', function () {
-                // Disable the button to prevent multiple submissions
+            form.addEventListener('submit', function (event) {
+                // Prevent multiple submissions
                 submitButton.disabled = true;
 
-                // Show the loader and hide the button text
+                // Show the loader and update the button text
                 buttonLoader.classList.remove('d-none');
                 buttonText.textContent = 'Processing...';
             });
