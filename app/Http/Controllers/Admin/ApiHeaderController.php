@@ -66,12 +66,22 @@ class ApiHeaderController extends Controller
             'name' => 'required|string|max:255|unique:dynamic_api_headers,name,' . $dynamicApiHeader->id,
             'api_key' => 'required|string|max:255',
             'status' => 'required|boolean',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1000',
         ]);
 
-        $dynamicApiHeader->update($request->all());
+        try {
+            $dynamicApiHeader->update($request->all());
 
-        return redirect()->route('admin.dynamicApiHeader.index')->with('success', 'API Header updated successfully.');
+            return response()->json([
+                'message' => 'API Header updated successfully.',
+                'redirect' => route('admin.dynamicApiHeader.index'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while updating the API Header.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function destroy(DynamicApiHeader $dynamicApiHeader)

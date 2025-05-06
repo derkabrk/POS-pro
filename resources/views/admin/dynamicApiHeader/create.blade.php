@@ -1,53 +1,100 @@
 @extends('layouts.master')
 
-@section('title', 'Create API Header')
+@section('title', 'Edit API Header')
 
 @section('main_content')
-<div class="container">
-    <h1>Create API Header</h1>
-    <form action="{{ route('admin.dynamicApiHeader.store') }}" method="POST" id="createForm">
-        @csrf
-        <div class="form-group mb-3">
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" class="form-control" placeholder="Enter API Header Name" required>
+<div class="erp-table-section">
+    <div class="container-fluid">
+        <div class="card border-0">
+            <div class="card-bodys">
+                <div class="table-header p-16 d-flex justify-content-between align-items-center">
+                    <h4>Edit API Header</h4>
+                    <a href="{{ route('admin.dynamicApiHeader.index') }}" class="btn btn-primary">
+                        <i class="fas fa-list me-1"></i> View All API Headers
+                    </a>
+                </div>
+                <div class="order-form-section p-16">
+                    <form action="{{ route('admin.dynamicApiHeader.update', $dynamicApiHeader->id) }}" method="POST" id="editForm">
+                        @csrf
+                        @method('PUT')
+                        <div class="row">
+                            <div class="col-lg-6 mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ $dynamicApiHeader->name }}" required>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label for="api_key" class="form-label">API Key</label>
+                                <input type="text" name="api_key" id="api_key" class="form-control" value="{{ $dynamicApiHeader->api_key }}" required>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="1" {{ $dynamicApiHeader->status ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ !$dynamicApiHeader->status ? 'selected' : '' }}>Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12 mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea name="description" id="description" class="form-control" rows="4">{{ $dynamicApiHeader->description }}</textarea>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="button-group text-center mt-5">
+                                    <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
+                                    <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group mb-3">
-            <label for="api_key">API Key</label>
-            <input type="text" name="api_key" id="api_key" class="form-control" placeholder="Enter API Key" required>
-        </div>
-        <div class="form-group mb-3">
-            <label for="status">Status</label>
-            <select name="status" id="status" class="form-control">
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
-            </select>
-        </div>
-        <div class="form-group mb-3">
-            <label for="description">Description</label>
-            <textarea name="description" id="description" class="form-control" rows="4" placeholder="Enter Description"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary" id="submitButton">
-            <span id="buttonText">Save</span>
-            <span class="spinner-border spinner-border-sm d-none" id="buttonLoader" role="status" aria-hidden="true"></span>
-        </button>
-    </form>
+    </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('createForm');
-        const submitButton = document.getElementById('submitButton');
-        const buttonLoader = document.getElementById('buttonLoader');
-        const buttonText = document.getElementById('buttonText');
-
-        if (form) {
-            form.addEventListener('submit', function (event) {
-                // Disable the button and show the loader
-                submitButton.disabled = true;
-                buttonLoader.classList.remove('d-none');
-                buttonText.textContent = 'Processing...';
-            });
-        }
-    });
-</script>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const editForm = document.getElementById('editForm');
+    const editButton = document.getElementById('editButton');
+
+    if (editForm && editButton) {
+        editForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const spinner = editButton.querySelector('.spinner-border');
+            spinner.classList.remove('d-none'); // Show spinner
+            editButton.setAttribute('disabled', 'true'); // Disable button
+
+            // Submit the form via AJAX
+            const formData = new FormData(editForm);
+
+            fetch(editForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.redirect) {
+                        window.location.href = data.redirect; // Redirect the user
+                    } else {
+                        alert(data.message || 'An error occurred.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                })
+                .finally(() => {
+                    // Re-enable the button and reset the loader
+                    editButton.removeAttribute('disabled');
+                    spinner.classList.add('d-none');
+                });
+        });
+    }
+});
+</script>
+@endpush

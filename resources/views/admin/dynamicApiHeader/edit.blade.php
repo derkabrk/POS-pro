@@ -38,10 +38,10 @@
                                 <textarea name="description" id="description" class="form-control" rows="4">{{ $dynamicApiHeader->description }}</textarea>
                             </div>
                             <div class="col-lg-12">
-                                <button type="submit" class="btn btn-success w-100" id="editButton">
-                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                    <i class="fas fa-save me-1"></i> Update API Header
-                                </button>
+                                <div class="button-group text-center mt-5">
+                                    <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
+                                    <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
+                                </div>
                             </div>
                         </div>
                     </form>
