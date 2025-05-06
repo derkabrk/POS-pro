@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Business\App\Http\Controllers as Business;
-
+use Modules\Business\App\Http\Controllers\OrderSourceController;
 
 Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['users', 'expired']], function () {
 
@@ -257,8 +257,9 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
 
     // OrderSource Routes
     Route::resource('orderSource', Business\OrderSourceController::class);
+    Route::post('webhook/{platform}', [Business\OrderSourceController::class, 'handleWebhook'])->name('webhook.handle');
 
-
+    Route::resource('dynamicApiHeader', Business\DynamicApiHeaderController::class);
 
    // Route::resource('shipping', Business\AcnooShippingController::class);
 });

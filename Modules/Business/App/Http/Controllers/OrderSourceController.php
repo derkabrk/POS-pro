@@ -3,9 +3,11 @@
 namespace Modules\Business\App\Http\Controllers;
 
 use App\Models\OrderSource;
+use App\Models\Sale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class OrderSourceController extends Controller
 {
@@ -120,5 +122,85 @@ class OrderSourceController extends Controller
         return response()->json([
             'message' => __('Order source deleted successfully.'),
         ]);
+    }
+
+    public function handleWebhook(Request $request, $platform)
+    {
+        // Validate the platform
+        $orderSource = OrderSource::where('name', $platform)->first();
+        if (!$orderSource) {
+            return response()->json(['message' => 'Invalid platform'], 400);
+        }
+
+        // Verify the webhook signature (if applicable)
+        if (!$this->verifyWebhookSignature($request, $orderSource)) {
+            return response()->json(['message' => 'Invalid webhook signature'], 403);
+        }
+
+        // Parse the incoming order data
+        $orderData = $this->parseOrderData($platform, $request->all());
+
+        // Store the sale in the database
+        $sale = Sale::create($orderData);
+
+        return response()->json(['message' => 'Sale stored successfully', 'sale' => $sale], 200);
+    }
+
+    protected function verifyWebhookSignature(Request $request, $orderSource)
+    {
+        $signature = $request->header('X-Signature'); // Replace with the actual header used by the platform
+        $payload = $request->getContent();
+
+        // Generate the expected signature using the API secret
+        $expectedSignature = hash_hmac('sha256', $payload, $orderSource->api_secret);
+
+        return hash_equals($expectedSignature, $signature);
+    }
+
+    protected function parseOrderData($platform, $data)
+    {
+        switch ($platform) {
+            case 'Shopify':
+                return [
+                    'business_id' => auth()->user()->business_id,
+                    'party_id' => null, // Update if customer mapping exists
+                    'invoiceNumber' => $data['id'], // Unique sale ID from Shopify
+                    'customer_name' => $data['customer']['first_name'] . ' ' . $data['customer']['last_name'],
+                    'totalAmount' => $data['total_price'],
+                    'dueAmount' => 0, // Assuming full payment for now
+                    'paidAmount' => $data['total_price'],
+                    'sale_status' => $data['financial_status'],
+                    'saleDate' => now(),
+                    'meta' => json_encode($data), // Store raw sale data
+                ];
+            case 'YouCan':
+                return [
+                    'business_id' => auth()->user()->business_id,
+                    'party_id' => null, // Update if customer mapping exists
+                    'invoiceNumber' => $data['order_id'], // Unique sale ID from YouCan
+                    'customer_name' => $data['customer']['name'],
+                    'totalAmount' => $data['total'],
+                    'dueAmount' => 0, // Assuming full payment for now
+                    'paidAmount' => $data['total'],
+                    'sale_status' => $data['status'],
+                    'saleDate' => now(),
+                    'meta' => json_encode($data), // Store raw sale data
+                ];
+            case 'WooCommerce':
+                return [
+                    'business_id' => auth()->user()->business_id,
+                    'party_id' => null, // Update if customer mapping exists
+                    'invoiceNumber' => $data['id'], // Unique sale ID from WooCommerce
+                    'customer_name' => $data['billing']['first_name'] . ' ' . $data['billing']['last_name'],
+                    'totalAmount' => $data['total'],
+                    'dueAmount' => 0, // Assuming full payment for now
+                    'paidAmount' => $data['total'],
+                    'sale_status' => $data['status'],
+                    'saleDate' => now(),
+                    'meta' => json_encode($data), // Store raw sale data
+                ];
+            default:
+                throw new \Exception('Unsupported platform');
+        }
     }
 }
