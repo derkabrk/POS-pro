@@ -3,6 +3,7 @@
 @section('title', 'API Headers')
 
 @section('main_content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="erp-table-section">
     <div class="container-fluid">
         <div class="card border-0">
@@ -183,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
             body: formData,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'), // Add CSRF token
             },
         })
             .then(response => response.json())
