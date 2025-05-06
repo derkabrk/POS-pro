@@ -394,6 +394,30 @@
                 </li>
             @endif
 
+            <!-- Add this block for Dynamic API Headers -->
+            <li class="dropdown {{ Request::routeIs('business.dynamicApiHeader.*') ? 'active' : '' }}">
+                <a href="#">
+                    <span class="sidebar-icon">
+                        <i class="fas fa-cogs"></i> <!-- Replace with an appropriate icon -->
+                    </span>
+                    {{ __('Dynamic API Headers') }}
+                </a>
+                <ul>
+                    <li>
+                        <a class="{{ Request::routeIs('business.dynamicApiHeader.index') ? 'active' : '' }}"
+                           href="{{ route('business.dynamicApiHeader.index') }}">
+                            {{ __('All API Headers') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="{{ Request::routeIs('business.dynamicApiHeader.create') ? 'active' : '' }}"
+                           href="{{ route('business.dynamicApiHeader.create') }}">
+                            {{ __('Add API Header') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li>
                 <a href="{{ get_option('general')['app_link'] ?? '' }}" target="_blank" class="active">
                     <span class="sidebar-icon">
