@@ -1,6 +1,6 @@
 <?php
 namespace Modules\Business\App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Models\Party;
 use App\Models\Product;
 use Illuminate\Http\Request;
