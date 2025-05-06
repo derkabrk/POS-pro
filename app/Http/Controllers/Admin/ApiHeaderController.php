@@ -29,15 +29,22 @@ class ApiHeaderController extends Controller
             'name' => 'required|string|max:255|unique:dynamic_api_headers,name',
             'api_key' => 'required|string|max:255',
             'status' => 'required|boolean',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1000',
         ]);
 
-        DynamicApiHeader::create($request->all());
+        try {
+            DynamicApiHeader::create($request->all());
 
-        return response()->json([
-            'message' => 'API Header created successfully.',
-            'redirect' => route('admin.dynamicApiHeader.index'),
-        ]);
+            return response()->json([
+                'message' => 'API Header created successfully.',
+                'redirect' => route('admin.dynamicApiHeader.index'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while creating the API Header.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function edit(DynamicApiHeader $dynamicApiHeader)
