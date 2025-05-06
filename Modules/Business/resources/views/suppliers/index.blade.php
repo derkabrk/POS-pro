@@ -14,48 +14,73 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
+                    <table class="table table-striped table-hover align-middle">
                         <thead class="table-light">
                             <tr>
+                                <th class="w-60 checkbox">
+                                    <input type="checkbox" id="select-all" class="delete-checkbox-item">
+                                </th>
                                 <th>#</th>
+                                <th>Image</th>
                                 <th>Full Name</th>
                                 <th>Phone</th>
                                 <th>Email</th>
                                 <th>Total Products</th>
                                 <th>Total Products in Stock</th>
                                 <th>Products Sold</th>
-                                <th>Products Sold (Delivered)</th>
-                                <th>Products Sold (Paid)</th>
-                                <th>Products Sold (Checkout)</th>
-                                <th>Products Sold (Returned)</th>
-                                <th>Pending</th>
-                                <th>Available</th>
-                                <th>Paid</th>
-                                <th>Cashout</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($suppliersData as $key => $data)
                                 <tr>
+                                    <td class="w-60 checkbox">
+                                        <input type="checkbox" name="ids[]" class="delete-checkbox-item multi-delete" value="{{ $data['supplier']->id }}">
+                                    </td>
                                     <td>{{ $key + 1 }}</td>
+                                    <td>
+                                        <img src="{{ asset($data['supplier']->image ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img">
+                                    </td>
                                     <td>{{ $data['supplier']->name }}</td>
                                     <td>{{ $data['supplier']->phone }}</td>
                                     <td>{{ $data['supplier']->email }}</td>
                                     <td>{{ $data['totalProducts'] }}</td>
                                     <td>{{ $data['totalStock'] }}</td>
                                     <td>{{ $data['productsSold'] }}</td>
-                                    <td>{{ $data['productsDelivered'] }}</td>
-                                    <td>{{ $data['productsPaid'] }}</td>
-                                    <td>{{ $data['productsCheckout'] }}</td>
-                                    <td>{{ $data['productsReturned'] }}</td>
-                                    <td>{{ $data['pending'] }}</td>
-                                    <td>{{ $data['available'] }}</td>
-                                    <td>{{ $data['paid'] }}</td>
-                                    <td>{{ $data['cashout'] }}</td>
+                                    <td class="print-d-none">
+                                        <div class="dropdown table-action">
+                                            <button type="button" data-bs-toggle="dropdown">
+                                                <i class="far fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="#supplier-view" class="supplier-view-btn" data-bs-toggle="modal"
+                                                        data-name="{{ $data['supplier']->name }}"
+                                                        data-phone="{{ $data['supplier']->phone }}"
+                                                        data-email="{{ $data['supplier']->email }}"
+                                                        data-total-products="{{ $data['totalProducts'] }}"
+                                                        data-total-stock="{{ $data['totalStock'] }}"
+                                                        data-products-sold="{{ $data['productsSold'] }}">
+                                                        <i class="fal fa-eye"></i> {{ __('View') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('business.suppliers.edit', $data['supplier']->id) }}">
+                                                        <i class="fal fa-edit"></i> {{ __('Edit') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('business.suppliers.destroy', $data['supplier']->id) }}" class="confirm-action" data-method="DELETE">
+                                                        <i class="fal fa-trash-alt"></i> {{ __('Delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="15" class="text-center text-muted">No Suppliers Found</td>
+                                    <td colspan="10" class="text-center text-muted">No Suppliers Found</td>
                                 </tr>
                             @endforelse
                         </tbody>
