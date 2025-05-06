@@ -72,7 +72,7 @@
                                             <input type="checkbox" name="ids[]" class="delete-checkbox-item multi-delete" value="{{ $data['supplier']->id }}">
                                         </div>
                                     </td>
-                                    <td>{{ ($suppliersData->currentPage() - 1) * $suppliersData->perPage() + $loop->iteration }}</td>
+                                    <td>{{ $loop->iteration + ($suppliers->currentPage() - 1) * $suppliers->perPage() }}</td>
                                     <td>
                                         <img src="{{ asset($data['supplier']->image ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img">
                                     </td>
@@ -87,7 +87,18 @@
                                             <button type="button" data-bs-toggle="dropdown">
                                                 <i class="far fa-ellipsis-v"></i>
                                             </button>
-                                           
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="{{ route('business.suppliers.edit', $data['supplier']->id) }}">
+                                                        <i class="fal fa-edit"></i> {{ __('Edit') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('business.suppliers.destroy', $data['supplier']->id) }}" class="confirm-action" data-method="DELETE">
+                                                        <i class="fal fa-trash-alt"></i> {{ __('Delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </td>
                                 </tr>
@@ -100,7 +111,7 @@
                     </table>
                 </div>
                 <div class="mt-3">
-                    {{ $suppliersData->links('vendor.pagination.bootstrap-5') }}
+                    {{ $suppliers->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>
