@@ -141,14 +141,14 @@
                 </li>
 
 
-                <li
+               <!-- <li
                     class="dropdown {{ (Request::routeIs('business.parties.index') && request('type') == 'Supplier') || (Request::routeIs('business.parties.create') && request('type') == 'Supplier') || (Request::routeIs('business.parties.edit') && request('type') == 'Supplier') ? 'active' : '' }}">
                     <a href="#">
                         <span class="sidebar-icon">
                             <img src="{{ asset('assets/images/sidebar/supplier.svg') }}">
 
                         </span>
-                        {{ __('Suppliers') }}
+                        {{ __('Suppliers') }} 
                     </a>
                     <ul>
                         <li><a class="{{ Request::routeIs('business.parties.index') && request('type') == 'Supplier' ? 'active' : '' }}"
@@ -158,7 +158,7 @@
                                 href="{{ route('business.parties.create', ['type' => 'Supplier']) }}">{{ __('Add Supplier') }}</a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
             @endif
 
             <li
