@@ -1,7 +1,5 @@
 <?php
 
-namespace Modules\Business\App\Http\Controllers;
-
 use App\Models\DynamicApiHeader;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
