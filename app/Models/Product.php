@@ -18,7 +18,7 @@ class Product extends Model
     protected $fillable = [
         'type',
         'productName',
-        'supplier_id',
+
         'business_id',
         'unit_id',
         'brand_id',
@@ -42,6 +42,7 @@ class Product extends Model
         'weight',
         'capacity',
         'productManufacturer',
+        'supplier_id', // New field
     ];
 
     public function unit() : BelongsTo
@@ -59,9 +60,10 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function supplier() : BelongsTo
+  
+    public function supplier(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Party::class, 'supplier_id');
     }
 
     /**

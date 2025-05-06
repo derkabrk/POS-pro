@@ -49,6 +49,16 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="supplier_id" class="form-label">Supplier</label>
+                                        <select name="supplier_id" id="supplier_id" class="form-control" required>
+                                            <option value="">Select Supplier</option>
+                                            @foreach ($suppliers as $supplier)
+                                                <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Product Brand') }}</label>
                                         <div class="gpt-up-down-arrow position-relative">

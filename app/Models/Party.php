@@ -41,6 +41,15 @@ class Party extends Model
     {
         return $this->hasOne(DueCollect::class);
     }
+
+    /**
+     * Define the relationship with the Product model.
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'supplier_id');
+    }
+
     /**
      * The attributes that should be cast to native types.
      *

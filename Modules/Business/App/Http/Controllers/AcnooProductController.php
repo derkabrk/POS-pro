@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Helpers\HasUploader;
 use App\Models\Vat;
+use App\Models\Party;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
@@ -69,8 +70,9 @@ class AcnooProductController extends Controller
         $product_id = (Product::max('id') ?? 0) + 1;
         $vats = Vat::where('business_id', auth()->user()->business_id)->latest()->get();
         $code = str_pad($product_id , 4, '0', STR_PAD_LEFT);
+        $suppliers = Party::where('type', 'Supplier')->get();
 
-        return view('business::products.create', compact('categories', 'brands', 'units', 'code','vats'));
+        return view('business::products.create', compact('categories', 'brands', 'units', 'code', 'vats', 'suppliers'));
     }
 
 
@@ -91,6 +93,7 @@ class AcnooProductController extends Controller
             'productSalePrice' => 'required|numeric|min:0',
             'productWholeSalePrice' => 'nullable|numeric|min:0',
             'productStock' => 'nullable|numeric|min:0',
+            'supplier_id' => 'required|exists:parties,id',
             'alert_qty' => 'nullable|numeric|min:0',
             'expire_date' => 'nullable|date',
             'size' => 'nullable|string|max:255',
@@ -105,6 +108,7 @@ class AcnooProductController extends Controller
                     return $query->where('business_id', auth()->user()->business_id);
                 }),
             ],
+            'supplier_id' => 'required|exists:parties,id',
         ]);
 
         //vat calculation
@@ -127,6 +131,7 @@ class AcnooProductController extends Controller
             'productStock' => $request->productStock ?? 0,
             'alert_qty' => $request->alert_qty ?? 0,
             'vat_amount' => $vat_amount,
+            'supplier_id' => $request->supplier_id,
             'business_id' => auth()->user()->business_id,
         ]);
 
