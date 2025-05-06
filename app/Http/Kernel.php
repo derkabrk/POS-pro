@@ -76,16 +76,5 @@ class Kernel extends HttpKernel
         'expired' => \App\Http\Middleware\ExpiredMiddleware::class,
     ];
 
-    /**
-     * The application's route middleware.
-     *
-     * @var array<string, class-string|string>
-     */
-    protected $routeMiddleware = [
-        // Other middleware...
-        'dynamic-api-headers-create' => \App\Http\Middleware\DynamicApiHeadersCreate::class,
-        'dynamic-api-headers-read' => \App\Http\Middleware\DynamicApiHeadersRead::class,
-        'dynamic-api-headers-update' => \App\Http\Middleware\DynamicApiHeadersUpdate::class,
-        'dynamic-api-headers-delete' => \App\Http\Middleware\DynamicApiHeadersDelete::class,
-    ];
+
 }
