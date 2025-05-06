@@ -87,18 +87,7 @@
                                             <button type="button" data-bs-toggle="dropdown">
                                                 <i class="far fa-ellipsis-v"></i>
                                             </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a href="{{ route('business.suppliers.edit', $data['supplier']->id) }}">
-                                                        <i class="fal fa-edit"></i> {{ __('Edit') }}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('business.suppliers.destroy', $data['supplier']->id) }}" class="confirm-action" data-method="DELETE">
-                                                        <i class="fal fa-trash-alt"></i> {{ __('Delete') }}
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                            
                                         </div>
                                     </td>
                                 </tr>
