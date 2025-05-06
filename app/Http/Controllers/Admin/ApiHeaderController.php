@@ -34,7 +34,10 @@ class ApiHeaderController extends Controller
 
         DynamicApiHeader::create($request->all());
 
-        return redirect()->route('admin.dynamicApiHeader.index')->with('success', 'API Header created successfully.');
+        return response()->json([
+            'message' => 'API Header created successfully.',
+            'redirect' => route('admin.dynamicApiHeader.index'),
+        ]);
     }
 
     public function edit(DynamicApiHeader $dynamicApiHeader)

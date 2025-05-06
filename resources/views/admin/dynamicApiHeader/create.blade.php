@@ -14,35 +14,31 @@
                     </a>
                 </div>
                 <div class="order-form-section p-16">
-                    <form action="{{ route('admin.dynamicApiHeader.store') }}" method="POST" class="ajaxform_instant_reload" id="createForm">
+                    <form action="{{ route('admin.dynamicApiHeader.store') }}" method="POST" id="createForm">
                         @csrf
-                        <div class="row">
-                            <div class="col-lg-6 mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" name="name" id="name" class="form-control" required placeholder="Enter API Header Name">
-                            </div>
-                            <div class="col-lg-6 mb-3">
-                                <label for="api_key" class="form-label">API Key</label>
-                                <input type="text" name="api_key" id="api_key" class="form-control" required placeholder="Enter API Key">
-                            </div>
-                            <div class="col-lg-6 mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select name="status" id="status" class="form-control">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-12 mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea name="description" id="description" class="form-control" rows="4" placeholder="Enter Description"></textarea>
-                            </div>
-                            <div class="col-lg-12">
-                                <button type="submit" class="btn btn-success w-100" id="submitButton">
-                                    <span class="spinner-border spinner-border-sm d-none" id="buttonLoader" role="status" aria-hidden="true"></span>
-                                    <span id="buttonText">Save API Header</span>
-                                </button>
-                            </div>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" class="form-control" required>
                         </div>
+                        <div class="form-group">
+                            <label for="api_key">API Key</label>
+                            <input type="text" name="api_key" id="api_key" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea name="description" id="description" class="form-control"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="submitButton">
+                            <span id="buttonText">Save</span>
+                            <span class="spinner-border spinner-border-sm d-none" id="buttonLoader" role="status" aria-hidden="true"></span>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -58,10 +54,10 @@
 
         if (form) {
             form.addEventListener('submit', function (event) {
-                // Prevent multiple submissions
+               
                 submitButton.disabled = true;
 
-                // Show the loader and update the button text
+               
                 buttonLoader.classList.remove('d-none');
                 buttonText.textContent = 'Processing...';
             });
