@@ -151,16 +151,19 @@ document.addEventListener('DOMContentLoaded', function () {
             const apiHeaderStatus = this.dataset.status;
             const apiHeaderDescription = this.dataset.description;
 
+            // Set form action and method
             apiHeaderForm.action = `/admin/dynamicApiHeader/${apiHeaderId}`;
             formMethod.value = "PUT";
+
+            // Update modal title and button text
             document.getElementById('apiHeaderModalLabel').textContent = "Edit API Header";
             buttonText.textContent = "Update";
 
             // Populate form fields
-            document.getElementById('name').value = apiHeaderName;
-            document.getElementById('api_key').value = apiHeaderKey;
-            document.getElementById('status').value = apiHeaderStatus;
-            document.getElementById('description').value = apiHeaderDescription;
+            document.getElementById('name').value = apiHeaderName || '';
+            document.getElementById('api_key').value = apiHeaderKey || '';
+            document.getElementById('status').value = apiHeaderStatus || '';
+            document.getElementById('description').value = apiHeaderDescription || '';
 
             // Show the modal
             apiHeaderModal.show();
