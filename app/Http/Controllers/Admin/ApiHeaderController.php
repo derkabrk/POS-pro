@@ -39,7 +39,7 @@ class ApiHeaderController extends Controller
 
     public function edit(DynamicApiHeader $dynamicApiHeader)
     {
-        return view('admin::dynamicApiHeader.edit', compact('dynamicApiHeader'));
+        return view('admin.dynamicApiHeader.edit', compact('dynamicApiHeader')); // Use direct path
     }
 
     public function update(Request $request, DynamicApiHeader $dynamicApiHeader)
