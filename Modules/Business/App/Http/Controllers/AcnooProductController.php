@@ -23,7 +23,11 @@ class AcnooProductController extends Controller
 
     public function index()
     {
-        $products = Product::with('unit:id,unitName', 'brand:id,brandName', 'category:id,categoryName')->where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $products = Product::with('supplier') 
+            ->where('business_id', auth()->user()->business_id)
+            ->latest()
+            ->paginate(10);
+
         return view('business::products.index', compact('products'));
     }
 
@@ -148,13 +152,14 @@ class AcnooProductController extends Controller
         $brands = Brand::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $units = Unit::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $vats = Vat::where('business_id', auth()->user()->business_id)->latest()->get();
+        $suppliers = Party::where('type', 'Supplier')->get();
 
         return view('business::products.edit', compact('categories', 'brands', 'units', 'product', 'vats'));
     }
 
     public function update(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::where('business_id', auth()->user()->business_id)->findOrFail($id);
 
         $request->validate([
             'vat_id' => 'nullable|exists:vats,id',
@@ -183,20 +188,21 @@ class AcnooProductController extends Controller
                 'nullable',
                 'unique:products,productCode,' . $product->id . ',id,business_id,' . auth()->user()->business_id,
             ],
+            'supplier_id' => 'required|exists:parties,id', // Validate supplier_id
         ]);
 
-
-        //vat calculation
+        // VAT calculation
         $vat = Vat::find($request->vat_id);
         $exclusive_price = $request->exclusive_price ?? 0;
         $vat_amount = ($exclusive_price * ($vat->rate ?? 0)) / 100;
 
-        if( $request->vat_type == 'exclusive'){
+        if ($request->vat_type == 'exclusive') {
             $purchase_price = $request->exclusive_price;
-        }else{
+        } else {
             $purchase_price = $request->exclusive_price + $vat_amount;
         }
 
+        // Update the product
         $product->update($request->except(['productPicture', 'productDealerPrice', 'productWholeSalePrice', 'productStock', 'alert_qty']) + [
             'productPicture' => $request->productPicture ? $this->upload($request, 'productPicture', $product->productPicture) : $product->productPicture,
             'productPurchasePrice' => $purchase_price,
@@ -205,12 +211,13 @@ class AcnooProductController extends Controller
             'productWholeSalePrice' => $request->productWholeSalePrice ?? $request->productSalePrice,
             'productStock' => $request->productStock ?? 0,
             'alert_qty' => $request->alert_qty ?? 0,
+            'supplier_id' => $request->supplier_id, // Update supplier_id
             'business_id' => auth()->user()->business_id,
         ]);
 
         return response()->json([
-            'message' => __('Data saved successfully.'),
-            'redirect' => route('business.products.index')
+            'message' => __('Product updated successfully.'),
+            'redirect' => route('business.products.index'),
         ]);
     }
 
