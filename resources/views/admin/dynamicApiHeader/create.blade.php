@@ -1,4 +1,4 @@
-@extends('business::layouts.master')
+@extends('admin::layouts.master')
 
 @section('title', 'Create API Header')
 
@@ -9,12 +9,12 @@
             <div class="card-bodys">
                 <div class="table-header p-16 d-flex justify-content-between align-items-center">
                     <h4>Create API Header</h4>
-                    <a href="{{ route('business.dynamicApiHeader.index') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.dynamicApiHeader.index') }}" class="btn btn-primary">
                         <i class="fas fa-list me-1"></i> View All API Headers
                     </a>
                 </div>
                 <div class="order-form-section p-16">
-                    <form action="{{ route('business.dynamicApiHeader.store') }}" method="POST" class="ajaxform_instant_reload" id="createForm">
+                    <form action="{{ route('admin.dynamicApiHeader.store') }}" method="POST" class="ajaxform_instant_reload" id="createForm">
                         @csrf
                         <div class="row">
                             <div class="col-lg-6 mb-3">

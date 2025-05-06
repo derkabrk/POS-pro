@@ -6,36 +6,31 @@ use App\Models\DynamicApiHeader;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class DynamicApiHeaderController extends Controller
+class ApiHeaderController extends Controller
 {
     /**
      * Display a listing of the API headers.
      */
 
-     public function __construct()
-     {
-         $this->middleware('dynamic-api-headers-create')->only('create', 'store');
-         $this->middleware('dynamic-api-headers-read')->only('index');
-         $this->middleware('dynamic-api-headers-update')->only('edit', 'update');
-         $this->middleware('dynamic-api-headers-delete')->only('destroy',);
-     }
+    public function __construct()
+    {
+        $this->middleware('dynamic-api-headers-create')->only('create', 'store');
+        $this->middleware('dynamic-api-headers-read')->only('index');
+        $this->middleware('dynamic-api-headers-update')->only('edit', 'update');
+        $this->middleware('dynamic-api-headers-delete')->only('destroy');
+    }
+
     public function index()
     {
         $apiHeaders = DynamicApiHeader::latest()->paginate(10);
         return view('admin::dynamicApiHeader.index', compact('apiHeaders'));
     }
 
-    /**
-     * Show the form for creating a new API header.
-     */
     public function create()
     {
         return view('admin::dynamicApiHeader.create');
     }
 
-    /**
-     * Store a newly created API header in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -50,17 +45,11 @@ class DynamicApiHeaderController extends Controller
         return redirect()->route('admin.dynamicApiHeader.index')->with('success', 'API Header created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified API header.
-     */
     public function edit(DynamicApiHeader $dynamicApiHeader)
     {
         return view('admin::dynamicApiHeader.edit', compact('dynamicApiHeader'));
     }
 
-    /**
-     * Update the specified API header in storage.
-     */
     public function update(Request $request, DynamicApiHeader $dynamicApiHeader)
     {
         $request->validate([
@@ -75,9 +64,6 @@ class DynamicApiHeaderController extends Controller
         return redirect()->route('admin.dynamicApiHeader.index')->with('success', 'API Header updated successfully.');
     }
 
-    /**
-     * Remove the specified API header from storage.
-     */
     public function destroy(DynamicApiHeader $dynamicApiHeader)
     {
         $dynamicApiHeader->delete();
