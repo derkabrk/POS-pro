@@ -174,10 +174,6 @@
                         <a class="{{ Request::routeIs('business.suppliers.index') ? 'active' : '' }}"
                            href="{{ route('business.suppliers.index') }}">{{ __('All Suppliers') }}</a>
                     </li>
-                    <li>
-                        <a class="{{ Request::routeIs('business.suppliers.create') ? 'active' : '' }}"
-                           href="{{ route('business.suppliers.create') }}">{{ __('Add Supplier') }}</a>
-                    </li>
                 </ul>
             </li>
 
