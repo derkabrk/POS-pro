@@ -97,11 +97,6 @@
                                     <td>{{ $data['paid'] }}</td>
                                     <td>{{ $data['cashout'] }}</td>
                                     <td>
-                                        <div class="dropdown table-action">
-                                            <button type="button" data-bs-toggle="dropdown">
-                                                <i class="far fa-ellipsis-v"></i>
-                                            </button>
-                                        </div>
                                         <button class="btn btn-sm btn-success mt-2">{{ __('Pay Me') }}</button>
                                     </td>
                                 </tr>

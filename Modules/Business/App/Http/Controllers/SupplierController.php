@@ -1,34 +1,36 @@
 <?php
 namespace Modules\Business\App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use App\Models\Party;
 use App\Models\Product;
+use App\Models\Sale; // Import the Sale model
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
     public function index()
     {
-        // Fetch suppliers
+        // Fetch suppliers with pagination
         $suppliers = Party::where('type', 'Supplier')->paginate(10); // Adjust the per-page value as needed
-
 
         // Calculate supplier data
         $suppliersData = $suppliers->map(function ($supplier) {
-            $products = Product::where('supplier_id', $supplier->id)->get();
+            $products = Product::where('supplier_id', $supplier->id)->pluck('id'); // Get product IDs for the supplier
+
+            // Use the Sale model to calculate amounts
+            $productsSold = Sale::whereIn('product_id', $products)->sum('quantity'); // Total products sold
+            $productsDelivered = Sale::whereIn('product_id', $products)->where('sale_status', 9)->sum('quantity'); // Delivered products
+            $productsPaid = Sale::whereIn('product_id', $products)->where('sale_status', 11)->sum('quantity'); // Paid products
+            $productsCheckout = Sale::whereIn('product_id', $products)->where('sale_status', 12)->sum('quantity'); // Products in checkout
+            $productsReturned = Sale::whereIn('product_id', $products)->where('sale_status', 10)->sum('quantity'); // Returned products
 
             $totalProducts = $products->count();
-            $totalStock = $products->sum('productStock');
-            $productsSold = $products->sum('sold_quantity'); // Assuming you have a `sold_quantity` field
-            $productsDelivered = $products->sum('delivered_quantity'); // Assuming you have a `delivered_quantity` field
-            $productsPaid = $products->sum('paid_quantity'); // Assuming you have a `paid_quantity` field
-            $productsCheckout = $products->sum('checkout_quantity'); // Assuming you have a `checkout_quantity` field
-            $productsReturned = $products->sum('returned_quantity'); // Assuming you have a `returned_quantity` field
-
-            $pending = $products->sum('pending_quantity'); // Assuming you have a `pending_quantity` field
-            $available = $totalStock - $pending;
-            $paid = $products->sum('paid_amount'); // Assuming you have a `paid_amount` field
-            $cashout = $products->sum('cashout_amount'); // Assuming you have a `cashout_amount` field
+            $totalStock = Product::whereIn('id', $products)->sum('productStock'); // Total stock for the supplier
+            $pending = Sale::whereIn('product_id', $products)->where('sale_status', 'pending')->sum('quantity'); // Pending products
+            $available = $totalStock - $pending; // Available stock
+            $paid = Sale::whereIn('product_id', $products)->sum('paid_amount'); // Total paid amount
+            $cashout = Sale::whereIn('product_id', $products)->sum('cashout_amount'); // Total cashout amount
 
             return [
                 'supplier' => $supplier,
@@ -46,8 +48,6 @@ class SupplierController extends Controller
             ];
         });
 
-       
         return view('business::suppliers.index', compact('suppliers', 'suppliersData'));
-
     }
 }
