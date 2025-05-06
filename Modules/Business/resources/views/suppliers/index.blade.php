@@ -9,7 +9,7 @@
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>{{ __('Supplier List') }}</h4>
-                    <a type="button" href="{{ route('business.suppliers.create') }}"
+                    <a type="button" href=""
                        class="add-order-btn rounded-2 {{ Route::is('business.suppliers.create') ? 'active' : '' }}">
                         <i class="fas fa-plus-circle me-1"></i>{{ __('Add New Supplier') }}
                     </a>
@@ -92,18 +92,7 @@
                                             <button type="button" data-bs-toggle="dropdown">
                                                 <i class="far fa-ellipsis-v"></i>
                                             </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a href="{{ route('business.suppliers.edit', $data['supplier']->id) }}">
-                                                        <i class="fal fa-edit"></i> {{ __('Edit') }}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('business.suppliers.destroy', $data['supplier']->id) }}" class="confirm-action" data-method="DELETE">
-                                                        <i class="fal fa-trash-alt"></i> {{ __('Delete') }}
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                           
                                         </div>
                                     </td>
                                 </tr>
