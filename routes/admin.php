@@ -126,7 +126,6 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
         Route::get('view/all/', 'mtReadAll')->name('mtReadAll');
     });
 
-
-    Route::resource('dynamicApiHeader', ADMIN\ApiHeaderController::class)->except('show');;
+    Route::resource('dynamicApiHeader', ADMIN\ApiHeaderController::class)->except(['create', 'store']);
 
 });
