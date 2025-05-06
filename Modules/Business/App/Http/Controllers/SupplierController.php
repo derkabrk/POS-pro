@@ -45,6 +45,7 @@ class SupplierController extends Controller
             ];
         });
 
-        return view('suppliers.index', compact('suppliersData'));
+       
+        return view('business::suppliers.index', compact('suppliersData'));    
     }
 }
