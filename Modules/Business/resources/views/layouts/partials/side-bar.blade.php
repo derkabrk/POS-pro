@@ -161,6 +161,25 @@
                 </li>
             @endif
 
+            <li
+                class="dropdown {{ Request::routeIs('business.suppliers.index', 'business.suppliers.create', 'business.suppliers.edit') ? 'active' : '' }}">
+                <a href="#">
+                    <span class="sidebar-icon">
+                        <img src="{{ asset('assets/images/sidebar/supplier.svg') }}"> <!-- Add an appropriate icon -->
+                    </span>
+                    {{ __('Suppliers') }}
+                </a>
+                <ul>
+                    <li>
+                        <a class="{{ Request::routeIs('business.suppliers.index') ? 'active' : '' }}"
+                           href="{{ route('business.suppliers.index') }}">{{ __('All Suppliers') }}</a>
+                    </li>
+                    <li>
+                        <a class="{{ Request::routeIs('business.suppliers.create') ? 'active' : '' }}"
+                           href="{{ route('business.suppliers.create') }}">{{ __('Add Supplier') }}</a>
+                    </li>
+                </ul>
+            </li>
 
             @if (auth()->user()->role != 'staff' || visible_permission('addIncomePermission'))
                 <li
