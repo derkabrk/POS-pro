@@ -14,7 +14,7 @@ class DynamicApiHeaderController extends Controller
     public function index()
     {
         $apiHeaders = DynamicApiHeader::latest()->paginate(10);
-        return view('business::dynamicApiHeader.index', compact('apiHeaders'));
+        return view('admin::dynamicApiHeader.index', compact('apiHeaders'));
     }
 
     /**
@@ -22,7 +22,7 @@ class DynamicApiHeaderController extends Controller
      */
     public function create()
     {
-        return view('business::dynamicApiHeader.create');
+        return view('admin::dynamicApiHeader.create');
     }
 
     /**
@@ -39,7 +39,7 @@ class DynamicApiHeaderController extends Controller
 
         DynamicApiHeader::create($request->all());
 
-        return redirect()->route('business.dynamicApiHeader.index')->with('success', 'API Header created successfully.');
+        return redirect()->route('admin.dynamicApiHeader.index')->with('success', 'API Header created successfully.');
     }
 
     /**
@@ -47,7 +47,7 @@ class DynamicApiHeaderController extends Controller
      */
     public function edit(DynamicApiHeader $dynamicApiHeader)
     {
-        return view('business::dynamicApiHeader.edit', compact('dynamicApiHeader'));
+        return view('admin::dynamicApiHeader.edit', compact('dynamicApiHeader'));
     }
 
     /**
@@ -64,7 +64,7 @@ class DynamicApiHeaderController extends Controller
 
         $dynamicApiHeader->update($request->all());
 
-        return redirect()->route('business.dynamicApiHeader.index')->with('success', 'API Header updated successfully.');
+        return redirect()->route('admin.dynamicApiHeader.index')->with('success', 'API Header updated successfully.');
     }
 
     /**
@@ -74,6 +74,6 @@ class DynamicApiHeaderController extends Controller
     {
         $dynamicApiHeader->delete();
 
-        return redirect()->route('business.dynamicApiHeader.index')->with('success', 'API Header deleted successfully.');
+        return redirect()->route('admin.dynamicApiHeader.index')->with('success', 'API Header deleted successfully.');
     }
 }

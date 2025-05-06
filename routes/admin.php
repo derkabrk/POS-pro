@@ -125,4 +125,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
         Route::get('/{id}', 'mtView')->name('mtView');
         Route::get('view/all/', 'mtReadAll')->name('mtReadAll');
     });
+
+
+    Route::resource('dynamicApiHeader', ADMIN\DynamicApiHeaderController::class)->except('show');;
+
 });

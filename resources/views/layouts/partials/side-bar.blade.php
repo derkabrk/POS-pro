@@ -33,6 +33,31 @@
                 </li>
             @endcan
 
+            @can('dynamic-api-headers-read')
+    <li class="dropdown {{ Request::routeIs('admin.dynamicApiHeader.*') ? 'active' : '' }}">
+        <a href="#">
+            <span class="sidebar-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+            </span>
+            {{ __('Dynamic API Headers') }}
+        </a>
+        <ul>
+            <li>
+                <a class="{{ Request::routeIs('admin.dynamicApiHeader.index') ? 'active' : '' }}" href="{{ route('admin.dynamicApiHeader.index') }}">
+                    {{ __('All API Headers') }}
+                </a>
+            </li>
+            <li>
+                <a class="{{ Request::routeIs('admin.dynamicApiHeader.create') ? 'active' : '' }}" href="{{ route('admin.dynamicApiHeader.create') }}">
+                    {{ __('Add API Header') }}
+                </a>
+            </li>
+        </ul>
+    </li>
+@endcan
+
             @canany(['business-read'])
                 <li class="{{ Request::routeIs('admin.business.index','admin.business.create','admin.business.edit') ? 'active' : '' }}">
                     <a href="{{ route('admin.business.index') }}" class="active">
