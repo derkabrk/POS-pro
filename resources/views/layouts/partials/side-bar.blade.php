@@ -33,7 +33,7 @@
                 </li>
             @endcan
 
-            @canany(['dynamic-api-headers-read'])
+           
                 <li class="{{ Request::routeIs('admin.dynamicApiHeader.index','admin.dynamicApiHeader.create','admin.dynamicApiHeader.edit') ? 'active' : '' }}">
                     <a href="{{ route('admin.dynamicApiHeader.index') }}" class="active">
                         <span class="sidebar-icon">
@@ -44,7 +44,7 @@
                         {{ __('Dynamic API Headers') }}
                     </a>
                 </li>
-            @endcanany
+           
 
             @canany(['business-categories-read'])
                 <li class="{{ Request::routeIs('admin.business-categories.index','admin.business-categories.create','admin.business-categories.edit') ? 'active' : '' }}">
@@ -59,7 +59,7 @@
                 </li>
             @endcanany
             
-            @canany(['shipping-companies-read'])
+            @canany(['shipping-companies-read',])
                 <li class="{{ Request::routeIs('admin.shipping-companies.index','admin.shipping-companies.create','admin.shipping-companies.edit') ? 'active' : '' }}">
                     <a href="{{ route('admin.shipping-companies.index') }}" class="active">
                         <span class="sidebar-icon">
