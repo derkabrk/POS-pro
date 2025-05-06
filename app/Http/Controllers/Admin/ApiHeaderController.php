@@ -25,21 +25,26 @@ class ApiHeaderController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:dynamic_api_headers,name',
-            'api_key' => 'required|string|max:255',
-            'status' => 'required|boolean',
-            'description' => 'nullable|string|max:1000',
-        ]);
-
         try {
-            DynamicApiHeader::create($request->all());
+            $validated = $request->validate([
+                'name' => 'required|string|max:255|unique:dynamic_api_headers,name',
+                'api_key' => 'required|string|max:255',
+                'status' => 'required|boolean',
+                'description' => 'nullable|string|max:1000',
+            ]);
+
+            DynamicApiHeader::create($validated);
 
             return response()->json([
                 'message' => 'API Header created successfully.',
                 'redirect' => route('admin.dynamicApiHeader.index'),
             ]);
         } catch (\Exception $e) {
+            \Log::error('Error in store method:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return response()->json([
                 'message' => 'An error occurred while creating the API Header.',
                 'error' => $e->getMessage(),
