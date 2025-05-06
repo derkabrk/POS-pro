@@ -42,12 +42,7 @@
                     </form>
                 </div>
 
-                <div class="delete-item delete-show d-none">
-                    <div class="delete-item-show">
-                        <p class="fw-bold"><span class="selected-count"></span> {{ __('items selected') }}</p>
-                        <button data-bs-toggle="modal" class="trigger-modal" data-bs-target="#multi-delete-modal" data-url="{{ route('business.suppliers.delete-all') }}">{{ __('Delete') }}</button>
-                    </div>
-                </div>
+               
 
                 <div class="responsive-table m-0">
                     <table class="table" id="datatable">
