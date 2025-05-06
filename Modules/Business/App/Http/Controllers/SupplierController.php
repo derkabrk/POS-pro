@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Http\Controllers;
+namespace Modules\Business\App\Http\Controllers;
 
 use App\Models\Party;
 use App\Models\Product;
