@@ -25,30 +25,33 @@ class ApiHeaderController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:dynamic_api_headers,name',
+            'api_key' => 'required|string|max:255',
+            'status' => 'required|boolean',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
         try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255|unique:dynamic_api_headers,name',
-                'api_key' => 'required|string|max:255',
-                'status' => 'required|boolean',
-                'description' => 'nullable|string|max:1000',
-            ]);
+            DynamicApiHeader::create($request->all());
 
-            DynamicApiHeader::create($validated);
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => 'API Header created successfully.',
+                    'redirect' => route('admin.dynamicApiHeader.index'),
+                ]);
+            }
 
-            return response()->json([
-                'message' => 'API Header created successfully.',
-                'redirect' => route('admin.dynamicApiHeader.index'),
-            ]);
+            return redirect()->route('admin.dynamicApiHeader.index')->with('success', 'API Header created successfully.');
         } catch (\Exception $e) {
-            \Log::error('Error in store method:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => 'An error occurred while creating the API Header.',
+                    'error' => $e->getMessage(),
+                ], 500);
+            }
 
-            return response()->json([
-                'message' => 'An error occurred while creating the API Header.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return redirect()->back()->withErrors(['error' => 'An error occurred while creating the API Header.']);
         }
     }
 
