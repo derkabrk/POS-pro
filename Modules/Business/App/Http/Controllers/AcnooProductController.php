@@ -154,7 +154,7 @@ class AcnooProductController extends Controller
         $vats = Vat::where('business_id', auth()->user()->business_id)->latest()->get();
         $suppliers = Party::where('type', 'Supplier')->get();
 
-        return view('business::products.edit', compact('categories', 'brands', 'units', 'product', 'vats'));
+        return view('business::products.edit', compact('categories', 'suppliers','brands', 'units', 'product', 'vats'));
     }
 
     public function update(Request $request, $id)
