@@ -9,8 +9,8 @@
             <div class="card-bodys">
                 <div class="table-header p-16 d-flex justify-content-between align-items-center">
                     <h4>API Headers</h4>
-                    <!-- Trigger the modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addApiHeaderModal">
+                    <!-- Trigger the modal -->  
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#apiHeaderModal">
                         <i class="fas fa-plus-circle me-1"></i> Add New API Header
                     </button>
                 </div>
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const buttonText = document.getElementById('buttonText');
 
     // Handle Create Button Click
-    document.querySelector('.btn-primary[data-bs-target="#addApiHeaderModal"]').addEventListener('click', function () {
+    document.querySelector('.btn-primary[data-bs-target="#apiHeaderModal"]').addEventListener('click', function () {
         apiHeaderForm.action = "{{ route('admin.dynamicApiHeader.store') }}";
         formMethod.value = "POST";
         document.getElementById('apiHeaderModalLabel').textContent = "Add New API Header";
