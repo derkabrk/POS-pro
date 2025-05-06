@@ -13,6 +13,7 @@
         <td>{{ $product->productCode }}</td>
         <td>{{ $product->brand->brandName ?? '' }}</td>
         <td>{{ $product->category->categoryName ?? '' }}</td>
+        <td>{{ $product->supplier ? $product->supplier->name : 'N/A' }}</td>
         <td>{{ $product->unit->unitName ?? '' }}</td>
         <td>{{ currency_format($product->productPurchasePrice, 'icon', 2, business_currency()) }}</td>
         <td>{{ currency_format($product->productSalePrice, 'icon', 2, business_currency()) }}</td>
@@ -31,6 +32,7 @@
                             data-code="{{ $product->productCode }}"
                             data-brand="{{ $product->brand->brandName ?? '' }}"
                             data-category="{{ $product->category->categoryName ?? '' }}"
+                            data-supplier="{{ $product->supplier ? $product->supplier->name : 'N/A' }}"
                             data-unit="{{ $product->unit->unitName ?? '' }}"
                             data-purchase-price="{{ currency_format($product->productPurchasePrice, 'icon', 2, business_currency()) }}"
                             data-sale-price="{{ currency_format($product->productSalePrice, 'icon', 2, business_currency()) }}"
