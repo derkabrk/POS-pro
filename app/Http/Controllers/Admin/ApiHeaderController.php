@@ -15,12 +15,12 @@ class ApiHeaderController extends Controller
     public function index()
     {
         $apiHeaders = DynamicApiHeader::latest()->paginate(10);
-        return view('admin::dynamicApiHeader.index', compact('apiHeaders'));
+        return view('admin.dynamicApiHeader.index', compact('apiHeaders')); // Direct path
     }
 
     public function create()
     {
-        return view('admin::dynamicApiHeader.create');
+        return view('admin.dynamicApiHeader.create'); // Direct path
     }
 
     public function store(Request $request)
