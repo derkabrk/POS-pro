@@ -9,7 +9,7 @@
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>{{ __('Supplier List') }}</h4>
-                    <a type="button" href=""
+                    <a type="button" href="{{ route('business.suppliers.create') }}"
                        class="add-order-btn rounded-2 {{ Route::is('business.suppliers.create') ? 'active' : '' }}">
                         <i class="fas fa-plus-circle me-1"></i>{{ __('Add New Supplier') }}
                     </a>
@@ -42,8 +42,6 @@
                     </form>
                 </div>
 
-               
-
                 <div class="responsive-table m-0">
                     <table class="table" id="datatable">
                         <thead>
@@ -61,6 +59,14 @@
                                 <th>{{ __('Total Products') }}</th>
                                 <th>{{ __('Total Stock') }}</th>
                                 <th>{{ __('Products Sold') }}</th>
+                                <th>{{ __('Products Sold (Delivered)') }}</th>
+                                <th>{{ __('Products Sold (Paid)') }}</th>
+                                <th>{{ __('Products Sold (Checkout)') }}</th>
+                                <th>{{ __('Products Sold (Returned)') }}</th>
+                                <th>{{ __('Pending') }}</th>
+                                <th>{{ __('Available') }}</th>
+                                <th>{{ __('Paid') }}</th>
+                                <th>{{ __('Cashout') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
@@ -82,18 +88,37 @@
                                     <td>{{ $data['totalProducts'] }}</td>
                                     <td>{{ $data['totalStock'] }}</td>
                                     <td>{{ $data['productsSold'] }}</td>
+                                    <td>{{ $data['productsDelivered'] }}</td>
+                                    <td>{{ $data['productsPaid'] }}</td>
+                                    <td>{{ $data['productsCheckout'] }}</td>
+                                    <td>{{ $data['productsReturned'] }}</td>
+                                    <td>{{ $data['pending'] }}</td>
+                                    <td>{{ $data['available'] }}</td>
+                                    <td>{{ $data['paid'] }}</td>
+                                    <td>{{ $data['cashout'] }}</td>
                                     <td>
                                         <div class="dropdown table-action">
                                             <button type="button" data-bs-toggle="dropdown">
                                                 <i class="far fa-ellipsis-v"></i>
                                             </button>
-                                            
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="{{ route('business.suppliers.edit', $data['supplier']->id) }}">
+                                                        <i class="fal fa-edit"></i> {{ __('Edit') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('business.suppliers.destroy', $data['supplier']->id) }}" class="confirm-action" data-method="DELETE">
+                                                        <i class="fal fa-trash-alt"></i> {{ __('Delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center text-muted">{{ __('No Suppliers Found') }}</td>
+                                    <td colspan="18" class="text-center text-muted">{{ __('No Suppliers Found') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>
