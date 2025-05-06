@@ -9,7 +9,7 @@
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>{{ __('Supplier List') }}</h4>
-                    <a type="button" href=""
+                    <a type="button" href="{{ route('business.parties.create', ['type' => 'supplier']) }}"
                        class="add-order-btn rounded-2 {{ Route::is('business.suppliers.create') ? 'active' : '' }}">
                         <i class="fas fa-plus-circle me-1"></i>{{ __('Add New Supplier') }}
                     </a>
