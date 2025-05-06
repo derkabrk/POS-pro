@@ -27,6 +27,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('business', Api\BusinessController::class)->only('index', 'store', 'update');
         Route::apiResource('business-categories', Api\BusinessCategoryController::class)->only('index');
         Route::apiResource('shipping-companies', Api\BusinessCategoryController::class)->only('index');
+        
         Route::apiResource('purchase', Api\PurchaseController::class)->except('show');
         Route::apiResource('sales', Api\AcnooSaleController::class)->except('show');
         Route::apiResource('sales-return', Api\SaleReturnController::class)->only('index', 'store', 'show');
