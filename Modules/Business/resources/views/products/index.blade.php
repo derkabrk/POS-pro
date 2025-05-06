@@ -100,6 +100,7 @@
                                 <th> {{ __('Code') }} </th>
                                 <th> {{ __('Brand') }} </th>
                                 <th> {{ __('Category') }} </th>
+                                <th> {{ __('Supplier') }} </th>
                                 <th> {{ __('Unit') }} </th>
                                 <th> {{ __('Purchase price') }}</th>
                                 <th> {{ __('Sale price') }}</th>
