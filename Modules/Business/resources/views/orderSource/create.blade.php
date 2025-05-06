@@ -48,10 +48,12 @@
                                     <label>Settings (JSON)</label>
                                     <textarea name="settings" class="form-control" placeholder="Enter additional settings in JSON format"></textarea>
                                 </div>
+
                                 <div class="col-lg-12">
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="fas fa-save me-1"></i> Save Order Source
-                                    </button>
+                                    <div class="button-group text-center mt-5">
+                                        <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
+                                        <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
