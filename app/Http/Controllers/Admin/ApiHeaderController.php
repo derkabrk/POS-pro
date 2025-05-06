@@ -10,13 +10,7 @@ class ApiHeaderController extends Controller
      * Display a listing of the API headers.
      */
 
-    public function __construct()
-    {
-        $this->middleware('dynamic-api-headers-create')->only('create', 'store');
-        $this->middleware('dynamic-api-headers-read')->only('index');
-        $this->middleware('dynamic-api-headers-update')->only('edit', 'update');
-        $this->middleware('dynamic-api-headers-delete')->only('destroy');
-    }
+
 
     public function index()
     {
