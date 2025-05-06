@@ -39,7 +39,13 @@
                                     </td>
                                     <td>{{ $header->description }}</td>
                                     <td>
-                                        <a href="{{ route('admin.dynamicApiHeader.edit', $header->id) }}" class="btn btn-sm btn-warning">
+                                        <a href="javascript:void(0)" 
+                                           class="btn btn-sm btn-warning" 
+                                           data-id="{{ $header->id }}" 
+                                           data-name="{{ $header->name }}" 
+                                           data-api-key="{{ $header->api_key }}" 
+                                           data-status="{{ $header->status }}" 
+                                           data-description="{{ $header->description }}">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                         <form action="{{ route('admin.dynamicApiHeader.destroy', $header->id) }}" method="POST" style="display:inline-block;">
@@ -68,16 +74,17 @@
 </div>
 
 <!-- Add API Header Modal -->
-<div class="modal fade" id="addApiHeaderModal" tabindex="-1" aria-labelledby="addApiHeaderModalLabel" aria-hidden="true">
+<div class="modal fade" id="apiHeaderModal" tabindex="-1" aria-labelledby="apiHeaderModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addApiHeaderModalLabel">Add New API Header</h5>
+                <h5 class="modal-title" id="apiHeaderModalLabel">Add New API Header</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('admin.dynamicApiHeader.store') }}" method="POST" id="createForm">
+                <form action="{{ route('admin.dynamicApiHeader.store') }}" method="POST" id="apiHeaderForm">
                     @csrf
+                    <input type="hidden" name="_method" id="formMethod" value="POST">
                     <div class="row">
                         <div class="col-lg-6 mb-3">
                             <label for="name" class="form-label">Name</label>
@@ -100,8 +107,11 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="button-group text-center mt-5">
-                                <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
-                                <button type="submit" class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
+                                <button type="reset" class="theme-btn border-btn m-2" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button type="submit" class="theme-btn m-2 submit-btn" id="submitButton">
+                                    <span id="buttonText">{{ __('Save') }}</span>
+                                    <span class="spinner-border spinner-border-sm d-none" id="buttonLoader" role="status" aria-hidden="true"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -110,4 +120,90 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const apiHeaderModal = new bootstrap.Modal(document.getElementById('apiHeaderModal'));
+    const apiHeaderForm = document.getElementById('apiHeaderForm');
+    const formMethod = document.getElementById('formMethod');
+    const submitButton = document.getElementById('submitButton');
+    const buttonLoader = document.getElementById('buttonLoader');
+    const buttonText = document.getElementById('buttonText');
+
+    // Handle Create Button Click
+    document.querySelector('.btn-primary[data-bs-target="#addApiHeaderModal"]').addEventListener('click', function () {
+        apiHeaderForm.action = "{{ route('admin.dynamicApiHeader.store') }}";
+        formMethod.value = "POST";
+        document.getElementById('apiHeaderModalLabel').textContent = "Add New API Header";
+        buttonText.textContent = "Save";
+
+        // Clear form fields
+        apiHeaderForm.reset();
+    });
+
+    // Handle Edit Button Click
+    document.querySelectorAll('.btn-warning').forEach(function (editButton) {
+        editButton.addEventListener('click', function () {
+            const apiHeaderId = this.dataset.id;
+            const apiHeaderName = this.dataset.name;
+            const apiHeaderKey = this.dataset.apiKey;
+            const apiHeaderStatus = this.dataset.status;
+            const apiHeaderDescription = this.dataset.description;
+
+            apiHeaderForm.action = `/admin/dynamicApiHeader/${apiHeaderId}`;
+            formMethod.value = "PUT";
+            document.getElementById('apiHeaderModalLabel').textContent = "Edit API Header";
+            buttonText.textContent = "Update";
+
+            // Populate form fields
+            document.getElementById('name').value = apiHeaderName;
+            document.getElementById('api_key').value = apiHeaderKey;
+            document.getElementById('status').value = apiHeaderStatus;
+            document.getElementById('description').value = apiHeaderDescription;
+
+            // Show the modal
+            apiHeaderModal.show();
+        });
+    });
+
+    // Handle Form Submission
+    apiHeaderForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Show loader and disable button
+        submitButton.disabled = true;
+        buttonLoader.classList.remove('d-none');
+        buttonText.textContent = 'Processing...';
+
+        // Submit the form via AJAX
+        const formData = new FormData(apiHeaderForm);
+
+        fetch(apiHeaderForm.action, {
+            method: formMethod.value,
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect) {
+                    window.location.href = data.redirect; // Redirect the user
+                } else {
+                    alert(data.message || 'An error occurred.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            })
+            .finally(() => {
+                // Re-enable the button and reset the loader
+                submitButton.disabled = false;
+                buttonLoader.classList.add('d-none');
+                buttonText.textContent = formMethod.value === "POST" ? "Save" : "Update";
+            });
+    });
+});
+</script>
 @endsection
