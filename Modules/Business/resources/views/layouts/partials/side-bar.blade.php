@@ -208,7 +208,7 @@
                 <li class="dropdown {{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'active' : '' }}">
                     <a href="#">
                         <span class="sidebar-icon">
-                            <img src="{{ asset('assets/images/sidebar/order-source.svg') }}"> <!-- Add an appropriate icon -->
+                            <img src="{{ asset('assets/images/sidebar/sales.svg') }}"> <!-- Add an appropriate icon -->
                         </span>
                         {{ __('Order Sources') }}
                     </a>
