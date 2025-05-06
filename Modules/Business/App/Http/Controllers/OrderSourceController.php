@@ -5,6 +5,7 @@ namespace Modules\Business\App\Http\Controllers;
 use App\Models\OrderSource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class OrderSourceController extends Controller
 {
@@ -46,7 +47,14 @@ class OrderSourceController extends Controller
             'settings' => 'nullable|json',
         ]);
 
-        $orderSource = OrderSource::create($request->all());
+        $orderSource = OrderSource::create([
+            'name' => $request->name,
+            'api_key' => Hash::make($request->api_key), // Hash the API key
+            'api_secret' => Hash::make($request->api_secret), // Hash the API secret
+            'webhook_url' => $request->webhook_url,
+            'status' => $request->status,
+            'settings' => $request->settings,
+        ]);
 
         return response()->json([
             'message' => __('Order source created successfully.'),
@@ -87,7 +95,14 @@ class OrderSourceController extends Controller
             'settings' => 'nullable|json',
         ]);
 
-        $orderSource->update($request->all());
+        $orderSource->update([
+            'name' => $request->name,
+            'api_key' => Hash::make($request->api_key), 
+            'api_secret' => Hash::make($request->api_secret),
+            'webhook_url' => $request->webhook_url,
+            'status' => $request->status,
+            'settings' => $request->settings,
+        ]);
 
         return response()->json([
             'message' => __('Order source updated successfully.'),
