@@ -14,7 +14,7 @@
                     </a>
                 </div>
                 <div class="order-form-section p-16">
-                    <form action="{{ route('business.dynamicApiHeader.update', $dynamicApiHeader->id) }}" method="POST" class="ajaxform_instant_reload">
+                    <form action="{{ route('business.dynamicApiHeader.update', $dynamicApiHeader->id) }}" method="POST" class="ajaxform_instant_reload" id="editForm">
                         @csrf
                         @method('PUT')
                         <div class="row">
@@ -38,7 +38,8 @@
                                 <textarea name="description" id="description" class="form-control" rows="4">{{ $dynamicApiHeader->description }}</textarea>
                             </div>
                             <div class="col-lg-12">
-                                <button type="submit" class="btn btn-success w-100">
+                                <button type="submit" class="btn btn-success w-100" id="editButton">
+                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                                     <i class="fas fa-save me-1"></i> Update API Header
                                 </button>
                             </div>
@@ -50,3 +51,31 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Handle Create Form Submission
+    const createForm = document.getElementById('createForm');
+    const createButton = document.getElementById('createButton');
+    if (createForm && createButton) {
+        createForm.addEventListener('submit', function () {
+            const spinner = createButton.querySelector('.spinner-border');
+            spinner.classList.remove('d-none'); // Show spinner
+            createButton.setAttribute('disabled', 'true'); // Disable button
+        });
+    }
+
+    // Handle Edit Form Submission
+    const editForm = document.getElementById('editForm');
+    const editButton = document.getElementById('editButton');
+    if (editForm && editButton) {
+        editForm.addEventListener('submit', function () {
+            const spinner = editButton.querySelector('.spinner-border');
+            spinner.classList.remove('d-none'); // Show spinner
+            editButton.setAttribute('disabled', 'true'); // Disable button
+        });
+    }
+});
+</script>
+@endpush
