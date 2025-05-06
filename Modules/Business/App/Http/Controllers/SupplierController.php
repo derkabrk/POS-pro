@@ -10,7 +10,8 @@ class SupplierController extends Controller
     public function index()
     {
         // Fetch suppliers
-        $suppliers = Party::where('type', 'Supplier')->get();
+        $suppliers = Party::where('type', 'Supplier')->paginate(10); // Adjust the per-page value as needed
+
 
         // Calculate supplier data
         $suppliersData = $suppliers->map(function ($supplier) {
@@ -46,6 +47,7 @@ class SupplierController extends Controller
         });
 
        
-        return view('business::suppliers.index', compact('suppliersData'));    
+        return view('business::suppliers.index', compact('suppliers', 'suppliersData'));
+
     }
 }
