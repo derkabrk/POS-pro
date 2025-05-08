@@ -581,7 +581,7 @@ class AcnooSaleController extends Controller
             ->where('business_id', auth()->user()->business_id)
             ->latest()
             ->get();
-            $suppliers = Party::where('type', 'Supplier')->get(); // Fetch suppliers
+   
 
         $categories = Category::where('business_id', auth()->user()->business_id)->latest()->get();
         $brands = Brand::where('business_id', auth()->user()->business_id)->latest()->get();
