@@ -117,19 +117,19 @@
 
 <!-- Modal for Ticket Categories -->
 <div class="modal fade" id="ticketCategoriesModal" tabindex="-1" aria-labelledby="ticketCategoriesModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content shadow">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="ticketCategoriesModalLabel">Manage Ticket Categories</h5>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content shadow" style="border-radius: 18px; overflow: hidden;">
+            <div class="modal-header bg-primary text-white" style="border-bottom: 1px solid #e9ecef;">
+                <h5 class="modal-title fw-bold" id="ticketCategoriesModalLabel">Manage Ticket Categories</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <!-- Table for Ticket Categories -->
+            <div class="modal-body" style="background: #f8f9fa;">
+                <!-- Table for Ticket Categories -->    
                 <div class="responsive-table mb-4">
-                    <table class="table table-bordered table-striped align-middle">
-                        <thead>
+                    <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
+                        <thead class="table-light">
                             <tr>
-                                <th>#</th>
+                                <th style="width: 60px;">#</th>
                                 <th>Name</th>
                                 <th>Color</th>
                             </tr>
@@ -137,11 +137,13 @@
                         <tbody>
                             @foreach($categories as $index => $category)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $category->name }}</td>
+                                    <td class="fw-semibold">{{ $index + 1 }}</td>
+                                    <td class="text-capitalize">{{ $category->name }}</td>
                                     <td>
                                         <span class="color-swatch" style="background-color: {{ $category->color }}"></span>
-                                        <span>{{ $category->color }}</span>
+                                        <span class="badge rounded-pill border" style="background: {{ $category->color }}20; color: #333;">
+                                            {{ $category->color }}
+                                        </span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -153,15 +155,17 @@
                 <form class="row g-3" method="POST" action="{{ route('admin.ticketCategories.store') }}">
                     @csrf
                     <div class="col-md-6">
-                        <label for="category-name" class="form-label">Category Name</label>
+                        <label for="category-name" class="form-label fw-semibold">Category Name</label>
                         <input type="text" name="name" id="category-name" class="form-control" placeholder="Enter category name" required>
                     </div>
                     <div class="col-md-4">
-                        <label for="category-color" class="form-label">Category Color</label>
+                        <label for="category-color" class="form-label fw-semibold">Category Color</label>
                         <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-success w-100"><i class="fas fa-plus-circle me-1"></i> Add Category</button>
+                        <button type="submit" class="btn btn-success w-100 shadow-sm">
+                            <i class="fas fa-plus-circle me-1"></i> Add Category
+                        </button>
                     </div>
                 </form>
                 @if ($errors->any())

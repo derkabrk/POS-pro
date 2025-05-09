@@ -30,7 +30,12 @@ class TicketCategoriesController extends Controller
             'name' => $request->name,
             'color' => $request->color,
         ]);
-        return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket category added successfully!');
 
+         if ($request->ajax()) {
+                return response()->json([
+                    'message' => 'Ticket category added successfully!',
+                    'redirect' => route('admin.ticketSystem.index'),
+                ]);
+            }
     }
 }
