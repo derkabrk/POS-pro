@@ -161,10 +161,10 @@ class OrderSourceController extends Controller
         }
 
         // Parse the incoming order data
-        $orderData = $this->parseOrderData($platform, $request->all());
+       // $orderData = $this->parseOrderData($platform, $request->all());
 
         // Store the sale in the database
-        $sale = Sale::create($orderData);
+        //$sale = Sale::create($orderData);
 
         return response()->json(['message' => 'Sale stored successfully', 'sale' => $sale], 200);
     }
