@@ -21,9 +21,9 @@
                         @csrf
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">
-                                <div class="col-lg-6 mb-2">
-                                    <label>Platform Name</label>
-                                    <input type="text" name="name" required class="form-control" placeholder="Enter Platform Name">
+                                  <div class="col-lg-6 mb-2">
+                                    <label>Account Name</label>
+                                    <input type="text" name="account_name" required class="form-control" placeholder="Enter Account Name">
                                 </div>
                                 <div class="col-lg-6 mb-2">
                                     <label>API Key</label>
@@ -33,9 +33,10 @@
                                     <label>API Secret</label>
                                     <input type="text" name="api_secret" required class="form-control" placeholder="Enter API Secret">
                                 </div>
+                              
                                 <div class="col-lg-6 mb-2">
                                     <label>Platform</label>
-                                    <select name="platform" id="platform" class="form-control" required>
+                                    <select name="name" id="platform" class="form-control" required>
                                         <option value="" disabled selected>Select Platform</option>
                                         <option value="Shopify">Shopify</option>
                                         <option value="YouCan">YouCan</option>

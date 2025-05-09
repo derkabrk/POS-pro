@@ -41,15 +41,16 @@ class OrderSourceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'account_name' => 'required|string',
+            'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
             'api_key' => 'required|string',
             'api_secret' => 'required|string',
-            'platform' => 'required|string|in:Shopify,YouCan,WooCommerce',
             'webhook_url' => 'required|url',
             'status' => 'required|boolean',
         ]);
 
         $orderSource = OrderSource::create([
+            'account_name' => $request->account_name,
             'name' => $request->name,
             'api_key' => $request->api_key,
             'api_secret' => $request->api_secret,
