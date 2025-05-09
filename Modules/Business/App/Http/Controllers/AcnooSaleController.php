@@ -484,6 +484,7 @@ class AcnooSaleController extends Controller
             $product = (array) $product;
             $id = isset($product['id']) ? (string) $product['id'] : null;
             $name = $product['productName'] ?? $product['product_name'] ?? null;
+            $quantity = $product['quantity'] ?? 1; // Default to 1 if quantity is not provided
     
             if (!$id || !$name || !ctype_digit($id)) {
                 \Log::warning('Invalid product format - skipping', ['product' => $product]);
@@ -500,9 +501,9 @@ class AcnooSaleController extends Controller
                 }
     
                 $finalProducts[] = [
-                    'product_id' => (string) $existing['product_id'], // ✅ Must be numeric string
+                    'product_id' => (string) $existing['product_id'], // Must be numeric string
                     'logistical_description' => $existing['logistical_description'],
-                    'quantity' => 1
+                    'quantity' => $quantity, // Include quantity
                 ];
                 continue;
             }
@@ -525,9 +526,9 @@ class AcnooSaleController extends Controller
                 }
     
                 $finalProducts[] = [
-                    'product_id' => $id, // ✅ send your original store-assigned product ID
+                    'product_id' => $id, // Send your original store-assigned product ID
                     'logistical_description' => $created['logistical_description'],
-                    'quantity' => 1
+                    'quantity' => $quantity, // Include quantity
                 ];
             } else {
                 \Log::error('Maystro product creation failed', [
@@ -1093,7 +1094,7 @@ class AcnooSaleController extends Controller
                     "Commune"       => "Maraval",
                     "Total"         => (float) $sale->totalAmount,
                     "Note"          => "",
-                    "TProduit"      => $product['productName'],
+                    "TProduit" => $product['productName'] . '-Q[' . $product['quantity'] . ']',
                     "id_Externe"    => $sale->tracking_id . '-' . $product['id'],
                     "Source"        => ""
                 ];
@@ -1129,6 +1130,8 @@ class AcnooSaleController extends Controller
                 "products" => $createdProducts,
             ];
         }
+
+        \Log::info('Payload being sent to Maystro Delivery', ['payload' => $payload]);
 
         $response = Http::withHeaders($headers)->post($apiUrl, $payload);
 
