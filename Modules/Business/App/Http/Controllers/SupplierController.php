@@ -19,18 +19,38 @@ class SupplierController extends Controller
             $products = Product::where('supplier_id', $supplier->id)->pluck('id'); // Get product IDs for the supplier
 
             // Use the Sale model to calculate amounts
-            $productsSold = Sale::whereIn('id', $products)->sum('quantity'); // Total products sold
-            $productsDelivered = Sale::whereIn('id', $products)->where('sale_status', 9)->sum('quantity'); // Delivered products
-            $productsPaid = Sale::whereIn('id', $products)->where('sale_status', 11)->sum('quantity'); // Paid products
-            $productsCheckout = Sale::whereIn('id', $products)->where('sale_status', 12)->sum('quantity'); // Products in checkout
-            $productsReturned = Sale::whereIn('id', $products)->where('sale_status', 10)->sum('quantity'); // Returned products
+            $productsSold = Sale::whereHas('details', function ($query) use ($products) {
+                $query->whereIn('product_id', $products);
+            })->sum('quantity'); // Total products sold
+
+            $productsDelivered = Sale::whereHas('details', function ($query) use ($products) {
+                $query->whereIn('product_id', $products)->where('sale_status', 9);
+            })->sum('quantity'); // Delivered products
+
+            $productsPaid = Sale::whereHas('details', function ($query) use ($products) {
+                $query->whereIn('product_id', $products)->where('sale_status', 11);
+            })->sum('quantity'); // Paid products
+
+            $productsCheckout = Sale::whereHas('details', function ($query) use ($products) {
+                $query->whereIn('product_id', $products)->where('sale_status', 12);
+            })->sum('quantity'); // Products in checkout
+
+            $productsReturned = Sale::whereHas('details', function ($query) use ($products) {
+                $query->whereIn('product_id', $products)->where('sale_status', 10);
+            })->sum('quantity'); // Returned products
 
             $totalProducts = $products->count();
             $totalStock = Product::whereIn('id', $products)->sum('productStock'); // Total stock for the supplier
-            $pending = Sale::whereIn('id', $products)->where('sale_status', 'pending')->sum('quantity'); // Pending products
+            $pending = Sale::whereHas('details', function ($query) use ($products) {
+                $query->whereIn('product_id', $products)->where('sale_status', 'pending');
+            })->sum('quantity'); // Pending products
             $available = $totalStock - $pending; // Available stock
-            $paid = Sale::whereIn('id', $products)->sum('paid_amount'); // Total paid amount
-            $cashout = Sale::whereIn('id', $products)->sum('cashout_amount'); // Total cashout amount
+            $paid = Sale::whereHas('details', function ($query) use ($products) {
+                $query->whereIn('product_id', $products);
+            })->sum('paid_amount'); // Total paid amount
+            $cashout = Sale::whereHas('details', function ($query) use ($products) {
+                $query->whereIn('product_id', $products);
+            })->sum('cashout_amount'); // Total cashout amount
 
             return [
                 'supplier' => $supplier,
@@ -49,5 +69,11 @@ class SupplierController extends Controller
         });
 
         return view('business::suppliers.index', compact('suppliers', 'suppliersData'));
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'sale_details', 'sale_id', 'product_id')
+                    ->withPivot('quantity');
     }
 }

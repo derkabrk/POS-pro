@@ -127,15 +127,26 @@ class Sale extends Model
         'meta' => 'json',
     ];
 
-        public function getProductsAttribute($value)
-        {
-        return json_decode($value, true) ?? [];
-        }
+    public function getProductsAttribute($value)
+    {
+        $products = json_decode($value, true) ?? [];
+        return array_map(function ($product) {
+            return [
+                'id' => $product['id'],
+                'quantity' => $product['quantity'],
+            ];
+        }, $products);
+    }
 
-         public function setProductsAttribute($value)
-         {
-         $this->attributes['products'] = json_encode($value);
-         }
+    public function setProductsAttribute($value)
+    {
+        $this->attributes['products'] = json_encode(array_map(function ($product) {
+            return [
+                'id' => $product['id'],
+                'quantity' => $product['quantity'],
+            ];
+        }, $value));
+    }
 
     public const STATUS = [
         1 => ['name' => 'Pending', 'color' => 'bg-warning'], // Yellow

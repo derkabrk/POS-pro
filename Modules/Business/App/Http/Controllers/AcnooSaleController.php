@@ -277,7 +277,6 @@ class AcnooSaleController extends Controller
             'sale_type' => $validated['sale_type'],
         ];
 
-
         if ($validated['sale_type'] == 1) {
             $saleData['sale_status'] = $validated['sale_status'] ?? 1;
             $saleData['shipping_service_id'] = $request['shipping_service_id'] ?? null;
@@ -317,7 +316,7 @@ class AcnooSaleController extends Controller
                 $vatAmount = ($subtotal * $vat->rate) / 100;
             }
 
-            //Discount
+            // Discount
             $discountAmount = $request->discountAmount ?? 0;
             if ($request->discount_type == 'percent') {
                 $discountAmount = ($subtotal * $discountAmount) / 100;
@@ -346,6 +345,14 @@ class AcnooSaleController extends Controller
                 'remainingShopBalance' => $business->remainingShopBalance + $paidAmount,
             ]);
 
+            // Prepare products array with new structure
+            $productsArray = $carts->map(function ($cartItem) {
+                return [
+                    'id' => $cartItem->id,
+                    'quantity' => $cartItem->qty,
+                ];
+            })->toArray();
+
             // Create Sale record
             $sale = Sale::create([
                 'user_id' => auth()->id(),
@@ -367,7 +374,7 @@ class AcnooSaleController extends Controller
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
                 'sale_status' => $saleData['sale_status'],
-                'products' => $productIds,
+                'products' => $productsArray, // Store products with new structure
                 'wilaya_id' => $saleData['wilaya_id'],
                 'commune_id' => $saleData['commune_id'],
                 'shipping_service_id' => $saleData['shipping_service_id'],
@@ -435,12 +442,11 @@ class AcnooSaleController extends Controller
                 'secondary_redirect_url' => route('business.sales.invoice', $sale->id),
             ]);
 
-
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
                 'message' => __('Something went wrong!'),
-                'error' => $e->getMessage() 
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -1006,102 +1012,109 @@ class AcnooSaleController extends Controller
             'sale_id' => 'required|exists:sales,id',
             'sale_status' => 'required|integer',
         ]);
-    
+
         $sale = Sale::findOrFail($request->sale_id);
         $sale->update(['sale_status' => $request->sale_status]);
-    
+
         if ($sale->sale_type != 1) {
             return response()->json([
                 'success' => false,
                 'message' => 'Cannot update status for Business Sale'
             ]);
         }
-    
+
         if ($sale->sale_status != 7) {
             return response()->json([
                 'message' => __('Sale Status updated Successfully'),
                 'redirect' => route('business.sales.index'),
             ]);
         }
-    
-       
-        $productIds = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
-        $products = Product::whereIn('id', $productIds)->get();
 
+        // Decode the products field to get the array of objects
+        $products = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
 
-        $cleanedProducts = $products->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'productName' => $product->productName,
-            ];
-        })->toArray();
-
-    
-        if (!$products || $products->isEmpty()) {
+        if (empty($products)) {
             return response()->json(['message' => 'Products list not found'], 404);
         }
-    
+
+        // Fetch product details from the database
+        $productIds = collect($products)->pluck('id')->toArray();
+        $productDetails = Product::whereIn('id', $productIds)->get();
+
+        if ($productDetails->isEmpty()) {
+            return response()->json(['message' => 'Products not found in the database'], 404);
+        }
+
+        // Map products with their quantities
+        $productsWithDetails = collect($products)->map(function ($product) use ($productDetails) {
+            $productDetail = $productDetails->where('id', $product['id'])->first();
+            return [
+                'id' => $product['id'],
+                'quantity' => $product['quantity'],
+                'productName' => $productDetail->productName ?? 'Unknown Product',
+            ];
+        });
+
         $customer = Party::find($sale->party_id);
         if (!$customer) {
             return response()->json(['message' => 'Customer not found'], 404);
         }
-    
+
         if (!$sale->wilaya_id || !$sale->commune_id) {
             return response()->json(['message' => 'wilaya_id or commune_id not found'], 404);
         }
-    
+
         $shippingService = Shipping::find($sale->shipping_service_id);
         $shippingCompany = ShippingCompanies::find($shippingService->shipping_company_id ?? null);
-    
+
         if (!$shippingService || !$shippingCompany) {
             return response()->json(['message' => 'Shipping service not found'], 404);
         }
-    
+
         $apiUrl = $shippingCompany->create_api_url;
         $headers = ['Accept' => 'application/json'];
         $payload = [];
-    
+
         if ($shippingService->shipping_company_id == 1) {
             $headers["token"] = $shippingService->first_r_credential;
             $headers["key"] = $shippingService->second_r_credential;
-    
-            $colis = [];
 
-           foreach ($products as $product) {
-           $colis[] = [
-          "Tracking"      => $sale->tracking_id,
-          "TypeLivraison" => (int) ($sale->delivery_type ?? 0),
-          "TypeColis"     => (int) ($sale->parcel_type ?? 0),  
-          "Confirmee"     => 0,
-          "Client"        => $customer->name,
-          "MobileA"       => $customer->phone,
-          "MobileB"       => $customer->phone,
-          "Adresse"       => $sale->delivery_address,
-          "IDWilaya"      => (int) $sale->wilaya_id,
-          "Commune"       => "Maraval",
-          "Total"         => (float) $sale->totalAmount,
-          "Note"          => "",
-          "TProduit"      => $product->productName,
-          "id_Externe"    => $sale->tracking_id . '-' . $product->id,
-          "Source"        => ""
-    ];
-}
-         $payload = [
-          "Colis" => $colis
-         ];
-    
+            $colis = $productsWithDetails->map(function ($product) use ($sale, $customer) {
+                return [
+                    "Tracking"      => $sale->tracking_id,
+                    "TypeLivraison" => (int) ($sale->delivery_type ?? 0),
+                    "TypeColis"     => (int) ($sale->parcel_type ?? 0),
+                    "Confirmee"     => 0,
+                    "Client"        => $customer->name,
+                    "MobileA"       => $customer->phone,
+                    "MobileB"       => $customer->phone,
+                    "Adresse"       => $sale->delivery_address,
+                    "IDWilaya"      => (int) $sale->wilaya_id,
+                    "Commune"       => "Maraval",
+                    "Total"         => (float) $sale->totalAmount,
+                    "Note"          => "",
+                    "TProduit"      => $product['productName'],
+                    "id_Externe"    => $sale->tracking_id . '-' . $product['id'],
+                    "Source"        => ""
+                ];
+            })->toArray();
+
+            $payload = [
+                "Colis" => $colis
+            ];
         } elseif ($shippingService->shipping_company_id == 2) {
-
-
             $authToken = $shippingService->first_r_credential;
-
             $headers["Authorization"] = "Token $authToken";
-    
-            
 
-           $createdProducts = $this->storeNonExistingProducts("Token $authToken", $cleanedProducts);
+            $cleanedProducts = $productsWithDetails->map(function ($product) {
+                return [
+                    'id' => $product['id'],
+                    'productName' => $product['productName'],
+                ];
+            })->toArray();
 
-    
+            $createdProducts = $this->storeNonExistingProducts("Token $authToken", $cleanedProducts);
+
             $payload = [
                 "external_order_id" => $sale->tracking_id,
                 "source" => 4,
@@ -1113,13 +1126,12 @@ class AcnooSaleController extends Controller
                 "product_price" => $sale->totalAmount,
                 "express" => false,
                 "note_to_driver" => "",
-                "products" =>  $createdProducts,
+                "products" => $createdProducts,
             ];
         }
-    
-        
+
         $response = Http::withHeaders($headers)->post($apiUrl, $payload);
-    
+
         if ($response->successful()) {
             $sale->update(['sale_status' => $request['sale_status']]);
             return response()->json([
@@ -1134,11 +1146,10 @@ class AcnooSaleController extends Controller
                 'status' => $response->status(),
                 'body' => $response->body(),
             ]);
-    
+
             return response()->json(['error' => $response->body()], 400);
         }
     }
-    
 
     public function getNextStatuses($currentStatus)
     {
