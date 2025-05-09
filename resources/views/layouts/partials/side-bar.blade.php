@@ -57,7 +57,17 @@
                     </a>
                 </li>
            
-
+   <li class="{{ Request::routeIs('admin.ticket-system.index') ? 'active' : '' }}">
+        <a href="{{ route('admin.ticket-system.index') }}" class="active">
+            <span class="sidebar-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-ticket" viewBox="0 0 16 16">
+                    <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5v1a.5.5 0 0 1-.5.5H15a2 2 0 0 0 0 4h.5a.5.5 0 0 1 .5.5v1A1.5 1.5 0 0 1 14.5 13h-13A1.5 1.5 0 0 1 0 11.5v-1a.5.5 0 0 1 .5-.5H1a2 2 0 0 0 0-4h-.5a.5.5 0 0 1-.5-.5v-1zM1 5v.91a3 3 0 0 1 0 4.18V11.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-.91a3 3 0 0 1 0-4.18V4.5a.5.5 0 0 0-.5-.5h-13a.5.5 0 0 0-.5.5V5z"/>
+                </svg>
+            </span>
+            {{ __('Ticket System') }}
+        </a>
+    </li>
+    
             @canany(['business-categories-read'])
                 <li class="{{ Request::routeIs('admin.business-categories.index','admin.business-categories.create','admin.business-categories.edit') ? 'active' : '' }}">
                     <a href="{{ route('admin.business-categories.index') }}" class="active">

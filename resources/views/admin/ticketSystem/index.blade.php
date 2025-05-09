@@ -1,11 +1,11 @@
-@extends('business::layouts.master')
+@extends('admin::layouts.master')
 
 @section('title', 'Tickets')
 
 @section('main_content')
 <div class="container">
     <h1>Tickets</h1>
-    <a href="{{ route('business.ticketSystem.create') }}" class="btn btn-primary">Create Ticket</a>
+    <a href="{{ route('admin.ticketSystem.create') }}" class="btn btn-primary">Create Ticket</a>
     <table class="table">
         <thead>
             <tr>
@@ -24,8 +24,8 @@
                 <td>{{ $ticket->status }}</td>
                 <td>{{ $ticket->priority }}</td>
                 <td>
-                    <a href="{{ route('business.ticketSystem.edit', $ticket->id) }}" class="btn btn-warning">Edit</a>
-                    <form action="{{ route('business.ticketSystem.destroy', $ticket->id) }}" method="POST" style="display:inline-block;">
+                    <a href="{{ route('admin.ticketSystem.edit', $ticket->id) }}" class="btn btn-warning">Edit</a>
+                    <form action="{{ route('admin.ticketSystem.destroy', $ticket->id) }}" method="POST" style="display:inline-block;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete</button>

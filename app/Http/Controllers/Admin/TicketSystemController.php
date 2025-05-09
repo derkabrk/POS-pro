@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Business\App\Http\Controllers;
+namespace App\Http\Controllers;
 
 use App\Models\TicketSystem;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class TicketSystemController extends Controller
     public function index()
     {
         $tickets = TicketSystem::latest()->paginate(10);
-        return view('business::ticketSystem.index', compact('tickets'));
+        return view('admin::ticketSystem.index', compact('tickets'));
     }
 
     /**
@@ -21,7 +21,7 @@ class TicketSystemController extends Controller
      */
     public function create()
     {
-        return view('business::ticketSystem.create');
+        return view('admin::ticketSystem.create');
     }
 
     /**
@@ -46,7 +46,7 @@ class TicketSystemController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-        return redirect()->route('business.ticketSystem.index')->with('success', 'Ticket created successfully.');
+        return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket created successfully.');
     }
 
     /**
@@ -54,7 +54,7 @@ class TicketSystemController extends Controller
      */
     public function edit(TicketSystem $ticketSystem)
     {
-        return view('business::ticketSystem.edit', compact('ticketSystem'));
+        return view('admin::ticketSystem.edit', compact('ticketSystem'));
     }
 
     /**
@@ -72,7 +72,7 @@ class TicketSystemController extends Controller
 
         $ticketSystem->update($request->all());
 
-        return redirect()->route('business.ticketSystem.index')->with('success', 'Ticket updated successfully.');
+        return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket updated successfully.');
     }
 
     /**
@@ -82,6 +82,6 @@ class TicketSystemController extends Controller
     {
         $ticketSystem->delete();
 
-        return redirect()->route('business.ticketSystem.index')->with('success', 'Ticket deleted successfully.');
+        return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket deleted successfully.');
     }
 }

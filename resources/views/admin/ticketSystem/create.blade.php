@@ -1,11 +1,11 @@
-@extends('business::layouts.master')
+@extends('admin::layouts.master')
 
 @section('title', 'Create Ticket')
 
 @section('main_content')
 <div class="container">
     <h1>Create Ticket</h1>
-    <form action="{{ route('business.ticketSystem.store') }}" method="POST">
+    <form action="{{ route('admin.ticketSystem.store') }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="title">Title</label>
