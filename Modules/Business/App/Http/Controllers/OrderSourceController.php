@@ -47,9 +47,9 @@ class OrderSourceController extends Controller
             'api_secret' => 'required|string',
             'webhook_url' => 'required|url',
             'status' => 'required|boolean',
-            'settings.shopify_store_url' => 'required_if:name,Shopify|url',
-            'settings.woocommerce_store_url' => 'required_if:name,WooCommerce|url',
-            'settings.youcan_store_url' => 'required_if:name,YouCan|url',
+            'shopify_store_url' => 'required_if:name,Shopify|url',
+            'woocommerce_store_url' => 'required_if:name,WooCommerce|url',
+            'youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
 
         // Extract the specific store URL based on the platform
@@ -259,38 +259,34 @@ class OrderSourceController extends Controller
         }
     }
 
-    protected function registerShopifyWebhook(OrderSource $orderSource)
-    {
-        \Log::info('Settings Field', [
-            'value' => $orderSource->settings,
-            'type' => gettype($orderSource->settings),
-        ]);
+  <?php
+protected function registerShopifyWebhook(OrderSource $orderSource)
+{
+    $webhookUrl = $orderSource->webhook_url;
 
-        $webhookUrl = $orderSource->webhook_url;
+    // Directly use the settings field as the store URL
+    $shopifyStoreUrl = $orderSource->settings;
 
-        // Directly use the settings field as the store URL
-        $shopifyStoreUrl = $this->settings;
-
-        if (!$shopifyStoreUrl) {
-            return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
-        }
-
-        $response = Http::withHeaders([
-            'X-Shopify-Access-Token' => $orderSource->api_key,
-        ])->post("https://{$shopifyStoreUrl}/admin/api/2023-01/webhooks.json", [
-            'webhook' => [
-                'topic' => 'orders/create',
-                'address' => $webhookUrl,
-                'format' => 'json',
-            ],
-        ]);
-
-        if ($response->successful()) {
-            return response()->json(['message' => 'Shopify webhook registered successfully']);
-        }
-
-        return response()->json(['message' => 'Failed to register Shopify webhook', 'error' => $response->body()], 400);
+    if (!$shopifyStoreUrl) {
+        return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
     }
+
+    $response = Http::withHeaders([
+        'X-Shopify-Access-Token' => $orderSource->api_key,
+    ])->post("https://{$shopifyStoreUrl}/admin/api/2023-01/webhooks.json", [
+        'webhook' => [
+            'topic' => 'orders/create',
+            'address' => $webhookUrl,
+            'format' => 'json',
+        ],
+    ]);
+
+    if ($response->successful()) {
+        return response()->json(['message' => 'Shopify webhook registered successfully']);
+    }
+
+    return response()->json(['message' => 'Failed to register Shopify webhook', 'error' => $response->body()], 400);
+}
 
     protected function registerWooCommerceWebhook(OrderSource $orderSource)
     {

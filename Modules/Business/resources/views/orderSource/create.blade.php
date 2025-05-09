@@ -52,7 +52,7 @@
                                 <div id="shopify-settings" class="platform-settings d-none">
                                     <div class="col-lg-12 mb-2">
                                         <label>Shopify Store URL</label>
-                                        <input type="text" name="settings[shopify_store_url]" class="form-control" placeholder="Enter your Shopify store URL">
+                                        <input type="text" name="shopify_store_url" class="form-control" placeholder="Enter your Shopify store URL">
                                     </div>
                                 </div>
 
@@ -60,7 +60,7 @@
                                 <div id="woocommerce-settings" class="platform-settings d-none">
                                     <div class="col-lg-12 mb-2">
                                         <label>WooCommerce Store URL</label>
-                                        <input type="text" name="settings[woocommerce_store_url]" class="form-control" placeholder="Enter your WooCommerce store URL">
+                                        <input type="text" name="woocommerce_store_url" class="form-control" placeholder="Enter your WooCommerce store URL">
                                     </div>
                                 </div>
 
@@ -68,7 +68,7 @@
                                 <div id="youcan-settings" class="platform-settings d-none">
                                     <div class="col-lg-12 mb-2">
                                         <label>YouCan Store URL</label>
-                                        <input type="text" name="settings[youcan_store_url]" class="form-control" placeholder="Enter your YouCan store URL">
+                                        <input type="text" name="youcan_store_url" class="form-control" placeholder="Enter your YouCan store URL">
                                     </div>
                                 </div>
 
