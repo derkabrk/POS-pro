@@ -13,8 +13,9 @@ class TicketSystemController extends Controller
      */
     public function index()
     {
-        $tickets = TicketSystem::with('category')->paginate(10); // Fetch tickets with their categories
-        return view('admin.ticketSystem.index', compact('tickets'));
+        $tickets = TicketSystem::with('category')->paginate(10);
+        $categories = TicketCategories::all();
+        return view('admin.ticketSystem.index', compact('tickets', 'categories'));
     }
 
     /**

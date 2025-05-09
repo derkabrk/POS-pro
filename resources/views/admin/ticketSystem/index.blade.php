@@ -24,6 +24,9 @@
     .table-striped > tbody > tr:nth-of-type(odd) {
         background-color: #f2f2f2;
     }
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #dee2e6 !important;
+    }
 </style>
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -44,6 +47,7 @@
                     <th>Title</th>
                     <th>Status</th>
                     <th>Priority</th>
+                    <th>Category</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -61,6 +65,14 @@
                         <span class="badge bg-{{ $ticket->priority === 'High' ? 'danger' : ($ticket->priority === 'Medium' ? 'warning' : 'info') }}">
                             {{ $ticket->priority }}
                         </span>
+                    </td>
+                    <td>
+                        @if($ticket->category)
+                            <span class="color-swatch" style="background-color: {{ $ticket->category->color }}"></span>
+                            {{ $ticket->category->name }}
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
                     </td>
                     <td>
                         <a href="{{ route('admin.ticketSystem.edit', $ticket->id) }}" class="btn btn-sm btn-warning">Edit</a>
@@ -100,77 +112,52 @@
                                 <th>Color</th>
                             </tr>
                         </thead>
-                        <tbody id="categories-table">
-                            <!-- Categories will be dynamically added here -->
+                        <tbody>
+                            @foreach($categories as $index => $category)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $category->name }}</td>
+                                    <td>
+                                        <span class="color-swatch" style="background-color: {{ $category->color }}"></span>
+                                        <span>{{ $category->color }}</span>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Form to Add New Category -->
-                <form id="add-category-form" class="row g-3">
+                <form id="add-category-form" class="row g-3" method="POST" action="{{ route('admin.ticketCategories.store') }}">
+                    @csrf
                     <div class="col-md-6">
                         <label for="category-name" class="form-label">Category Name</label>
-                        <input type="text" id="category-name" class="form-control" placeholder="Enter category name" required>
+                        <input type="text" name="name" id="category-name" class="form-control" placeholder="Enter category name" required>
                     </div>
                     <div class="col-md-4">
                         <label for="category-color" class="form-label">Category Color</label>
-                        <input type="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
+                        <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="submit" class="btn btn-success w-100">Add Category</button>
                     </div>
                 </form>
+                @if ($errors->any())
+                    <div class="alert alert-danger mt-3">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if (session('success'))
+                    <div class="alert alert-success mt-3">
+                        {{ session('success') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-    // Fetch and display ticket categories
-    function fetchCategories() {
-        axios.get('/admin/ticketCategories')
-            .then(response => {
-                const categories = response.data;
-                const categoriesTable = $('#categories-table');
-                categoriesTable.empty();
-                categories.forEach((category, index) => {
-                    categoriesTable.append(`
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${category.name}</td>
-                            <td>
-                                <span class="color-swatch" style="background-color: ${category.color};"></span>
-                                <span>${category.color}</span>
-                            </td>
-                        </tr>
-                    `);
-                });
-            })
-            .catch(error => console.error(error));
-    }
-
-    // Add a new ticket category
-    $('#add-category-form').on('submit', function (e) {
-        e.preventDefault();
-        const categoryName = $('#category-name').val();
-        const categoryColor = $('#category-color').val();
-
-        axios.post('/admin/ticketCategories', { name: categoryName, color: categoryColor })
-            .then(response => {
-                alert(response.data.message);
-                $('#category-name').val(''); // Clear the input field
-                $('#category-color').val('#000000'); // Reset the color picker
-                fetchCategories(); // Refresh the categories table
-            })
-            .catch(error => {
-                console.error(error);
-                alert('Failed to add category. Make sure the name is unique.');
-            });
-    });
-
-    // Initial fetch
-    fetchCategories();
-</script>
 @endsection
