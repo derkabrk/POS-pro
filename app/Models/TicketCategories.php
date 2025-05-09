@@ -17,4 +17,5 @@ class TicketCategories extends Model
     {
         return $this->hasMany(TicketSystem::class, 'category_id');
     }
+     protected $table = 'ticket_categories';
 }
