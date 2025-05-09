@@ -169,34 +169,64 @@ class OrderSourceController extends Controller
         return response()->json(['message' => 'Sale stored successfully', 'sale' => $sale], 200);
     }
 
-    protected function verifyWebhookSignature(Request $request, $orderSource)
-    {
-        // Define platform-specific headers
-        $platformHeaders = [
-            'Shopify' => 'X-Shopify-Hmac-Sha256',
-            'YouCan' => 'X-YouCan-Signature',
-            'WooCommerce' => 'X-WC-Webhook-Signature',
-        ];
+   protected function verifyWebhookSignature(Request $request, $orderSource)
+{
+    // Platform-specific header mapping
+    $platformHeaders = [
+        'Shopify' => 'X-Shopify-Hmac-Sha256',
+        'YouCan' => 'X-YouCan-Signature',
+        'WooCommerce' => 'X-WC-Webhook-Signature',
+    ];
 
-        // Get the header name for the platform
-        $headerName = $platformHeaders[$orderSource->name] ?? 'X-Signature';
+    // Header to use for verification
+    $headerName = $platformHeaders[$orderSource->name] ?? 'X-Signature';
 
-        // Retrieve the signature from the request header
-        $signature = $request->header($headerName);
-        if (!$signature) {
-            \Log::warning('Missing signature header', ['platform' => $orderSource->name]);
-            return false;
-        }
+    // Get raw request payload
+    $payload = $request->getContent();
 
-        // Get the raw payload
-        $payload = $request->getContent();
+    // Get the signature from headers
+    $signature = $request->header($headerName);
 
-        // Generate the expected signature using the API secret
-        $expectedSignature = hash_hmac('sha256', $payload, $orderSource->api_secret);
+    // Debug log for troubleshooting
+    \Log::debug('Webhook signature verification triggered', [
+        'platform' => $orderSource->name,
+        'header_name' => $headerName,
+        'received_signature' => $signature,
+        'api_secret' => $orderSource->api_secret,
+        'payload_length' => strlen($payload),
+    ]);
 
-        // Compare the signatures
-        return hash_equals($expectedSignature, $signature);
+    // Ensure required values are present
+    if (empty($signature) || empty($orderSource->api_secret)) {
+        \Log::warning('Missing signature or API secret', [
+            'signature' => $signature,
+            'api_secret' => $orderSource->api_secret,
+            'platform' => $orderSource->name,
+        ]);
+        return false;
     }
+
+    // Generate expected signature
+    $expectedSignature = hash_hmac('sha256', $payload, $orderSource->api_secret, $orderSource->name === 'Shopify');
+
+    // Log generated signature
+    \Log::debug('Calculated signature', [
+        'expected_signature' => $expectedSignature,
+    ]);
+
+    // Compare using constant-time function
+    $isValid = hash_equals($expectedSignature, $signature);
+
+    if (!$isValid) {
+        \Log::warning('Webhook signature mismatch', [
+            'expected' => $expectedSignature,
+            'actual' => $signature,
+        ]);
+    }
+
+    return $isValid;
+}
+
 
 protected function parseOrderData($platform, $data)
 {
