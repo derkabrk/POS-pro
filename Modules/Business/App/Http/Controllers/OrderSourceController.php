@@ -259,7 +259,7 @@ class OrderSourceController extends Controller
         }
     }
 
-  <?php
+
 protected function registerShopifyWebhook(OrderSource $orderSource)
 {
     $webhookUrl = $orderSource->webhook_url;
