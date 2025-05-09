@@ -41,27 +41,24 @@ class OrderSourceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:order_sources,name',
-            'api_key' => 'required|string|max:255',
-            'api_secret' => 'required|string|max:255',
-            'webhook_url' => 'nullable|url',
+            'name' => 'required|string',
+            'api_key' => 'required|string',
+            'api_secret' => 'required|string',
+            'platform' => 'required|string|in:Shopify,YouCan,WooCommerce',
+            'webhook_url' => 'required|url',
             'status' => 'required|boolean',
-            'settings' => 'nullable|json',
         ]);
 
         $orderSource = OrderSource::create([
             'name' => $request->name,
-            'api_key' => Hash::make($request->api_key), // Hash the API key
-            'api_secret' => Hash::make($request->api_secret), // Hash the API secret
+            'api_key' => $request->api_key,
+            'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => $request->settings,
+            'settings' => $request->settings ? json_decode($request->settings, true) : null,
         ]);
 
-        return response()->json([
-            'message' => __('Order source created successfully.'),
-            'data' => $orderSource,
-        ]);
+        return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully!');
     }
 
     /**

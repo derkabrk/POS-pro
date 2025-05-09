@@ -34,8 +34,17 @@
                                     <input type="text" name="api_secret" required class="form-control" placeholder="Enter API Secret">
                                 </div>
                                 <div class="col-lg-6 mb-2">
+                                    <label>Platform</label>
+                                    <select name="platform" id="platform" class="form-control" required>
+                                        <option value="" disabled selected>Select Platform</option>
+                                        <option value="Shopify">Shopify</option>
+                                        <option value="YouCan">YouCan</option>
+                                        <option value="WooCommerce">WooCommerce</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 mb-2">
                                     <label>Webhook URL</label>
-                                    <input type="url" name="webhook_url" class="form-control" placeholder="Enter Webhook URL">
+                                    <input type="text" name="webhook_url" id="webhook_url" class="form-control" readonly placeholder="Webhook URL will be auto-generated">
                                 </div>
                                 <div class="col-lg-6 mb-2">
                                     <label>Status</label>
@@ -63,4 +72,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('platform').addEventListener('change', function () {
+        const platform = this.value;
+        const webhookUrl = `https://shyftcom.com/${platform}`;
+        document.getElementById('webhook_url').value = webhookUrl;
+    });
+</script>
 @endsection
