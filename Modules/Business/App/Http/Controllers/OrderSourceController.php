@@ -269,7 +269,7 @@ class OrderSourceController extends Controller
         $webhookUrl = $orderSource->webhook_url;
 
         // Directly use the settings field as the store URL
-        $shopifyStoreUrl = $this->settings; // Directly use the string value
+        $shopifyStoreUrl = $this->settings;
 
         if (!$shopifyStoreUrl) {
             return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);

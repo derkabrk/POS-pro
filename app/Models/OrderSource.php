@@ -32,6 +32,7 @@ class OrderSource extends Model
      */
     protected $casts = [
         'status' => 'boolean',
+        'settings' => 'string', // Treat settings as a plain string
     ];
 
     /**
@@ -130,5 +131,13 @@ class OrderSource extends Model
         if ($response->failed()) {
             \Log::error('Failed to create WooCommerce webhook: ' . $response->body());
         }
+    }
+
+    /**
+     * Get the settings attribute.
+     */
+    public function getSettingsAttribute($value)
+    {
+        return $value; 
     }
 }
