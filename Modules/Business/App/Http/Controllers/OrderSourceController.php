@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OrderSourceController extends Controller
 {
@@ -17,7 +18,7 @@ class OrderSourceController extends Controller
     public function index()
     {
         // Fetch paginated order sources
-        $orderSources = OrderSource::latest()->paginate(10); // Use paginate instead of get()
+        $orderSources = OrderSource::latest()->paginate(10);
 
         // Manipulate data (e.g., concatenate name and status)
         $orderSources->getCollection()->transform(function ($orderSource) {
@@ -28,7 +29,6 @@ class OrderSourceController extends Controller
         // Pass data to the view
         return view('business::orderSource.index', compact('orderSources'));
     }
-
 
     public function create()
     {
@@ -44,7 +44,7 @@ class OrderSourceController extends Controller
             'account_name' => 'required|string',
             'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
             'api_key' => 'required|string',
-            'api_secret' => 'required|string',
+            'api_secret' => 'nullable|string',
             'webhook_url' => 'required|url',
             'status' => 'required|boolean',
             'shopify_store_url' => 'required_if:name,Shopify|url',
@@ -55,11 +55,11 @@ class OrderSourceController extends Controller
         // Extract the specific store URL based on the platform
         $storeUrl = null;
         if ($request->name === 'Shopify') {
-            $storeUrl = $request->input('settings.shopify_store_url');
+            $storeUrl = $request->shopify_store_url;
         } elseif ($request->name === 'WooCommerce') {
-            $storeUrl = $request->input('settings.woocommerce_store_url');
+            $storeUrl = $request->woocommerce_store_url;
         } elseif ($request->name === 'YouCan') {
-            $storeUrl = $request->input('settings.youcan_store_url');
+            $storeUrl = $request->youcan_store_url;
         }
 
         $orderSource = OrderSource::create([
@@ -75,9 +75,6 @@ class OrderSourceController extends Controller
         return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully!');
     }
 
-    /**
-     * Display the specified order source.
-     */
     public function show(OrderSource $orderSource)
     {
         return response()->json([
@@ -86,41 +83,37 @@ class OrderSourceController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified order source.
-     */
     public function edit(OrderSource $orderSource)
     {
         return view('business::orderSource.edit', compact('orderSource'));
     }
 
-    /**
-     * Update the specified order source in storage.
-     */
     public function update(Request $request, OrderSource $orderSource)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:order_sources,name,' . $orderSource->id,
-            'api_key' => 'required|string|max:255',
-            'api_secret' => 'required|string|max:255',
-            'webhook_url' => 'nullable|url',
+            'account_name' => 'required|string',
+            'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
+            'api_key' => 'required|string',
+            'api_secret' => 'nullable|string',
+            'webhook_url' => 'required|url',
             'status' => 'required|boolean',
-            'settings.shopify_store_url' => 'required_if:name,Shopify|url',
-            'settings.woocommerce_store_url' => 'required_if:name,WooCommerce|url',
-            'settings.youcan_store_url' => 'required_if:name,YouCan|url',
+            'shopify_store_url' => 'required_if:name,Shopify|url',
+            'woocommerce_store_url' => 'required_if:name,WooCommerce|url',
+            'youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
 
         // Extract the specific store URL based on the platform
         $storeUrl = null;
         if ($request->name === 'Shopify') {
-            $storeUrl = $request->input('settings.shopify_store_url');
+            $storeUrl = $request->shopify_store_url;
         } elseif ($request->name === 'WooCommerce') {
-            $storeUrl = $request->input('settings.woocommerce_store_url');
+            $storeUrl = $request->woocommerce_store_url;
         } elseif ($request->name === 'YouCan') {
-            $storeUrl = $request->input('settings.youcan_store_url');
+            $storeUrl = $request->youcan_store_url;
         }
 
         $orderSource->update([
+            'account_name' => $request->account_name,
             'name' => $request->name,
             'api_key' => $request->api_key,
             'api_secret' => $request->api_secret,
@@ -135,9 +128,6 @@ class OrderSourceController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified order source from storage.
-     */
     public function destroy(OrderSource $orderSource)
     {
         $orderSource->delete();
@@ -149,139 +139,98 @@ class OrderSourceController extends Controller
 
     public function handleWebhook(Request $request, $platform)
     {
-        // Validate the platform
         $orderSource = OrderSource::where('name', $platform)->first();
         if (!$orderSource) {
             return response()->json(['message' => 'Invalid platform'], 400);
         }
 
-        // Verify the webhook signature (if applicable)
         if (!$this->verifyWebhookSignature($request, $orderSource)) {
             return response()->json(['message' => 'Invalid webhook signature'], 403);
         }
 
-        // Parse the incoming order data
-       // $orderData = $this->parseOrderData($platform, $request->all());
-
-        // Store the sale in the database
-        //$sale = Sale::create($orderData);
+        $orderData = $this->parseOrderData($platform, $request->all());
+        $sale = Sale::create($orderData);
 
         return response()->json(['message' => 'Sale stored successfully', 'sale' => $sale], 200);
     }
 
-   protected function verifyWebhookSignature(Request $request, $orderSource)
-{
-    // Platform-specific header mapping
-    $platformHeaders = [
-        'Shopify' => 'X-Shopify-Hmac-Sha256',
-        'YouCan' => 'X-YouCan-Signature',
-        'WooCommerce' => 'X-WC-Webhook-Signature',
-    ];
+    protected function verifyWebhookSignature(Request $request, $orderSource)
+    {
+        $platformHeaders = [
+            'Shopify' => 'X-Shopify-Hmac-Sha256',
+            'YouCan' => 'X-YouCan-Signature',
+            'WooCommerce' => 'X-WC-Webhook-Signature',
+        ];
 
-    // Header to use for verification
-    $headerName = $platformHeaders[$orderSource->name] ?? 'X-Signature';
+        $headerName = $platformHeaders[$orderSource->name] ?? 'X-Signature';
+        $payload = $request->getContent();
+        $signature = $request->header($headerName);
 
-    // Get raw request payload
-    $payload = $request->getContent();
+        if (empty($signature) || empty($orderSource->api_secret)) {
+            Log::warning('Missing signature or API secret', [
+                'signature' => $signature,
+                'api_secret' => $orderSource->api_secret,
+                'platform' => $orderSource->name,
+            ]);
+            return false;
+        }
 
-    // Get the signature from headers
-    $signature = $request->header($headerName);
-
-    // Debug log for troubleshooting
-    \Log::debug('Webhook signature verification triggered', [
-        'platform' => $orderSource->name,
-        'header_name' => $headerName,
-        'received_signature' => $signature,
-        'api_secret' => $orderSource->api_secret,
-        'payload_length' => strlen($payload),
-    ]);
-
-    // Ensure required values are present
-    if (empty($signature) || empty($orderSource->api_secret)) {
-        \Log::warning('Missing signature or API secret', [
-            'signature' => $signature,
-            'api_secret' => $orderSource->api_secret,
-            'platform' => $orderSource->name,
-        ]);
-        return false;
+        $expectedSignature = hash_hmac('sha256', $payload, $orderSource->api_secret, $orderSource->name === 'Shopify');
+        return hash_equals($expectedSignature, $signature);
     }
 
-    // Generate expected signature
-    $expectedSignature = hash_hmac('sha256', $payload, $orderSource->api_secret, $orderSource->name === 'Shopify');
+    protected function parseOrderData($platform, $data)
+    {
+        switch ($platform) {
+            case 'Shopify':
+                $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
+                return [
+                    'business_id' => auth()->user()->business_id,
+                    'party_id' => null,
+                    'invoiceNumber' => $data['id'] ?? null,
+                    'customer_name' => ($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''),
+                    'totalAmount' => $data['total_price'] ?? 0,
+                    'dueAmount' => 0,
+                    'paidAmount' => $data['total_price'] ?? 0,
+                    'sale_status' => $data['financial_status'] ?? 'unknown',
+                    'saleDate' => now(),
+                    'meta' => json_encode($data),
+                ];
 
-    // Log generated signature
-    \Log::debug('Calculated signature', [
-        'expected_signature' => $expectedSignature,
-    ]);
+            case 'YouCan':
+                $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
+                return [
+                    'business_id' => auth()->user()->business_id,
+                    'party_id' => null,
+                    'invoiceNumber' => $data['order_id'] ?? null,
+                    'customer_name' => $customer['name'] ?? '',
+                    'totalAmount' => $data['total'] ?? 0,
+                    'dueAmount' => 0,
+                    'paidAmount' => $data['total'] ?? 0,
+                    'sale_status' => $data['status'] ?? 'unknown',
+                    'saleDate' => now(),
+                    'meta' => json_encode($data),
+                ];
 
-    // Compare using constant-time function
-    $isValid = hash_equals($expectedSignature, $signature);
+            case 'WooCommerce':
+                $billing = is_array($data['billing'] ?? null) ? $data['billing'] : [];
+                return [
+                    'business_id' => auth()->user()->business_id,
+                    'party_id' => null,
+                    'invoiceNumber' => $data['id'] ?? null,
+                    'customer_name' => ($billing['first_name'] ?? '') . ' ' . ($billing['last_name'] ?? ''),
+                    'totalAmount' => $data['total'] ?? 0,
+                    'dueAmount' => 0,
+                    'paidAmount' => $data['total'] ?? 0,
+                    'sale_status' => $data['status'] ?? 'unknown',
+                    'saleDate' => now(),
+                    'meta' => json_encode($data),
+                ];
 
-    if (!$isValid) {
-        \Log::warning('Webhook signature mismatch', [
-            'expected' => $expectedSignature,
-            'actual' => $signature,
-        ]);
+            default:
+                throw new \Exception('Unsupported platform');
+        }
     }
-
-    return $isValid;
-}
-
-
-protected function parseOrderData($platform, $data)
-{
-    switch ($platform) {
-        case 'Shopify':
-            $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
-            return [
-                'business_id' => auth()->user()->business_id,
-                'party_id' => null,
-                'invoiceNumber' => $data['id'] ?? null,
-                'customer_name' => ($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''),
-                'totalAmount' => $data['total_price'] ?? 0,
-                'dueAmount' => 0,
-                'paidAmount' => $data['total_price'] ?? 0,
-                'sale_status' => $data['financial_status'] ?? 'unknown',
-                'saleDate' => now(),
-                'meta' => json_encode($data),
-            ];
-
-        case 'YouCan':
-            $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
-            return [
-                'business_id' => auth()->user()->business_id,
-                'party_id' => null,
-                'invoiceNumber' => $data['order_id'] ?? null,
-                'customer_name' => $customer['name'] ?? '',
-                'totalAmount' => $data['total'] ?? 0,
-                'dueAmount' => 0,
-                'paidAmount' => $data['total'] ?? 0,
-                'sale_status' => $data['status'] ?? 'unknown',
-                'saleDate' => now(),
-                'meta' => json_encode($data),
-            ];
-
-        case 'WooCommerce':
-            $billing = is_array($data['billing'] ?? null) ? $data['billing'] : [];
-            return [
-                'business_id' => auth()->user()->business_id,
-                'party_id' => null,
-                'invoiceNumber' => $data['id'] ?? null,
-                'customer_name' => ($billing['first_name'] ?? '') . ' ' . ($billing['last_name'] ?? ''),
-                'totalAmount' => $data['total'] ?? 0,
-                'dueAmount' => 0,
-                'paidAmount' => $data['total'] ?? 0,
-                'sale_status' => $data['status'] ?? 'unknown',
-                'saleDate' => now(),
-                'meta' => json_encode($data),
-            ];
-
-        default:
-            throw new \Exception('Unsupported platform');
-    }
-}
-
-
 
     public function registerWebhook(OrderSource $orderSource)
     {
@@ -297,40 +246,35 @@ protected function parseOrderData($platform, $data)
         }
     }
 
+    protected function registerShopifyWebhook(OrderSource $orderSource)
+    {
+        $webhookUrl = $orderSource->webhook_url;
+        $shopifyStoreUrl = $orderSource->settings;
 
-protected function registerShopifyWebhook(OrderSource $orderSource)
-{
-    $webhookUrl = $orderSource->webhook_url;
+        if (!$shopifyStoreUrl) {
+            return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
+        }
 
-    // Directly use the settings field as the store URL
-    $shopifyStoreUrl = $orderSource->settings;
+        $response = Http::withHeaders([
+            'X-Shopify-Access-Token' => $orderSource->api_key,
+        ])->post("https://{$shopifyStoreUrl}/admin/api/2023-01/webhooks.json", [
+            'webhook' => [
+                'topic' => 'orders/create',
+                'address' => $webhookUrl,
+                'format' => 'json',
+            ],
+        ]);
 
-    if (!$shopifyStoreUrl) {
-        return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
+        if ($response->successful()) {
+            return response()->json(['message' => 'Shopify webhook registered successfully']);
+        }
+
+        return response()->json(['message' => 'Failed to register Shopify webhook', 'error' => $response->body()], 400);
     }
-
-    $response = Http::withHeaders([
-        'X-Shopify-Access-Token' => $orderSource->api_key,
-    ])->post("https://{$shopifyStoreUrl}/admin/api/2023-01/webhooks.json", [
-        'webhook' => [
-            'topic' => 'orders/create',
-            'address' => $webhookUrl,
-            'format' => 'json',
-        ],
-    ]);
-
-    if ($response->successful()) {
-        return response()->json(['message' => 'Shopify webhook registered successfully']);
-    }
-
-    return response()->json(['message' => 'Failed to register Shopify webhook', 'error' => $response->body()], 400);
-}
 
     protected function registerWooCommerceWebhook(OrderSource $orderSource)
     {
         $webhookUrl = $orderSource->webhook_url;
-
-        // Directly use the settings field as the store URL
         $woocommerceStoreUrl = $orderSource->settings;
 
         if (!$woocommerceStoreUrl) {
@@ -356,10 +300,6 @@ protected function registerShopifyWebhook(OrderSource $orderSource)
     {
         $webhookUrl = $orderSource->webhook_url;
 
-        // Decode the settings JSON
-        $settings = json_decode($orderSource->settings, true);
-
-        // YouCan does not require additional settings in this example
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$orderSource->api_key}",
         ])->post("https://api.youcan.shop/v1/webhooks", [
