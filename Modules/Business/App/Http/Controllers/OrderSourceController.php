@@ -291,11 +291,8 @@ class OrderSourceController extends Controller
     {
         $webhookUrl = $orderSource->webhook_url;
 
-        // Decode the settings JSON
-        $settings = json_decode($orderSource->settings, true);
-
-        // Safely access the woocommerce_store_url key
-        $woocommerceStoreUrl = $settings['woocommerce_store_url'] ?? null;
+        // Directly use the settings field as the store URL
+        $woocommerceStoreUrl = $orderSource->settings;
 
         if (!$woocommerceStoreUrl) {
             return response()->json(['message' => 'WooCommerce store URL is missing in settings'], 400);
