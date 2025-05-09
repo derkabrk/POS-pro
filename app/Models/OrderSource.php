@@ -22,7 +22,7 @@ class OrderSource extends Model
         'api_secret', // API secret for the platform
         'webhook_url', // Webhook URL for receiving updates
         'status', // Active or inactive
-        'settings', // Additional settings in JSON format
+        'settings', // This will now store the store URL as a string
     ];
 
     /**
@@ -31,7 +31,6 @@ class OrderSource extends Model
      * @var array
      */
     protected $casts = [
-        'settings' => 'json',
         'status' => 'boolean',
     ];
 

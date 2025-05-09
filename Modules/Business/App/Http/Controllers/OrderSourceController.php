@@ -52,7 +52,15 @@ class OrderSourceController extends Controller
             'settings.youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
 
-        $settings = $request->settings ? json_encode($request->settings, JSON_UNESCAPED_SLASHES) : null;
+        // Extract the specific store URL based on the platform
+        $storeUrl = null;
+        if ($request->name === 'Shopify') {
+            $storeUrl = $request->input('settings.shopify_store_url');
+        } elseif ($request->name === 'WooCommerce') {
+            $storeUrl = $request->input('settings.woocommerce_store_url');
+        } elseif ($request->name === 'YouCan') {
+            $storeUrl = $request->input('settings.youcan_store_url');
+        }
 
         $orderSource = OrderSource::create([
             'account_name' => $request->account_name,
@@ -61,7 +69,7 @@ class OrderSourceController extends Controller
             'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => $settings,
+            'settings' => $storeUrl, // Save the store URL as a plain string
         ]);
 
         return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully!');
@@ -97,16 +105,28 @@ class OrderSourceController extends Controller
             'api_secret' => 'required|string|max:255',
             'webhook_url' => 'nullable|url',
             'status' => 'required|boolean',
-            'settings' => 'nullable|json',
+            'settings.shopify_store_url' => 'required_if:name,Shopify|url',
+            'settings.woocommerce_store_url' => 'required_if:name,WooCommerce|url',
+            'settings.youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
+
+        // Extract the specific store URL based on the platform
+        $storeUrl = null;
+        if ($request->name === 'Shopify') {
+            $storeUrl = $request->input('settings.shopify_store_url');
+        } elseif ($request->name === 'WooCommerce') {
+            $storeUrl = $request->input('settings.woocommerce_store_url');
+        } elseif ($request->name === 'YouCan') {
+            $storeUrl = $request->input('settings.youcan_store_url');
+        }
 
         $orderSource->update([
             'name' => $request->name,
-            'api_key' => Hash::make($request->api_key), 
-            'api_secret' => Hash::make($request->api_secret),
+            'api_key' => $request->api_key,
+            'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => $request->settings,
+            'settings' => $storeUrl, // Save the store URL as a plain string
         ]);
 
         return response()->json([
@@ -243,14 +263,8 @@ class OrderSourceController extends Controller
     {
         $webhookUrl = $orderSource->webhook_url;
 
-        // Decode the settings JSON
-        $settings = json_decode($orderSource->settings, true);
-
-        // Safely access the shopify_store_url key
-        $shopifyStoreUrl = $settings['shopify_store_url'] ?? null;
-
-        // Remove unnecessary escaping from the URL
-        $shopifyStoreUrl = stripslashes($shopifyStoreUrl);
+        // Directly use the settings field as the store URL
+        $shopifyStoreUrl = $orderSource->settings;
 
         if (!$shopifyStoreUrl) {
             return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
