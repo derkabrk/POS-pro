@@ -19,18 +19,18 @@ class SupplierController extends Controller
             $products = Product::where('supplier_id', $supplier->id)->pluck('id'); // Get product IDs for the supplier
 
             // Use the Sale model to calculate amounts
-            $productsSold = Sale::whereIn('product_id', $products)->sum('quantity'); // Total products sold
-            $productsDelivered = Sale::whereIn('product_id', $products)->where('sale_status', 9)->sum('quantity'); // Delivered products
-            $productsPaid = Sale::whereIn('product_id', $products)->where('sale_status', 11)->sum('quantity'); // Paid products
-            $productsCheckout = Sale::whereIn('product_id', $products)->where('sale_status', 12)->sum('quantity'); // Products in checkout
-            $productsReturned = Sale::whereIn('product_id', $products)->where('sale_status', 10)->sum('quantity'); // Returned products
+            $productsSold = Sale::whereIn('id', $products)->sum('quantity'); // Total products sold
+            $productsDelivered = Sale::whereIn('id', $products)->where('sale_status', 9)->sum('quantity'); // Delivered products
+            $productsPaid = Sale::whereIn('id', $products)->where('sale_status', 11)->sum('quantity'); // Paid products
+            $productsCheckout = Sale::whereIn('id', $products)->where('sale_status', 12)->sum('quantity'); // Products in checkout
+            $productsReturned = Sale::whereIn('id', $products)->where('sale_status', 10)->sum('quantity'); // Returned products
 
             $totalProducts = $products->count();
             $totalStock = Product::whereIn('id', $products)->sum('productStock'); // Total stock for the supplier
-            $pending = Sale::whereIn('product_id', $products)->where('sale_status', 'pending')->sum('quantity'); // Pending products
+            $pending = Sale::whereIn('id', $products)->where('sale_status', 'pending')->sum('quantity'); // Pending products
             $available = $totalStock - $pending; // Available stock
-            $paid = Sale::whereIn('product_id', $products)->sum('paid_amount'); // Total paid amount
-            $cashout = Sale::whereIn('product_id', $products)->sum('cashout_amount'); // Total cashout amount
+            $paid = Sale::whereIn('id', $products)->sum('paid_amount'); // Total paid amount
+            $cashout = Sale::whereIn('id', $products)->sum('cashout_amount'); // Total cashout amount
 
             return [
                 'supplier' => $supplier,
