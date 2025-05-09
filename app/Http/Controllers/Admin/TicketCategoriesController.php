@@ -30,7 +30,7 @@ class TicketCategoriesController extends Controller
             'name' => $request->name,
             'color' => $request->color,
         ]);
+        return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket category added successfully!');
 
-        return response()->json(['message' => 'Ticket category added successfully!', 'category' => $category]);
     }
 }
