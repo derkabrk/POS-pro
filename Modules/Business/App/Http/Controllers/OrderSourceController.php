@@ -243,9 +243,19 @@ class OrderSourceController extends Controller
     {
         $webhookUrl = $orderSource->webhook_url;
 
+        // Decode the settings JSON
+        $settings = json_decode($orderSource->settings, true);
+
+        // Safely access the shopify_store_url key
+        $shopifyStoreUrl = $settings['shopify_store_url'] ?? null;
+
+        if (!$shopifyStoreUrl) {
+            return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
+        }
+
         $response = Http::withHeaders([
             'X-Shopify-Access-Token' => $orderSource->api_key,
-        ])->post("https://{$orderSource->settings['shopify_store_url']}/admin/api/2023-01/webhooks.json", [
+        ])->post("https://{$shopifyStoreUrl}/admin/api/2023-01/webhooks.json", [
             'webhook' => [
                 'topic' => 'orders/create',
                 'address' => $webhookUrl,
@@ -264,8 +274,18 @@ class OrderSourceController extends Controller
     {
         $webhookUrl = $orderSource->webhook_url;
 
+        // Decode the settings JSON
+        $settings = json_decode($orderSource->settings, true);
+
+        // Safely access the woocommerce_store_url key
+        $woocommerceStoreUrl = $settings['woocommerce_store_url'] ?? null;
+
+        if (!$woocommerceStoreUrl) {
+            return response()->json(['message' => 'WooCommerce store URL is missing in settings'], 400);
+        }
+
         $response = Http::withBasicAuth($orderSource->api_key, $orderSource->api_secret)
-            ->post("{$orderSource->settings['woocommerce_store_url']}/wp-json/wc/v3/webhooks", [
+            ->post("{$woocommerceStoreUrl}/wp-json/wc/v3/webhooks", [
                 'name' => 'Order Created Webhook',
                 'topic' => 'order.created',
                 'delivery_url' => $webhookUrl,
@@ -283,6 +303,10 @@ class OrderSourceController extends Controller
     {
         $webhookUrl = $orderSource->webhook_url;
 
+        // Decode the settings JSON
+        $settings = json_decode($orderSource->settings, true);
+
+        // YouCan does not require additional settings in this example
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$orderSource->api_key}",
         ])->post("https://api.youcan.shop/v1/webhooks", [
