@@ -163,11 +163,11 @@ class OrderSourceController extends Controller
             case 'Shopify':
                 return [
                     'business_id' => auth()->user()->business_id,
-                    'party_id' => null, // Update if customer mapping exists
-                    'invoiceNumber' => $data['id'], // Unique sale ID from Shopify
+                    'party_id' => null,
+                    'invoiceNumber' => $data['id'], 
                     'customer_name' => $data['customer']['first_name'] . ' ' . $data['customer']['last_name'],
                     'totalAmount' => $data['total_price'],
-                    'dueAmount' => 0, // Assuming full payment for now
+                    'dueAmount' => 0, 
                     'paidAmount' => $data['total_price'],
                     'sale_status' => $data['financial_status'],
                     'saleDate' => now(),

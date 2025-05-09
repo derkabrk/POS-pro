@@ -1094,7 +1094,7 @@ class AcnooSaleController extends Controller
                     "Commune"       => "Maraval",
                     "Total"         => (float) $sale->totalAmount,
                     "Note"          => "",
-                    "TProduit" => $product['productName'] . '-Q[' . $product['quantity'] . ']',
+                    "TProduit" => $product['productName'] . '(' . $product['quantity'] . ')',
                     "id_Externe"    => $sale->tracking_id . '-' . $product['id'],
                     "Source"        => ""
                 ];
