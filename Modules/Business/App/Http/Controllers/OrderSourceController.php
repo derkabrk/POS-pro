@@ -52,7 +52,7 @@ class OrderSourceController extends Controller
             'settings.youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
 
-        $settings = $request->settings ? json_encode($request->settings) : null;
+        $settings = $request->settings ? json_encode($request->settings, JSON_UNESCAPED_SLASHES) : null;
 
         $orderSource = OrderSource::create([
             'account_name' => $request->account_name,
@@ -248,6 +248,9 @@ class OrderSourceController extends Controller
 
         // Safely access the shopify_store_url key
         $shopifyStoreUrl = $settings['shopify_store_url'] ?? null;
+
+        // Remove unnecessary escaping from the URL
+        $shopifyStoreUrl = stripslashes($shopifyStoreUrl);
 
         if (!$shopifyStoreUrl) {
             return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
