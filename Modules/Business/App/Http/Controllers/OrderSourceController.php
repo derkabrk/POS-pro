@@ -148,12 +148,30 @@ class OrderSourceController extends Controller
 
     protected function verifyWebhookSignature(Request $request, $orderSource)
     {
-        $signature = $request->header('X-Signature'); // Replace with the actual header used by the platform
+        // Define platform-specific headers
+        $platformHeaders = [
+            'Shopify' => 'X-Shopify-Hmac-Sha256',
+            'YouCan' => 'X-YouCan-Signature',
+            'WooCommerce' => 'X-WC-Webhook-Signature',
+        ];
+
+        // Get the header name for the platform
+        $headerName = $platformHeaders[$orderSource->name] ?? 'X-Signature';
+
+        // Retrieve the signature from the request header
+        $signature = $request->header($headerName);
+        if (!$signature) {
+            \Log::warning('Missing signature header', ['platform' => $orderSource->name]);
+            return false;
+        }
+
+        // Get the raw payload
         $payload = $request->getContent();
 
         // Generate the expected signature using the API secret
         $expectedSignature = hash_hmac('sha256', $payload, $orderSource->api_secret);
 
+        // Compare the signatures
         return hash_equals($expectedSignature, $signature);
     }
 
@@ -202,5 +220,77 @@ class OrderSourceController extends Controller
             default:
                 throw new \Exception('Unsupported platform');
         }
+    }
+
+    public function registerWebhook(OrderSource $orderSource)
+    {
+        switch ($orderSource->name) {
+            case 'Shopify':
+                return $this->registerShopifyWebhook($orderSource);
+            case 'WooCommerce':
+                return $this->registerWooCommerceWebhook($orderSource);
+            case 'YouCan':
+                return $this->registerYouCanWebhook($orderSource);
+            default:
+                return response()->json(['message' => 'Unsupported platform'], 400);
+        }
+    }
+
+    protected function registerShopifyWebhook(OrderSource $orderSource)
+    {
+        $webhookUrl = $orderSource->webhook_url;
+
+        $response = Http::withHeaders([
+            'X-Shopify-Access-Token' => $orderSource->api_key,
+        ])->post("https://{$orderSource->settings['shopify_store_url']}/admin/api/2023-01/webhooks.json", [
+            'webhook' => [
+                'topic' => 'orders/create',
+                'address' => $webhookUrl,
+                'format' => 'json',
+            ],
+        ]);
+
+        if ($response->successful()) {
+            return response()->json(['message' => 'Shopify webhook registered successfully']);
+        }
+
+        return response()->json(['message' => 'Failed to register Shopify webhook', 'error' => $response->body()], 400);
+    }
+
+    protected function registerWooCommerceWebhook(OrderSource $orderSource)
+    {
+        $webhookUrl = $orderSource->webhook_url;
+
+        $response = Http::withBasicAuth($orderSource->api_key, $orderSource->api_secret)
+            ->post("{$orderSource->settings['woocommerce_store_url']}/wp-json/wc/v3/webhooks", [
+                'name' => 'Order Created Webhook',
+                'topic' => 'order.created',
+                'delivery_url' => $webhookUrl,
+                'status' => 'active',
+            ]);
+
+        if ($response->successful()) {
+            return response()->json(['message' => 'WooCommerce webhook registered successfully']);
+        }
+
+        return response()->json(['message' => 'Failed to register WooCommerce webhook', 'error' => $response->body()], 400);
+    }
+
+    protected function registerYouCanWebhook(OrderSource $orderSource)
+    {
+        $webhookUrl = $orderSource->webhook_url;
+
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer {$orderSource->api_key}",
+        ])->post("https://api.youcan.shop/v1/webhooks", [
+            'url' => $webhookUrl,
+            'event' => 'order.created',
+        ]);
+
+        if ($response->successful()) {
+            return response()->json(['message' => 'YouCan webhook registered successfully']);
+        }
+
+        return response()->json(['message' => 'Failed to register YouCan webhook', 'error' => $response->body()], 400);
     }
 }
