@@ -79,10 +79,7 @@
                                         <option value="0">Inactive</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-12 mb-2">
-                                    <label>Settings (JSON)</label>
-                                    <textarea name="settings" class="form-control" placeholder="Enter additional settings in JSON format"></textarea>
-                                </div>
+                             
 
                                 <div class="col-lg-12">
                                     <div class="button-group text-center mt-5">
@@ -108,15 +105,30 @@
         // Hide all platform-specific settings
         document.querySelectorAll('.platform-settings').forEach(function (el) {
             el.classList.add('d-none');
+            el.querySelectorAll('input').forEach(function (input) {
+                input.disabled = true; // Disable hidden inputs
+            });
         });
 
         // Show the relevant settings based on the selected platform
         if (platform === 'Shopify') {
-            document.getElementById('shopify-settings').classList.remove('d-none');
+            const shopifySettings = document.getElementById('shopify-settings');
+            shopifySettings.classList.remove('d-none');
+            shopifySettings.querySelectorAll('input').forEach(function (input) {
+                input.disabled = false; // Enable visible inputs
+            });
         } else if (platform === 'WooCommerce') {
-            document.getElementById('woocommerce-settings').classList.remove('d-none');
+            const woocommerceSettings = document.getElementById('woocommerce-settings');
+            woocommerceSettings.classList.remove('d-none');
+            woocommerceSettings.querySelectorAll('input').forEach(function (input) {
+                input.disabled = false; // Enable visible inputs
+            });
         } else if (platform === 'YouCan') {
-            document.getElementById('youcan-settings').classList.remove('d-none');
+            const youcanSettings = document.getElementById('youcan-settings');
+            youcanSettings.classList.remove('d-none');
+            youcanSettings.querySelectorAll('input').forEach(function (input) {
+                input.disabled = false; // Enable visible inputs
+            });
         }
     });
 </script>
