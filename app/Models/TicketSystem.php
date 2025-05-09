@@ -11,11 +11,11 @@ class TicketSystem extends Model
     protected $fillable = [
         'title',
         'description',
-        'status', // e.g., Open, Closed, Pending
-        'priority', // e.g., Low, Medium, High
-        'assigned_to', // User ID of the assigned person
-        'created_by', // User ID of the creator
-        'category_id', // Foreign key for TicketCategories
+        'status_id', // Foreign key for TicketStatus
+        'priority',
+        'assigned_to',
+        'created_by',
+        'category_id',
     ];
 
     /**
@@ -24,5 +24,13 @@ class TicketSystem extends Model
     public function category()
     {
         return $this->belongsTo(TicketCategories::class, 'category_id');
+    }
+
+    /**
+     * Define the relationship with the TicketStatus model.
+     */
+    public function status()
+    {
+        return $this->belongsTo(TicketStatus::class, 'status_id');
     }
 }
