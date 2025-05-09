@@ -22,7 +22,7 @@ class OrderSource extends Model
         'api_secret', // API secret for the platform
         'webhook_url', // Webhook URL for receiving updates
         'status', // Active or inactive
-        'settings', // This will now store the store URL as a string
+        'settings', // Store URL as a plain string
     ];
 
     /**
@@ -135,9 +135,10 @@ class OrderSource extends Model
 
     /**
      * Get the settings attribute.
+     * Ensure it is returned as a plain string.
      */
     public function getSettingsAttribute($value)
     {
-        return $value; 
+        return $value; // Return the plain string value
     }
 }
