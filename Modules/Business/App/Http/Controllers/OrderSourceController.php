@@ -198,16 +198,16 @@ class OrderSourceController extends Controller
         return hash_equals($expectedSignature, $signature);
     }
 
- protected function parseOrderData($platform, $data)
+protected function parseOrderData($platform, $data)
 {
     switch ($platform) {
         case 'Shopify':
+            $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
             return [
                 'business_id' => auth()->user()->business_id,
                 'party_id' => null,
                 'invoiceNumber' => $data['id'] ?? null,
-                'customer_name' => 
-                    ($data['customer']['first_name'] ?? '') . ' ' . ($data['customer']['last_name'] ?? ''),
+                'customer_name' => ($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''),
                 'totalAmount' => $data['total_price'] ?? 0,
                 'dueAmount' => 0,
                 'paidAmount' => $data['total_price'] ?? 0,
@@ -217,11 +217,12 @@ class OrderSourceController extends Controller
             ];
 
         case 'YouCan':
+            $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
             return [
                 'business_id' => auth()->user()->business_id,
                 'party_id' => null,
                 'invoiceNumber' => $data['order_id'] ?? null,
-                'customer_name' => $data['customer']['name'] ?? '',
+                'customer_name' => $customer['name'] ?? '',
                 'totalAmount' => $data['total'] ?? 0,
                 'dueAmount' => 0,
                 'paidAmount' => $data['total'] ?? 0,
@@ -231,12 +232,12 @@ class OrderSourceController extends Controller
             ];
 
         case 'WooCommerce':
+            $billing = is_array($data['billing'] ?? null) ? $data['billing'] : [];
             return [
                 'business_id' => auth()->user()->business_id,
                 'party_id' => null,
                 'invoiceNumber' => $data['id'] ?? null,
-                'customer_name' =>
-                    ($data['billing']['first_name'] ?? '') . ' ' . ($data['billing']['last_name'] ?? ''),
+                'customer_name' => ($billing['first_name'] ?? '') . ' ' . ($billing['last_name'] ?? ''),
                 'totalAmount' => $data['total'] ?? 0,
                 'dueAmount' => 0,
                 'paidAmount' => $data['total'] ?? 0,
@@ -249,6 +250,7 @@ class OrderSourceController extends Controller
             throw new \Exception('Unsupported platform');
     }
 }
+
 
 
     public function registerWebhook(OrderSource $orderSource)
