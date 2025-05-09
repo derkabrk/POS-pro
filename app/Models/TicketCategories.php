@@ -9,7 +9,7 @@ class TicketCategories extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'color'];
-
+    protected $table = 'ticket_categories';
     /**
      * Define the relationship with the TicketSystem model.
      */
@@ -17,5 +17,5 @@ class TicketCategories extends Model
     {
         return $this->hasMany(TicketSystem::class, 'category_id');
     }
-     protected $table = 'ticket_categories';
+     
 }
