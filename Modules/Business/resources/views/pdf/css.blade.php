@@ -51,7 +51,7 @@
 
 
     .in-table-header .head-red {
-        background-color: #c52127 !important;
+        background-color: #00abb3 !important;
         color: white;
         padding: 12px 14px;
         font-weight: 700;
@@ -78,7 +78,7 @@
     }
 
     .in-table-body-container tr.in-table-body:nth-child(even) {
-        background-color: #C521271A;
+        background-color: #00abb31A;
     }
 
     .in-table-body td:first-child {
@@ -243,7 +243,7 @@
 
 
     .in-table-row-bottom .total-amound {
-        background-color: #c52127;
+        background-color: #00abb3;
         color: white;
         padding: 8px 6px;
     }

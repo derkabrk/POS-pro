@@ -194,7 +194,7 @@
         -moz-appearance: none;
         width: 18px;
         height: 18px;
-        border: 2px solid #c52127;
+        border: 2px solid #00abb3;
         border-radius: 4px;
         background-color: #e4e5e7;
         cursor: pointer;
@@ -203,8 +203,8 @@
 
     /* Checkbox when checked */
     input[type="checkbox"]:checked {
-        background-color: #c52127;
-        border: 2px solid #c52127;
+        background-color: #00abb3;
+        border: 2px solid #00abb3;
     }
 
     /* Checkmark */
