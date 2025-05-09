@@ -128,7 +128,7 @@
                 </div>
 
                 <!-- Form to Add New Category -->
-                <form id="add-category-form" class="row g-3" method="POST" action="{{ route('admin.ticket_categories.store') }}">
+                <form id="add-category-form" class="row g-3" method="POST" action="{{ route('admin.ticketCategories.store') }}">
                     @csrf
                     <div class="col-md-6">
                         <label for="category-name" class="form-label">Category Name</label>
