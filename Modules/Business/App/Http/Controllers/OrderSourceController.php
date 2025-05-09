@@ -198,52 +198,58 @@ class OrderSourceController extends Controller
         return hash_equals($expectedSignature, $signature);
     }
 
-    protected function parseOrderData($platform, $data)
-    {
-        switch ($platform) {
-            case 'Shopify':
-                return [
-                    'business_id' => auth()->user()->business_id,
-                    'party_id' => null,
-                    'invoiceNumber' => $data['id'], 
-                    'customer_name' => $data['customer']['first_name'] . ' ' . $data['customer']['last_name'],
-                    'totalAmount' => $data['total_price'],
-                    'dueAmount' => 0, 
-                    'paidAmount' => $data['total_price'],
-                    'sale_status' => $data['financial_status'],
-                    'saleDate' => now(),
-                    'meta' => json_encode($data), // Store raw sale data
-                ];
-            case 'YouCan':
-                return [
-                    'business_id' => auth()->user()->business_id,
-                    'party_id' => null, // Update if customer mapping exists
-                    'invoiceNumber' => $data['order_id'], // Unique sale ID from YouCan
-                    'customer_name' => $data['customer']['name'],
-                    'totalAmount' => $data['total'],
-                    'dueAmount' => 0, // Assuming full payment for now
-                    'paidAmount' => $data['total'],
-                    'sale_status' => $data['status'],
-                    'saleDate' => now(),
-                    'meta' => json_encode($data), // Store raw sale data
-                ];
-            case 'WooCommerce':
-                return [
-                    'business_id' => auth()->user()->business_id,
-                    'party_id' => null, // Update if customer mapping exists
-                    'invoiceNumber' => $data['id'], // Unique sale ID from WooCommerce
-                    'customer_name' => $data['billing']['first_name'] . ' ' . $data['billing']['last_name'],
-                    'totalAmount' => $data['total'],
-                    'dueAmount' => 0, // Assuming full payment for now
-                    'paidAmount' => $data['total'],
-                    'sale_status' => $data['status'],
-                    'saleDate' => now(),
-                    'meta' => json_encode($data), // Store raw sale data
-                ];
-            default:
-                throw new \Exception('Unsupported platform');
-        }
+ protected function parseOrderData($platform, $data)
+{
+    switch ($platform) {
+        case 'Shopify':
+            return [
+                'business_id' => auth()->user()->business_id,
+                'party_id' => null,
+                'invoiceNumber' => $data['id'] ?? null,
+                'customer_name' => 
+                    ($data['customer']['first_name'] ?? '') . ' ' . ($data['customer']['last_name'] ?? ''),
+                'totalAmount' => $data['total_price'] ?? 0,
+                'dueAmount' => 0,
+                'paidAmount' => $data['total_price'] ?? 0,
+                'sale_status' => $data['financial_status'] ?? 'unknown',
+                'saleDate' => now(),
+                'meta' => json_encode($data),
+            ];
+
+        case 'YouCan':
+            return [
+                'business_id' => auth()->user()->business_id,
+                'party_id' => null,
+                'invoiceNumber' => $data['order_id'] ?? null,
+                'customer_name' => $data['customer']['name'] ?? '',
+                'totalAmount' => $data['total'] ?? 0,
+                'dueAmount' => 0,
+                'paidAmount' => $data['total'] ?? 0,
+                'sale_status' => $data['status'] ?? 'unknown',
+                'saleDate' => now(),
+                'meta' => json_encode($data),
+            ];
+
+        case 'WooCommerce':
+            return [
+                'business_id' => auth()->user()->business_id,
+                'party_id' => null,
+                'invoiceNumber' => $data['id'] ?? null,
+                'customer_name' =>
+                    ($data['billing']['first_name'] ?? '') . ' ' . ($data['billing']['last_name'] ?? ''),
+                'totalAmount' => $data['total'] ?? 0,
+                'dueAmount' => 0,
+                'paidAmount' => $data['total'] ?? 0,
+                'sale_status' => $data['status'] ?? 'unknown',
+                'saleDate' => now(),
+                'meta' => json_encode($data),
+            ];
+
+        default:
+            throw new \Exception('Unsupported platform');
     }
+}
+
 
     public function registerWebhook(OrderSource $orderSource)
     {
