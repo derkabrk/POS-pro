@@ -1123,7 +1123,7 @@ class AcnooSaleController extends Controller
                 "destination_text" => $sale->delivery_address,
                 "customer_phone" => $customer->phone,
                 "customer_name" => $customer->name,
-                "product_price" => $sale->totalAmount,
+               "product_price" => strval($sale->totalAmount),
                 "express" => false,
                 "note_to_driver" => "",
                 "products" => $createdProducts,
