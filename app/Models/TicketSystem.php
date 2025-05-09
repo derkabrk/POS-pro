@@ -1,4 +1,3 @@
-
 <?php
 namespace App\Models;
 
@@ -16,5 +15,14 @@ class TicketSystem extends Model
         'priority', // e.g., Low, Medium, High
         'assigned_to', // User ID of the assigned person
         'created_by', // User ID of the creator
+        'category_id', // Foreign key for TicketCategories
     ];
+
+    /**
+     * Define the relationship with the TicketCategories model.
+     */
+    public function category()
+    {
+        return $this->belongsTo(TicketCategories::class, 'category_id');
+    }
 }

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\TicketSystem;
+use App\Models\TicketCategories;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -12,7 +13,6 @@ class TicketSystemController extends Controller
      */
     public function index()
     {
-        $tickets = TicketSystem::latest()->paginate(10);
         return view('admin::ticketSystem.index', compact('tickets'));
     }
 
@@ -21,7 +21,8 @@ class TicketSystemController extends Controller
      */
     public function create()
     {
-        return view('admin::ticketSystem.create');
+        $categories = TicketCategories::all(); // Fetch all categories
+        return view('admin.ticketSystem.create', compact('categories'));
     }
 
     /**
@@ -31,20 +32,13 @@ class TicketSystemController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:Open,Closed,Pending',
-            'priority' => 'required|in:Low,Medium,High',
-            'assigned_to' => 'nullable|exists:users,id',
+            'description' => 'required|string',
+            'status' => 'required|string|in:Open,Closed,Pending',
+            'priority' => 'required|string|in:Low,Medium,High',
+            'category_id' => 'nullable|exists:ticket_categories,id', // Validate category_id
         ]);
 
-        TicketSystem::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'status' => $request->status,
-            'priority' => $request->priority,
-            'assigned_to' => $request->assigned_to,
-            'created_by' => auth()->id(),
-        ]);
+        TicketSystem::create($request->all());
 
         return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket created successfully.');
     }
@@ -54,7 +48,8 @@ class TicketSystemController extends Controller
      */
     public function edit(TicketSystem $ticketSystem)
     {
-        return view('admin::ticketSystem.edit', compact('ticketSystem'));
+        $categories = TicketCategories::all(); // Fetch all categories
+        return view('admin.ticketSystem.edit', compact('ticketSystem', 'categories'));
     }
 
     /**
@@ -64,10 +59,10 @@ class TicketSystemController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:Open,Closed,Pending',
-            'priority' => 'required|in:Low,Medium,High',
-            'assigned_to' => 'nullable|exists:users,id',
+            'description' => 'required|string',
+            'status' => 'required|string|in:Open,Closed,Pending',
+            'priority' => 'required|string|in:Low,Medium,High',
+            'category_id' => 'nullable|exists:ticket_categories,id', // Validate category_id
         ]);
 
         $ticketSystem->update($request->all());
