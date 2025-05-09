@@ -47,6 +47,31 @@
                                     <label>Webhook URL</label>
                                     <input type="text" name="webhook_url" id="webhook_url" class="form-control" readonly placeholder="Webhook URL will be auto-generated">
                                 </div>
+
+                                <!-- Shopify Settings -->
+                                <div id="shopify-settings" class="platform-settings d-none">
+                                    <div class="col-lg-12 mb-2">
+                                        <label>Shopify Store URL</label>
+                                        <input type="text" name="settings[shopify_store_url]" class="form-control" placeholder="Enter your Shopify store URL">
+                                    </div>
+                                </div>
+
+                                <!-- WooCommerce Settings -->
+                                <div id="woocommerce-settings" class="platform-settings d-none">
+                                    <div class="col-lg-12 mb-2">
+                                        <label>WooCommerce Store URL</label>
+                                        <input type="text" name="settings[woocommerce_store_url]" class="form-control" placeholder="Enter your WooCommerce store URL">
+                                    </div>
+                                </div>
+
+                                <!-- YouCan Settings -->
+                                <div id="youcan-settings" class="platform-settings d-none">
+                                    <div class="col-lg-12 mb-2">
+                                        <label>YouCan Store URL</label>
+                                        <input type="text" name="settings[youcan_store_url]" class="form-control" placeholder="Enter your YouCan store URL">
+                                    </div>
+                                </div>
+
                                 <div class="col-lg-6 mb-2">
                                     <label>Status</label>
                                     <select name="status" class="form-control">
@@ -79,6 +104,20 @@
         const platform = this.value;
         const webhookUrl = `https://shyftcom.com/${platform}`;
         document.getElementById('webhook_url').value = webhookUrl;
+
+        // Hide all platform-specific settings
+        document.querySelectorAll('.platform-settings').forEach(function (el) {
+            el.classList.add('d-none');
+        });
+
+        // Show the relevant settings based on the selected platform
+        if (platform === 'Shopify') {
+            document.getElementById('shopify-settings').classList.remove('d-none');
+        } else if (platform === 'WooCommerce') {
+            document.getElementById('woocommerce-settings').classList.remove('d-none');
+        } else if (platform === 'YouCan') {
+            document.getElementById('youcan-settings').classList.remove('d-none');
+        }
     });
 </script>
 @endsection

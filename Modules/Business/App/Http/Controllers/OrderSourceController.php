@@ -47,7 +47,12 @@ class OrderSourceController extends Controller
             'api_secret' => 'required|string',
             'webhook_url' => 'required|url',
             'status' => 'required|boolean',
+            'settings.shopify_store_url' => 'required_if:name,Shopify|url',
+            'settings.woocommerce_store_url' => 'required_if:name,WooCommerce|url',
+            'settings.youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
+
+        $settings = $request->settings ? json_encode($request->settings) : null;
 
         $orderSource = OrderSource::create([
             'account_name' => $request->account_name,
@@ -56,7 +61,7 @@ class OrderSourceController extends Controller
             'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => $request->settings ? json_decode($request->settings, true) : null,
+            'settings' => $settings,
         ]);
 
         return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully!');
