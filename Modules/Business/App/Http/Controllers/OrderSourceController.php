@@ -261,6 +261,11 @@ class OrderSourceController extends Controller
 
     protected function registerShopifyWebhook(OrderSource $orderSource)
     {
+        \Log::info('Settings Field', [
+            'value' => $orderSource->settings,
+            'type' => gettype($orderSource->settings),
+        ]);
+
         $webhookUrl = $orderSource->webhook_url;
 
         // Directly use the settings field as the store URL
