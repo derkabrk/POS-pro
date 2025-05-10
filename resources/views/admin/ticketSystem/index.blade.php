@@ -54,6 +54,9 @@
                         <button type="button" class="add-order-btn btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ticketCategoriesModal">
                             <i class="fas fa-layer-group me-1"></i> Manage Categories
                         </button>
+                        <button type="button" class="add-order-btn btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ticketStatusesModal">
+                            <i class="fas fa-tasks me-1"></i> Manage Statuses
+                        </button>
                     </div>
                 </div>
                 <div class="responsive-table m-0">
@@ -126,7 +129,28 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="responsive-table mb-4">
+                <!-- Form at the top -->
+                <form action="{{ route('admin.ticketCategories.store') }}" method="POST" id="categoryForm" class="mb-4">
+                    @csrf
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <label for="category-name" class="form-label fw-semibold">Category Name</label>
+                            <input type="text" name="name" id="category-name" class="form-control" placeholder="Enter category name" required>
+                        </div>
+                        <div class="col-lg-6 mb-3">
+                            <label for="category-color" class="form-label fw-semibold">Category Color</label>
+                            <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
+                        </div>
+                        <div class="col-lg-12 text-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-plus-circle me-1"></i> Add Category
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Table -->
+                <div class="responsive-table">
                     <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
                         <thead class="table-light">
                             <tr>
@@ -152,28 +176,6 @@
                     </table>
                 </div>
 
-                <form action="{{ route('admin.ticketCategories.store') }}" method="POST" id="categoryForm">
-                    @csrf
-                    <div class="row">
-                        <div class="col-lg-6 mb-3">
-                            <label for="category-name" class="form-label fw-semibold">Category Name</label>
-                            <input type="text" name="name" id="category-name" class="form-control" placeholder="Enter category name" required>
-                        </div>
-                        <div class="col-lg-6 mb-3">
-                            <label for="category-color" class="form-label fw-semibold">Category Color</label>
-                            <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="button-group text-center mt-4">
-                                <button type="reset" class="theme-btn border-btn m-2" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                                <button type="submit" class="theme-btn m-2 submit-btn" id="submitButton">
-                                    <span id="buttonText">{{ __('Save') }}</span>
-                                    <span class="spinner-border spinner-border-sm d-none" id="buttonLoader" role="status" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
                 @if ($errors->any())
                     <div class="alert alert-danger mt-3">
                         <ul class="mb-0">
@@ -186,6 +188,83 @@
                 @if (session('success'))
                     <div class="alert alert-success mt-3">
                         {{ session('success') }}
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Ticket Statuses -->
+<div class="modal fade" id="ticketStatusesModal" tabindex="-1" aria-labelledby="ticketStatusesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold d-flex align-items-center" id="ticketStatusesModalLabel">
+                    <i class="fas fa-tasks me-2"></i> Manage Ticket Statuses
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Form at the top -->
+                <form action="{{ route('admin.ticketStatus.store') }}" method="POST" id="statusForm" class="mb-4">
+                    @csrf
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <label for="status-name" class="form-label fw-semibold">Status Name</label>
+                            <input type="text" name="name" id="status-name" class="form-control" placeholder="Enter status name" required>
+                        </div>
+                        <div class="col-lg-6 mb-3">
+                            <label for="status-color" class="form-label fw-semibold">Status Color</label>
+                            <input type="color" name="color" id="status-color" class="form-control form-control-color" value="#000000" title="Choose your color">
+                        </div>
+                        <div class="col-lg-12 text-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-plus-circle me-1"></i> Add Status
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Table -->
+                <div class="responsive-table">
+                    <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 60px;">#</th>
+                                <th>Name</th>
+                                <th>Color</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($statuses as $index => $status)
+                                <tr>
+                                    <td class="fw-semibold">{{ $index + 1 }}</td>
+                                    <td class="text-capitalize">{{ $status->name }}</td>
+                                    <td>
+                                        <span class="color-swatch" style="background-color: {{ $status->color }}"></span>
+                                        <span class="badge rounded-pill border" style="background: {{ $status->color }}20; color: #333;">
+                                            {{ $status->color }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                @if ($errors->any() && session('form') === 'status')
+                    <div class="alert alert-danger mt-3">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if (session('success_status'))
+                    <div class="alert alert-success mt-3">
+                        {{ session('success_status') }}
                     </div>
                 @endif
             </div>
