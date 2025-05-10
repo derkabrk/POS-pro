@@ -14,7 +14,7 @@
                     <h4>{{ __('Confirmed Orders') }}</h4>
                 </div>
                 <div class="table-top-form p-16-0">
-                    <form action="{{ route('business.orders.filter') }}" method="post" class="filter-form" table="#orders-data">
+                    <form action="" method="post" class="filter-form" table="#orders-data">
                         @csrf
                         <div class="table-top-left d-flex gap-3 margin-l-16">
                             <!-- Per Page Dropdown -->
