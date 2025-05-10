@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\TicketSystem;
 use App\Models\TicketCategories;
 use App\Models\TicketStatus;
+use App\Models\Business; // Assuming you have a Business model
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -26,8 +27,11 @@ class TicketSystemController extends Controller
      */
     public function create()
     {
-        $categories = TicketCategories::all(); // Fetch all categories
-        return view('admin.ticketSystem.create', compact('categories'));
+        $categories = TicketCategories::all();
+        $statuses = TicketStatus::all();
+        $businesses = Business::all(); // Assuming you have a Business model
+
+        return view('admin.ticketSystem.create', compact('categories', 'statuses', 'businesses'));
     }
 
     /**

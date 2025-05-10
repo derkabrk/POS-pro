@@ -53,6 +53,9 @@
                 <div class="table-header">
                     <h4>Tickets List</h4>
                     <div class="d-flex">
+                        <a href="{{ route('admin.ticketSystem.create') }}" class="btn btn-primary text-white add-order-btn">
+                            <i class="fas fa-plus-circle me-1"></i> New Ticket
+                        </a>
                         <button type="button" class="btn btn-link text-decoration-none" data-bs-toggle="modal" data-bs-target="#ticketCategoriesModal">
                             <i class="fas fa-layer-group me-1"></i> Manage Categories
                         </button>
