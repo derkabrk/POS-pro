@@ -1191,15 +1191,16 @@ class AcnooSaleController extends Controller
         return response()->json($statusList);
     }
 
-    public function confirmedOrders()
-    {
-        // Fetch orders where sale_status is 1, 2, 3, 4, or 5
-        $orders = Sale::whereIn('sale_status', [1, 2, 3, 4, 5])
-            ->orderBy('created_at', 'desc') // Order by the most recent orders
-            ->paginate(10); // Paginate the results
-         return response()->json([
-            'orders' => view('business::sales.confirmed-orders', compact('orders'))->render(),
-        ]);
-        
-    }
+   public function confirmedOrders()
+{
+    // Fetch orders where sale_status is 1, 2, 3, 4, or 5
+    $orders = Sale::whereIn('sale_status', [1, 2, 3, 4, 5])
+        ->orderBy('created_at', 'desc') // Order by the most recent orders
+        ->paginate(10); // Paginate the results
+
+   
+    return response()->json([
+        'orders' => $orders,
+    ]);
+}
 }
