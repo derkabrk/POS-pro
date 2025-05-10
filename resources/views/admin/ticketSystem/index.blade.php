@@ -97,11 +97,12 @@
                                     </span>
                                 </td>
                                 <td>
-                                    @if($ticket->category)
-                                        <span class="color-swatch" style="background-color: {{ $ticket->category->color }}"></span>
-                                        {{ $ticket->category->name }}
+                                    @if ($ticket->category)
+                                        <span class="badge rounded-pill" style="background-color: {{ $ticket->category->color }}; color: #fff;">
+                                            {{ $ticket->category->name }}
+                                        </span>
                                     @else
-                                        <span class="text-muted">-</span>
+                                        <span class="text-muted">No Category</span>
                                     @endif
                                 </td>
                                 <td>
