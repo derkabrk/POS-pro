@@ -29,7 +29,7 @@ class TicketSystemController extends Controller
     {
         $categories = TicketCategories::all();
         $statuses = TicketStatus::all();
-        $businesses = Business::all(); // Assuming you have a Business model
+        $businesses = Business::all(); 
 
         return view('admin.ticketSystem.create', compact('categories', 'statuses', 'businesses'));
     }

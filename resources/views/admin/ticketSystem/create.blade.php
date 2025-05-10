@@ -1,6 +1,8 @@
 @extends('layouts.master')
 
-@section('content')
+@section('title', 'Tickets')
+
+@section('main_content')
 <div class="container">
     <h1>Create Ticket</h1>
     <form action="{{ route('admin.ticketSystem.store') }}" method="POST">
