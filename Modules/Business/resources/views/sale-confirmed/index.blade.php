@@ -1,7 +1,7 @@
 @extends('business::layouts.master')
 
 @section('title')
-    {{ __('Sales List') }}
+    {{ __('Confirm List Orders') }}
 @endsection
 
 @section('main_content')
@@ -11,7 +11,7 @@
             <div class="card">
                 <div class="card-bodys">
                     <div class="table-header p-16">
-                        <h4>{{ __('Sales List') }}</h4>
+                        <h4>{{ __('Orders List') }}</h4>
                     </div>
                     <div class="table-top-form p-16-0">
                     <form action="{{ route('business.sales.filter') }}" method="post" class="filter-form" table="#sales-data">

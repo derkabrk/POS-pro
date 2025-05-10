@@ -45,6 +45,14 @@
                             Invoice
                         </a>
                     </li>
+
+                       <li>
+                        <a target="_blank" href="{{ route('business.sales.order-view.blade', $sale->id) }}">
+                            <img src="{{ asset('assets/images/icons/Invoic.svg') }}" alt="">
+                            Show Order
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ route('business.sale-returns.create', ['sale_id' => $sale->id]) }}">
                             <i class="fal fa-undo-alt"></i>
