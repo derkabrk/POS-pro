@@ -117,14 +117,15 @@
 
 <!-- Modal for Ticket Categories -->
 <div class="modal fade" id="ticketCategoriesModal" tabindex="-1" aria-labelledby="ticketCategoriesModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content shadow" style="border-radius: 18px; overflow: hidden;">
-            <div class="modal-header bg-primary text-white" style="border-bottom: 1px solid #e9ecef;">
-                <h5 class="modal-title fw-bold" id="ticketCategoriesModalLabel">Manage Ticket Categories</h5>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold" id="ticketCategoriesModalLabel">
+                    <i class="fas fa-layer-group me-2"></i> Manage Ticket Categories
+                </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="background: #f8f9fa;">
-                <!-- Table for Ticket Categories -->    
                 <div class="responsive-table mb-4">
                     <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
                         <thead class="table-light">
@@ -151,7 +152,6 @@
                     </table>
                 </div>
 
-                <!-- Form to Add New Category -->
                 <form class="row g-3" method="POST" action="{{ route('admin.ticketCategories.store') }}">
                     @csrf
                     <div class="col-md-6">
