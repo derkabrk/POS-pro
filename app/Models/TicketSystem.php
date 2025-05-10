@@ -11,11 +11,11 @@ class TicketSystem extends Model
     protected $fillable = [
         'title',
         'description',
-        'status_id', // Foreign key for TicketStatus
+        'email',
+        'status_id',
         'priority',
-        'assigned_to',
-        'created_by',
         'category_id',
+        'business_id',
     ];
 
     /**

@@ -42,15 +42,25 @@ class TicketSystemController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'status' => 'required|string|in:Open,Closed,Pending',
+            'email' => 'required|email',
+            'status_id' => 'required|exists:ticket_statuses,id', // Validate status_id
             'priority' => 'required|string|in:Low,Medium,High',
             'category_id' => 'nullable|exists:ticket_categories,id', // Validate category_id
+            'business_id' => 'nullable|exists:businesses,id', // Validate business_id
         ]);
 
-        TicketSystem::create($request->all());
+        // Create the ticket
+        TicketSystem::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'email' => $request->email,
+            'status_id' => $request->status_id,
+            'priority' => $request->priority,
+            'category_id' => $request->category_id,
+            'business_id' => $request->business_id,
+        ]);
 
-         return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket created successfully.');
-          
+        return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket created successfully.');
     }
 
     /**
