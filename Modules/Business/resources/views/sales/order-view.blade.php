@@ -9,7 +9,7 @@
             <div class="card-bodys">
                 <div class="table-header p-16 d-flex justify-content-between align-items-center">
                     <h4>{{ __('Order Details') }}</h4>
-                    <a href="{{ route('business.orders.index') }}" class="btn btn-primary text-white">
+                    <a href="{{ route('business.sales.index') }}" class="btn btn-primary text-white">
                         <i class="fas fa-arrow-left me-1"></i> {{ __('Back to Orders') }}
                     </a>
                 </div>
