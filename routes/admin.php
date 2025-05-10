@@ -129,5 +129,6 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('dynamicApiHeader', ADMIN\ApiHeaderController::class)->except(['show',]);
     Route::resource('ticketSystem', ADMIN\TicketSystemController::class);
     Route::resource('ticketCategories', ADMIN\TicketCategoriesController::class);
+    Route::resource('ticketStatus', ADMIN\TicketStatusController::class);
 
 });
