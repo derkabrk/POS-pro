@@ -37,6 +37,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('sale/product-filter', [Business\AcnooSaleController::class, 'productFilter'])->name('sales.product-filter');
     Route::post('sale/category-filter', [Business\AcnooSaleController::class, 'categoryFilter'])->name('sales.category-filter');
     Route::post('sale/brand-filter', [Business\AcnooSaleController::class, 'brandFilter'])->name('sales.brand-filter');
+    Route::get('sales/{id}/show-order', [Business\AcnooSaleController::class, 'showOrder'])->name('sales.showOrder');
     Route::get('sale/{sale_id}/pdf', [Business\AcnooSaleController::class, 'generatePDF'])->name('sales.pdf');
     Route::post('sale/mail/{sale_id}', [Business\AcnooSaleController::class, 'sendMail'])->name('sales.mail');
     Route::post('create-customer', [Business\AcnooSaleController::class, 'createCustomer'])->name('sales.store.customer');
