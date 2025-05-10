@@ -55,4 +55,14 @@ class TicketSystemController extends Controller
         // Redirect back with a success message
         return redirect()->route('business.ticketSystem.index')->with('success', 'Ticket created successfully.');
     }
+
+    /**
+     * Display the specified ticket.
+     */
+    public function show($id)
+    {
+        $ticket = TicketSystem::with(['category', 'status'])->findOrFail($id);
+
+        return view('business.ticketSystem.show', compact('ticket'));
+    }
 }
