@@ -52,11 +52,11 @@
             <div class="card-bodys">
                 <div class="table-header">
                     <h4>Tickets List</h4>
-                    <div>
-                        <button type="button" class="add-order-btn btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ticketCategoriesModal">
+                    <div class="d-flex">
+                        <button type="button" class="btn btn-link text-decoration-none" data-bs-toggle="modal" data-bs-target="#ticketCategoriesModal">
                             <i class="fas fa-layer-group me-1"></i> Manage Categories
                         </button>
-                        <button type="button" class="add-order-btn btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ticketStatusesModal">
+                        <button type="button" class="btn btn-link text-decoration-none" data-bs-toggle="modal" data-bs-target="#ticketStatusesModal">
                             <i class="fas fa-tasks me-1"></i> Manage Statuses
                         </button>
                     </div>
@@ -124,30 +124,25 @@
 <div class="modal fade" id="ticketCategoriesModal" tabindex="-1" aria-labelledby="ticketCategoriesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title fw-bold d-flex align-items-center" id="ticketCategoriesModalLabel">
-                    <i class="fas fa-layer-group me-2"></i> Manage Ticket Categories
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header">
+                <h5 class="modal-title" id="ticketCategoriesModalLabel">Manage Ticket Categories</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <!-- Form at the top -->
                 <form action="{{ route('admin.ticketCategories.store') }}" method="POST" id="categoryForm" class="mb-4">
                     @csrf
-                    <div class="row g-3">
-                        <div class="col-lg-6">
-                            <label for="category-name" class="form-label fw-semibold">Category Name</label>
-                            <input type="text" name="name" id="category-name" class="form-control shadow-sm" placeholder="Enter category name" required>
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <label for="category-name" class="form-label">Category Name</label>
+                            <input type="text" name="name" id="category-name" class="form-control" placeholder="Enter category name" required>
                         </div>
-                        <div class="col-lg-6">
-                            <label for="category-color" class="form-label fw-semibold">Category Color</label>
-                            <input type="color" name="color" id="category-color" class="form-control form-control-color shadow-sm" value="#000000" title="Choose your color">
+                        <div class="col-lg-6 mb-3">
+                            <label for="category-color" class="form-label">Category Color</label>
+                            <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
                         </div>
-                        <div class="col-lg-12 text-end">
-                            <button type="reset" class="btn btn-danger shadow-sm">
-                                <i class="fas fa-times-circle me-1"></i> Cancel
-                            </button>
-                            <button type="submit" class="btn btn-success shadow-sm">
+                        <div class="col-lg-12 text-center">
+                            <button type="submit" class="btn btn-danger">
                                 <i class="fas fa-plus-circle me-1"></i> Add Category
                             </button>
                         </div>
@@ -204,30 +199,25 @@
 <div class="modal fade" id="ticketStatusesModal" tabindex="-1" aria-labelledby="ticketStatusesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title fw-bold d-flex align-items-center" id="ticketStatusesModalLabel">
-                    <i class="fas fa-tasks me-2"></i> Manage Ticket Statuses
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header">
+                <h5 class="modal-title" id="ticketStatusesModalLabel">Manage Ticket Statuses</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <!-- Form at the top -->
                 <form action="{{ route('admin.ticketStatus.store') }}" method="POST" id="statusForm" class="mb-4">
                     @csrf
-                    <div class="row g-3">
-                        <div class="col-lg-6">
-                            <label for="status-name" class="form-label fw-semibold">Status Name</label>
-                            <input type="text" name="name" id="status-name" class="form-control shadow-sm" placeholder="Enter status name" required>
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <label for="status-name" class="form-label">Status Name</label>
+                            <input type="text" name="name" id="status-name" class="form-control" placeholder="Enter status name" required>
                         </div>
-                        <div class="col-lg-6">
-                            <label for="status-color" class="form-label fw-semibold">Status Color</label>
-                            <input type="color" name="color" id="status-color" class="form-control form-control-color shadow-sm" value="#000000" title="Choose your color">
+                        <div class="col-lg-6 mb-3">
+                            <label for="status-color" class="form-label">Status Color</label>
+                            <input type="color" name="color" id="status-color" class="form-control form-control-color" value="#000000" title="Choose your color">
                         </div>
-                        <div class="col-lg-12 text-end">
-                            <button type="reset" class="btn btn-danger shadow-sm">
-                                <i class="fas fa-times-circle me-1"></i> Cancel
-                            </button>
-                            <button type="submit" class="btn btn-success shadow-sm">
+                        <div class="col-lg-12 text-center">
+                            <button type="submit" class="btn btn-danger">
                                 <i class="fas fa-plus-circle me-1"></i> Add Status
                             </button>
                         </div>
