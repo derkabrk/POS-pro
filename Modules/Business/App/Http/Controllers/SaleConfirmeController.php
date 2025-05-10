@@ -26,8 +26,7 @@ class SaleConfirmeController extends Controller
                 }
             ])
             ->where('business_id', auth()->user()->business_id)
-            ->whereIn('sale_status', [1, 2, 3, 4, 5]) // Add this condition
-            ->whereHas('saleReturns')
+            ->whereIn('sale_status', [1, 2, 3, 4, 5])
             ->latest()
             ->paginate(20);
 
