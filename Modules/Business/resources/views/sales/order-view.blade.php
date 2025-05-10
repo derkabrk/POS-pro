@@ -7,6 +7,7 @@
     <div class="container-fluid">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
+                <!-- Header Section -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-bold text-primary">{{ __('Order Details') }}</h4>
                     <a href="{{ route('business.sales.index') }}" class="btn btn-outline-primary">
@@ -16,8 +17,8 @@
 
                 <!-- Layout: Left (Client & Order Info) | Right (Products & Totals) -->
                 <div class="row g-4">
-                    <!-- Left Side: Client & Order Info -->
-                    <div class="col-lg-4">
+                    <!-- Left Side: Client & Order Info (Wider Section) -->
+                    <div class="col-lg-6">
                         <h5 class="fw-bold text-secondary">{{ __('Client & Order Info') }}</h5>
                         <table class="table table-borderless">
                             <tbody>
@@ -52,12 +53,32 @@
                                         </span>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th class="text-muted">{{ __('Status Control') }}</th>
+                                    <td>
+                                        @foreach (\App\Models\Sale::STATUS as $key => $statusOption)
+                                            @php
+                                                $isDisabled = in_array($statusOption['name'], $disabledStatuses); // Check if the status is disabled
+                                            @endphp
+                                            <button 
+                                                class="btn btn-sm {{ $statusOption['color'] }} text-white px-2 py-1 rounded-pill update-status-btn {{ $isDisabled ? 'disabled' : '' }}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#updateStatusModal"
+                                                data-sale-id="{{ $sale->id }}"
+                                                data-current-status="{{ $key }}"
+                                                {{ $isDisabled ? 'disabled' : '' }}
+                                            >
+                                                {{ $statusOption['name'] }}
+                                            </button>
+                                        @endforeach
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <!-- Right Side: Products & Totals -->
-                    <div class="col-lg-8">
+                    <div class="col-lg-6">
                         <!-- Product Details -->
                         <h5 class="fw-bold text-secondary">{{ __('Products') }}</h5>
                         <div class="table-responsive mb-4">
