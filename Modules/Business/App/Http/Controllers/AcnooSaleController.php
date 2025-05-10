@@ -573,7 +573,7 @@ class AcnooSaleController extends Controller
     public function showOrder($id)
     {
         // Fetch sale details with related data
-        $order = Sale::with(
+        $sale = Sale::with(
             'user:id,name',
             'party:id,name,email,phone,type',
             'details',
@@ -588,7 +588,7 @@ class AcnooSaleController extends Controller
 
 
         // Return the view for showing order details
-        return view('business::sales.order-view', compact('order',));
+        return view('business::sales.order-view', compact('sale',));
     }
 
     public function edit($id)
