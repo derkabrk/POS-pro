@@ -16,6 +16,7 @@ class TicketSystem extends Model
         'priority',
         'category_id',
         'business_id',
+        'assign_to', // Add this field
     ];
 
     /**
@@ -32,5 +33,13 @@ class TicketSystem extends Model
     public function status()
     {
         return $this->belongsTo(TicketStatus::class, 'status_id');
+    }
+
+    /**
+     * Define the relationship with the User model for assigned user.
+     */
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assign_to');
     }
 }

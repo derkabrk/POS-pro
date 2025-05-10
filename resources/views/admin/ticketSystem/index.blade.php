@@ -73,6 +73,7 @@
                                 <th>Status</th>
                                 <th>Priority</th>
                                 <th>Category</th>
+                                <th>Assigned User</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -97,6 +98,13 @@
                                         {{ $ticket->category->name }}
                                     @else
                                         <span class="text-muted">-</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($ticket->assignedUser)
+                                        {{ $ticket->assignedUser->name }}
+                                    @else
+                                        <span class="text-muted">Unassigned</span>
                                     @endif
                                 </td>
                                 <td>

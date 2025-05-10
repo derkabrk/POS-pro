@@ -5,6 +5,7 @@ use App\Models\TicketSystem;
 use App\Models\TicketCategories;
 use App\Models\TicketStatus;
 use App\Models\Business; // Assuming you have a Business model
+use App\Models\User; // Assuming you have a User model
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -29,9 +30,10 @@ class TicketSystemController extends Controller
     {
         $categories = TicketCategories::all();
         $statuses = TicketStatus::all();
-        $businesses = Business::all(); 
+        $businesses = Business::all();
+        $users = User::all(); // Fetch all users
 
-        return view('admin.ticketSystem.create', compact('categories', 'statuses', 'businesses'));
+        return view('admin.ticketSystem.create', compact('categories', 'statuses', 'businesses', 'users'));
     }
 
     /**
@@ -43,10 +45,11 @@ class TicketSystemController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'email' => 'required|email',
-            'status_id' => 'required|exists:ticket_statuses,id', // Validate status_id
+            'status_id' => 'required|exists:ticket_statuses,id',
             'priority' => 'required|string|in:Low,Medium,High',
-            'category_id' => 'nullable|exists:ticket_categories,id', // Validate category_id
-            'business_id' => 'nullable|exists:businesses,id', // Validate business_id
+            'category_id' => 'nullable|exists:ticket_categories,id',
+            'business_id' => 'nullable|exists:businesses,id',
+            'assign_to' => 'nullable|exists:users,id', // Validate assign_to
         ]);
 
         // Create the ticket
@@ -58,6 +61,7 @@ class TicketSystemController extends Controller
             'priority' => $request->priority,
             'category_id' => $request->category_id,
             'business_id' => $request->business_id,
+            'assign_to' => $request->assign_to, // Save the assigned user
         ]);
 
         return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket created successfully.');
