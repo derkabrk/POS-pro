@@ -365,6 +365,27 @@
             @endif
 
             @if (auth()->user()->role != 'staff')
+                <li class="dropdown {{ Request::routeIs('business.ticketSystem.index', 'business.ticketSystem.create') ? 'active' : '' }}">
+                    <a href="#">
+                        <span class="sidebar-icon">
+                            <img src="{{ asset('assets/images/sidebar/ticket.svg') }}"> <!-- Add an appropriate icon -->
+                        </span>
+                        {{ __('Ticket System') }}
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{{ Request::routeIs('business.ticketSystem.index') ? 'active' : '' }}"
+                               href="{{ route('business.ticketSystem.index') }}">{{ __('All Tickets') }}</a>
+                        </li>
+                        <li>
+                            <a class="{{ Request::routeIs('business.ticketSystem.create') ? 'active' : '' }}"
+                               href="{{ route('business.ticketSystem.create') }}">{{ __('Create Ticket') }}</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+            @if (auth()->user()->role != 'staff')
                 <li
                     class="dropdown {{ Request::routeIs('business.settings.index', 'business.roles.index', 'business.roles.edit', 'business.roles.create', 'business.currencies.index', 'business.currencies.create', 'business.currencies.edit', 'business.notifications.index','business.payment-types.index') ? 'active' : '' }}">
                     <a href="#">
