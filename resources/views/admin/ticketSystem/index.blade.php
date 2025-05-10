@@ -83,9 +83,13 @@
                                 <td>{{ $ticket->id }}</td>
                                 <td>{{ $ticket->title }}</td>
                                 <td>
-                                    <span class="badge bg-{{ $ticket->status === 'Open' ? 'success' : ($ticket->status === 'Closed' ? 'secondary' : 'warning') }}">
-                                        {{ $ticket->status }}
-                                    </span>
+                                    @if ($ticket->status)
+                                        <span class="badge rounded-pill" style="background-color: {{ $ticket->status->color }}; color: #fff;">
+                                            {{ $ticket->status->name }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted">No Status</span>
+                                    @endif
                                 </td>
                                 <td>
                                     <span class="badge bg-{{ $ticket->priority === 'High' ? 'danger' : ($ticket->priority === 'Medium' ? 'warning' : 'info') }}">
