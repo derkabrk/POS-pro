@@ -17,7 +17,13 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     // Pos Sale
     Route::resource('sales', Business\AcnooSaleController::class);
     
-    Route::get('sales/confirmed-orders', [Business\AcnooSaleController::class, 'confirmedOrders'])->name('sales.confirmed');
+    
+    Route::resource('sale-confirme', Business\SaleConfirmeController::class)->only('index', 'create', 'store');
+
+    Route::resource('sale-returns', Business\SaleReturnController::class)->only('index', 'create', 'store');
+
+    
+    
     Route::post('sales/filter', [Business\AcnooSaleController::class, 'acnooFilter'])->name('sales.filter');
     Route::post('sales/updatestatus', [Business\AcnooSaleController::class, 'updatestatus'])->name('sales.updatestatus');
     Route::get('/sales/next-statuses/{status}', [Business\AcnooSaleController::class, 'getNextStatuses']);
@@ -35,7 +41,6 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('sale/mail/{sale_id}', [Business\AcnooSaleController::class, 'sendMail'])->name('sales.mail');
     Route::post('create-customer', [Business\AcnooSaleController::class, 'createCustomer'])->name('sales.store.customer');
 
-    Route::resource('sale-returns', Business\SaleReturnController::class)->only('index', 'create', 'store');
     Route::post('sale-return/filter', [Business\SaleReturnController::class, 'acnooFilter'])->name('sale-returns.filter');
 
 
