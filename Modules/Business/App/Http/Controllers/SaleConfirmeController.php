@@ -21,9 +21,6 @@ class SaleConfirmeController extends Controller
                 'details',
                 'details.product:id,productName,category_id',
                 'details.product.category:id,categoryName',
-                'saleReturns' => function ($query) {
-                    $query->withSum('details as total_return_amount', 'return_amount');
-                }
             ])
             ->where('business_id', auth()->user()->business_id)
             ->whereIn('sale_status', [1, 2, 3, 4, 5])
