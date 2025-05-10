@@ -3,6 +3,9 @@
 @section('title', 'Order Details')
 
 @section('main_content')
+@php
+    $disabledStatuses = ['Cash Out', 'Canceled']; // List of statuses to disable the button
+@endphp
 <div class="erp-table-section py-4 px-3">
     <div class="container-fluid">
         <div class="card border-0 shadow-sm">
