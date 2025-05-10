@@ -88,7 +88,8 @@
                                         @method('PATCH')
                                         <select name="status_id" class="form-select form-select-sm" onchange="this.form.submit()">
                                             @foreach ($statuses as $status)
-                                                <option value="{{ $status->id }}" {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
+                                                <option value="{{ $status->id }}" {{ $ticket->status_id == $status->id ? 'selected' : '' }}
+                                                    style="background-color: {{ $status->color }}; color: #fff;">
                                                     {{ $status->name }}
                                                 </option>
                                             @endforeach
