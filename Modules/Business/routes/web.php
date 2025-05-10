@@ -16,6 +16,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
 
     // Pos Sale
     Route::resource('sales', Business\AcnooSaleController::class);
+    Route::get('sales/confirmed-orders', [Business\AcnooSaleController::class, 'confirmedOrders'])->name('business.orders.confirmed');
     Route::post('sales/filter', [Business\AcnooSaleController::class, 'acnooFilter'])->name('sales.filter');
     Route::post('sales/updatestatus', [Business\AcnooSaleController::class, 'updatestatus'])->name('sales.updatestatus');
     Route::get('/sales/next-statuses/{status}', [Business\AcnooSaleController::class, 'getNextStatuses']);

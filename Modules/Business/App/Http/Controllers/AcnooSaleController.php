@@ -566,8 +566,31 @@ class AcnooSaleController extends Controller
             ->toArray();
 
         return response()->json([
-            'html' => view('business::sales.show', compact('sales', 'salesWithReturns'))->render()
+            'html' => view('business::sales.confirmed-orders', compact('sales', 'salesWithReturns'))->render()
         ]);
+    }
+
+    public function showOrder($id)
+    {
+        // Fetch sale details with related data
+        $sale = Sale::with(
+            'user:id,name',
+            'party:id,name,email,phone,type',
+            'details',
+            'details.product:id,productName,category_id',
+            'details.product.category:id,categoryName',
+            'payment_type:id,name'
+        )
+            ->where('business_id', auth()->user()->business_id)
+            ->findOrFail($id);
+
+        // Fetch sales with returns
+        $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
+            ->pluck('sale_id')
+            ->toArray();
+
+        // Return the view for showing order details
+        return view('business::sales.order-view', compact('sale', 'salesWithReturns'));
     }
 
     public function edit($id)
@@ -1166,5 +1189,15 @@ class AcnooSaleController extends Controller
         }
 
         return response()->json($statusList);
+    }
+
+    public function confirmedOrders()
+    {
+        // Fetch orders where sale_status is 1, 2, 3, 4, or 5
+        $orders = Sale::whereIn('sale_status', [1, 2, 3, 4, 5])
+            ->orderBy('created_at', 'desc') // Order by the most recent orders
+            ->paginate(10); // Paginate the results
+
+        return view('business.sales.confirmed-orders', compact('orders'));
     }
 }
