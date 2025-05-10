@@ -31,7 +31,7 @@ class TicketSystemController extends Controller
         $categories = TicketCategories::all();
         $statuses = TicketStatus::all();
         $businesses = Business::all();
-        $users = User::all(); // Fetch all users
+        $users = User::whereIn('role', ['Admin', 'Super Admin'])->get(); // Fetch only Admin & Super Admin users
 
         return view('admin.ticketSystem.create', compact('categories', 'statuses', 'businesses', 'users'));
     }
