@@ -1198,6 +1198,6 @@ class AcnooSaleController extends Controller
             ->orderBy('created_at', 'desc') // Order by the most recent orders
             ->paginate(10); // Paginate the results
 
-        return view('business.sales.confirmed-orders', compact('orders'));
+        return view('business::sales.confirmed-orders', compact('orders'));
     }
 }
