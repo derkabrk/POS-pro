@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\TicketSystem;
 use App\Models\TicketCategories;
+use App\Models\TicketStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +16,9 @@ class TicketSystemController extends Controller
     {
         $tickets = TicketSystem::with('category')->paginate(10);
         $categories = TicketCategories::all();
-        return view('admin.ticketSystem.index', compact('tickets', 'categories'));
+        $statuses = TicketStatus::all();
+
+        return view('admin.ticketSystem.index', compact('tickets', 'categories', 'statuses'));
     }
 
     /**
@@ -42,7 +45,8 @@ class TicketSystemController extends Controller
 
         TicketSystem::create($request->all());
 
-        return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket created successfully.');
+         return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket created successfully.');
+          
     }
 
     /**
