@@ -80,9 +80,13 @@
         border: 1px solid #ced4da;
         padding: 6px 12px;
         font-size: 14px;
-        color: #333;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        color: #fff; /* Default text color */
+        background-color: #fff; /* Default background color */
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .form-select option {
+        color: #fff; /* Text color for options */
     }
 
     .form-select:focus {
@@ -165,7 +169,8 @@
                                     <form action="{{ route('admin.ticketSystem.updateStatus', $ticket->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('PATCH')
-                                        <select name="status_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <select name="status_id" class="form-select form-select-sm" onchange="this.form.submit()" 
+                                            style="background-color: {{ $ticket->status ? $ticket->status->color : '#fff' }}; color: #fff;">
                                             @foreach ($statuses as $status)
                                                 <option value="{{ $status->id }}" {{ $ticket->status_id == $status->id ? 'selected' : '' }}
                                                     style="background-color: {{ $status->color }}; color: #fff;">
@@ -202,169 +207,169 @@
                                         <button type="submit" class="btn btn-sm btn-danger"
                                             onclick="return confirm('Are you sure you want to delete this ticket?')">
                                             <i class="fas fa-trash-alt"></i> Delete
-                                        </button>
-                                    </form>
+                                        </button>foreach
+                                    </form>ody>
                                 </td>
-                            </tr>
                             @endforeach
-                        </tbody>
-                    </table>
-                    <div class="mt-3">
-                        {{ $tickets->links('vendor.pagination.bootstrap-5') }}
-                    </div>
-                </div>
-            </div>
+                        </tbody> $tickets->links('vendor.pagination.bootstrap-5') }}
+                    </table>div>
+                    <div class="mt-3">div>
+                        {{ $tickets->links('vendor.pagination.bootstrap-5') }}div>
+                    </div>div>
+                </div>div>
+            </div></div>
         </div>
     </div>
-</div>
-
+</div>oriesModal" tabindex="-1" aria-labelledby="ticketCategoriesModalLabel" aria-hidden="true">
+lg">
 <!-- Modal for Ticket Categories -->
 <div class="modal fade" id="ticketCategoriesModal" tabindex="-1" aria-labelledby="ticketCategoriesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content">utton type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             <div class="modal-header">
                 <h5 class="modal-title" id="ticketCategoriesModalLabel">Manage Ticket Categories</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            </div>ion="{{ route('admin.ticketCategories.store') }}" method="POST" id="categoryForm" class="mb-4">
             <div class="modal-body">
                 <!-- Form at the top -->
                 <form action="{{ route('admin.ticketCategories.store') }}" method="POST" id="categoryForm" class="mb-4">
                     @csrf
-                    <div class="row">
+                    <div class="row">nput type="text" name="name" id="category-name" class="form-control" placeholder="Enter category name" required>
                         <div class="col-lg-6 mb-3">
                             <label for="category-name" class="form-label">Category Name</label>
                             <input type="text" name="name" id="category-name" class="form-control" placeholder="Enter category name" required>
-                        </div>
+                        </div>nput type="color" name="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
                         <div class="col-lg-6 mb-3">
                             <label for="category-color" class="form-label">Category Color</label>
                             <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
-                        </div>
-                        <div class="col-lg-12 text-center">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-plus-circle me-1"></i> Add Category
-                            </button>
+                        </div>ass="fas fa-plus-circle me-1"></i> Add Category
+                        <div class="col-lg-12 text-center">button>
+                            <button type="submit" class="btn btn-danger">div>
+                                <i class="fas fa-plus-circle me-1"></i> Add Categoryiv>
+                            </button>                </form>
                         </div>
                     </div>
                 </form>
-
-                <!-- Table -->
+red table-striped align-middle shadow-sm mb-0" style="background: #fff;">
+                <!-- Table -->lass="table-light">
                 <div class="responsive-table">
-                    <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
+                    <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">dth: 60px;">#</th>
                         <thead class="table-light">
-                            <tr>
-                                <th style="width: 60px;">#</th>
-                                <th>Name</th>
+                            <tr>th>Color</th>
+                                <th style="width: 60px;">#</th>>
+                                <th>Name</th>>
                                 <th>Color</th>
-                            </tr>
+                            </tr>($categories as $index => $category)
                         </thead>
                         <tbody>
-                            @foreach($categories as $index => $category)
+                            @foreach($categories as $index => $category)class="text-capitalize">{{ $category->name }}</td>
                                 <tr>
                                     <td class="fw-semibold">{{ $index + 1 }}</td>
-                                    <td class="text-capitalize">{{ $category->name }}</td>
-                                    <td>
-                                        <span class="color-swatch" style="background-color: {{ $category->color }}"></span>
-                                        <span class="badge rounded-pill border" style="background: {{ $category->color }}20; color: #333;">
+                                    <td class="text-capitalize">{{ $category->name }}</td>-pill border" style="background: {{ $category->color }}20; color: #333;">
+                                    <td>$category->color }}
+                                        <span class="color-swatch" style="background-color: {{ $category->color }}"></span>/span>
+                                        <span class="badge rounded-pill border" style="background: {{ $category->color }}20; color: #333;">/td>
                                             {{ $category->color }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        </span>foreach
+                                    </td>ody>
+                                </tr>table>
+                            @endforeach                </div>
                         </tbody>
                     </table>
-                </div>
+                </div>rt-danger mt-3">
 
-                @if ($errors->any())
-                    <div class="alert alert-danger mt-3">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                @if ($errors->any())as $error)
+                    <div class="alert alert-danger mt-3">$error }}</li>
+                        <ul class="mb-0">endforeach
+                            @foreach ($errors->all() as $error)ul>
+                                <li>{{ $error }}</li>div>
                             @endforeach
                         </ul>
-                    </div>
-                @endif
-                @if (session('success'))
-                    <div class="alert alert-success mt-3">
-                        {{ session('success') }}
-                    </div>
-                @endif
-            </div>
+                    </div>ess mt-3">
+                @endif session('success') }}
+                @if (session('success'))div>
+                    <div class="alert alert-success mt-3">ndif
+                        {{ session('success') }}div>
+                    </div>div>
+                @endifdiv>
+            </div></div>
         </div>
     </div>
-</div>
-
+</div>sesModal" tabindex="-1" aria-labelledby="ticketStatusesModalLabel" aria-hidden="true">
+lg">
 <!-- Modal for Ticket Statuses -->
 <div class="modal fade" id="ticketStatusesModal" tabindex="-1" aria-labelledby="ticketStatusesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content">utton type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             <div class="modal-header">
                 <h5 class="modal-title" id="ticketStatusesModalLabel">Manage Ticket Statuses</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            </div>ion="{{ route('admin.ticketStatus.store') }}" method="POST" id="statusForm" class="mb-4">
             <div class="modal-body">
                 <!-- Form at the top -->
                 <form action="{{ route('admin.ticketStatus.store') }}" method="POST" id="statusForm" class="mb-4">
                     @csrf
-                    <div class="row">
+                    <div class="row">nput type="text" name="name" id="status-name" class="form-control" placeholder="Enter status name" required>
                         <div class="col-lg-6 mb-3">
                             <label for="status-name" class="form-label">Status Name</label>
                             <input type="text" name="name" id="status-name" class="form-control" placeholder="Enter status name" required>
-                        </div>
+                        </div>nput type="color" name="color" id="status-color" class="form-control form-control-color" value="#000000" title="Choose your color">
                         <div class="col-lg-6 mb-3">
                             <label for="status-color" class="form-label">Status Color</label>
                             <input type="color" name="color" id="status-color" class="form-control form-control-color" value="#000000" title="Choose your color">
-                        </div>
-                        <div class="col-lg-12 text-center">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-plus-circle me-1"></i> Add Status
-                            </button>
+                        </div>ass="fas fa-plus-circle me-1"></i> Add Status
+                        <div class="col-lg-12 text-center">button>
+                            <button type="submit" class="btn btn-danger">div>
+                                <i class="fas fa-plus-circle me-1"></i> Add Statusiv>
+                            </button>                </form>
                         </div>
                     </div>
                 </form>
-
-                <!-- Table -->
+red table-striped align-middle shadow-sm mb-0" style="background: #fff;">
+                <!-- Table -->lass="table-light">
                 <div class="responsive-table">
-                    <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
+                    <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">dth: 60px;">#</th>
                         <thead class="table-light">
-                            <tr>
-                                <th style="width: 60px;">#</th>
-                                <th>Name</th>
+                            <tr>th>Color</th>
+                                <th style="width: 60px;">#</th>>
+                                <th>Name</th>>
                                 <th>Color</th>
-                            </tr>
+                            </tr>($statuses as $index => $status)
                         </thead>
                         <tbody>
-                            @foreach($statuses as $index => $status)
+                            @foreach($statuses as $index => $status)class="text-capitalize">{{ $status->name }}</td>
                                 <tr>
                                     <td class="fw-semibold">{{ $index + 1 }}</td>
-                                    <td class="text-capitalize">{{ $status->name }}</td>
-                                    <td>
-                                        <span class="color-swatch" style="background-color: {{ $status->color }}"></span>
-                                        <span class="badge rounded-pill border" style="background: {{ $status->color }}20; color: #333;">
+                                    <td class="text-capitalize">{{ $status->name }}</td>ed-pill border" style="background: {{ $status->color }}20; color: #333;">
+                                    <td>$status->color }}
+                                        <span class="color-swatch" style="background-color: {{ $status->color }}"></span>/span>
+                                        <span class="badge rounded-pill border" style="background: {{ $status->color }}20; color: #333;">/td>
                                             {{ $status->color }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        </span>foreach
+                                    </td>ody>
+                                </tr>table>
+                            @endforeach                </div>
                         </tbody>
-                    </table>
-                </div>
+                    </table>= 'status')
+                </div>rt-danger mt-3">
 
-                @if ($errors->any() && session('form') === 'status')
-                    <div class="alert alert-danger mt-3">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                @if ($errors->any() && session('form') === 'status')as $error)
+                    <div class="alert alert-danger mt-3">$error }}</li>
+                        <ul class="mb-0">endforeach
+                            @foreach ($errors->all() as $error)ul>
+                                <li>{{ $error }}</li>div>
                             @endforeach
                         </ul>
-                    </div>
-                @endif
-                @if (session('success_status'))
-                    <div class="alert alert-success mt-3">
-                        {{ session('success_status') }}
-                    </div>
-                @endif
+                    </div>3">
+                @endif session('success_status') }}
+                @if (session('success_status'))div>
+                    <div class="alert alert-success mt-3">ndif
+                        {{ session('success_status') }}div>
+                    </div>div>
+                @endifdiv>
             </div>
-        </div>
-    </div>
-</div>
-@endsection
+
+
+
+
+@endsection</div>    </div>        </div>@endsection
