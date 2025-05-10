@@ -1,4 +1,3 @@
-<?php
 @extends('business::layouts.master')
 
 @section('title', 'Order Details')
