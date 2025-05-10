@@ -1200,5 +1200,6 @@ class AcnooSaleController extends Controller
          return response()->json([
             'orders' => view('business::sales.confirmed-orders', compact('orders'))->render(),
         ]);
+        
     }
 }
