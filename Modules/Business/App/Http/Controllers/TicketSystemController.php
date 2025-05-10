@@ -17,7 +17,7 @@ class TicketSystemController extends Controller
     {
         $tickets = TicketSystem::where('business_id', auth()->user()->business_id)->paginate(10);
 
-        return view('business.ticketSystem.index', compact('tickets'));
+        return view('business::ticketSystem.index', compact('tickets'));
     }
 
     /**
