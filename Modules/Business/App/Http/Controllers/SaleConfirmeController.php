@@ -15,7 +15,7 @@ class SaleConfirmeController extends Controller
 {
     public function index()
     {
-        $sales = Sale::with([
+        $orders = Sale::with([
                 'user:id,name',
                 'party:id,name',
                 'details',
@@ -31,6 +31,6 @@ class SaleConfirmeController extends Controller
             ->latest()
             ->paginate(20);
 
-        return view('business::sale-confirmed.index', compact('sales'));
+        return view('business::sale-confirmed.index', compact('orders'));
     }
 }
