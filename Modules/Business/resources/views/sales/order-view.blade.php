@@ -3,7 +3,7 @@
 @section('title', 'Order Details')
 
 @section('main_content')
-<div class="erp-table-section">
+<div class="erp-table-section py-4 px-3">
     <div class="container-fluid">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
@@ -22,27 +22,27 @@
                         <table class="table table-borderless">
                             <tbody>
                                 <tr>
-                                    <th>{{ __('Order ID') }}</th>
-                                    <td>{{ $sale->tracking_id ?? 'N/A' }}</td>
+                                    <th class="text-muted">{{ __('Order ID') }}</th>
+                                    <td class="fw-bold">{{ $sale->tracking_id ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ __('Order Date') }}</th>
-                                    <td>{{ $sale->created_at->format('d M, Y') }}</td>
+                                    <th class="text-muted">{{ __('Order Date') }}</th>
+                                    <td class="fw-bold">{{ $sale->created_at->format('d M, Y') }}</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ __('Customer Name') }}</th>
-                                    <td>{{ $sale->party->name ?? 'N/A' }}</td>
+                                    <th class="text-muted">{{ __('Customer Name') }}</th>
+                                    <td class="fw-bold">{{ $sale->party->name ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ __('Delivery Type') }}</th>
-                                    <td>{{ $sale->sale_type == 0 ? 'Physical' : ($sale->delivery_type == 0 ? 'Home' : 'StepDesk') }}</td>
+                                    <th class="text-muted">{{ __('Delivery Type') }}</th>
+                                    <td class="fw-bold">{{ $sale->sale_type == 0 ? 'Physical' : ($sale->delivery_type == 0 ? 'Home' : 'StepDesk') }}</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ __('Payment Status') }}</th>
-                                    <td>{{ $sale->payment_status ?? 'N/A' }}</td>
+                                    <th class="text-muted">{{ __('Payment Status') }}</th>
+                                    <td class="fw-bold">{{ $sale->payment_status ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ __('Order Status') }}</th>
+                                    <th class="text-muted">{{ __('Order Status') }}</th>
                                     <td>
                                         @php
                                             $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
@@ -88,19 +88,19 @@
                         <table class="table table-borderless">
                             <tbody>
                                 <tr>
-                                    <th>{{ __('Subtotal') }}</th>
-                                    <td>${{ number_format($sale->subtotal, 2) }}</td>
+                                    <th class="text-muted">{{ __('Subtotal') }}</th>
+                                    <td class="fw-bold">${{ number_format($sale->subtotal, 2) }}</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ __('Shipping Charge') }}</th>
-                                    <td>${{ number_format($sale->shipping_charge, 2) }}</td>
+                                    <th class="text-muted">{{ __('Shipping Charge') }}</th>
+                                    <td class="fw-bold">${{ number_format($sale->shipping_charge, 2) }}</td>
                                 </tr>
                                 <tr>
-                                    <th>{{ __('Tax') }}</th>
-                                    <td>${{ number_format($sale->tax, 2) }}</td>
+                                    <th class="text-muted">{{ __('Tax') }}</th>
+                                    <td class="fw-bold">${{ number_format($sale->tax, 2) }}</td>
                                 </tr>
                                 <tr>
-                                    <th class="fw-bold">{{ __('Total Amount') }}</th>
+                                    <th class="fw-bold text-dark">{{ __('Total Amount') }}</th>
                                     <td class="fw-bold text-success">${{ number_format($sale->totalAmount, 2) }}</td>
                                 </tr>
                             </tbody>
