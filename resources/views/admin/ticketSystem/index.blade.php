@@ -117,15 +117,15 @@
 
 <!-- Modal for Ticket Categories -->
 <div class="modal fade" id="ticketCategoriesModal" tabindex="-1" aria-labelledby="ticketCategoriesModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content shadow" style="border-radius: 18px; overflow: hidden;">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title fw-bold" id="ticketCategoriesModalLabel">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius: 18px; overflow: hidden;">
+            <div class="modal-header bg-primary text-white align-items-center" style="border-bottom: 1px solid #e9ecef;">
+                <h5 class="modal-title fw-bold d-flex align-items-center" id="ticketCategoriesModalLabel">
                     <i class="fas fa-layer-group me-2"></i> Manage Ticket Categories
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="background: #f8f9fa;">
+            <div class="modal-body py-4" style="background: #f8f9fa;">
                 <div class="responsive-table mb-4">
                     <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
                         <thead class="table-light">
