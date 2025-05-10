@@ -18,7 +18,7 @@ class TicketSystemController extends Controller
         $tickets = TicketSystem::where('business_id', auth()->user()->business_id)->paginate(10);
         $categories = TicketCategories::all(); // Fetch all categories
 
-        return view('business.ticketSystem.index', compact('tickets', 'categories'));
+        return view('business::ticketSystem.index', compact('tickets', 'categories'));
     }
 
     /**
@@ -29,7 +29,7 @@ class TicketSystemController extends Controller
         $categories = TicketCategories::all();
         $statuses = TicketStatus::all();
 
-        return view('business.ticketSystem.create', compact('categories', 'statuses'));
+        return view('business::ticketSystem.create', compact('categories', 'statuses'));
     }
 
     /**
