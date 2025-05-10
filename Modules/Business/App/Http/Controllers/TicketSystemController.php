@@ -16,8 +16,9 @@ class TicketSystemController extends Controller
     public function index()
     {
         $tickets = TicketSystem::where('business_id', auth()->user()->business_id)->paginate(10);
+        $categories = TicketCategories::all(); // Fetch all categories
 
-        return view('business::ticketSystem.index', compact('tickets'));
+        return view('business.ticketSystem.index', compact('tickets', 'categories'));
     }
 
     /**
@@ -36,25 +37,22 @@ class TicketSystemController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate the incoming request
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'email' => 'required|email',
-            'status_id' => 'required|exists:ticket_statuses,id',
-            'priority' => 'required|string|in:Low,Medium,High',
-            'category_id' => 'nullable|exists:ticket_categories,id',
+            'category_id' => 'nullable|exists:ticket_categories,id', // Ensure the category exists
         ]);
 
+        // Create the ticket and associate it with the logged-in business
         TicketSystem::create([
             'title' => $request->title,
             'description' => $request->description,
-            'email' => $request->email,
-            'status_id' => $request->status_id,
-            'priority' => $request->priority,
             'category_id' => $request->category_id,
-            'business_id' => auth()->user()->business_id, // Automatically associate with the logged-in business
+            'business_id' => auth()->user()->business_id, // Associate with the logged-in business
         ]);
 
+        // Redirect back with a success message
         return redirect()->route('business.ticketSystem.index')->with('success', 'Ticket created successfully.');
     }
 }
