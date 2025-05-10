@@ -83,13 +83,17 @@
                                 <td>{{ $ticket->id }}</td>
                                 <td>{{ $ticket->title }}</td>
                                 <td>
-                                    @if ($ticket->status)
-                                        <span class="badge rounded-pill" style="background-color: {{ $ticket->status->color }}; color: #fff;">
-                                            {{ $ticket->status->name }}
-                                        </span>
-                                    @else
-                                        <span class="text-muted">No Status</span>
-                                    @endif
+                                    <form action="{{ route('admin.ticketSystem.updateStatus', $ticket->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <select name="status_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                            @foreach ($statuses as $status)
+                                                <option value="{{ $status->id }}" {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
+                                                    {{ $status->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
                                 </td>
                                 <td>
                                     <span class="badge bg-{{ $ticket->priority === 'High' ? 'danger' : ($ticket->priority === 'Medium' ? 'warning' : 'info') }}">
@@ -97,12 +101,11 @@
                                     </span>
                                 </td>
                                 <td>
-                                    @if ($ticket->category)
-                                        <span class="badge rounded-pill" style="background-color: {{ $ticket->category->color }}; color: #fff;">
-                                            {{ $ticket->category->name }}
-                                        </span>
+                                    @if($ticket->category)
+                                        <span class="color-swatch" style="background-color: {{ $ticket->category->color }}"></span>
+                                        {{ $ticket->category->name }}
                                     @else
-                                        <span class="text-muted">No Category</span>
+                                        <span class="text-muted">-</span>
                                     @endif
                                 </td>
                                 <td>

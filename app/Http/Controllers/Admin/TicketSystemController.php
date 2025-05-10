@@ -95,6 +95,23 @@ class TicketSystemController extends Controller
     }
 
     /**
+     * Update the status of the specified ticket.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status_id' => 'required|exists:ticket_statuses,id', // Ensure the status exists
+        ]);
+
+        $ticket = TicketSystem::findOrFail($id);
+        $ticket->update([
+            'status_id' => $request->status_id,
+        ]);
+
+        return redirect()->back()->with('success', 'Ticket status updated successfully.');
+    }
+
+    /**
      * Remove the specified ticket from storage.
      */
     public function destroy(TicketSystem $ticketSystem)
