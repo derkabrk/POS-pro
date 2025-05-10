@@ -17,64 +17,58 @@
 
                 <!-- Layout: Left (Client & Order Info) | Right (Products & Totals) -->
                 <div class="row g-4">
-                    <!-- Left Side: Client & Order Info (Wider Section) -->
+                    <!-- Left Side: Client & Order Info -->
                     <div class="col-lg-6">
                         <h5 class="fw-bold text-secondary">{{ __('Client & Order Info') }}</h5>
-                        <table class="table table-borderless">
-                            <tbody>
-                                <tr>
-                                    <th class="text-muted">{{ __('Order ID') }}</th>
-                                    <td class="fw-bold">{{ $sale->tracking_id ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">{{ __('Order Date') }}</th>
-                                    <td class="fw-bold">{{ $sale->created_at->format('d M, Y') }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">{{ __('Customer Name') }}</th>
-                                    <td class="fw-bold">{{ $sale->party->name ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">{{ __('Delivery Type') }}</th>
-                                    <td class="fw-bold">{{ $sale->sale_type == 0 ? 'Physical' : ($sale->delivery_type == 0 ? 'Home' : 'StepDesk') }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">{{ __('Payment Status') }}</th>
-                                    <td class="fw-bold">{{ $sale->payment_status ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">{{ __('Order Status') }}</th>
-                                    <td>
-                                        @php
-                                            $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
-                                        @endphp
-                                        <span class="badge {{ $status['color'] }} px-3 py-2">
-                                            {{ $status['name'] }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">{{ __('Status Control') }}</th>
-                                    <td>
-                                        @foreach (\App\Models\Sale::STATUS as $key => $statusOption)
-                                            @php
-                                                $isDisabled = in_array($statusOption['name'], $disabledStatuses); // Check if the status is disabled
-                                            @endphp
-                                            <button 
-                                                class="btn btn-sm {{ $statusOption['color'] }} text-white px-2 py-1 rounded-pill update-status-btn {{ $isDisabled ? 'disabled' : '' }}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#updateStatusModal"
-                                                data-sale-id="{{ $sale->id }}"
-                                                data-current-status="{{ $key }}"
-                                                {{ $isDisabled ? 'disabled' : '' }}
-                                            >
-                                                {{ $statusOption['name'] }}
-                                            </button>
-                                        @endforeach
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Order ID') }}:</span>
+                            <span class="fw-bold">{{ $sale->tracking_id ?? 'N/A' }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Order Date') }}:</span>
+                            <span class="fw-bold">{{ $sale->created_at->format('d M, Y') }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Customer Name') }}:</span>
+                            <span class="fw-bold">{{ $sale->party->name ?? 'N/A' }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Delivery Type') }}:</span>
+                            <span class="fw-bold">{{ $sale->sale_type == 0 ? 'Physical' : ($sale->delivery_type == 0 ? 'Home' : 'StepDesk') }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Payment Status') }}:</span>
+                            <span class="fw-bold">{{ $sale->payment_status ?? 'N/A' }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Order Status') }}:</span>
+                            @php
+                                $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
+                            @endphp
+                            <span class="badge {{ $status['color'] }} px-3 py-2">
+                                {{ $status['name'] }}
+                            </span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Status Control') }}:</span>
+                            <div>
+                                @foreach (\App\Models\Sale::STATUS as $key => $statusOption)
+                                    @php
+                                        $isDisabled = in_array($statusOption['name'], $disabledStatuses); // Check if the status is disabled
+                                    @endphp
+                                    <button 
+                                        class="btn btn-sm {{ $statusOption['color'] }} text-white px-2 py-1 rounded-pill update-status-btn {{ $isDisabled ? 'disabled' : '' }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#updateStatusModal"
+                                        data-sale-id="{{ $sale->id }}"
+                                        data-current-status="{{ $key }}"
+                                        {{ $isDisabled ? 'disabled' : '' }}
+                                    >
+                                        {{ $statusOption['name'] }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Right Side: Products & Totals -->
@@ -106,26 +100,22 @@
 
                         <!-- Order Totals -->
                         <h5 class="fw-bold text-secondary">{{ __('Order Totals') }}</h5>
-                        <table class="table table-borderless">
-                            <tbody>
-                                <tr>
-                                    <th class="text-muted">{{ __('Subtotal') }}</th>
-                                    <td class="fw-bold">${{ number_format($sale->subtotal, 2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">{{ __('Shipping Charge') }}</th>
-                                    <td class="fw-bold">${{ number_format($sale->shipping_charge, 2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">{{ __('Tax') }}</th>
-                                    <td class="fw-bold">${{ number_format($sale->tax, 2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="fw-bold text-dark">{{ __('Total Amount') }}</th>
-                                    <td class="fw-bold text-success">${{ number_format($sale->totalAmount, 2) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Subtotal') }}:</span>
+                            <span class="fw-bold">${{ number_format($sale->subtotal, 2) }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Shipping Charge') }}:</span>
+                            <span class="fw-bold">${{ number_format($sale->shipping_charge, 2) }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">{{ __('Tax') }}:</span>
+                            <span class="fw-bold">${{ number_format($sale->tax, 2) }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted fw-bold">{{ __('Total Amount') }}:</span>
+                            <span class="fw-bold text-success">${{ number_format($sale->totalAmount, 2) }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
