@@ -1197,7 +1197,8 @@ class AcnooSaleController extends Controller
         $orders = Sale::whereIn('sale_status', [1, 2, 3, 4, 5])
             ->orderBy('created_at', 'desc') // Order by the most recent orders
             ->paginate(10); // Paginate the results
-
-        return view('business::sales.confirmed-orders', compact('orders'));
+         return response()->json([
+            'orders' => view('business::sales.confirmed-orders', compact('orders'))->render(),
+        ]);
     }
 }
