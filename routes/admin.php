@@ -128,7 +128,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
 
     Route::resource('dynamicApiHeader', ADMIN\ApiHeaderController::class)->except(['show',]);
     Route::resource('ticketSystem', ADMIN\TicketSystemController::class)->only('index', 'store','create','destroy');
-    Route::patch('ticketSystem/{id}/updateStatus', [ADMIN\TicketSystemController::class, 'updateStatus'])->name('admin.ticketSystem.updateStatus');
+    Route::patch('ticketSystem/{id}/updateStatus', [ADMIN\TicketSystemController::class, 'updateStatus'])->name('ticketSystem.updateStatus');
     Route::resource('ticketCategories', ADMIN\TicketCategoriesController::class);
     Route::resource('ticketStatus', ADMIN\TicketStatusController::class);
 
