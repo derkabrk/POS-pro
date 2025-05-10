@@ -36,10 +36,8 @@
                                 href="{{ route('business.sales.index') }}">{{ __('Sale List') }}</a></li>
                         <li><a class="{{ Request::routeIs('business.sale-returns.index') ? 'active' : '' }}"
                                 href="{{ route('business.sale-returns.index') }}">{{ __('Sales Return') }}</a></li>
-<li><a class="{{ Request::routeIs('sales.confirmed') ? 'active' : '' }}"
-       href="{{ route('sales.confirmed') }}">{{ __('Confirme Sales') }}</a></li>
-                                
-                       
+                     <li><a class="{{ Request::routeIs('business.sales.confirmed') ? 'active' : '' }}"
+                      href="{{ route('business.sales.confirmed') }}">{{ __('Confirme Sales') }}</a></li> 
                         @endif
                     </ul>
                 </li>
