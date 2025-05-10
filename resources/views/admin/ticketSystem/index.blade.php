@@ -108,7 +108,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.ticketSystem.edit', $ticket->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a>
+                                    
                                     <form action="{{ route('admin.ticketSystem.destroy', $ticket->id) }}" method="POST" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
