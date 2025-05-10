@@ -37,5 +37,7 @@ class TicketCategoriesController extends Controller
                     'redirect' => route('admin.ticketSystem.index'),
                 ]);
             }
+      return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket category added successfully!');
+
     }
 }
