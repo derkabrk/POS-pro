@@ -36,13 +36,92 @@
         margin-top: 24px;
     }
     .modal-content {
-        border-radius: 12px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
     .modal-header {
         border-bottom: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+        border-radius: 16px 16px 0 0;
     }
     .modal-title {
         font-weight: 600;
+        font-size: 18px;
+    }
+    /* General Styling */
+    .table {
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+        border-color: #e9ecef;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .table td {
+        padding: 12px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    /* Dropdown Styling */
+    .form-select {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 6px 12px;
+        font-size: 14px;
+        color: #333;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-select:focus {
+        border-color: #80bdff;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    /* Badge Styling */
+    .badge {
+        border-radius: 12px;
+        font-size: 12px;
+        padding: 6px 12px;
+        font-weight: 500;
+    }
+
+    /* Buttons */
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 8px 16px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    /* Modal Styling */
+    .modal-body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 0 0 16px 16px;
     }
 </style>
 
@@ -65,7 +144,7 @@
                     </div>
                 </div>
                 <div class="responsive-table m-0">
-                    <table class="table table-bordered table-striped align-middle shadow-sm" id="datatable">
+                    <table class="table table-bordered table-striped align-middle shadow-sm">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -117,7 +196,6 @@
                                     @endif
                                 </td>
                                 <td>
-                                    
                                     <form action="{{ route('admin.ticketSystem.destroy', $ticket->id) }}" method="POST" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
