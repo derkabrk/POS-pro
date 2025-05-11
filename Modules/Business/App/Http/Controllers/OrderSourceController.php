@@ -48,7 +48,7 @@ class OrderSourceController extends Controller
             'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
             'api_key' => 'required|string',
             'api_secret' => 'nullable|string',
-            'shopify_store_url' => 'nullable|required_if:name,Shopify|url',
+            'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^[a-zA-Z0-9\-]+\.myshopify\.com$/',
             'woocommerce_store_url' => 'nullable|required_if:name,WooCommerce|url',
             'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
             'status' => 'required|boolean',
@@ -57,7 +57,7 @@ class OrderSourceController extends Controller
         // Prepare settings based on the platform
         $settings = [];
         if ($request->name === 'Shopify') {
-            $settings['shop_domain'] = $request->shopify_store_url;
+            $settings['shop_domain'] = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
         } elseif ($request->name === 'WooCommerce') {
             $settings['store_url'] = $request->woocommerce_store_url;
         } elseif ($request->name === 'YouCan') {
@@ -324,5 +324,32 @@ class OrderSourceController extends Controller
         }
 
         return response()->json(['message' => 'Failed to register YouCan webhook', 'error' => $response->body()], 400);
+    }
+
+    protected function createShopifyWebhook()
+    {
+        $settings = $this->settings;
+
+        if (!isset($settings['shop_domain'])) {
+            \Log::error('Shopify settings are missing the shop_domain key.');
+            return;
+        }
+
+        $shopDomain = $settings['shop_domain'];
+        $shopUrl = "https://{$shopDomain}"; // Ensure the URL starts with https://
+
+        $response = Http::withHeaders([
+            'X-Shopify-Access-Token' => $this->api_key,
+        ])->post("{$shopUrl}/admin/api/2023-01/webhooks.json", [
+            'webhook' => [
+                'topic' => 'orders/create',
+                'address' => $this->webhook_url,
+                'format' => 'json',
+            ],
+        ]);
+
+        if ($response->failed()) {
+            \Log::error('Failed to create Shopify webhook: ' . $response->body());
+        }
     }
 }
