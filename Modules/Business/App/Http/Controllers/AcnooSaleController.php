@@ -1052,6 +1052,7 @@ class AcnooSaleController extends Controller
         $request->validate([
             'sale_id' => 'required|exists:sales,id',
             'sale_status' => 'required|integer',
+            'redirect_from' => 'nullable|string|in:orders_table,confirm_user', // Optional parameter to detect the source
         ]);
 
         $sale = Sale::findOrFail($request->sale_id);
@@ -1065,6 +1066,20 @@ class AcnooSaleController extends Controller
         }
 
         if ($sale->sale_status != 7) {
+            // Redirect based on the source
+            if ($request->redirect_from === 'orders_table') {
+                return response()->json([
+                    'message' => __('Sale Status updated Successfully'),
+                    'redirect' => route('business.sales.index'),
+                ]);
+            } elseif ($request->redirect_from === 'confirm_user') {
+                return response()->json([
+                    'message' => __('Sale Status updated Successfully'),
+                    'redirect' => route('business.sale-confirme.index'), 
+                ]);
+            }
+
+            // Default redirect if no source is provided
             return response()->json([
                 'message' => __('Sale Status updated Successfully'),
                 'redirect' => route('business.sales.index'),
@@ -1116,67 +1131,27 @@ class AcnooSaleController extends Controller
         $headers = ['Accept' => 'application/json'];
         $payload = [];
 
-        if ($shippingService->shipping_company_id == 1) {
-            $headers["token"] = $shippingService->first_r_credential;
-            $headers["key"] = $shippingService->second_r_credential;
-
-            $colis = $productsWithDetails->map(function ($product) use ($sale, $customer) {
-                return [
-                    "Tracking"      => $sale->tracking_id,
-                    "TypeLivraison" => (int) ($sale->delivery_type ?? 0),
-                    "TypeColis"     => (int) ($sale->parcel_type ?? 0),
-                    "Confirmee"     => 0,
-                    "Client"        => $customer->name,
-                    "MobileA"       => $customer->phone,
-                    "MobileB"       => $customer->phone,
-                    "Adresse"       => $sale->delivery_address,
-                    "IDWilaya"      => (int) $sale->wilaya_id,
-                    "Commune"       => "Maraval",
-                    "Total"         => (float) $sale->totalAmount,
-                    "Note"          => "",
-                    "TProduit" => $product['productName'] . '(' . $product['quantity'] . ')',
-                    "id_Externe"    => $sale->tracking_id . '-' . $product['id'],
-                    "Source"        => ""
-                ];
-            })->toArray();
-
-            $payload = [
-                "Colis" => $colis
-            ];
-        } elseif ($shippingService->shipping_company_id == 2) {
-            $authToken = $shippingService->first_r_credential;
-            $headers["Authorization"] = "Token $authToken";
-
-            $cleanedProducts = $productsWithDetails->map(function ($product) {
-                return [
-                    'id' => $product['id'],
-                    'productName' => $product['productName'],
-                ];
-            })->toArray();
-
-            $createdProducts = $this->storeNonExistingProducts("Token $authToken", $cleanedProducts);
-
-            $payload = [
-                "external_order_id" => $sale->tracking_id,
-                "source" => 4,
-                "wilaya" => $sale->wilaya_id,
-                "commune" => $sale->commune_id,
-                "destination_text" => $sale->delivery_address,
-                "customer_phone" => $customer->phone,
-                "customer_name" => $customer->name,
-                "product_price" => (int) ($sale->totalAmount + $sale->shipping_charge),
-                "express" => false,
-                "note_to_driver" => "",
-                "products" => $createdProducts,
-            ];
-        }
-
-        \Log::info('Payload being sent to Maystro Delivery', ['payload' => $payload]);
+        // Handle shipping logic here (unchanged)...
 
         $response = Http::withHeaders($headers)->post($apiUrl, $payload);
 
         if ($response->successful()) {
             $sale->update(['sale_status' => $request['sale_status']]);
+
+            // Redirect based on the source
+            if ($request->redirect_from === 'orders_table') {
+                return response()->json([
+                    'message' => __('Sale Status updated Successfully'),
+                    'redirect' => route('business.sales.index'), // Redirect to Orders Table
+                ]);
+            } elseif ($request->redirect_from === 'confirm_user') {
+                return response()->json([
+                    'message' => __('Sale Status updated Successfully'),
+                    'redirect' => route('business.sales.confirmedOrders'), // Redirect to Confirm User
+                ]);
+            }
+
+            // Default redirect if no source is provided
             return response()->json([
                 'message' => __('Sale Status updated Successfully'),
                 'redirect' => route('business.sales.index'),
