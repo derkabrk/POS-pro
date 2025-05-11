@@ -13,9 +13,30 @@
                 <!-- Header Section -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-bold text-primary">{{ __('Order Details') }}</h4>
-                    <a href="{{ route('business.sales.index') }}" class="btn btn-primary text-white px-4 py-2 rounded-pill shadow-sm">
-                        <i class="fas fa-arrow-left me-2"></i> {{ __('Back to Sales') }}
-                    </a>
+                    <!-- Status Control Buttons -->
+                    <div>
+                        @foreach ($nextStatuses as $nextStatus)
+                            @php
+                                $statusOption = \App\Models\Sale::STATUS[$nextStatus] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
+                            @endphp
+                            <form 
+                                action="{{ route('business.sales.updatestatus', ['sale' => $sale->id]) }}" 
+                                method="POST" 
+                                class="d-inline"
+                            >
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="sale_id" value="{{ $sale->id }}">
+                                <input type="hidden" name="sale_status" value="{{ $nextStatus }}">
+                                <button 
+                                    type="submit"
+                                    class="btn btn-sm {{ $statusOption['color'] }} text-white px-3 py-2 rounded-pill shadow-sm me-2 mb-2"
+                                >
+                                    {{ $statusOption['name'] }}
+                                </button>
+                            </form>
+                        @endforeach
+                    </div>
                 </div>
 
                 <!-- Layout: Left (Client & Order Info) | Right (Products & Totals) -->
@@ -51,25 +72,6 @@
                             <span class="badge {{ $status['color'] }} px-4 py-2 rounded-pill shadow-sm">
                                 {{ $status['name'] }}
                             </span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-muted d-block mb-1">{{ __('Status Control') }}:</span>
-                            <div>
-                                @foreach ($nextStatuses as $nextStatus)
-                                    @php
-                                        $statusOption = \App\Models\Sale::STATUS[$nextStatus] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
-                                    @endphp
-                                    <button 
-                                        class="btn btn-sm {{ $statusOption['color'] }} text-white px-3 py-2 rounded-pill shadow-sm me-2 mb-2 update-status-btn"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#updateStatusModal"
-                                        data-sale-id="{{ $sale->id }}"
-                                        data-next-status="{{ $nextStatus }}"
-                                    >
-                                        {{ $statusOption['name'] }}
-                                    </button>
-                                @endforeach
-                            </div>
                         </div>
                     </div>
 
