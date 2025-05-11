@@ -57,6 +57,7 @@ class OrderSourceController extends Controller
         }
 
         $orderSource = OrderSource::create([
+            'business_id' => auth()->user()->business_id, // Use the authenticated user's 
             'account_name' => $request->account_name,
             'name' => $request->name,
             'api_key' => $request->api_key,
@@ -148,7 +149,7 @@ class OrderSourceController extends Controller
         }
 
         // Parse the order data based on the platform
-        $orderData = $this->parseOrderData($platform, $request->all());
+        $orderData = $this->parseOrderData($platform, $request->all(), $orderSource);
 
         // Add the order_source_id to the order data
         $orderData['order_source_id'] = $orderSource->id;
@@ -191,13 +192,13 @@ class OrderSourceController extends Controller
         return hash_equals($expectedSignature, $signature);
     }
 
-    protected function parseOrderData($platform, $data)
+    protected function parseOrderData($platform, $data, $orderSource)
     {
         switch ($platform) {
             case 'Shopify':
                 $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
                 return [
-                    'business_id' => auth()->user()->business_id,
+                    'business_id' => $orderSource->business_id, // Use the business_id from the OrderSource
                     'party_id' => null,
                     'invoiceNumber' => $data['id'] ?? null,
                     'customer_name' => ($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''),
@@ -205,36 +206,6 @@ class OrderSourceController extends Controller
                     'dueAmount' => 0,
                     'paidAmount' => $data['total_price'] ?? 0,
                     'sale_status' => $data['financial_status'] ?? 'unknown',
-                    'saleDate' => now(),
-                    'meta' => json_encode($data),
-                ];
-
-            case 'YouCan':
-                $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
-                return [
-                    'business_id' => auth()->user()->business_id,
-                    'party_id' => null,
-                    'invoiceNumber' => $data['order_id'] ?? null,
-                    'customer_name' => $customer['name'] ?? '',
-                    'totalAmount' => $data['total'] ?? 0,
-                    'dueAmount' => 0,
-                    'paidAmount' => $data['total'] ?? 0,
-                    'sale_status' => $data['status'] ?? 'unknown',
-                    'saleDate' => now(),
-                    'meta' => json_encode($data),
-                ];
-
-            case 'WooCommerce':
-                $billing = is_array($data['billing'] ?? null) ? $data['billing'] : [];
-                return [
-                    'business_id' => auth()->user()->business_id,
-                    'party_id' => null,
-                    'invoiceNumber' => $data['id'] ?? null,
-                    'customer_name' => ($billing['first_name'] ?? '') . ' ' . ($billing['last_name'] ?? ''),
-                    'totalAmount' => $data['total'] ?? 0,
-                    'dueAmount' => 0,
-                    'paidAmount' => $data['total'] ?? 0,
-                    'sale_status' => $data['status'] ?? 'unknown',
                     'saleDate' => now(),
                     'meta' => json_encode($data),
                 ];

@@ -16,6 +16,7 @@ class OrderSource extends Model
      * @var array
      */
     protected $fillable = [
+        'business_id', // Add this field
         'account_name', // Account name for the order source
         'name', // e.g., Shopify, YouCan, WooCommerce
         'api_key', // API key for the platform
