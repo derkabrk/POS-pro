@@ -265,7 +265,6 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
 
     // OrderSource Routes
     Route::resource('orderSource', Business\OrderSourceController::class);
-    Route::post('webhook/{platform}', [Business\OrderSourceController::class, 'handleWebhook'])->name('webhook.handle');
     Route::get('/suppliers', [Business\SupplierController::class, 'index'])->name('suppliers.index');
     Route::post('/suppliers', [Business\SupplierController::class, 'store'])->name('suppliers.store');
     Route::resource('ticketSystem', Business\TicketSystemController::class);
