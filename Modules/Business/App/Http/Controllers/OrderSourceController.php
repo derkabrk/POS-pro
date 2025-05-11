@@ -40,9 +40,6 @@ class OrderSourceController extends Controller
      */
     public function store(Request $request)
     {
-        // Log the incoming request data for debugging
-        \Log::info('Order Source Store Request:', $request->all());
-
         $request->validate([
             'account_name' => 'required|string',
             'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
@@ -54,17 +51,15 @@ class OrderSourceController extends Controller
             'status' => 'required|boolean',
         ]);
 
-        // Prepare settings based on the platform
         $settings = [];
         if ($request->name === 'Shopify') {
-            $settings['shop_domain'] = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
+            $settings['shop_domain'] = preg_replace('/^https?:\/\//', '', $request->shopify_store_url);
         } elseif ($request->name === 'WooCommerce') {
             $settings['store_url'] = $request->woocommerce_store_url;
         } elseif ($request->name === 'YouCan') {
             $settings['store_url'] = $request->youcan_store_url;
         }
 
-        // Create the OrderSource
         $orderSource = OrderSource::create([
             'account_name' => $request->account_name,
             'name' => $request->name,
@@ -72,8 +67,11 @@ class OrderSourceController extends Controller
             'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => json_encode($settings), // Store settings as JSON
+            'settings' => json_encode($settings),
         ]);
+
+        // Explicitly register the webhook
+        $this->registerWebhook($orderSource);
 
         return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully.');
     }
@@ -261,11 +259,13 @@ class OrderSourceController extends Controller
     protected function registerShopifyWebhook(OrderSource $orderSource)
     {
         $webhookUrl = $orderSource->webhook_url;
-        $shopifyStoreUrl = $orderSource->settings;
+        $settings = json_decode($orderSource->settings, true); // Decode settings into an array
 
-        if (!$shopifyStoreUrl) {
+        if (!isset($settings['shop_domain'])) {
             return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
         }
+
+        $shopifyStoreUrl = $settings['shop_domain'];
 
         $response = Http::withHeaders([
             'X-Shopify-Access-Token' => $orderSource->api_key,

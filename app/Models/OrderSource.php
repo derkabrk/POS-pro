@@ -43,14 +43,14 @@ class OrderSource extends Model
         parent::boot();
 
         // Automatically create a webhook when an OrderSource is created
-        static::created(function ($orderSource) {
+       /* static::created(function ($orderSource) {
             $orderSource->createPlatformWebhook();
         });
 
         // Automatically update the webhook when an OrderSource is updated
         static::updated(function ($orderSource) {
             $orderSource->createPlatformWebhook();
-        });
+        });*/
     }
 
     /**
