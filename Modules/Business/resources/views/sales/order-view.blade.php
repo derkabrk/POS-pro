@@ -20,17 +20,18 @@
                                 $statusOption = \App\Models\Sale::STATUS[$nextStatus] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
                             @endphp
                             <form 
-                                action="{{ route('business.sales.updateStatus') }}" <!-- Removed sale->id from the URL -->
+                                action="{{ route('business.sales.updateStatus') }}" 
                                 method="POST" 
-                                class="d-inline"
+                                class="d-inline status-update-form"
                             >
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="sale_id" value="{{ $sale->id }}"> <!-- Pass sale_id as a hidden input -->
-                                <input type="hidden" name="sale_status" value="{{ $nextStatus }}"> <!-- Pass sale_status as a hidden input -->
+                                <input type="hidden" name="sale_id" value="{{ $sale->id }}">
+                                <input type="hidden" name="sale_status" value="{{ $nextStatus }}">
                                 <button 
-                                    type="submit"
-                                    class="btn btn-sm {{ $statusOption['color'] }} text-white px-3 py-2 rounded-pill shadow-sm me-2 mb-2"
+                                    type="button" 
+                                    class="btn btn-sm {{ $statusOption['color'] }} text-white px-3 py-2 rounded-pill shadow-sm me-2 mb-2 status-update-btn"
+                                    data-status-name="{{ $statusOption['name'] }}"
                                 >
                                     {{ $statusOption['name'] }}
                                 </button>
@@ -129,4 +130,20 @@
         </div>
     </div>
 </div>
+
+<!-- Add JavaScript for Confirmation -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.status-update-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const statusName = this.getAttribute('data-status-name');
+                const form = this.closest('form');
+                if (confirm(`Are you sure you want to change the status to "${statusName}"?`)) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
 @endsection
