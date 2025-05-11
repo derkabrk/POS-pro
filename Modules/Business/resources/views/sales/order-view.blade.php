@@ -20,14 +20,14 @@
                                 $statusOption = \App\Models\Sale::STATUS[$nextStatus] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
                             @endphp
                             <form 
-                                action="{{ route('business.sales.updatestatus', ['sale' => $sale->id]) }}" 
+                                action="{{ route('business.sales.updateStatus') }}" <!-- Removed sale->id from the URL -->
                                 method="POST" 
                                 class="d-inline"
                             >
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="sale_id" value="{{ $sale->id }}">
-                                <input type="hidden" name="sale_status" value="{{ $nextStatus }}">
+                                <input type="hidden" name="sale_id" value="{{ $sale->id }}"> <!-- Pass sale_id as a hidden input -->
+                                <input type="hidden" name="sale_status" value="{{ $nextStatus }}"> <!-- Pass sale_status as a hidden input -->
                                 <button 
                                     type="submit"
                                     class="btn btn-sm {{ $statusOption['color'] }} text-white px-3 py-2 rounded-pill shadow-sm me-2 mb-2"
