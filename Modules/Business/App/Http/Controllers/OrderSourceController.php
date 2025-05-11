@@ -53,11 +53,7 @@ class OrderSourceController extends Controller
 
         $settings = [];
         if ($request->name === 'Shopify') {
-            $settings['shop_domain'] = preg_replace('/^https?:\/\//', '', $request->shopify_store_url);
-        } elseif ($request->name === 'WooCommerce') {
-            $settings['store_url'] = $request->woocommerce_store_url;
-        } elseif ($request->name === 'YouCan') {
-            $settings['store_url'] = $request->youcan_store_url;
+            $settings['shop_domain'] = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
         }
 
         $orderSource = OrderSource::create([
@@ -67,7 +63,7 @@ class OrderSourceController extends Controller
             'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => json_encode($settings),
+            'settings' => json_encode($settings), // Store settings as JSON
         ]);
 
         // Explicitly register the webhook
@@ -103,14 +99,9 @@ class OrderSourceController extends Controller
             'youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
 
-        // Extract the specific store URL based on the platform
-        $storeUrl = null;
+        $settings = [];
         if ($request->name === 'Shopify') {
-            $storeUrl = $request->shopify_store_url;
-        } elseif ($request->name === 'WooCommerce') {
-            $storeUrl = $request->woocommerce_store_url;
-        } elseif ($request->name === 'YouCan') {
-            $storeUrl = $request->youcan_store_url;
+            $settings['shop_domain'] = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
         }
 
         $orderSource->update([
@@ -120,7 +111,7 @@ class OrderSourceController extends Controller
             'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => $storeUrl, // Save the store URL as a plain string
+            'settings' => json_encode($settings), // Store settings as JSON
         ]);
 
         return response()->json([
@@ -259,7 +250,9 @@ class OrderSourceController extends Controller
     protected function registerShopifyWebhook(OrderSource $orderSource)
     {
         $webhookUrl = $orderSource->webhook_url;
-        $settings = json_decode($orderSource->settings, true); // Decode settings into an array
+
+        // Ensure settings is an array
+        $settings = is_array($orderSource->settings) ? $orderSource->settings : json_decode($orderSource->settings, true);
 
         if (!isset($settings['shop_domain'])) {
             return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
