@@ -4,7 +4,8 @@
 
 @section('main_content')
 @php
-    $disabledStatuses = ['Cash Out', 'Canceled']; // List of statuses to disable the button
+
+    $nextStatuses = \App\Models\Sale::getNextStatuses($sale->sale_status);
 @endphp
 <div class="erp-table-section py-4 px-3">
     <div class="container-fluid">
@@ -55,17 +56,17 @@
                         <div class="mb-3">
                             <span class="text-muted">{{ __('Status Control') }}:</span>
                             <div>
-                                @foreach (\App\Models\Sale::STATUS as $key => $statusOption)
+                                @foreach ($nextStatuses as $nextStatus)
                                     @php
-                                        $isDisabled = in_array($statusOption['name'], $disabledStatuses); // Check if the status is disabled
+                                        // Get the status details (name and color) from the STATUS array
+                                        $statusOption = \App\Models\Sale::STATUS[$nextStatus] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
                                     @endphp
                                     <button 
-                                        class="btn btn-sm {{ $statusOption['color'] }} text-white px-2 py-1 rounded-pill update-status-btn {{ $isDisabled ? 'disabled' : '' }}"
+                                        class="btn btn-sm {{ $statusOption['color'] }} text-white px-2 py-1 rounded-pill update-status-btn"
                                         data-bs-toggle="modal"
                                         data-bs-target="#updateStatusModal"
                                         data-sale-id="{{ $sale->id }}"
-                                        data-current-status="{{ $key }}"
-                                        {{ $isDisabled ? 'disabled' : '' }}
+                                        data-next-status="{{ $nextStatus }}"
                                     >
                                         {{ $statusOption['name'] }}
                                     </button>
