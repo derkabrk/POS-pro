@@ -48,7 +48,7 @@ class OrderSourceController extends Controller
             'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
             'api_key' => 'required|string',
             'api_secret' => 'nullable|string',
-            'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^[a-zA-Z0-9\-]+\.myshopify\.com$/',
+            'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
             'woocommerce_store_url' => 'nullable|required_if:name,WooCommerce|url',
             'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
             'status' => 'required|boolean',
@@ -100,7 +100,7 @@ class OrderSourceController extends Controller
             'api_secret' => 'nullable|string',
             'webhook_url' => 'required|url',
             'status' => 'required|boolean',
-            'shopify_store_url' => 'required_if:name,Shopify|url',
+            'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
             'woocommerce_store_url' => 'required_if:name,WooCommerce|url',
             'youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
