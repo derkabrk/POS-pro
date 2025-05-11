@@ -102,6 +102,9 @@
         const webhookUrl = `https://shyftcom.com/${platform}`;
         document.getElementById('webhook_url').value = webhookUrl;
 
+        console.log('Selected Platform:', platform);
+        console.log('Generated Webhook URL:', webhookUrl);
+
         // Hide all platform-specific settings
         document.querySelectorAll('.platform-settings').forEach(function (el) {
             el.classList.add('d-none');

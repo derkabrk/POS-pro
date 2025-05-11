@@ -40,28 +40,31 @@ class OrderSourceController extends Controller
      */
     public function store(Request $request)
     {
+        // Log the incoming request data for debugging
+        \Log::info('Order Source Store Request:', $request->all());
+
         $request->validate([
             'account_name' => 'required|string',
             'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
             'api_key' => 'required|string',
             'api_secret' => 'nullable|string',
-            'webhook_url' => 'required|url',
+            'shopify_store_url' => 'nullable|required_if:name,Shopify|url',
+            'woocommerce_store_url' => 'nullable|required_if:name,WooCommerce|url',
+            'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
             'status' => 'required|boolean',
-            'shopify_store_url' => 'required_if:name,Shopify|url',
-            'woocommerce_store_url' => 'required_if:name,WooCommerce|url',
-            'youcan_store_url' => 'required_if:name,YouCan|url',
         ]);
 
-        // Extract the specific store URL based on the platform
-        $storeUrl = null;
+        // Prepare settings based on the platform
+        $settings = [];
         if ($request->name === 'Shopify') {
-            $storeUrl = $request->shopify_store_url;
+            $settings['shop_domain'] = $request->shopify_store_url;
         } elseif ($request->name === 'WooCommerce') {
-            $storeUrl = $request->woocommerce_store_url;
+            $settings['store_url'] = $request->woocommerce_store_url;
         } elseif ($request->name === 'YouCan') {
-            $storeUrl = $request->youcan_store_url;
+            $settings['store_url'] = $request->youcan_store_url;
         }
 
+        // Create the OrderSource
         $orderSource = OrderSource::create([
             'account_name' => $request->account_name,
             'name' => $request->name,
@@ -69,10 +72,10 @@ class OrderSourceController extends Controller
             'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => $storeUrl, // Save the store URL as a plain string
+            'settings' => json_encode($settings), // Store settings as JSON
         ]);
 
-        return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully!');
+        return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully.');
     }
 
     public function show(OrderSource $orderSource)
