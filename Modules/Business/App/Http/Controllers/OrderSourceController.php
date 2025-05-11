@@ -67,7 +67,11 @@ class OrderSourceController extends Controller
         ]);
 
         // Explicitly register the webhook
-        $this->registerWebhook($orderSource);
+        try {
+            $this->registerWebhook($orderSource);
+        } catch (\Exception $e) {
+            \Log::error('Error during webhook registration:', ['exception' => $e->getMessage()]);
+        }
 
         return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully.');
     }
@@ -235,6 +239,8 @@ class OrderSourceController extends Controller
 
     public function registerWebhook(OrderSource $orderSource)
     {
+        \Log::info('Registering webhook for:', ['orderSource' => $orderSource]);
+
         switch ($orderSource->name) {
             case 'Shopify':
                 return $this->registerShopifyWebhook($orderSource);
@@ -243,18 +249,20 @@ class OrderSourceController extends Controller
             case 'YouCan':
                 return $this->registerYouCanWebhook($orderSource);
             default:
+                \Log::error('Unsupported platform for webhook registration:', ['name' => $orderSource->name]);
                 return response()->json(['message' => 'Unsupported platform'], 400);
         }
     }
 
     protected function registerShopifyWebhook(OrderSource $orderSource)
     {
-        $webhookUrl = $orderSource->webhook_url;
+        \Log::info('Registering Shopify webhook for:', ['orderSource' => $orderSource]);
 
-        // Ensure settings is an array
+        $webhookUrl = $orderSource->webhook_url;
         $settings = is_array($orderSource->settings) ? $orderSource->settings : json_decode($orderSource->settings, true);
 
         if (!isset($settings['shop_domain'])) {
+            \Log::error('Shopify store URL is missing in settings:', ['settings' => $settings]);
             return response()->json(['message' => 'Shopify store URL is missing in settings'], 400);
         }
 
@@ -271,9 +279,11 @@ class OrderSourceController extends Controller
         ]);
 
         if ($response->successful()) {
+            \Log::info('Shopify webhook registered successfully:', ['response' => $response->json()]);
             return response()->json(['message' => 'Shopify webhook registered successfully']);
         }
 
+        \Log::error('Failed to register Shopify webhook:', ['response' => $response->body()]);
         return response()->json(['message' => 'Failed to register Shopify webhook', 'error' => $response->body()], 400);
     }
 
