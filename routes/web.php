@@ -4,6 +4,11 @@ use App\Http\Controllers as Web;
 use App\Models\PaymentType;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use Modules\Business\App\Http\Controllers as Business;
+
+
+Route::post('/webhook/{platform}', [Business\OrderSourceController::class, 'handleWebhook'])->name('webhook.handle');
+
 
 Route::get('/', [Web\WebController::class, 'index'])->name('home');
 Route::resource('blogs', Web\BlogController::class)->only('index', 'show', 'store');
