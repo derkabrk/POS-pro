@@ -20,7 +20,7 @@
                                 $statusOption = \App\Models\Sale::STATUS[$nextStatus] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
                             @endphp
                             <form 
-                                action="{{ route('business.sales.updateStatus') }}" 
+                                action="{{ route('business.sales.updatestatus') }}" 
                                 method="POST" 
                                 class="d-inline status-update-form"
                             >
