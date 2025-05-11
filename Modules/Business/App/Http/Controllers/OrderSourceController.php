@@ -151,8 +151,9 @@ class OrderSourceController extends Controller
         // Parse the order data based on the platform
         $orderData = $this->parseOrderData($platform, $request->all(), $orderSource);
 
-        // Add the order_source_id to the order data
+        // Add the order_source_id and business_id to the order data
         $orderData['order_source_id'] = $orderSource->id;
+        $orderData['business_id'] = $orderSource->business_id;
 
         // Create the Sale record
         $sale = Sale::create($orderData);

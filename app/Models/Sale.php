@@ -105,13 +105,20 @@ class Sale extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $id = Sale::where('business_id', auth()->user()->business_id)->count() + 1;
+            // Ensure business_id is set before generating the invoice number
+            if (empty($model->business_id)) {
+                throw new \Exception('business_id is required to create a Sale.');
+            }
+
+            // Generate the invoice number based on the business_id
+            $id = Sale::where('business_id', $model->business_id)->count() + 1;
             $model->invoiceNumber = "S" . str_pad($id, 2, '0', STR_PAD_LEFT);
         });
+
         static::creating(function ($model) {
+            // Generate a unique tracking ID
             $model->tracking_id = 'TRK-' . Str::upper(Str::random(10));
         });
-
     }
 
     /**
