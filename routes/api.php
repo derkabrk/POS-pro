@@ -5,7 +5,7 @@ use Modules\Business\App\Http\Controllers as Business;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    Route::post('webhook/{platform}', [Business\OrderSourceController::class, 'handleWebhook'])->name('webhook.handle');
+    Route::post('/webhook/{platform}', [Business\OrderSourceController::class, 'handleWebhook'])->name('webhook.handle');
     Route::post('/sign-in', [Api\Auth\AuthController::class, 'login']);
     Route::post('/submit-otp', [Api\Auth\AuthController::class, 'submitOtp']);
     Route::post('/sign-up', [Api\Auth\AuthController::class, 'signUp']);
