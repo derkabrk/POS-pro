@@ -13,15 +13,22 @@ use Illuminate\Support\Facades\DB;
 
 class SaleConfirmeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-         $sale = Sale::with(
+        // Fetch a single sale record
+        $sale = Sale::with(
             'user:id,name',
             'party:id,name,email,phone,type',
             'payment_type:id,name'
         )
-            ->where('business_id', auth()->user()->business_id)->whereIn('sale_status', [1, 2, 3, 4, 5])
-            ->latest();
+            ->where('business_id', auth()->user()->business_id)
+            ->whereIn('sale_status', [1, 2, 3, 4, 5])
+            ->latest()
+            ->first(); // Fetch the first record
+
+        if (!$sale) {
+            return redirect()->back()->with('error', __('Sale not found.'));
+        }
 
         // Decode the products field to get the array of objects
         $products = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
