@@ -21,7 +21,7 @@ class SaleConfirmeController extends Controller
             'payment_type:id,name'
         )
             ->where('business_id', auth()->user()->business_id)->whereIn('sale_status', [1, 2, 3, 4, 5])
-            ->latest().paginate(10);
+            ->latest();
 
         // Decode the products field to get the array of objects
         $products = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
