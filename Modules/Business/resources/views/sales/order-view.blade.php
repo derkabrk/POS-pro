@@ -28,7 +28,7 @@
                                 @method('PUT')
                                 <input type="hidden" name="sale_id" value="{{ $sale->id }}">
                                 <input type="hidden" name="sale_status" value="{{ $nextStatus }}">
-                                 <input type="hidden" name="redirect_from" value="confirm_user">
+                                <input type="hidden" name="redirect_from" value="confirm_user">
                                 <button 
                                     type="button" 
                                     class="btn btn-sm {{ $statusOption['color'] }} text-white px-3 py-2 rounded-pill shadow-sm me-2 mb-2 status-update-btn"
