@@ -51,6 +51,7 @@ class SaleConfirmeController extends Controller
                 'quantity' => $product['quantity'] ?? 0,
                 'price' => $productDetail->productSalePrice ?? 0,
                 'subtotal' => ($product['quantity'] ?? 0) * ($productDetail->productSalePrice ?? 0),
+                'image' => $productDetail->image ?? null, // Include the image field
             ];
         });
 

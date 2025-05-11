@@ -49,22 +49,27 @@
                             <span class="text-muted d-block mb-1">{{ __('Order ID') }}:</span>
                             <span class="fw-bold">{{ $sale->tracking_id ?? 'N/A' }}</span>
                         </div>
+                        <hr> <!-- Divider -->
                         <div class="mb-4">
                             <span class="text-muted d-block mb-1">{{ __('Order Date') }}:</span>
                             <span class="fw-bold">{{ $sale->created_at->format('d M, Y') }}</span>
                         </div>
+                        <hr> <!-- Divider -->
                         <div class="mb-4">
                             <span class="text-muted d-block mb-1">{{ __('Customer Name') }}:</span>
                             <span class="fw-bold">{{ $sale->party->name ?? 'N/A' }}</span>
                         </div>
+                        <hr> <!-- Divider -->
                         <div class="mb-4">
                             <span class="text-muted d-block mb-1">{{ __('Delivery Type') }}:</span>
                             <span class="fw-bold">{{ $sale->sale_type == 0 ? 'Physical' : ($sale->delivery_type == 0 ? 'Home' : 'StepDesk') }}</span>
                         </div>
+                        <hr> <!-- Divider -->
                         <div class="mb-4">
                             <span class="text-muted d-block mb-1">{{ __('Payment Status') }}:</span>
                             <span class="fw-bold">{{ $sale->payment_status ?? 'N/A' }}</span>
                         </div>
+                        <hr> <!-- Divider -->
                         <div class="mb-4">
                             <span class="text-muted d-block mb-1">{{ __('Order Status') }}:</span>
                             @php
@@ -83,6 +88,7 @@
                             <table class="table table-striped table-hover align-middle">
                                 <thead class="table-light">
                                     <tr>
+                                        <th>{{ __('Product Image') }}</th>
                                         <th>{{ __('Product ID') }}</th>
                                         <th>{{ __('Product Name') }}</th>
                                         <th>{{ __('Category') }}</th>
@@ -94,6 +100,13 @@
                                 <tbody>
                                     @foreach ($productsWithDetails as $product)
                                         <tr>
+                                            <td>
+                                                @if (!empty($product['image']))
+                                                    <img src="{{ asset($product['image']) }}" alt="{{ $product['name'] }}" class="img-thumbnail" style="width: 50px; height: 50px;">
+                                                @else
+                                                    <span class="text-muted">{{ __('No Image') }}</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $product['id'] }}</td>
                                             <td>{{ $product['name'] }}</td>
                                             <td>{{ $product['category'] }}</td>

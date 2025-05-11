@@ -601,6 +601,7 @@ class AcnooSaleController extends Controller
                 'category' => $productDetail->category->categoryName ?? 'N/A',
                 'quantity' => $product['quantity'] ?? 0,
                 'price' => $productDetail->productSalePrice ?? 0,
+                'image' => $productDetail->image ?? null, // 
                 'subtotal' => ($product['quantity'] ?? 0) * ($productDetail->productSalePrice ?? 0),
             ];
         });
