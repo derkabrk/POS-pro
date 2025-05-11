@@ -49,6 +49,7 @@ class Sale extends Model
         'saleDate',
         'image',
         'meta',
+        'order_source_id',
     ];
 
     public function business() : BelongsTo
@@ -91,7 +92,13 @@ class Sale extends Model
         return $this->belongsTo(PaymentType::class);
     }
 
-    
+    /**
+     * Relationship with the OrderSource model.
+     */
+    public function orderSource(): BelongsTo
+    {
+        return $this->belongsTo(OrderSource::class, 'order_source_id');
+    }
 
     public static function boot()
     {

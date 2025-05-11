@@ -139,16 +139,25 @@ class OrderSourceController extends Controller
 
     public function handleWebhook(Request $request, $platform)
     {
+        // Find the OrderSource by platform name
         $orderSource = OrderSource::where('name', $platform)->first();
+
         if (!$orderSource) {
             return response()->json(['message' => 'Invalid platform'], 400);
         }
 
+        // Verify the webhook signature
         if (!$this->verifyWebhookSignature($request, $orderSource)) {
             return response()->json(['message' => 'Invalid webhook signature'], 403);
         }
 
+        // Parse the order data based on the platform
         $orderData = $this->parseOrderData($platform, $request->all());
+
+        // Add the order_source_id to the order data
+        $orderData['order_source_id'] = $orderSource->id;
+
+        // Create the Sale record
         $sale = Sale::create($orderData);
 
         return response()->json(['message' => 'Sale stored successfully', 'sale' => $sale], 200);

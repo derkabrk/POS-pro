@@ -83,9 +83,16 @@ class OrderSource extends Model
      */
     protected function createShopifyWebhook()
     {
+        $settings = $this->settings;
+
+        if (!isset($settings['shop_domain'])) {
+            \Log::error('Shopify settings are missing the shop_domain key.');
+            return;
+        }
+
         $response = Http::withHeaders([
             'X-Shopify-Access-Token' => $this->api_key,
-        ])->post("https://{$this->settings['shop_domain']}/admin/api/2023-01/webhooks.json", [
+        ])->post("https://{$settings['shop_domain']}/admin/api/2023-01/webhooks.json", [
             'webhook' => [
                 'topic' => 'orders/create',
                 'address' => $this->webhook_url,
@@ -120,8 +127,15 @@ class OrderSource extends Model
      */
     protected function createWooCommerceWebhook()
     {
+        $settings = $this->settings;
+
+        if (!isset($settings['store_url'])) {
+            \Log::error('WooCommerce settings are missing the store_url key.');
+            return;
+        }
+
         $response = Http::withBasicAuth($this->api_key, $this->api_secret)
-            ->post("{$this->settings['store_url']}/wp-json/wc/v3/webhooks", [
+            ->post("{$settings['store_url']}/wp-json/wc/v3/webhooks", [
                 'name' => 'Order Created Webhook',
                 'topic' => 'order.created',
                 'delivery_url' => $this->webhook_url,
@@ -135,10 +149,10 @@ class OrderSource extends Model
 
     /**
      * Get the settings attribute.
-     * Ensure it is returned as a plain string.
+     * Decode the settings JSON into an array.
      */
     public function getSettingsAttribute($value)
     {
-        return $value; // Return the plain string value
+        return json_decode($value, true) ?? [];
     }
 }
