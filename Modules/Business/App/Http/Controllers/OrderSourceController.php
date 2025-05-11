@@ -155,6 +155,9 @@ class OrderSourceController extends Controller
         $orderData['order_source_id'] = $orderSource->id;
         $orderData['business_id'] = $orderSource->business_id;
 
+        // Log the data being passed to Sale::create()
+        \Log::info('Creating Sale with data:', $orderData);
+
         // Create the Sale record
         $sale = Sale::create($orderData);
 

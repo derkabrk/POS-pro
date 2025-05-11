@@ -107,6 +107,7 @@ class Sale extends Model
         static::creating(function ($model) {
             // Ensure business_id is set before generating the invoice number
             if (empty($model->business_id)) {
+                \Log::error('business_id is missing in Sale model:', $model->toArray());
                 throw new \Exception('business_id is required to create a Sale.');
             }
 
