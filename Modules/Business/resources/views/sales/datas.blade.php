@@ -25,6 +25,7 @@
                 data-bs-target="#updateStatusModal"
                 data-sale-id="{{ $sale->id }}"
                 data-current-status="{{ $sale->sale_status }}"
+                data-redirect-from="orders_table"
                 {{ in_array($status['name'], $disabledStatuses) ? 'disabled' : '' }} 
             >
                 {{ $status['name'] }}
