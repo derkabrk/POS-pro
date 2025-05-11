@@ -99,7 +99,7 @@
 <script>
     document.getElementById('platform').addEventListener('change', function () {
         const platform = this.value;
-        const webhookUrl = `https://shyftcom.com/${platform}`;
+        const webhookUrl = `https://shyftcom.com/webhook/${platform}`;
         document.getElementById('webhook_url').value = webhookUrl;
 
         console.log('Selected Platform:', platform);
