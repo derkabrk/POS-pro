@@ -172,7 +172,7 @@ class OrderSourceController extends Controller
         $signature = $request->header($headerName);
 
         if (empty($signature) || empty($orderSource->api_secret)) {
-            Log::warning('Missing signature or API secret', [
+            \Log::warning('Missing signature or API secret', [
                 'signature' => $signature,
                 'api_secret' => $orderSource->api_secret,
                 'platform' => $orderSource->name,
@@ -180,7 +180,14 @@ class OrderSourceController extends Controller
             return false;
         }
 
-        $expectedSignature = hash_hmac('sha256', $payload, $orderSource->api_secret, $orderSource->name === 'Shopify');
+        $expectedSignature = base64_encode(hash_hmac('sha256', $payload, $orderSource->api_secret, true));
+
+        \Log::info('Webhook signature validation:', [
+            'expected' => $expectedSignature,
+            'received' => $signature,
+            'payload' => $payload,
+        ]);
+
         return hash_equals($expectedSignature, $signature);
     }
 
