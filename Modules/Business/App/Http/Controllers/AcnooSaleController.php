@@ -576,19 +576,37 @@ class AcnooSaleController extends Controller
         $sale = Sale::with(
             'user:id,name',
             'party:id,name,email,phone,type',
-            'details',
-            'details.product:id,productName,category_id',
-            'details.product.category:id,categoryName',
             'payment_type:id,name'
         )
             ->where('business_id', auth()->user()->business_id)
             ->findOrFail($id);
 
-        // Fetch sales with returns
+        // Decode the products field to get the array of objects
+        $products = is_array($sale->products) ? $sale->products : json_decode($sale->products, true) ?? [];
 
+        if (empty($products)) {
+            return redirect()->back()->with('error', __('Products list not found.'));
+        }
+
+        // Fetch product details from the database
+        $productIds = collect($products)->pluck('id')->toArray();
+        $productDetails = Product::whereIn('id', $productIds)->get();
+
+        // Map products with their details
+        $productsWithDetails = collect($products)->map(function ($product) use ($productDetails) {
+            $productDetail = $productDetails->where('id', $product['id'])->first();
+            return [
+                'id' => $product['id'],
+                'name' => $productDetail->productName ?? 'Unknown Product',
+                'category' => $productDetail->category->categoryName ?? 'N/A',
+                'quantity' => $product['quantity'] ?? 0,
+                'price' => $productDetail->productSalePrice ?? 0,
+                'subtotal' => ($product['quantity'] ?? 0) * ($productDetail->productSalePrice ?? 0),
+            ];
+        });
 
         // Return the view for showing order details
-        return view('business::sales.order-view', compact('sale',));
+        return view('business::sales.order-view', compact('sale', 'productsWithDetails'));
     }
 
     public function edit($id)

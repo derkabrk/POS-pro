@@ -76,23 +76,27 @@
                     <!-- Right Side: Products & Totals -->
                     <div class="col-lg-6">
                         <h5 class="fw-bold text-secondary mb-4">{{ __('Products') }}</h5>
-                        <div class="table-responsive mb-4">
+                        <div class="table-responsive">
                             <table class="table table-striped table-hover align-middle">
                                 <thead class="table-light">
                                     <tr>
+                                        <th>{{ __('Product ID') }}</th>
                                         <th>{{ __('Product Name') }}</th>
+                                        <th>{{ __('Category') }}</th>
                                         <th>{{ __('Quantity') }}</th>
-                                        <th>{{ __('Unit Price') }}</th>
+                                        <th>{{ __('Price') }}</th>
                                         <th>{{ __('Subtotal') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($sale->details as $detail)
+                                    @foreach ($productsWithDetails as $product)
                                         <tr>
-                                            <td>{{ $detail->product->productName ?? 'N/A' }}</td>
-                                            <td>{{ $detail->quantity }}</td>
-                                            <td>${{ number_format($detail->unit_price, 2) }}</td>
-                                            <td>${{ number_format($detail->quantity * $detail->unit_price, 2) }}</td>
+                                            <td>{{ $product['id'] }}</td>
+                                            <td>{{ $product['name'] }}</td>
+                                            <td>{{ $product['category'] }}</td>
+                                            <td>{{ $product['quantity'] }}</td>
+                                            <td>${{ number_format($product['price'], 2) }}</td>
+                                            <td>${{ number_format($product['subtotal'], 2) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
