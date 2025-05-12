@@ -160,9 +160,10 @@ class OrderSourceController extends Controller
         // Parse the order data based on the platform
         $orderData = $this->parseOrderData($platform, $payload, $orderSource);
 
-        // Add the order_source_id and business_id to the order data
+        
         $orderData['order_source_id'] = $orderSource->id;
         $orderData['business_id'] = $businessId;
+        $orderData['user_id'] = auth()->id() ?? 1;
 
         // Log the data being passed to Sale::create()
         \Log::info('Creating Sale with data:', $orderData);
