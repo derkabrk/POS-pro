@@ -57,14 +57,15 @@ class OrderSourceController extends Controller
         }
 
         $orderSource = OrderSource::create([
-            'business_id' => auth()->user()->business_id, // Use the authenticated user's 
+            'business_id' => auth()->user()->business_id,
+            'user_id' => auth()->id(),
             'account_name' => $request->account_name,
             'name' => $request->name,
             'api_key' => $request->api_key,
             'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => json_encode($settings), // Store settings as JSON
+            'settings' => json_encode($settings),
         ]);
 
         // Explicitly register the webhook
@@ -116,7 +117,8 @@ class OrderSourceController extends Controller
             'api_secret' => $request->api_secret,
             'webhook_url' => $request->webhook_url,
             'status' => $request->status,
-            'settings' => json_encode($settings), // Store settings as JSON
+            'settings' => json_encode($settings),
+            'user_id' => auth()->id(),
         ]);
 
         return response()->json([
@@ -136,39 +138,41 @@ class OrderSourceController extends Controller
 
     public function handleWebhook(Request $request, $platform)
     {
-        // Find the OrderSource by platform name
+        
         $orderSource = OrderSource::where('name', $platform)->first();
 
         if (!$orderSource) {
             return response()->json(['message' => 'Invalid platform'], 400);
         }
 
-        // Verify the webhook signature
+       
         if (!$this->verifyWebhookSignature($request, $orderSource)) {
             return response()->json(['message' => 'Invalid webhook signature'], 403);
         }
 
-        // Extract business_id from the request payload
+        
         $payload = $request->all();
-        $businessId = $payload['business_id'] ?? null;
+
+        
+        $businessId = $orderSource->business_id;
 
         if (!$businessId) {
-            \Log::error('business_id is missing in the webhook payload:', $payload);
-            return response()->json(['message' => 'business_id is missing in the webhook payload'], 400);
+            \Log::error('business_id is missing in the OrderSource:', ['orderSource' => $orderSource]);
+            return response()->json(['message' => 'business_id is missing in the OrderSource'], 400);
         }
 
-        // Parse the order data based on the platform
+       
         $orderData = $this->parseOrderData($platform, $payload, $orderSource);
-
+ 
         
         $orderData['order_source_id'] = $orderSource->id;
         $orderData['business_id'] = $businessId;
-        $orderData['user_id'] = auth()->id() ?? 1;
+        $orderData['user_id'] = $orderSource->user_id;
 
-        // Log the data being passed to Sale::create()
+        
         \Log::info('Creating Sale with data:', $orderData);
 
-        // Create the Sale record
+        
         $sale = Sale::create($orderData);
 
         return response()->json(['message' => 'Sale stored successfully', 'sale' => $sale], 200);
@@ -212,11 +216,11 @@ class OrderSourceController extends Controller
             case 'Shopify':
                 $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
                 return [
-                    'party_id' => $data['party_id'] ?? null, // Default to null if not provided
-                    'invoiceNumber' => $data['id'] ?? 'INV-' . uniqid(), // Generate a unique invoice number if not provided
-                    'customer_name' => ($customer['first_name'] ?? 'Unknown') . ' ' . ($customer['last_name'] ?? 'Customer'), // Default to "Unknown Customer"
-                    'totalAmount' => $data['total_price'] ?? 0.0, // Default to 0.0
-                    'dueAmount' => $data['due_amount'] ?? 0.0, // Default to 0.0
+                    'party_id' => $data['party_id'] ?? null,
+                    'invoiceNumber' => $data['id'] ?? 'INV-' . uniqid(),
+                    'customer_name' => ($customer['first_name'] ?? 'Unknown') . ' ' . ($customer['last_name'] ?? 'Customer'),
+                    'totalAmount' => $data['total_price'] ?? 0.0, 
+                    'dueAmount' => $data['due_amount'] ?? 0.0, 
                     'paidAmount' => $data['paid_amount'] ?? $data['total_price'] ?? 0.0,
                     
                     'saleDate' => $data['sale_date'] ?? now(),
@@ -225,7 +229,7 @@ class OrderSourceController extends Controller
                     'delivery_fees' => $data['delivery_fees'] ?? 0,
                     'sale_status' => $data['sale_status'] ?? 1,
                      
-                    'meta' => json_encode($data), // Store the entire payload as JSON
+                    'meta' => json_encode($data),
                 ];
 
             default:

@@ -16,14 +16,15 @@ class OrderSource extends Model
      * @var array
      */
     protected $fillable = [
-        'business_id', // Add this field
-        'account_name', // Account name for the order source
-        'name', // e.g., Shopify, YouCan, WooCommerce
-        'api_key', // API key for the platform
-        'api_secret', // API secret for the platform
-        'webhook_url', // Webhook URL for receiving updates
-        'status', // Active or inactive
-        'settings', // Store URL as a plain string
+        'business_id',
+        'user_id',
+        'account_name', 
+        'name', 
+        'api_key',
+        'api_secret',
+        'webhook_url',
+        'status',
+        'settings',
     ];
 
     /**
