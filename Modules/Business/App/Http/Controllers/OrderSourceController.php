@@ -148,12 +148,21 @@ class OrderSourceController extends Controller
             return response()->json(['message' => 'Invalid webhook signature'], 403);
         }
 
+        // Extract business_id from the request payload
+        $payload = $request->all();
+        $businessId = $payload['business_id'] ?? null;
+
+        if (!$businessId) {
+            \Log::error('business_id is missing in the webhook payload:', $payload);
+            return response()->json(['message' => 'business_id is missing in the webhook payload'], 400);
+        }
+
         // Parse the order data based on the platform
-        $orderData = $this->parseOrderData($platform, $request->all(), $orderSource);
+        $orderData = $this->parseOrderData($platform, $payload, $orderSource);
 
         // Add the order_source_id and business_id to the order data
         $orderData['order_source_id'] = $orderSource->id;
-        $orderData['business_id'] = $orderSource->business_id;
+        $orderData['business_id'] = $businessId;
 
         // Log the data being passed to Sale::create()
         \Log::info('Creating Sale with data:', $orderData);
@@ -202,7 +211,7 @@ class OrderSourceController extends Controller
             case 'Shopify':
                 $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
                 return [
-                    'business_id' => $orderSource->business_id, // Use the business_id from the OrderSource
+                    // Do not overwrite business_id here
                     'party_id' => null,
                     'invoiceNumber' => $data['id'] ?? null,
                     'customer_name' => ($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''),
