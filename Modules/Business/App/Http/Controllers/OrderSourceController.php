@@ -129,11 +129,11 @@ class OrderSourceController extends Controller
 
     public function destroy(OrderSource $orderSource)
     {
+        // Delete the OrderSource
         $orderSource->delete();
 
-        return response()->json([
-            'message' => __('Order source deleted successfully.'),
-        ]);
+        // Redirect the user to the index page with a success message
+        return redirect()->route('business.orderSource.index')->with('success', __('Order source deleted successfully.'));
     }
 
     public function handleWebhook(Request $request, $platform)
@@ -270,12 +270,19 @@ class OrderSourceController extends Controller
 
         $response = Http::withHeaders([
             'X-Shopify-Access-Token' => $orderSource->api_key,
-        ])->post("https://{$shopifyStoreUrl}/admin/api/2023-01/webhooks.json", [
+        ])->post("https://{$shopifyStoreUrl}/admin/api/2025-04/webhooks.json", [
             'webhook' => [
                 'topic' => 'orders/create',
                 'address' => $webhookUrl,
                 'format' => 'json',
             ],
+        ]);
+
+        // Log the full response
+        \Log::info('Shopify API Response:', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+            'json' => $response->json(),
         ]);
 
         if ($response->successful()) {
