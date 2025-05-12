@@ -15,10 +15,19 @@ class SlickPay
         $apiKey = $gateway->data['slickpay_api_key']; // Replace with the actual API key field
         $amount = $array['pay_amount'] * 100; // Convert to the smallest currency unit (e.g., cents)
 
+        // Retrieve the business details using business_id
+        $business = \App\Models\Business::findOrFail($array['business_id']);
+        $user = $business->user; // Retrieve the associated User model
+
         // Prepare the payment request payload
         $payload = [
             'amount' => $amount, // Required: Amount to transfer (must be greater than 100)
             'url' => self::redirect_if_payment_success(), // Required: Return URL after payment
+            'firstname' => $user->name, 
+            'email' => $business->email, 
+            'phone' => $business->phone, 
+            'lastname' => $user->name, 
+            'address' => $business->address,
         ];
 
         // Add the account UUID if provided
@@ -30,24 +39,8 @@ class SlickPay
         if (!empty($array['contact'])) {
             $payload['contact'] = $array['contact'];
         } else {
-            // If no contact is provided, use individual contact details
             if (!empty($array['rib'])) {
-                $payload['rib'] = $array['rib'];
-            }
-            if (!empty($array['firstname'])) {
-                $payload['firstname'] = $array['firstname'];
-            }
-            if (!empty($array['lastname'])) {
-                $payload['lastname'] = $array['lastname'];
-            }
-            if (!empty($array['phone'])) {
-                $payload['phone'] = $array['phone'];
-            }
-            if (!empty($array['email'])) {
-                $payload['email'] = $array['email'];
-            }
-            if (!empty($array['address'])) {
-                $payload['address'] = $array['address'];
+                $payload['rib'] = '00799999002265799150';
             }
         }
 
