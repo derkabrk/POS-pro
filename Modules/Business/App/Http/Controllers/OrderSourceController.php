@@ -212,16 +212,20 @@ class OrderSourceController extends Controller
             case 'Shopify':
                 $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
                 return [
-                    // Do not overwrite business_id here
-                    'party_id' => null,
-                    'invoiceNumber' => $data['id'] ?? null,
-                    'customer_name' => ($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''),
-                    'totalAmount' => $data['total_price'] ?? 0,
-                    'dueAmount' => 0,
-                    'paidAmount' => $data['total_price'] ?? 0,
-                    'sale_status' => $data['financial_status'] ?? 'unknown',
-                    'saleDate' => now(),
-                    'meta' => json_encode($data),
+                    'party_id' => $data['party_id'] ?? null, // Default to null if not provided
+                    'invoiceNumber' => $data['id'] ?? 'INV-' . uniqid(), // Generate a unique invoice number if not provided
+                    'customer_name' => ($customer['first_name'] ?? 'Unknown') . ' ' . ($customer['last_name'] ?? 'Customer'), // Default to "Unknown Customer"
+                    'totalAmount' => $data['total_price'] ?? 0.0, // Default to 0.0
+                    'dueAmount' => $data['due_amount'] ?? 0.0, // Default to 0.0
+                    'paidAmount' => $data['paid_amount'] ?? $data['total_price'] ?? 0.0,
+                    
+                    'saleDate' => $data['sale_date'] ?? now(),
+                    'delivery_type' => $data['delivery_type'] ?? 0,
+                    'parcel_type' => $data['delivery_type'] ?? 0,
+                    'delivery_fees' => $data['delivery_fees'] ?? 0,
+                    'sale_status' => $data['sale_status'] ?? 1,
+                     
+                    'meta' => json_encode($data), // Store the entire payload as JSON
                 ];
 
             default:
