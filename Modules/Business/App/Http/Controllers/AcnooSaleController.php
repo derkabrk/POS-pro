@@ -38,30 +38,35 @@ class AcnooSaleController extends Controller
             return redirect()->back()->with('error', __('You have no permission to access.'));
         }
 
+        // Retrieve the business_id from the authenticated user
+        $businessId = auth()->user()->business_id;
 
-    $orderSources = OrderSource::where('business_id', $businessId)->get();
+        // Fetch OrderSources for the dropdown
+        $orderSources = OrderSource::where('business_id', $businessId)->get();
 
-
-
-        $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
+        // Fetch sales with returns
+        $salesWithReturns = SaleReturn::where('business_id', $businessId)
             ->pluck('sale_id')
             ->toArray();
 
+        // Build the query for sales
         $query = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'details', 'details.product:id,productName,category_id', 'details.product.category:id,categoryName', 'payment_type:id,name')
-            ->where('business_id', auth()->user()->business_id)
+            ->where('business_id', $businessId)
             ->latest();
-                if ($request->has('order_source_id') && $request->order_source_id) {
-        $query->where('order_source_id', $request->order_source_id);
-    }
+
+        // Apply filters
+        if ($request->has('order_source_id') && $request->order_source_id) {
+            $query->where('order_source_id', $request->order_source_id);
+        }
 
         if ($request->has('today') && $request->today) {
             $query->whereDate('created_at', Carbon::today());
         }
-        
 
+        // Paginate the results
         $sales = $query->paginate(20);
 
-        return view('business::sales.index', compact('sales', 'salesWithReturns','orderSources' ));
+        return view('business::sales.index', compact('sales', 'salesWithReturns', 'orderSources'));
     }
 
     public function acnoofilter(Request $request)
