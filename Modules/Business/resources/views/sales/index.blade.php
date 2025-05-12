@@ -38,6 +38,16 @@
             </select>
         </div>
 
+        <!-- Order Source Dropdown -->
+        <div class="gpt-up-down-arrow position-relative">
+            <select name="order_source_id" id="order_source_filter" class="form-control">
+                <option value="">{{ __('All Order Sources') }}</option>
+                @foreach($orderSources as $orderSource)
+                    <option value="{{ $orderSource->id }}">{{ $orderSource->account_name }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <!-- Search Input -->
         <div class="table-search position-relative">
             <input type="text" name="search" class="form-control" placeholder="{{ __('Search...') }}">

@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Collection;
 
+
 class AcnooSaleController extends Controller
 {
     use HasUploader;
@@ -36,6 +37,11 @@ class AcnooSaleController extends Controller
             return redirect()->back()->with('error', __('You have no permission to access.'));
         }
 
+
+    $orderSources = OrderSource::where('business_id', $businessId)->get();
+
+
+
         $salesWithReturns = SaleReturn::where('business_id', auth()->user()->business_id)
             ->pluck('sale_id')
             ->toArray();
@@ -43,14 +49,18 @@ class AcnooSaleController extends Controller
         $query = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'details', 'details.product:id,productName,category_id', 'details.product.category:id,categoryName', 'payment_type:id,name')
             ->where('business_id', auth()->user()->business_id)
             ->latest();
+                if ($request->has('order_source_id') && $request->order_source_id) {
+        $query->where('order_source_id', $request->order_source_id);
+    }
 
         if ($request->has('today') && $request->today) {
             $query->whereDate('created_at', Carbon::today());
         }
+        
 
         $sales = $query->paginate(20);
 
-        return view('business::sales.index', compact('sales', 'salesWithReturns', ));
+        return view('business::sales.index', compact('sales', 'salesWithReturns','orderSources' ));
     }
 
     public function acnoofilter(Request $request)
@@ -79,6 +89,7 @@ class AcnooSaleController extends Controller
             'html' => view('business::sales.datas', compact('sales'))->render()
         ]);
     }
+
 
     public function productFilter(Request $request)
     {
@@ -538,67 +549,9 @@ class AcnooSaleController extends Controller
         return $finalProducts;
     }
     
-    public function handleWebhook(Request $request, $platform)
-    {
-        // Find the OrderSource by platform name
-        $orderSource = OrderSource::where('name', $platform)->first();
+    
 
-        if (!$orderSource) {
-            return response()->json(['message' => 'Invalid platform'], 400);
-        }
-
-        // Verify the webhook signature
-        if (!$this->verifyWebhookSignature($request, $orderSource)) {
-            return response()->json(['message' => 'Invalid webhook signature'], 403);
-        }
-
-        // Extract business_id from the request payload
-        $payload = $request->all();
-        $businessId = $payload['business_id'] ?? null;
-
-        if (!$businessId) {
-            \Log::error('business_id is missing in the webhook payload:', $payload);
-            return response()->json(['message' => 'business_id is missing in the webhook payload'], 400);
-        }
-
-        // Parse the order data based on the platform
-        $orderData = $this->parseOrderData($platform, $payload, $orderSource);
-
-        // Add the order_source_id and business_id to the order data
-        $orderData['order_source_id'] = $orderSource->id;
-        $orderData['business_id'] = $businessId;
-
-        // Log the data being passed to Sale::create()
-        \Log::info('Creating Sale with data:', $orderData);
-
-        // Create the Sale record
-        $sale = Sale::create($orderData);
-
-        return response()->json(['message' => 'Sale stored successfully', 'sale' => $sale], 200);
-    }
-
-    protected function parseOrderData($platform, $data, $orderSource)
-    {
-        switch ($platform) {
-            case 'Shopify':
-                $customer = is_array($data['customer'] ?? null) ? $data['customer'] : [];
-                return [
-                    // Do not overwrite business_id here
-                    'party_id' => null,
-                    'invoiceNumber' => $data['id'] ?? null,
-                    'customer_name' => ($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''),
-                    'totalAmount' => $data['total_price'] ?? 0,
-                    'dueAmount' => 0,
-                    'paidAmount' => $data['total_price'] ?? 0,
-                    'sale_status' => $data['financial_status'] ?? 'unknown',
-                    'saleDate' => now(),
-                    'meta' => json_encode($data),
-                ];
-
-            default:
-                throw new \Exception('Unsupported platform');
-        }
-    }
+    
 
     public function show($id)
     {
@@ -1098,6 +1051,8 @@ class AcnooSaleController extends Controller
         ]);
 
     }
+
+
 
     public function updatestatus(Request $request)
     {
