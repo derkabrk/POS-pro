@@ -162,6 +162,13 @@ class AuthenticatedSessionController extends Controller
             return response()->json(['message' => __('User not found.')], 400);
         }
 
+        \Log::info('OTP Verification Attempt:', [
+            'email' => $request->email,
+            'otp' => $request->otp,
+            'user_otp' => $user->remember_token ?? null,
+            'otp_expiration' => $user->email_verified_at ?? null,
+        ]);
+
         // Check if the OTP matches
         if ($user->remember_token !== $request->otp) {
             return response()->json(['message' => __('Invalid OTP.')], 400);
@@ -188,7 +195,7 @@ class AuthenticatedSessionController extends Controller
                 'device' => $request->header('User-Agent'),
             ];
 
-            Mail::to($user->email)->send(new LoginMail($loginDetails));
+          Mail::to($user->email)->queue(new LoginMail($loginDetails));
         }
 
         return response()->json([
