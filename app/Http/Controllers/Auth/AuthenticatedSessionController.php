@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\LoginOtpMain;
+use App\Mail\LoginOtpMail;
 use App\Mail\LoginMail;
 class AuthenticatedSessionController extends Controller
 {
@@ -62,9 +62,9 @@ class AuthenticatedSessionController extends Controller
                     // Send OTP via email
                     if (env('MAIL_USERNAME')) {
                         if (env('QUEUE_MAIL')) {
-                            Mail::to($user->email)->queue(new LoginOtpMain($data));
+                            Mail::to($user->email)->queue(new LoginOtpMail($data));
                         } else {
-                            Mail::to($user->email)->send(new LoginOtpMain($data));
+                            Mail::to($user->email)->send(new LoginOtpMail($data));
                         }
                     } else {
                         Auth::logout();

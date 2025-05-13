@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class LoginOtpMain extends Mailable
+class LoginOtpMail extends Mailable
 {
     use Queueable, SerializesModels;
 
