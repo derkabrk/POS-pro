@@ -103,6 +103,41 @@
 
 @push('js')
 <script src="{{ asset('assets/js/auth.js') }}"></script>
+<script>
+document.querySelector('.login_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.otp_required) {
+                // Trigger the OTP modal
+                const otpModal = new bootstrap.Modal(document.getElementById('otpVerificationModal'));
+                otpModal.show();
+
+                // Optionally, pre-fill the email field in the modal
+                document.getElementById('otpEmail').value = formData.get('email');
+            } else if (data.redirect) {
+                // Redirect if no OTP is required
+                window.location.href = data.redirect;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Something went wrong. Please try again.');
+        });
+});
+</script>
 @endpush
 
 
