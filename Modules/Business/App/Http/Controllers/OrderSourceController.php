@@ -49,13 +49,13 @@ class OrderSourceController extends Controller
             'status' => 'required|boolean',
         ]);
 
-        $settings = [];
         if ($request->name === 'Shopify') {
             $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
 
             // Redirect to Shopify OAuth
-            $apiKey = config('services.shopify.api_key');
-            $redirectUri = route('shopify.callback'); 
+            $apiKey = $request->input('api_key');
+            $apiSecret = $request->input('api_secret');
+            $redirectUri = route('business.shopify.callback'); // OAuth callback route
             $scopes = 'read_orders,write_orders,read_products'; // Define required scopes
 
             $oauthUrl = "https://{$shop}/admin/oauth/authorize?client_id={$apiKey}&scope={$scopes}&redirect_uri={$redirectUri}";
@@ -65,12 +65,15 @@ class OrderSourceController extends Controller
                 'shopify_store_url' => $shop,
                 'account_name' => $request->account_name,
                 'status' => $request->status,
+                'api_key' => $apiKey,
+                'api_secret' => $apiSecret,
             ]);
 
             return redirect()->away($oauthUrl);
         }
 
         // For other platforms, save the OrderSource directly
+        $settings = [];
         $orderSource = OrderSource::create([
             'business_id' => auth()->user()->business_id,
             'user_id' => auth()->id(),
@@ -78,7 +81,6 @@ class OrderSourceController extends Controller
             'name' => $request->name,
             'api_key' => $request->api_key,
             'api_secret' => $request->api_secret,
-            'webhook_url' => $request->webhook_url,
             'status' => $request->status,
             'settings' => json_encode($settings),
         ]);
@@ -382,8 +384,13 @@ class OrderSourceController extends Controller
             return redirect()->route('business.orderSource.index')->with('error', __('Invalid OAuth response.'));
         }
 
-        $apiKey = config('services.shopify.api_key');
-        $apiSecret = config('services.shopify.api_secret');
+        // Retrieve API key and secret from the session
+        $apiKey = session('api_key');
+        $apiSecret = session('api_secret');
+
+        if (!$apiKey || !$apiSecret) {
+            return redirect()->route('business.orderSource.index')->with('error', __('API key or secret is missing.'));
+        }
 
         // Exchange the authorization code for an access token
         $response = Http::post("https://{$shop}/admin/oauth/access_token", [
@@ -398,12 +405,12 @@ class OrderSourceController extends Controller
 
         $accessToken = $response->json('access_token');
 
-        // Retrieve temporary data from session
+        // Retrieve other temporary data from session
         $shopifyStoreUrl = session('shopify_store_url');
         $accountName = session('account_name');
         $status = session('status');
 
-        // Save the OrderSource with the access token
+        // Save the OrderSource with the access token, API key, and API secret
         $orderSource = OrderSource::create([
             'business_id' => auth()->user()->business_id,
             'user_id' => auth()->id(),
@@ -437,5 +444,65 @@ class OrderSourceController extends Controller
         $oauthUrl = "https://{$shop}/admin/oauth/authorize?client_id={$apiKey}&scope={$scopes}&redirect_uri={$redirectUri}";
 
         return redirect()->away($oauthUrl);
+    }
+
+    public function storeShopifyOrder(Request $request)
+    {
+        // Decode the incoming order data
+        $orderData = json_decode($request->getContent(), true);
+
+        // Retrieve the associated OrderSource using the shop domain
+        $shopDomain = $orderData['domain'] ?? null;
+        $orderSource = OrderSource::where('settings->shop_domain', $shopDomain)->first();
+
+        if (!$orderSource) {
+            \Log::error('OrderSource not found for shop domain.', ['shop_domain' => $shopDomain]);
+            return response()->json(['message' => 'OrderSource not found.'], 404);
+        }
+
+        // Verify the webhook signature using the SaaS user's api_secret
+        $hmacHeader = $request->header('X-Shopify-Hmac-Sha256');
+        $data = $request->getContent();
+        $calculatedHmac = base64_encode(hash_hmac('sha256', $data, $orderSource->api_secret, true));
+
+        if (!hash_equals($hmacHeader, $calculatedHmac)) {
+            \Log::warning('Shopify webhook verification failed.', ['shop_domain' => $shopDomain]);
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Check if the order already exists in the sales table
+        $existingSale = Sale::where('invoiceNumber', $orderData['id'])->first();
+        if ($existingSale) {
+            \Log::info('Order already exists in the sales table.', ['order_id' => $orderData['id']]);
+            return response()->json(['message' => 'Order already exists.'], 200);
+        }
+
+        // Prepare the order data for storage
+        $customer = $orderData['customer'] ?? [];
+        $saleData = [
+            'business_id' => $orderSource->business_id,
+            'user_id' => $orderSource->user_id,
+            'order_source_id' => $orderSource->id,
+            'invoiceNumber' => $orderData['id'], // Shopify order ID
+            'customer_name' => ($customer['first_name'] ?? 'Unknown') . ' ' . ($customer['last_name'] ?? 'Customer'),
+            'customer_email' => $customer['email'] ?? null,
+            'totalAmount' => $orderData['total_price'] ?? 0.0,
+            'paidAmount' => $orderData['total_price'] ?? 0.0, // Assuming fully paid
+            'dueAmount' => 0, // Assuming no due amount
+            'saleDate' => $orderData['created_at'] ?? now(),
+            'sale_status' => 1, // Assuming active sale
+            'meta' => json_encode($orderData), // Store the full order data as JSON
+        ];
+
+        // Store the order in the sales table
+        try {
+            $sale = Sale::create($saleData);
+
+            \Log::info('Shopify order stored successfully.', ['sale_id' => $sale->id]);
+            return response()->json(['message' => 'Order stored successfully.', 'sale' => $sale], 200);
+        } catch (\Exception $e) {
+            \Log::error('Failed to store Shopify order.', ['error' => $e->getMessage(), 'order_data' => $orderData]);
+            return response()->json(['message' => 'Failed to store order.'], 500);
+        }
     }
 }
