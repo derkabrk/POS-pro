@@ -9,6 +9,7 @@ use Modules\Business\App\Http\Controllers as Business;
 
 Route::post('/webhook/{platform}', [Business\OrderSourceController::class, 'handleWebhook'])->name('webhook.handle');
 
+Route::get('/shopify/callback', [Business\OrderSourceController::class, 'shopifyCallback'])->name('shopify.callback');
 
 Route::get('/', [Web\WebController::class, 'index'])->name('home');
 Route::resource('blogs', Web\BlogController::class)->only('index', 'show', 'store');
