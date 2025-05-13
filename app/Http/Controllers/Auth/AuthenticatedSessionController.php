@@ -45,6 +45,14 @@ class AuthenticatedSessionController extends Controller
             $module = Module::find('Business');
 
             if ($module && $module->isEnabled()) {
+                // Check if OTP verification is already complete
+                if ($request->session()->has('otp_verified') && $request->session()->get('otp_verified') === true) {
+                    return response()->json([
+                        'message' => __('Logged In Successfully'),
+                        'redirect' => route('business.dashboard.index'),
+                    ]);
+                }
+
                 // Generate OTP and send email
                 $code = random_int(100000, 999999); // Generate a 6-digit OTP
                 $visibility_time = env('OTP_VISIBILITY_TIME', 3); // Default to 3 minutes
@@ -79,8 +87,8 @@ class AuthenticatedSessionController extends Controller
                 return response()->json([
                     'message' => 'An OTP code has been sent to your email. Please check and confirm.',
                     'otp_expiration' => now()->diffInSeconds($expire),
-                    'otp_required' => true, // Indicate OTP is required
-                    'openModal' => true, // Trigger OTP modal on frontend
+                    'otp_required' => true,
+                    'openModal' => true,
                 ]);
             } else {
                 Auth::logout();
@@ -162,13 +170,6 @@ class AuthenticatedSessionController extends Controller
             return response()->json(['message' => __('User not found.')], 400);
         }
 
-        \Log::info('OTP Verification Attempt:', [
-            'email' => $request->email,
-            'otp' => $request->otp,
-            'user_otp' => $user->remember_token ?? null,
-            'otp_expiration' => $user->email_verified_at ?? null,
-        ]);
-
         // Check if the OTP matches
         if ($user->remember_token !== $request->otp) {
             return response()->json(['message' => __('Invalid OTP.')], 400);
@@ -186,6 +187,9 @@ class AuthenticatedSessionController extends Controller
             'email_verified_at' => now(),
         ]);
 
+        // Mark OTP as verified in the session
+        $request->session()->put('otp_verified', true);
+
         // Send Login Email Alert
         if (env('MAIL_USERNAME')) {
             $loginDetails = [
@@ -195,7 +199,7 @@ class AuthenticatedSessionController extends Controller
                 'device' => $request->header('User-Agent'),
             ];
 
-          Mail::to($user->email)->queue(new LoginMail($loginDetails));
+            Mail::to($user->email)->queue(new LoginMail($loginDetails));
         }
 
         return response()->json([
