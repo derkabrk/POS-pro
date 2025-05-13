@@ -57,10 +57,10 @@ class OrderSourceController extends Controller
             $scopes = 'orders:read,orders:write'; // Define required scopes
 
             $oauthUrl = "https://api.youcan.shop/oauth/authorize?" . http_build_query([
-                'client_id' => $apiKey,
-                'redirect_uri' => $redirectUri,
+                'client_id' => $apiKey, // Your YouCan API Key
+                'redirect_uri' => $redirectUri, // Your callback URL
                 'response_type' => 'code',
-                'scope' => $scopes,
+                'scope' => $scopes, // Scopes like 'orders:read,orders:write'
             ]);
 
             // Save YouCan info temporarily in session for use after OAuth
@@ -464,8 +464,8 @@ class OrderSourceController extends Controller
             return redirect()->route('business.orderSource.index')->with('error', __('Invalid OAuth response.'));
         }
 
-        $apiKey = config('services.youcan.api_key'); // Retrieve from .env
-        $apiSecret = config('services.youcan.api_secret'); // Retrieve from .env
+        $apiKey = config('services.youcan.api_key');
+        $apiSecret = config('services.youcan.api_secret');
         $storeUrl = session('youcan_store_url');
         $accountName = session('account_name');
         $status = session('status');
@@ -484,6 +484,10 @@ class OrderSourceController extends Controller
         ]);
 
         if ($response->failed()) {
+            \Log::error('YouCan OAuth Token Exchange Failed:', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
             return redirect()->route('business.orderSource.index')->with('error', __('Failed to connect to YouCan.'));
         }
 
