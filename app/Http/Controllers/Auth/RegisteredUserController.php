@@ -189,41 +189,42 @@ class RegisteredUserController extends Controller
             'otp' => 'required|min:4|max:15',
         ]);
 
+        // Retrieve the user by email
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return response()->json(['message' => __('User not found.')], 400);
         }
 
-        if ($user->remember_token == $request->otp) {
-            if ($user->email_verified_at > now()) {
+        // Check if the OTP matches
+        if ($user->remember_token !== $request->otp) {
+            return response()->json(['message' => __('Invalid OTP.')], 400);
+        }
 
-                if (Module::find('Business')) {
-                    Auth::login($user);
+        // Check if the OTP has expired
+        if ($user->email_verified_at <= now()) {
+            return response()->json(['message' => __('The verification OTP has expired.')], 400);
+        }
 
-                    $user->update([
-                        'remember_token' => NULL,
-                        'email_verified_at' => now(),
-                    ]);
+        // OTP is valid and not expired
+        if (Module::find('Business')) {
+            Auth::login($user);
 
-                    return response()->json([
-                        'message' => 'Logged In successfully!',
-                        'redirect' => route('business.dashboard.index'),
-                    ]);
+            // Clear the OTP and mark the email as verified
+            $user->update([
+                'remember_token' => null,
+                'email_verified_at' => now(),
+            ]);
 
-                    return redirect();
-                } else {
-                    Auth::logout();
-                    return response()->json([
-                        'message' => 'The business module is not installed.',
-                    ], 406);
-                }
-
-            } else {
-                return response()->json(['message' => __('The verification otp has been expired.')], 400);
-            }
+            return response()->json([
+                'message' => 'Logged in successfully!',
+                'redirect' => route('business.dashboard.index'),
+            ]);
         } else {
-            return response()->json(['message' => __('Invalid otp.')], 400);
+            Auth::logout();
+            return response()->json([
+                'message' => 'The business module is not installed.',
+            ], 406);
         }
     }
 
