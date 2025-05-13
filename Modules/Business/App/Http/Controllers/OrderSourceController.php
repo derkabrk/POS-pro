@@ -38,55 +38,63 @@ class OrderSourceController extends Controller
     /**
      * Store a newly created order source in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'account_name' => 'required|string',
-            'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
-            'api_key' => 'required_if:name,Shopify|string',
-            'api_secret' => 'required_if:name,Shopify|string',
-            'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
-            'status' => 'required|boolean',
+  public function store(Request $request)
+{
+    $request->validate([
+        'account_name' => 'required|string',
+        'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
+        'api_key' => 'required_if:name,Shopify|string|nullable',
+        'api_secret' => 'required_if:name,Shopify|string|nullable',
+        'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
+        'status' => 'required|boolean',
+    ]);
+
+    // Handle Shopify platform
+    if ($request->name === 'Shopify') {
+        $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
+        $apiKey = $request->input('api_key');
+        $apiSecret = $request->input('api_secret');
+        $redirectUri = route('business.shopify.callback'); // OAuth callback
+        $scopes = 'read_orders,write_orders,read_products';
+
+        $oauthUrl = "https://{$shop}/admin/oauth/authorize?" . http_build_query([
+            'client_id' => $apiKey,
+            'scope' => $scopes,
+            'redirect_uri' => $redirectUri,
         ]);
 
-        if ($request->name === 'Shopify') {
-            $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
-
-            // Redirect to Shopify OAuth
-            $apiKey = $request->input('api_key');
-            $apiSecret = $request->input('api_secret');
-            $redirectUri = route('business.shopify.callback'); // OAuth callback route
-            $scopes = 'read_orders,write_orders,read_products'; // Define required scopes
-
-            $oauthUrl = "https://{$shop}/admin/oauth/authorize?client_id={$apiKey}&scope={$scopes}&redirect_uri={$redirectUri}";
-
-            // Save temporary data to session for callback
-            session([
-                'shopify_store_url' => $shop,
-                'account_name' => $request->account_name,
-                'status' => $request->status,
-                'api_key' => $apiKey,
-                'api_secret' => $apiSecret,
-            ]);
-
-            return redirect()->away($oauthUrl);
-        }
-
-        // For other platforms, save the OrderSource directly
-        $settings = [];
-        $orderSource = OrderSource::create([
-            'business_id' => auth()->user()->business_id,
-            'user_id' => auth()->id(),
+        // Save Shopify info temporarily in session for use after OAuth
+        session([
+            'shopify_store_url' => $shop,
             'account_name' => $request->account_name,
-            'name' => $request->name,
-            'api_key' => $request->api_key,
-            'api_secret' => $request->api_secret,
             'status' => $request->status,
-            'settings' => json_encode($settings),
+            'api_key' => $apiKey,
+            'api_secret' => $apiSecret,
         ]);
 
-        return redirect()->route('business.orderSource.index')->with('success', __('Order source created successfully.'));
+        // Redirect to Shopify for OAuth (no AJAX/fetch!)
+        return redirect()->away($oauthUrl);
     }
+
+    // For other platforms like WooCommerce or YouCan
+    $settings = [];
+
+    $orderSource = OrderSource::create([
+        'business_id' => auth()->user()->business_id,
+        'user_id' => auth()->id(),
+        'account_name' => $request->account_name,
+        'name' => $request->name,
+        'api_key' => $request->api_key,
+        'api_secret' => $request->api_secret,
+        'status' => $request->status,
+        'settings' => $settings,
+    ]);
+
+    return redirect()
+        ->route('business.orderSource.index')
+        ->with('success', __('Order source created successfully.'));
+}
+
 
     public function show(OrderSource $orderSource)
     {
