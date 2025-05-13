@@ -183,6 +183,38 @@ document.getElementById('otp-resend').addEventListener('click', function () {
             alert('Something went wrong. Please try again.');
         });
 });
+
+// OTP Verification Logic
+document.querySelector('.verify_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.redirect) {
+                // Dismiss the OTP modal
+                const otpModal = bootstrap.Modal.getInstance(document.getElementById('verifymodal'));
+                otpModal.hide();
+
+                // Redirect to the dashboard
+                window.location.href = data.redirect;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Something went wrong. Please try again.');
+        });
+});
 </script>
 @endpush
 
