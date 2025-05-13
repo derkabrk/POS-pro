@@ -51,8 +51,10 @@ class OrderSourceController extends Controller
 
     // Handle Shopify platform
     if ($request->name === 'Shopify') {
+
         $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
-        $apiKey = $request->input('api_key');
+       // $apiKey = $request->input('api_key');
+       $apiKey = config('services.shopify.api_key');
         $apiSecret = $request->input('api_secret');
         $redirectUri = route('business.shopify.callback'); // OAuth callback
         $scopes = 'read_orders,write_orders,read_products';
@@ -445,7 +447,7 @@ class OrderSourceController extends Controller
             return redirect()->back()->with('error', __('Shop URL is required.'));
         }
 
-        $apiKey = config('services.shopify.api_key');
+        $apiKey = config('services.shopify.api_key'); // Ensure this is the correct API Key
         $redirectUri = route('shopify.callback'); 
         $scopes = 'read_orders,write_orders,read_products';
 
