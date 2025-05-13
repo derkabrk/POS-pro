@@ -53,7 +53,7 @@ class OrderSourceController extends Controller
             $storeUrl = $request->youcan_store_url;
             $apiKey = config('services.youcan.api_key');
             $apiSecret = config('services.youcan.api_secret'); 
-            $redirectUri = route('business.youcan.callback'); // OAuth callback route
+            $redirectUri = route('youcan.callback'); // OAuth callback route
             $scopes = 'orders:read,orders:write'; // Define required scopes
 
             $oauthUrl = "https://api.youcan.shop/oauth/authorize?" . http_build_query([
