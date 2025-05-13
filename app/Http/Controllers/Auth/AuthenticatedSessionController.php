@@ -13,6 +13,10 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LoginOtpMail;
 use App\Mail\LoginMail;
+use App\Models\User;
+use Laravel\Sanctum\NewAccessToken;
+use Illuminate\Support\Facades\DB;
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -74,9 +78,16 @@ class AuthenticatedSessionController extends Controller
                         ], 406);
                     }
 
+                    // Set access token expiration
+                    $accessToken = $user->createToken('auth_token');
+                    $this->setAccessTokenExpiration($accessToken);
+
+                    // Return response with openModal key
                     return response()->json([
                         'message' => 'An OTP code has been sent to your email. Please check and confirm.',
                         'otp_expiration' => now()->diffInSeconds($expire),
+                        'otp_required' => true, // Indicate OTP is required
+                        'openModal' => true, // Trigger OTP modal on frontend
                     ]);
                 } else {
                     Auth::logout();
@@ -108,6 +119,90 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
+     * Resend OTP to the user's email.
+     */
+    public function otpResend(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $code = random_int(100000, 999999);
+        $visibility_time = env('OTP_VISIBILITY_TIME', 3); // Default to 3 minutes
+        $expire = now()->addSeconds($visibility_time * 60);
+
+        $data = [
+            'code' => $code,
+            'name' => User::where('email', $request->email)->first()->name,
+        ];
+
+        // Send OTP via email
+        if (env('MAIL_USERNAME')) {
+            if (env('QUEUE_MAIL')) {
+                Mail::to($request->email)->queue(new LoginOtpMail($data));
+            } else {
+                Mail::to($request->email)->send(new LoginOtpMail($data));
+            }
+        } else {
+            return response()->json([
+                'message' => __('Mail service is not configured. Please contact your administrator.'),
+            ], 406);
+        }
+
+        // Update the user's OTP and expiration time
+        User::where('email', $request->email)->first()->update([
+            'remember_token' => $code,
+            'email_verified_at' => $expire,
+        ]);
+
+        return response()->json([
+            'message' => 'An OTP code has been sent to your email. Please check and confirm.',
+            'otp_expiration' => now()->diffInSeconds($expire),
+        ]);
+    }
+
+    /**
+     * Submit OTP for verification.
+     */
+    public function otpSubmit(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required|min:4|max:6',
+        ]);
+
+        // Retrieve the user by email
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => __('User not found.')], 400);
+        }
+
+        // Check if the OTP matches
+        if ($user->remember_token !== $request->otp) {
+            return response()->json(['message' => __('Invalid OTP.')], 400);
+        }
+
+        // Check if the OTP has expired
+        if ($user->email_verified_at <= now()) {
+            return response()->json(['message' => __('The OTP has expired.')], 400);
+        }
+
+        // OTP is valid, clear the OTP and log the user in
+        Auth::login($user);
+
+        $user->update([
+            'remember_token' => null,
+            'email_verified_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Logged in successfully!',
+            'redirect' => route('business.dashboard.index'),
+        ]);
+    }
+
+    /**
      * Destroy an authenticated session.
      */
     public function destroy(Request $request): RedirectResponse
@@ -119,5 +214,17 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    /**
+     * Set the access token expiration.
+     */
+    protected function setAccessTokenExpiration(NewAccessToken $accessToken)
+    {
+        $expiration = now()->addMinutes(config('sanctum.expiration', 120)); // Default to 120 minutes if not set
+
+        DB::table('personal_access_tokens')
+            ->where('id', $accessToken->accessToken->id)
+            ->update(['expires_at' => $expiration]);
     }
 }
