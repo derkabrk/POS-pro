@@ -45,50 +45,10 @@ class AuthenticatedSessionController extends Controller
             $module = Module::find('Business');
 
             if ($module && $module->isEnabled()) {
-                // Check if OTP verification is already complete
-                if ($request->session()->has('otp_verified') && $request->session()->get('otp_verified') === true) {
-                    return response()->json([
-                        'message' => __('Logged In Successfully'),
-                        'redirect' => route('business.dashboard.index'),
-                    ]);
-                }
-
-                // Generate OTP and send email
-                $code = random_int(100000, 999999); // Generate a 6-digit OTP
-                $visibility_time = env('OTP_VISIBILITY_TIME', 3); // Default to 3 minutes
-                $expire = now()->addSeconds($visibility_time * 60);
-
-                $data = [
-                    'code' => $code,
-                    'name' => $user->name,
-                ];
-
-                // Update the user's OTP and expiration time
-                $user->update([
-                    'remember_token' => $code,
-                    'email_verified_at' => $expire,
-                ]);
-
-                // Send OTP via email
-                if (env('MAIL_USERNAME')) {
-                    if (env('QUEUE_MAIL')) {
-                        Mail::to($user->email)->queue(new LoginOtpMail($data));
-                    } else {
-                        Mail::to($user->email)->send(new LoginOtpMail($data));
-                    }
-                } else {
-                    Auth::logout();
-                    return response()->json([
-                        'message' => __('Mail service is not configured. Please contact your administrator.'),
-                    ], 406);
-                }
-
-                // Return response with openModal key
+                // Directly redirect the user to the dashboard
                 return response()->json([
-                    'message' => 'An OTP code has been sent to your email. Please check and confirm.',
-                    'otp_expiration' => now()->diffInSeconds($expire),
-                    'otp_required' => true,
-                    'openModal' => true,
+                    'message' => __('Logged In Successfully'),
+                    'redirect' => route('business.dashboard.index'),
                 ]);
             } else {
                 Auth::logout();
