@@ -120,17 +120,62 @@ document.querySelector('.login_form').addEventListener('submit', function (e) {
         .then((data) => {
             if (data.otp_required) {
                 // Trigger the OTP modal
-                const otpModal = new bootstrap.Modal(document.getElementById('otpVerificationModal'));
+                const otpModal = new bootstrap.Modal(document.getElementById('verifymodal'));
                 otpModal.show();
 
-                // Optionally, pre-fill the email field in the modal
-                document.getElementById('otpEmail').value = formData.get('email');
+                // Update the email in the modal
+                document.getElementById('dynamicEmail').textContent = formData.get('email');
+
+                // Start the countdown timer
+                startCountdown();
             } else if (data.redirect) {
                 // Redirect if no OTP is required
                 window.location.href = data.redirect;
             } else {
                 alert(data.message);
             }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Something went wrong. Please try again.');
+        });
+});
+
+// Countdown Timer for OTP Resend
+let countdownElement = document.getElementById('countdown');
+let countdownTime = 60; // 60 seconds
+
+function startCountdown() {
+    countdownTime = 60; // Reset countdown time
+    const interval = setInterval(() => {
+        if (countdownTime <= 0) {
+            clearInterval(interval);
+            countdownElement.textContent = '';
+            document.getElementById('otp-resend').classList.remove('disabled');
+        } else {
+            countdownElement.textContent = `${countdownTime--}s`;
+            document.getElementById('otp-resend').classList.add('disabled');
+        }
+    }, 1000);
+}
+
+// Resend OTP Logic
+document.getElementById('otp-resend').addEventListener('click', function () {
+    const route = this.getAttribute('data-route');
+
+    fetch(route, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: JSON.stringify({
+            email: document.getElementById('dynamicEmail').textContent,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            alert(data.message);
+            startCountdown(); // Restart the countdown timer
         })
         .catch((error) => {
             console.error('Error:', error);
