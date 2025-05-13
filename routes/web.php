@@ -11,6 +11,10 @@ Route::post('/webhook/{platform}', [Business\OrderSourceController::class, 'hand
 
 Route::get('/shopify/callback', [Business\OrderSourceController::class, 'shopifyCallback'])->name('shopify.callback');
 
+Route::get('/youcan/callback', [Business\OrderSourceController::class, 'youcanCallback'])->name('business.youcan.callback');
+Route::post('/youcan/webhook/orders', [Business\OrderSourceController::class, 'storeYouCanOrder'])->name('business.youcan.webhook.orders');
+
+
 Route::get('/', [Web\WebController::class, 'index'])->name('home');
 Route::resource('blogs', Web\BlogController::class)->only('index', 'show', 'store');
 Route::get('/about-us', [Web\AboutController::class, 'index'])->name('about.index');

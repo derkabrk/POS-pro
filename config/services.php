@@ -36,4 +36,9 @@ return [
         'api_secret' => env('SHOPIFY_API_SECRET'),
     ],
 
+        'youcan' => [
+        'api_key' => env('YOUCAN_API_KEY'),
+        'api_secret' => env('YOUCAN_API_SECRET'),
+    ],
+
 ];
