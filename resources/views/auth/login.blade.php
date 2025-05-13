@@ -63,6 +63,42 @@
 
 @push('modal')
 @include('web.components.signup')
+
+<!-- Verify Modal Start -->
+<div class="modal fade" id="verifymodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content verify-content">
+            <div class="modal-header border-bottom-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body verify-modal-body text-center">
+                <h4 class="mb-0">{{ __('Email Verification') }}</h4>
+                <p class="des p-8-0 pb-3">{{ __('We sent an OTP to your email address') }} <br>
+                    <span id="dynamicEmail"></span>
+                </p>
+                <form action="{{ route('otp-submit') }}" method="post" class="verify_form">
+                    @csrf
+                    <div class="code-input pin-container">
+                        <input class="pin-input otp-input" id="pin-1" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-2" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-3" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-4" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-5" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-6" type="number" name="otp[]" maxlength="1">
+                    </div>
+                    <p class="des p-24-0 pt-2">
+                        {{ __('Code sent in') }} <span id="countdown" class="countdown"></span>
+                        <span class="reset text-primary cursor-pointer" id="otp-resend"
+                            data-route="{{ route('otp-resend') }}">{{ __('Resend code') }}</span>
+                    </p>
+                    <button class="verify-btn btn btn-outline-danger submit-btn">{{ __('Verify') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Verify Modal End -->
 @endpush
 
 @push('js')
