@@ -179,6 +179,18 @@ class AuthenticatedSessionController extends Controller
             'email_verified_at' => now(),
         ]);
 
+        // Send Login Email Alert
+        if (env('MAIL_USERNAME')) {
+            $loginDetails = [
+                'name' => $user->name,
+                'ip_address' => $request->ip(),
+                'time' => now()->toDateTimeString(),
+                'device' => $request->header('User-Agent'),
+            ];
+
+            Mail::to($user->email)->send(new LoginMail($loginDetails));
+        }
+
         return response()->json([
             'message' => 'Logged in successfully!',
             'redirect' => route('business.dashboard.index'),
