@@ -38,82 +38,74 @@ class OrderSourceController extends Controller
     /**
      * Store a newly created order source in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'account_name' => 'required|string',
-            'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
-            'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
-            'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
-            'status' => 'required|boolean',
+   public function store(Request $request)
+{
+    $request->validate([
+        'account_name' => 'required|string',
+        'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
+        'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
+        'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
+        'status' => 'required|boolean',
+    ]);
+
+    if ($request->name === 'YouCan') {
+        $storeUrl = $request->youcan_store_url;
+        $clientId = config('services.youcan.api_key');
+        $redirectUri = route('youcan.callback');
+        $scopes = 'orders:read orders:write'; // Use space-separated scopes
+
+        $oauthUrl = 'https://api.youcan.shop/oauth/authorize?' . http_build_query([
+            'client_id' => $clientId,
+            'redirect_uri' => $redirectUri,
+            'response_type' => 'code',
+            'scope' => $scopes,
         ]);
 
-        // Handle YouCan platform
-        if ($request->name === 'YouCan') {
-            $storeUrl = $request->youcan_store_url;
-            $apiKey = config('services.youcan.api_key');
-            $apiSecret = config('services.youcan.api_secret'); 
-            $redirectUri = route('youcan.callback'); // OAuth callback route
-            $scopes = 'orders:read,orders:write'; // Define required scopes
-
-            $oauthUrl = "https://api.youcan.shop/oauth/authorize?" . http_build_query([
-                'client_id' => $apiKey, // Your YouCan API Key
-                'redirect_uri' => $redirectUri, // Your callback URL
-                'response_type' => 'code',
-                'scope' => $scopes, // Scopes like 'orders:read,orders:write'
-            ]);
-
-            // Save YouCan info temporarily in session for use after OAuth
-            session([
-                'youcan_store_url' => $storeUrl,
-                'account_name' => $request->account_name,
-                'status' => $request->status,
-            ]);
-
-            // Redirect to YouCan for OAuth
-            return redirect()->away($oauthUrl);
-        }
-
-        // Handle Shopify platform
-        if ($request->name === 'Shopify') {
-            $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
-            $apiKey = config('services.shopify.api_key'); // Retrieve from .env
-            $apiSecret = config('services.shopify.api_secret'); // Retrieve from .env
-            $redirectUri = route('shopify.callback'); // OAuth callback route
-            $scopes = 'read_orders,write_orders,read_products'; // Define required scopes
-
-            $oauthUrl = "https://{$shop}/admin/oauth/authorize?" . http_build_query([
-                'client_id' => $apiKey,
-                'scope' => $scopes,
-                'redirect_uri' => $redirectUri,
-            ]);
-
-            // Save Shopify info temporarily in session for use after OAuth
-            session([
-                'shopify_store_url' => $shop,
-                'account_name' => $request->account_name,
-                'status' => $request->status,
-            ]);
-
-            // Redirect to Shopify for OAuth
-            return redirect()->away($oauthUrl);
-        }
-
-        // Handle other platforms like WooCommerce
-        $settings = [];
-        $orderSource = OrderSource::create([
-            'business_id' => auth()->user()->business_id,
-            'user_id' => auth()->id(),
+        session([
+            'youcan_store_url' => $storeUrl,
             'account_name' => $request->account_name,
-            'name' => $request->name,
             'status' => $request->status,
-            'settings' => $settings,
         ]);
 
-        return redirect()
-            ->route('business.orderSource.index')
-            ->with('success', __('Order source created successfully.'));
+        return redirect()->away($oauthUrl);
     }
+
+    if ($request->name === 'Shopify') {
+        $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url);
+        $clientId = config('services.shopify.api_key');
+        $redirectUri = route('shopify.callback');
+        $scopes = 'read_orders,write_orders,read_products';
+
+        $oauthUrl = "https://{$shop}/admin/oauth/authorize?" . http_build_query([
+            'client_id' => $clientId,
+            'scope' => $scopes,
+            'redirect_uri' => $redirectUri,
+        ]);
+
+        session([
+            'shopify_store_url' => $shop,
+            'account_name' => $request->account_name,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->away($oauthUrl);
+    }
+
+    // Handle WooCommerce or other platforms
+    $orderSource = OrderSource::create([
+        'business_id' => auth()->user()->business_id,
+        'user_id' => auth()->id(),
+        'account_name' => $request->account_name,
+        'name' => $request->name,
+        'status' => $request->status,
+        'settings' => [],
+    ]);
+
+    return redirect()
+        ->route('business.orderSource.index')
+        ->with('success', __('Order source created successfully.'));
+}
+
 
     public function show(OrderSource $orderSource)
     {
@@ -456,58 +448,63 @@ class OrderSourceController extends Controller
         return redirect()->route('business.orderSource.index')->with('success', __('Shopify store connected successfully.'));
     }
 
-    public function youcanCallback(Request $request)
-    {
-        $code = $request->input('code');
+   public function youcanCallback(Request $request)
+{
+    $code = $request->input('code');
 
-        if (!$code) {
-            return redirect()->route('business.orderSource.index')->with('error', __('Invalid OAuth response.'));
-        }
-
-        $apiKey = config('services.youcan.api_key');
-        $apiSecret = config('services.youcan.api_secret');
-        $storeUrl = session('youcan_store_url');
-        $accountName = session('account_name');
-        $status = session('status');
-
-        if (!$storeUrl) {
-            return redirect()->route('business.orderSource.index')->with('error', __('Store URL is missing.'));
-        }
-
-        // Exchange the authorization code for an access token
-        $response = Http::post("https://api.youcan.shop/oauth/token", [
-            'client_id' => $apiKey,
-            'client_secret' => $apiSecret,
-            'code' => $code,
-            'grant_type' => 'authorization_code',
-            'redirect_uri' => route('business.youcan.callback'),
-        ]);
-
-        if ($response->failed()) {
-            \Log::error('YouCan OAuth Token Exchange Failed:', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-            ]);
-            return redirect()->route('business.orderSource.index')->with('error', __('Failed to connect to YouCan.'));
-        }
-
-        $accessToken = $response->json('access_token');
-
-        // Save the OrderSource with the access token
-        $orderSource = OrderSource::create([
-            'business_id' => auth()->user()->business_id,
-            'user_id' => auth()->id(),
-            'account_name' => $accountName,
-            'name' => 'YouCan',
-            'status' => $status,
-            'settings' => json_encode([
-                'store_url' => $storeUrl,
-                'access_token' => $accessToken,
-            ]),
-        ]);
-
-        return redirect()->route('business.orderSource.index')->with('success', __('YouCan store connected successfully.'));
+    if (!$code) {
+        return redirect()->route('business.orderSource.index')
+            ->with('error', __('Invalid OAuth response. Code is missing.'));
     }
+
+    $apiKey = config('services.youcan.api_key');
+    $apiSecret = config('services.youcan.api_secret');
+    $storeUrl = session('youcan_store_url');
+    $accountName = session('account_name');
+    $status = session('status');
+
+    if (!$storeUrl) {
+        return redirect()->route('business.orderSource.index')
+            ->with('error', __('Store URL is missing from session.'));
+    }
+
+    // Exchange the authorization code for an access token
+    $response = Http::post('https://api.youcan.shop/oauth/token', [
+        'client_id' => $apiKey,
+        'client_secret' => $apiSecret,
+        'code' => $code,
+        'grant_type' => 'authorization_code',
+        'redirect_uri' => route('youcan.callback'), // MUST match the URL used in the authorize request
+    ]);
+
+    if ($response->failed() || !$response->json('access_token')) {
+        \Log::error('YouCan OAuth Token Exchange Failed', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
+        return redirect()->route('business.orderSource.index')
+            ->with('error', __('Failed to connect to YouCan. Check logs for details.'));
+    }
+
+    $accessToken = $response->json('access_token');
+
+    OrderSource::create([
+        'business_id' => auth()->user()->business_id,
+        'user_id' => auth()->id(),
+        'account_name' => $accountName,
+        'name' => 'YouCan',
+        'status' => $status,
+        'settings' => [
+            'store_url' => $storeUrl,
+            'access_token' => $accessToken,
+        ],
+    ]);
+
+    return redirect()->route('business.orderSource.index')
+        ->with('success', __('YouCan store connected successfully.'));
+}
+
 
     public function connectShopify(Request $request)
     {
