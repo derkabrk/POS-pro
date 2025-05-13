@@ -17,7 +17,8 @@
                     </a>
                 </div>
                 <div class="order-form-section p-16">
-                    <form action="{{ route('business.orderSource.store') }}" enctype="multipart/form-data" method="POST" class="ajaxform_instant_reload">
+                    <form method="POST" action="{{ route('business.orderSource.store') }}">
+
                         @csrf
                         <div class="add-suplier-modal-wrapper d-block">
                             <div class="row">

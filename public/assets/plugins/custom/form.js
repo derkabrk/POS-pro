@@ -76,7 +76,7 @@ $ajaxform_instant_reload.initFormValidation(),
                 },
                 error: function (e) {
                     t.html(a).removeClass("disabled").attr("disabled", !1),
-                        showInputErrors(e.responseJSON),
+                        showInputErrors(e.responseJSON || e);
                         Notify("error", e);
                 },
             });
@@ -137,7 +137,7 @@ $(document).on("submit", ".login_form", function (e) {
                 window.sessionStorage.previousMessage = response.message || null;
                 location.href = response.redirect;
             } else {
-                showInputErrors(error.responseJSON);
+                showInputErrors(e.responseJSON || e);
                 Notify("error", error);
             }
         },
@@ -177,7 +177,7 @@ $(document).on("submit", ".sign_up_form", function (e) {
             },
             error: function (e) {
                 // Handle error response
-                showInputErrors(e.responseJSON);
+                showInputErrors(e.responseJSON || e);
                 Notify("error", e);
             },
             complete: function () {
@@ -273,22 +273,32 @@ pinInputs.forEach((inputField, index) => {
 });
 
 function showInputErrors(e) {
-    if (e.errors !== undefined) {
-        $.each(e.errors, function (field, message) {
-            $("#" + field + "-error").remove();
-
-            let errorLabel = `
-                <label id="${field}-error" class="error" for="${field}">${message}</label>
-            `;
-
-            $("#" + field)
-                .parents()
-                .hasClass("form-check")
-                ? $("#" + field).parents().find(".form-check").append(errorLabel)
-                : $("#" + field).addClass("error").after(errorLabel);
-        });
+    if (!e || typeof e !== 'object') {
+        console.error('Invalid error response:', e);
+        return;
     }
+
+    const errors = e.errors || (e.responseJSON && e.responseJSON.errors);
+    if (!errors) {
+        console.warn('No errors found in the response:', e);
+        return;
+    }
+
+    $.each(errors, function (field, message) {
+        $("#" + field + "-error").remove();
+
+        let errorLabel = `
+            <label id="${field}-error" class="error" for="${field}">${message}</label>
+        `;
+
+        $("#" + field)
+            .parents()
+            .hasClass("form-check")
+            ? $("#" + field).parents().find(".form-check").append(errorLabel)
+            : $("#" + field).addClass("error").after(errorLabel);
+    });
 }
+
 
 function ajaxSuccess(response, Notify) {
     if (response.redirect) {
