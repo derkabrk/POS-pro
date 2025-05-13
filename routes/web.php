@@ -11,8 +11,9 @@ Route::post('/webhook/{platform}', [Business\OrderSourceController::class, 'hand
 
 Route::get('/shopify/callback', [Business\OrderSourceController::class, 'shopifyCallback'])->name('shopify.callback');
 
-Route::get('/youcan/callback', [Business\OrderSourceController::class, 'youcanCallback'])->name('business.youcan.callback');
-Route::post('/youcan/webhook/orders', [Business\OrderSourceController::class, 'storeYouCanOrder'])->name('business.youcan.webhook.orders');
+Route::get('/youcan/callback', [Business\OrderSourceController::class, 'youcanCallback'])->name('youcan.callback');
+
+Route::post('/youcan/webhook/orders', [Business\OrderSourceController::class, 'storeYouCanOrder'])->name('youcan.webhook.orders');
 
 
 Route::get('/', [Web\WebController::class, 'index'])->name('home');

@@ -51,8 +51,8 @@ class OrderSourceController extends Controller
         // Handle YouCan platform
         if ($request->name === 'YouCan') {
             $storeUrl = $request->youcan_store_url;
-            $apiKey = config('services.youcan.api_key'); // Retrieve from .env
-            $apiSecret = config('services.youcan.api_secret'); // Retrieve from .env
+            $apiKey = config('services.youcan.api_key');
+            $apiSecret = config('services.youcan.api_secret'); 
             $redirectUri = route('business.youcan.callback'); // OAuth callback route
             $scopes = 'orders:read,orders:write'; // Define required scopes
 
