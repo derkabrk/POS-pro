@@ -134,6 +134,13 @@ class RegisteredUserController extends Controller
 
         } catch (\Throwable $th) {
             DB::rollBack();
+
+            // Log the exception for debugging
+            \Log::error('Error in RegisteredUserController@store:', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
             return response()->json([
                 'message' => 'Something went wrong. Please contact the admin.',
             ], 403);
