@@ -56,7 +56,7 @@ class OrderSourceController extends Controller
        // $apiKey = $request->input('api_key');
        $apiKey = config('services.shopify.api_key');
         $apiSecret = $request->input('api_secret');
-        $redirectUri = route('business.shopify.callback'); // OAuth callback
+        $redirectUri = route('shopify.callback'); // OAuth callback
         $scopes = 'read_orders,write_orders,read_products';
 
         $oauthUrl = "https://{$shop}/admin/oauth/authorize?" . http_build_query([
