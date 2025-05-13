@@ -43,11 +43,7 @@
                                         <option value="WooCommerce">WooCommerce</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-6 mb-2">
-                                    <label>Webhook URL</label>
-                                    <input type="text" name="webhook_url" id="webhook_url" class="form-control" readonly placeholder="Webhook URL will be auto-generated">
-                                </div>
-
+                               
                                 <!-- Shopify Settings -->
                                 <div id="shopify-settings" class="platform-settings d-none">
                                     <div class="col-lg-12 mb-2">
@@ -99,11 +95,11 @@
 <script>
     document.getElementById('platform').addEventListener('change', function () {
         const platform = this.value;
-        const webhookUrl = `https://shyftcom.com/webhook/${platform}`;
-        document.getElementById('webhook_url').value = webhookUrl;
+       // const webhookUrl = `https://shyftcom.com/webhook/${platform}`;
+       // document.getElementById('webhook_url').value = webhookUrl;
 
         console.log('Selected Platform:', platform);
-        console.log('Generated Webhook URL:', webhookUrl);
+        //console.log('Generated Webhook URL:', webhookUrl);
 
         // Hide all platform-specific settings
         document.querySelectorAll('.platform-settings').forEach(function (el) {

@@ -268,5 +268,8 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::get('/suppliers', [Business\SupplierController::class, 'index'])->name('suppliers.index');
     Route::post('/suppliers', [Business\SupplierController::class, 'store'])->name('suppliers.store');
     Route::resource('ticketSystem', Business\TicketSystemController::class);
+
+    Route::get('/shopify/connect', [Business\OrderSourceController::class, 'connectShopify'])->name('shopify.connect');
+    Route::get('/shopify/callback', [Business\OrderSourceController::class, 'shopifyCallback'])->name('shopify.callback');
    // Route::resource('shipping', Business\AcnooShippingController::class);
 });

@@ -28,21 +28,10 @@ class SlickPay
             'phone' => $business->phone, 
             'lastname' => $user->name, 
             'address' => $business->address,
+            'rib' => '00799999002265799150',
         ];
 
-        // Add the account UUID if provided
-        if (!empty($array['account'])) {
-            $payload['account'] = $array['account'];
-        }
-
-        // Add the contact UUID if provided
-        if (!empty($array['contact'])) {
-            $payload['contact'] = $array['contact'];
-        } else {
-            if (!empty($array['rib'])) {
-                $payload['rib'] = '00799999002265799150';
-            }
-        }
+     
 
         try {
             // Initialize cURL

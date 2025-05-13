@@ -43,19 +43,34 @@ class OrderSourceController extends Controller
         $request->validate([
             'account_name' => 'required|string',
             'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
-            'api_key' => 'required|string',
-            'api_secret' => 'nullable|string',
+            'api_key' => 'required_if:name,Shopify|string',
+            'api_secret' => 'required_if:name,Shopify|string',
             'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
-            'woocommerce_store_url' => 'nullable|required_if:name,WooCommerce|url',
-            'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
             'status' => 'required|boolean',
         ]);
 
         $settings = [];
         if ($request->name === 'Shopify') {
-            $settings['shop_domain'] = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
+            $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url); // Remove http:// or https://
+
+            // Redirect to Shopify OAuth
+            $apiKey = config('services.shopify.api_key');
+            $redirectUri = route('shopify.callback'); 
+            $scopes = 'read_orders,write_orders,read_products'; // Define required scopes
+
+            $oauthUrl = "https://{$shop}/admin/oauth/authorize?client_id={$apiKey}&scope={$scopes}&redirect_uri={$redirectUri}";
+
+            // Save temporary data to session for callback
+            session([
+                'shopify_store_url' => $shop,
+                'account_name' => $request->account_name,
+                'status' => $request->status,
+            ]);
+
+            return redirect()->away($oauthUrl);
         }
 
+        // For other platforms, save the OrderSource directly
         $orderSource = OrderSource::create([
             'business_id' => auth()->user()->business_id,
             'user_id' => auth()->id(),
@@ -68,14 +83,7 @@ class OrderSourceController extends Controller
             'settings' => json_encode($settings),
         ]);
 
-        // Explicitly register the webhook
-        try {
-            $this->registerWebhook($orderSource);
-        } catch (\Exception $e) {
-            \Log::error('Error during webhook registration:', ['exception' => $e->getMessage()]);
-        }
-
-        return redirect()->route('business.orderSource.index')->with('success', 'Order Source created successfully.');
+        return redirect()->route('business.orderSource.index')->with('success', __('Order source created successfully.'));
     }
 
     public function show(OrderSource $orderSource)
@@ -363,5 +371,71 @@ class OrderSourceController extends Controller
         if ($response->failed()) {
             \Log::error('Failed to create Shopify webhook: ' . $response->body());
         }
+    }
+
+    public function shopifyCallback(Request $request)
+    {
+        $shop = $request->input('shop');
+        $code = $request->input('code');
+
+        if (!$shop || !$code) {
+            return redirect()->route('business.orderSource.index')->with('error', __('Invalid OAuth response.'));
+        }
+
+        $apiKey = config('services.shopify.api_key');
+        $apiSecret = config('services.shopify.api_secret');
+
+        // Exchange the authorization code for an access token
+        $response = Http::post("https://{$shop}/admin/oauth/access_token", [
+            'client_id' => $apiKey,
+            'client_secret' => $apiSecret,
+            'code' => $code,
+        ]);
+
+        if ($response->failed()) {
+            return redirect()->route('business.orderSource.index')->with('error', __('Failed to connect to Shopify.'));
+        }
+
+        $accessToken = $response->json('access_token');
+
+        // Retrieve temporary data from session
+        $shopifyStoreUrl = session('shopify_store_url');
+        $accountName = session('account_name');
+        $status = session('status');
+
+        // Save the OrderSource with the access token
+        $orderSource = OrderSource::create([
+            'business_id' => auth()->user()->business_id,
+            'user_id' => auth()->id(),
+            'account_name' => $accountName,
+            'name' => 'Shopify',
+            'api_key' => $apiKey,
+            'api_secret' => $apiSecret,
+            'webhook_url' => route('shopify.webhook'),
+            'status' => $status,
+            'settings' => json_encode([
+                'shop_domain' => $shop,
+                'access_token' => $accessToken,
+            ]),
+        ]);
+
+        return redirect()->route('business.orderSource.index')->with('success', __('Shopify store connected successfully.'));
+    }
+
+    public function connectShopify(Request $request)
+    {
+        $shop = $request->input('shop'); // Shopify store URL (e.g., 'example.myshopify.com')
+
+        if (!$shop) {
+            return redirect()->back()->with('error', __('Shop URL is required.'));
+        }
+
+        $apiKey = config('services.shopify.api_key');
+        $redirectUri = route('shopify.callback'); 
+        $scopes = 'read_orders,write_orders,read_products';
+
+        $oauthUrl = "https://{$shop}/admin/oauth/authorize?client_id={$apiKey}&scope={$scopes}&redirect_uri={$redirectUri}";
+
+        return redirect()->away($oauthUrl);
     }
 }
