@@ -79,25 +79,28 @@
                     {{-- Replies Section --}}
                     <div class="mt-4">
                         <h5 class="fw-bold">Replies</h5>
-                        @if($ticket->replies && $ticket->replies->count())
-                            @foreach($ticket->replies as $reply)
-                                <div class="card mb-2 
-                                    @if($reply->user_id == auth()->id()) border-primary @else border-secondary @endif">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span>
-                                                @if($reply->user_id == auth()->id())
-                                                    <span class="badge bg-primary">You</span>
-                                                @else
-                                                    <span class="badge bg-secondary">User #{{ $reply->user_id }}</span>
-                                                @endif
-                                            </span>
-                                            <small class="text-muted">{{ $reply->created_at->format('d M Y, h:i A') }}</small>
+                        @if($replies && $replies->count())
+                            <div class="d-flex flex-column gap-2">
+                                @foreach($replies as $reply)
+                                    <div class="d-flex {{ $reply->user_id == auth()->id() ? 'justify-content-end' : 'justify-content-start' }}">
+                                        <div class="card mb-1 {{ $reply->user_id == auth()->id() ? 'bg-primary text-white' : 'bg-light' }}" style="max-width: 70%;">
+                                            <div class="card-body p-2">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <span class="small fw-bold">
+                                                        @if($reply->user_id == auth()->id())
+                                                            You
+                                                        @else
+                                                            Admin
+                                                        @endif
+                                                    </span>
+                                                    <small class="text-muted ms-2">{{ $reply->created_at->format('d M Y, h:i A') }}</small>
+                                                </div>
+                                                <div>{{ $reply->message }}</div>
+                                            </div>
                                         </div>
-                                        <div>{{ $reply->message }}</div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         @else
                             <p class="text-muted">No replies yet.</p>
                         @endif
