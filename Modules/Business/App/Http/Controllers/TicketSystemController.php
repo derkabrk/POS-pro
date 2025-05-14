@@ -62,7 +62,7 @@ class TicketSystemController extends Controller
      */
     public function show($id)
     {
-        $ticket = TicketSystem::with(['category', 'status'])->findOrFail($id);
+        $ticket = TicketSystem::with(['category', 'status', 'replies'])->findOrFail($id);
 
         return view('business::ticketSystem.show', compact('ticket'));
     }

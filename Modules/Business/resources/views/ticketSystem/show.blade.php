@@ -1,4 +1,3 @@
-
 @extends('business::layouts.master')
 
 @section('title', 'View Ticket')
@@ -69,6 +68,33 @@
                             <h6 class="fw-bold">Last Updated:</h6>
                             <p>{{ $ticket->updated_at->format('d M Y, h:i A') }}</p>
                         </div>
+                    </div>
+
+                    {{-- Replies Section --}}
+                    <div class="mt-4">
+                        <h5 class="fw-bold">Replies</h5>
+                        @if($ticket->replies && $ticket->replies->count())
+                            @foreach($ticket->replies as $reply)
+                                <div class="card mb-2 
+                                    @if($reply->user_id == auth()->id()) border-primary @else border-secondary @endif">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span>
+                                                @if($reply->user_id == auth()->id())
+                                                    <span class="badge bg-primary">You</span>
+                                                @else
+                                                    <span class="badge bg-secondary">User #{{ $reply->user_id }}</span>
+                                                @endif
+                                            </span>
+                                            <small class="text-muted">{{ $reply->created_at->format('d M Y, h:i A') }}</small>
+                                        </div>
+                                        <div>{{ $reply->message }}</div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <p class="text-muted">No replies yet.</p>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -42,4 +42,12 @@ class TicketSystem extends Model
     {
         return $this->belongsTo(User::class, 'assign_to');
     }
+
+    /**
+     * Define the relationship with the TicketReply model.
+     */
+    public function replies()
+    {
+        return $this->hasMany(\App\Models\TicketReply::class, 'ticket_id');
+    }
 }
