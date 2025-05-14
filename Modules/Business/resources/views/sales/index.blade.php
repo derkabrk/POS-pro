@@ -60,6 +60,29 @@
         </div>
     </div>
 </form>
+
+<!-- Import CSV Button OUTSIDE the filter form -->
+<div class="ms-2" style="display:inline-block;">
+    <form action="{{ route('business.sales.import.csv') }}" method="POST" enctype="multipart/form-data" id="import-csv-form">
+        @csrf
+        <input type="file" name="csv_file" id="import-csv-input" accept=".csv" style="display: none;" onchange="document.getElementById('import-csv-form').submit();">
+        <label for="import-csv-input" class="btn btn-outline-primary d-flex align-items-center gap-2 mb-0" style="cursor:pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <rect width="18" height="18" x="3" y="3" fill="#0d6efd" rx="4"/>
+                <path fill="#fff" d="M12 7v6m0 0v4m0-4h4m-4 0H8"/>
+            </svg>
+            {{ __('Import CSV') }}
+        </label>
+        <span id="csv-file-name" class="ms-2 text-secondary" style="font-size: 0.95em;"></span>
+    </form>
+</div>
+
+<script>
+    document.getElementById('import-csv-input').addEventListener('change', function(){
+        const fileName = this.files[0] ? this.files[0].name : '';
+        document.getElementById('csv-file-name').textContent = fileName;
+    });
+</script>
                     </div>
                 </div>
 

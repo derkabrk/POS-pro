@@ -26,7 +26,8 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Collection;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
 
 class AcnooSaleController extends Controller
 {
@@ -1239,4 +1240,56 @@ class AcnooSaleController extends Controller
         'orders' => $orders,
     ]);
 }
+
+    public function importCsv(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+
+        $file = $request->file('csv_file');
+        if (!$file->isValid()) {
+            return Redirect::back()->with('error', 'Uploaded CSV file is not valid.');
+        }
+
+        $handle = fopen($file->getRealPath(), 'r');
+        $header = fgetcsv($handle);
+
+        if ($header === false || count($header) < 1) {
+            fclose($handle);
+            return Redirect::back()->with('error', 'CSV file is empty or invalid.');
+        }
+
+        $businessId = auth()->user()->business_id;
+        $userId = auth()->id();
+
+        $imported = 0;
+        while (($row = fgetcsv($handle)) !== false) {
+            $data = array_combine($header, $row);
+
+            // Adjust these fields to match your CSV columns
+            Sale::create([
+                'business_id'    => $businessId,
+                'user_id'        => $userId,
+                'order_source_id'=> null,
+                'invoiceNumber'  => $data['invoiceNumber'] ?? uniqid('INV-'),
+                'customer_name'  => $data['customer_name'] ?? '',
+                'customer_email' => $data['customer_email'] ?? null,
+                'totalAmount'    => $data['totalAmount'] ?? 0.0,
+                'paidAmount'     => $data['paidAmount'] ?? 0.0,
+                'dueAmount'      => $data['dueAmount'] ?? 0.0,
+                'saleDate'       => $data['saleDate'] ?? now(),
+                'sale_status'    => $data['sale_status'] ?? 1,
+                'meta'           => json_encode($data),
+            ]);
+            $imported++;
+        }
+        fclose($handle);
+
+        return Redirect::back()->with('success', "$imported sales imported successfully from CSV.");
+    }
 }
