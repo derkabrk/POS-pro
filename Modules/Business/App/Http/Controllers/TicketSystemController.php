@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TicketSystem;
 use App\Models\TicketCategories;
 use App\Models\TicketStatus;
-use App\Models\TicketReply; // Add this at the top with your other use statements
+use App\Models\TicketReply; 
 use Illuminate\Http\Request;
 
 class TicketSystemController extends Controller

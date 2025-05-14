@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\TicketSystem;
 use App\Models\TicketCategories;
 use App\Models\TicketStatus;
+use App\Models\TicketReply;
 use App\Models\Business; // Assuming you have a Business model
 use App\Models\User; // Assuming you have a User model
 use Illuminate\Http\Request;
@@ -121,9 +122,6 @@ class TicketSystemController extends Controller
         return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket deleted successfully.');
     }
 
-    /**
-     * Reply to a ticket.
-     */
     public function reply(Request $request)
     {
         $request->validate([
@@ -131,10 +129,13 @@ class TicketSystemController extends Controller
             'message' => 'required|string',
         ]);
 
-        // You can save the reply to a TicketReply model or send an email, etc.
-        // Example: TicketReply::create([...]);
+        // Save the reply
+        TicketReply::create([
+            'ticket_id' => $request->ticket_id,
+            'user_id' => auth()->id(),
+            'message' => $request->message,
+        ]);
 
-        // For now, just flash a success message
-        return redirect()->route('admin.ticketSystem.index')->with('success', 'Reply sent successfully.');
+        return redirect()->route('business.ticketSystem.index')->with('success', 'Reply sent successfully.');
     }
 }
