@@ -65,7 +65,7 @@ class TicketSystemController extends Controller
         $ticket = TicketSystem::with(['category', 'status'])->findOrFail($id);
 
         // Get replies by ticket_id
-        $replies = \App\Models\TicketReply::where('ticket_id', $id)->orderBy('created_at', 'asc')->get();
+        $replies = \App\Models\TicketReply::where('ticket_id', $id)->get();
 
         return view('business::ticketSystem.show', compact('ticket', 'replies'));
     }
