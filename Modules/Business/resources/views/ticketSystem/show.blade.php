@@ -83,7 +83,11 @@
                             <div class="d-flex flex-column gap-2">
                                 @foreach($replies as $reply)
                                     <div class="d-flex {{ $reply->user_id == auth()->id() ? 'justify-content-end' : 'justify-content-start' }}">
-                                        <div class="card mb-1 {{ $reply->user_id == auth()->id() ? 'bg-primary text-white' : 'bg-light' }}" style="max-width: 70%;">
+                                        <div class="card mb-1 
+                                            {{ $reply->user_id == auth()->id() 
+                                                ? 'bg-dark text-white border-primary' 
+                                                : 'bg-primary text-white' 
+                                            }}" style="max-width: 70%;">
                                             <div class="card-body p-2">
                                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                                     <span class="small fw-bold">
