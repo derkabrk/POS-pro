@@ -38,74 +38,111 @@ class OrderSourceController extends Controller
     /**
      * Store a newly created order source in storage.
      */
-   public function store(Request $request)
-{
-    $request->validate([
-        'account_name' => 'required|string',
-        'name' => 'required|string|in:Shopify,YouCan,WooCommerce',
-        'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
-        'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
-        'status' => 'required|boolean',
-    ]);
-
-    if ($request->name === 'YouCan') {
-        $storeUrl = $request->youcan_store_url;
-        $clientId = config('services.youcan.api_key');
-        $redirectUri = route('youcan.callback');
-        $scopes = 'orders:read orders:write'; // Use space-separated scopes
-
-        $oauthUrl = 'https://api.youcan.shop/oauth/authorize?' . http_build_query([
-            'client_id' => $clientId,
-            'redirect_uri' => $redirectUri,
-            'response_type' => 'code',
-            'scope' => $scopes,
+    public function store(Request $request)
+    {
+        $request->validate([
+            'account_name' => 'required|string',
+            'name' => 'required|string|in:Shopify,YouCan,WooCommerce,CSV',
+            'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
+            'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
+            'status' => 'required|boolean',
+            'csv_file' => 'nullable|required_if:name,CSV|file|mimes:csv,txt',
         ]);
 
-        session([
-            'youcan_store_url' => $storeUrl,
+        if ($request->name === 'CSV') {
+            if ($request->hasFile('csv_file')) {
+                $file = $request->file('csv_file');
+                $handle = fopen($file->getRealPath(), 'r');
+                $header = fgetcsv($handle); // get the first row as header
+
+                while (($row = fgetcsv($handle)) !== false) {
+                    $data = array_combine($header, $row);
+
+                    // Adjust these fields to match your CSV columns
+                    \App\Models\Sale::create([
+                        'business_id'    => auth()->user()->business_id,
+                        'user_id'        => auth()->id(),
+                        'order_source_id'=> null,
+                        'invoiceNumber'  => $data['invoiceNumber'] ?? uniqid('INV-'),
+                        'customer_name'  => $data['customer_name'] ?? '',
+                        'customer_email' => $data['customer_email'] ?? null,
+                        'totalAmount'    => $data['totalAmount'] ?? 0.0,
+                        'paidAmount'     => $data['paidAmount'] ?? 0.0,
+                        'dueAmount'      => $data['dueAmount'] ?? 0.0,
+                        'saleDate'       => $data['saleDate'] ?? now(),
+                        'sale_status'    => $data['sale_status'] ?? 1,
+                        'meta'           => json_encode($data),
+                    ]);
+                }
+                fclose($handle);
+
+                return redirect()
+                    ->route('business.orderSource.index')
+                    ->with('success', __('CSV orders imported successfully.'));
+            } else {
+                return redirect()
+                    ->back()
+                    ->with('error', __('CSV file is required.'));
+            }
+        }
+
+        if ($request->name === 'YouCan') {
+            $storeUrl = $request->youcan_store_url;
+            $clientId = config('services.youcan.api_key');
+            $redirectUri = route('youcan.callback');
+            $scopes = 'orders:read orders:write'; // Use space-separated scopes
+
+            $oauthUrl = 'https://api.youcan.shop/oauth/authorize?' . http_build_query([
+                'client_id' => $clientId,
+                'redirect_uri' => $redirectUri,
+                'response_type' => 'code',
+                'scope' => $scopes,
+            ]);
+
+            session([
+                'youcan_store_url' => $storeUrl,
+                'account_name' => $request->account_name,
+                'status' => $request->status,
+            ]);
+
+            return redirect()->away($oauthUrl);
+        }
+
+        if ($request->name === 'Shopify') {
+            $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url);
+            $clientId = config('services.shopify.api_key');
+            $redirectUri = route('shopify.callback');
+            $scopes = 'read_orders,write_orders,read_products';
+
+            $oauthUrl = "https://{$shop}/admin/oauth/authorize?" . http_build_query([
+                'client_id' => $clientId,
+                'scope' => $scopes,
+                'redirect_uri' => $redirectUri,
+            ]);
+
+            session([
+                'shopify_store_url' => $shop,
+                'account_name' => $request->account_name,
+                'status' => $request->status,
+            ]);
+
+            return redirect()->away($oauthUrl);
+        }
+
+        // Handle WooCommerce or other platforms
+        $orderSource = OrderSource::create([
+            'business_id' => auth()->user()->business_id,
+            'user_id' => auth()->id(),
             'account_name' => $request->account_name,
+            'name' => $request->name,
             'status' => $request->status,
+            'settings' => [],
         ]);
 
-        return redirect()->away($oauthUrl);
+        return redirect()
+            ->route('business.orderSource.index')
+            ->with('success', __('Order source created successfully.'));
     }
-
-    if ($request->name === 'Shopify') {
-        $shop = preg_replace('/^https?:\/\//', '', $request->shopify_store_url);
-        $clientId = config('services.shopify.api_key');
-        $redirectUri = route('shopify.callback');
-        $scopes = 'read_orders,write_orders,read_products';
-
-        $oauthUrl = "https://{$shop}/admin/oauth/authorize?" . http_build_query([
-            'client_id' => $clientId,
-            'scope' => $scopes,
-            'redirect_uri' => $redirectUri,
-        ]);
-
-        session([
-            'shopify_store_url' => $shop,
-            'account_name' => $request->account_name,
-            'status' => $request->status,
-        ]);
-
-        return redirect()->away($oauthUrl);
-    }
-
-    // Handle WooCommerce or other platforms
-    $orderSource = OrderSource::create([
-        'business_id' => auth()->user()->business_id,
-        'user_id' => auth()->id(),
-        'account_name' => $request->account_name,
-        'name' => $request->name,
-        'status' => $request->status,
-        'settings' => [],
-    ]);
-
-    return redirect()
-        ->route('business.orderSource.index')
-        ->with('success', __('Order source created successfully.'));
-}
-
 
     public function show(OrderSource $orderSource)
     {

@@ -42,6 +42,7 @@
                                         <option value="Shopify">Shopify</option>
                                         <option value="YouCan">YouCan</option>
                                         <option value="WooCommerce">WooCommerce</option>
+                                        <option value="CSV">CSV</option> <!-- Added CSV option -->
                                     </select>
                                 </div>
                                
@@ -67,6 +68,12 @@
                                         <label>YouCan Store URL</label>
                                         <input type="text" name="youcan_store_url" class="form-control" placeholder="Enter your YouCan store URL">
                                     </div>
+                                </div>
+
+                                <!-- CSV Upload Section -->
+                                <div class="col-lg-6 mb-2" id="csv-upload-section" style="display:none;">
+                                    <label>CSV File</label>
+                                    <input type="file" name="csv_file" class="form-control" accept=".csv">
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
@@ -96,39 +103,39 @@
 <script>
     document.getElementById('platform').addEventListener('change', function () {
         const platform = this.value;
-       // const webhookUrl = `https://shyftcom.com/webhook/${platform}`;
-       // document.getElementById('webhook_url').value = webhookUrl;
-
-        console.log('Selected Platform:', platform);
-        //console.log('Generated Webhook URL:', webhookUrl);
 
         // Hide all platform-specific settings
         document.querySelectorAll('.platform-settings').forEach(function (el) {
             el.classList.add('d-none');
             el.querySelectorAll('input').forEach(function (input) {
-                input.disabled = true; // Disable hidden inputs
+                input.disabled = true;
             });
         });
+
+        // Hide CSV upload by default
+        document.getElementById('csv-upload-section').style.display = 'none';
 
         // Show the relevant settings based on the selected platform
         if (platform === 'Shopify') {
             const shopifySettings = document.getElementById('shopify-settings');
             shopifySettings.classList.remove('d-none');
             shopifySettings.querySelectorAll('input').forEach(function (input) {
-                input.disabled = false; // Enable visible inputs
+                input.disabled = false;
             });
         } else if (platform === 'WooCommerce') {
             const woocommerceSettings = document.getElementById('woocommerce-settings');
             woocommerceSettings.classList.remove('d-none');
             woocommerceSettings.querySelectorAll('input').forEach(function (input) {
-                input.disabled = false; // Enable visible inputs
+                input.disabled = false;
             });
         } else if (platform === 'YouCan') {
             const youcanSettings = document.getElementById('youcan-settings');
             youcanSettings.classList.remove('d-none');
             youcanSettings.querySelectorAll('input').forEach(function (input) {
-                input.disabled = false; // Enable visible inputs
+                input.disabled = false;
             });
+        } else if (platform === 'CSV') {
+            document.getElementById('csv-upload-section').style.display = 'block';
         }
     });
 </script>

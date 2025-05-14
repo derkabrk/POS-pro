@@ -91,7 +91,9 @@
                                                     </span>
                                                     <small class="text-muted ms-2">{{ $reply->created_at->format('d M Y') }}</small>
                                                 </div>
-                                                <div>{{ $reply->message }}</div>
+                                                <div>
+                                                    {{ $reply->message }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -50,6 +50,40 @@ class PaymentController extends Controller
         $gateway = Gateway::findOrFail($gateway_id);
         $business = Business::findOrFail(session("business_id"));
 
+        
+        if ($gateway->id == 17) {
+            $orderData = [
+                "destination_text" => $business->address,
+                "product_price" => $plan->subscriptionPrice ?? $plan->offerPrice,
+                "customer_name" => $business->companyName,
+                "customer_phone" => $business->phoneNumber,
+                "express" => false,
+                "wilaya" => "16",
+                "commune" => 887,
+                "note_to_driver" => "test test",
+                "products" => [
+                    [
+                        "product_id" => "31107880779837",
+                        "quantity" => 1
+                    ],
+                ]
+            ];
+
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Authorization' => 'Bearer YOUR_API_TOKEN_HERE',
+                'Accept' => 'application/json',
+            ])->post(
+                'https://backend.maystro-delivery.com/api/stores/orders_store',
+                $orderData
+            );
+
+            if ($response->successful()) {
+                return redirect()->back()->with('message', 'Order created successfully with Maystro Delivery.');
+            } else {
+                return redirect()->back()->with('error', 'Failed to create order with Maystro Delivery.');
+            }
+        }
+
         if ($gateway->is_manual) {
             $request->validate([
                 'attachment' => 'required|mimes:jpg,jpeg,png|max:2048|file',
