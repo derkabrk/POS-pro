@@ -129,7 +129,7 @@
 <!-- Reply Modal -->
 <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form method="POST" action="{{ route('admin.ticketSystem.reply') }}">
+    <form method="POST" action="{{ route('business.ticketSystem.reply') }}">
       @csrf
       <input type="hidden" name="ticket_id" id="replyTicketId">
       <div class="modal-content">
