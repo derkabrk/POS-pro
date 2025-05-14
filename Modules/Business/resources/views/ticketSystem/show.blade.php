@@ -79,21 +79,27 @@
                     {{-- Replies Section --}}
                     <div class="mt-4">
                         <h5 class="fw-bold">Replies</h5>
-                        @foreach($replies as $reply)
-                            <div class="d-flex">
-                                <div class="card mb-1 bg-dark text-white border-primary" style="max-width: 70%;">
-                                    <div class="card-body p-2">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <span class="small fw-bold">
-                                                {{ $reply->user_id }}
-                                            </span>
-                                            <small class="text-muted ms-2">{{ $reply->created_at->format('d M Y') }}</small>
+                        @if($replies && $replies->count())
+                            <div class="d-flex flex-column gap-2">
+                                @foreach($replies as $reply)
+                                    <div class="d-flex">
+                                        <div class="card mb-1 bg-dark text-white border-primary" style="max-width: 70%;">
+                                            <div class="card-body p-2">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <span class="small fw-bold">
+                                                        {{ $reply->user_id }}
+                                                    </span>
+                                                    <small class="text-muted ms-2">{{ $reply->created_at->format('d M Y') }}</small>
+                                                </div>
+                                                <div>{{ $reply->message }}</div>
+                                            </div>
                                         </div>
-                                        <div>{{ $reply->message }}</div>
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
-                        @endforeach
+                        @else
+                            <p class="text-muted">No replies yet.</p>
+                        @endif
                     </div>
                 </div>
             </div>
