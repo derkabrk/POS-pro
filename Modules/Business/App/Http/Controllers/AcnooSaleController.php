@@ -1243,17 +1243,14 @@ class AcnooSaleController extends Controller
 
     public function importCsv(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        // Validate file type and presence
+        $request->validate([
             'csv_file' => 'required|file|mimes:csv,txt|max:2048',
         ]);
 
-        if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-
         $file = $request->file('csv_file');
         if (!$file->isValid()) {
-            return Redirect::back()->with('error', 'Uploaded CSV file is not valid.');
+            return redirect()->back()->with('error', 'Uploaded CSV file is not valid.');
         }
 
         $handle = fopen($file->getRealPath(), 'r');
@@ -1261,7 +1258,7 @@ class AcnooSaleController extends Controller
 
         if ($header === false || count($header) < 1) {
             fclose($handle);
-            return Redirect::back()->with('error', 'CSV file is empty or invalid.');
+            return redirect()->back()->with('error', 'CSV file is empty or invalid.');
         }
 
         $businessId = auth()->user()->business_id;
@@ -1271,8 +1268,7 @@ class AcnooSaleController extends Controller
         while (($row = fgetcsv($handle)) !== false) {
             $data = array_combine($header, $row);
 
-            // Adjust these fields to match your CSV columns
-            Sale::create([
+            \App\Models\Sale::create([
                 'business_id'    => $businessId,
                 'user_id'        => $userId,
                 'order_source_id'=> null,
@@ -1290,6 +1286,6 @@ class AcnooSaleController extends Controller
         }
         fclose($handle);
 
-        return Redirect::back()->with('success', "$imported sales imported successfully from CSV.");
+        return redirect()->back()->with('success', "$imported sales imported successfully from CSV.");
     }
 }
