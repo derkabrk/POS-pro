@@ -83,7 +83,7 @@
                             <div class="d-flex flex-column gap-2">
                                 @foreach($replies as $reply)
                                     <div class="d-flex">
-                                        <div class="card mb-1 bg-dark text-white border-primary" style="max-width: 70%;">
+                                        <div class="card mb-1 bg-light text-dark border-primary" style="max-width: 70%;">
                                             <div class="card-body p-2">
                                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                                     <span class="small fw-bold">
