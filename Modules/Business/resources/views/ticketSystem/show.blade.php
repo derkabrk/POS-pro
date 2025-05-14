@@ -9,9 +9,15 @@
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>Ticket Details</h4>
-                    <a href="{{ route('business.ticketSystem.index') }}" class="btn btn-primary text-white add-order-btn">
-                        <i class="fas fa-arrow-left me-1"></i> Back to Tickets
-                    </a>
+                    <button 
+                        type="button" 
+                        class="btn btn-primary text-white add-order-btn" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#replyModal"
+                        data-ticket-id="{{ $ticket->id }}"
+                    >
+                        <i class="fas fa-reply me-1"></i> Reply
+                    </button>
                 </div>
                 <div class="p-16">
                     <div class="row g-4">
@@ -101,4 +107,42 @@
         </div>
     </div>
 </div>
+
+
+
 @endsection
+
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ route('business.ticketSystem.reply') }}">
+      @csrf
+      <input type="hidden" name="ticket_id" id="replyTicketId">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="replyModalLabel">Reply to Ticket</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="replyMessage" class="form-label">Message</label>
+            <textarea class="form-control" id="replyMessage" name="message" rows="4" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Send Reply</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var replyModal = document.getElementById('replyModal');
+    replyModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var ticketId = button.getAttribute('data-ticket-id');
+        document.getElementById('replyTicketId').value = ticketId;
+    });
+});
+</script>
