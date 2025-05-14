@@ -136,6 +136,6 @@ class TicketSystemController extends Controller
             'message' => $request->message,
         ]);
 
-        return redirect()->route('business.ticketSystem.index')->with('success', 'Reply sent successfully.');
+        return redirect()->route('admin.ticketSystem.index')->with('success', 'Reply sent successfully.');
     }
 }
