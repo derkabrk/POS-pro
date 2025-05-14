@@ -46,44 +46,56 @@ class OrderSourceController extends Controller
             'youcan_store_url' => 'nullable|required_if:name,YouCan|url',
             'shopify_store_url' => 'nullable|required_if:name,Shopify|regex:/^(https?:\/\/)?[a-zA-Z0-9\-]+\.myshopify\.com$/',
             'status' => 'required|boolean',
-            'csv_file' => 'nullable|required_if:name,CSV|file|mimes:csv,txt',
+            'csv_file' => 'nullable|required_if:name,CSV|file|mimes:csv,txt|max:2048', // CSV validation
         ]);
 
         if ($request->name === 'CSV') {
-            if ($request->hasFile('csv_file')) {
-                $file = $request->file('csv_file');
-                $handle = fopen($file->getRealPath(), 'r');
-                $header = fgetcsv($handle); // get the first row as header
-
-                while (($row = fgetcsv($handle)) !== false) {
-                    $data = array_combine($header, $row);
-
-                    // Adjust these fields to match your CSV columns
-                    \App\Models\Sale::create([
-                        'business_id'    => auth()->user()->business_id,
-                        'user_id'        => auth()->id(),
-                        'order_source_id'=> null,
-                        'invoiceNumber'  => $data['invoiceNumber'] ?? uniqid('INV-'),
-                        'customer_name'  => $data['customer_name'] ?? '',
-                        'customer_email' => $data['customer_email'] ?? null,
-                        'totalAmount'    => $data['totalAmount'] ?? 0.0,
-                        'paidAmount'     => $data['paidAmount'] ?? 0.0,
-                        'dueAmount'      => $data['dueAmount'] ?? 0.0,
-                        'saleDate'       => $data['saleDate'] ?? now(),
-                        'sale_status'    => $data['sale_status'] ?? 1,
-                        'meta'           => json_encode($data),
-                    ]);
-                }
-                fclose($handle);
-
-                return redirect()
-                    ->route('business.orderSource.index')
-                    ->with('success', __('CSV orders imported successfully.'));
-            } else {
+            if (!$request->hasFile('csv_file')) {
                 return redirect()
                     ->back()
                     ->with('error', __('CSV file is required.'));
             }
+
+            $file = $request->file('csv_file');
+            // Additional validation: check if file is readable and has at least one row
+            if (!$file->isValid()) {
+                return redirect()
+                    ->back()
+                    ->with('error', __('Uploaded CSV file is not valid.'));
+            }
+
+            $handle = fopen($file->getRealPath(), 'r');
+            $header = fgetcsv($handle);
+            if ($header === false || count($header) < 1) {
+                fclose($handle);
+                return redirect()
+                    ->back()
+                    ->with('error', __('CSV file is empty or invalid.'));
+            }
+
+            while (($row = fgetcsv($handle)) !== false) {
+                $data = array_combine($header, $row);
+
+                \App\Models\Sale::create([
+                    'business_id'    => auth()->user()->business_id,
+                    'user_id'        => auth()->id(),
+                    'order_source_id'=> null,
+                    'invoiceNumber'  => $data['invoiceNumber'] ?? uniqid('INV-'),
+                    'customer_name'  => $data['customer_name'] ?? '',
+                    'customer_email' => $data['customer_email'] ?? null,
+                    'totalAmount'    => $data['totalAmount'] ?? 0.0,
+                    'paidAmount'     => $data['paidAmount'] ?? 0.0,
+                    'dueAmount'      => $data['dueAmount'] ?? 0.0,
+                    'saleDate'       => $data['saleDate'] ?? now(),
+                    'sale_status'    => $data['sale_status'] ?? 1,
+                    'meta'           => json_encode($data),
+                ]);
+            }
+            fclose($handle);
+
+            return redirect()
+                ->route('business.orderSource.index')
+                ->with('success', __('CSV orders imported successfully.'));
         }
 
         if ($request->name === 'YouCan') {
