@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TicketSystem;
 use App\Models\TicketCategories;
 use App\Models\TicketStatus;
+use App\Models\TicketReply; // Add this at the top with your other use statements
 use Illuminate\Http\Request;
 
 class TicketSystemController extends Controller
@@ -66,18 +67,21 @@ class TicketSystemController extends Controller
         return view('business::ticketSystem.show', compact('ticket'));
     }
 
-    
+
     public function reply(Request $request)
-{
-    $request->validate([
-        'ticket_id' => 'required|exists:ticket_systems,id',
-        'message' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'ticket_id' => 'required|exists:ticket_systems,id',
+            'message' => 'required|string',
+        ]);
 
-    // You can save the reply to a TicketReply model or send an email, etc.
-    // Example: TicketReply::create([...]);
+        // Save the reply
+        TicketReply::create([
+            'ticket_id' => $request->ticket_id,
+            'user_id' => auth()->id(),
+            'message' => $request->message,
+        ]);
 
-    // For now, just flash a success message
-    return redirect()->route('business.ticketSystem.index')->with('success', 'Reply sent successfully.');
-}
+        return redirect()->route('business.ticketSystem.index')->with('success', 'Reply sent successfully.');
+    }
 }
