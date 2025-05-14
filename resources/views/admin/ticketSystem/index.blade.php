@@ -205,6 +205,15 @@
                                             <i class="fas fa-trash-alt"></i> Delete
                                         </button>
                                     </form>
+                                    
+                                    <button type="button"
+                                            class="btn btn-sm btn-secondary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#replyModal"
+                                            data-ticket-id="{{ $ticket->id }}"
+                                            data-ticket-title="{{ $ticket->title }}">
+                                        <i class="fas fa-reply"></i>
+                                    </button>
                                 </td>
                             </tr>
                             @endforeach
@@ -368,4 +377,40 @@
         </div>
     </div>
 </div>
+
+<!-- Reply Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ route('admin.ticketSystem.reply') }}">
+      @csrf
+      <input type="hidden" name="ticket_id" id="replyTicketId">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="replyModalLabel">Reply to Ticket</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="replyMessage" class="form-label">Message</label>
+            <textarea class="form-control" id="replyMessage" name="message" rows="4" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Send Reply</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var replyModal = document.getElementById('replyModal');
+    replyModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var ticketId = button.getAttribute('data-ticket-id');
+        document.getElementById('replyTicketId').value = ticketId;
+    });
+});
+</script>
 @endsection

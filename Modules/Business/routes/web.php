@@ -270,5 +270,6 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::resource('ticketSystem', Business\TicketSystemController::class);
     Route::post('/shopify/webhook/orders', [Business\OrderSourceController::class, 'storeShopifyOrder'])->name('shopify.webhook.orders');
     Route::get('/shopify/connect', [Business\OrderSourceController::class, 'connectShopify'])->name('shopify.connect');
+    Route::post('ticketSystem/reply', [Business\TicketSystemController::class, 'reply'])->name('ticketSystem.reply');
    // Route::resource('shipping', Business\AcnooShippingController::class);
 });

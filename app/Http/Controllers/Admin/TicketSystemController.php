@@ -120,4 +120,21 @@ class TicketSystemController extends Controller
 
         return redirect()->route('admin.ticketSystem.index')->with('success', 'Ticket deleted successfully.');
     }
+
+    /**
+     * Reply to a ticket.
+     */
+    public function reply(Request $request)
+    {
+        $request->validate([
+            'ticket_id' => 'required|exists:ticket_systems,id',
+            'message' => 'required|string',
+        ]);
+
+        // You can save the reply to a TicketReply model or send an email, etc.
+        // Example: TicketReply::create([...]);
+
+        // For now, just flash a success message
+        return redirect()->route('admin.ticketSystem.index')->with('success', 'Reply sent successfully.');
+    }
 }

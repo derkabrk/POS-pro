@@ -131,5 +131,5 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::patch('ticketSystem/{id}/updateStatus', [ADMIN\TicketSystemController::class, 'updateStatus'])->name('ticketSystem.updateStatus');
     Route::resource('ticketCategories', ADMIN\TicketCategoriesController::class);
     Route::resource('ticketStatus', ADMIN\TicketStatusController::class);
-
+    Route::post('ticketSystem/reply', [ADMIN\TicketSystemController::class, 'reply'])->name('ticketSystem.reply');
 });
