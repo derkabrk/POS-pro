@@ -20,8 +20,7 @@
         @endphp
         <td>
             <button 
-                class="btn btn-soft-custom waves-effect waves-light text-white px-2 py-1 update-status-btn"
-                style="background-color: {{ $status['color'] }}; opacity: 0.85;"
+                class="btn btn-soft-{{ $status['color'] }} waves-effect waves-light"
                 data-bs-toggle="modal"
                 data-bs-target="#updateStatusModal"
                 data-sale-id="{{ $sale->id }}"
