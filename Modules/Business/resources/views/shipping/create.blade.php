@@ -201,7 +201,7 @@ console.log("Second Credential Label:", secondCredentialLabel);
         -moz-appearance: none;
         width: 18px;
         height: 18px;
-        border: 2px solid #00abb3;
+        border: 2px solid rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important;
         border-radius: 4px;
         background-color: #e4e5e7;
         cursor: pointer;
@@ -210,8 +210,8 @@ console.log("Second Credential Label:", secondCredentialLabel);
 
     /* Checkbox when checked */
     input[type="checkbox"]:checked {
-        background-color: #00abb3;
-        border: 2px solid #00abb3;
+        background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important;
+        border: 2px solid rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important;
     }
 
     /* Checkmark */

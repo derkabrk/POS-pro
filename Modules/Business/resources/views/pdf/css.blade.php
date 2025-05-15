@@ -9,7 +9,7 @@
     }
 
     .sale-invoice {
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
         font-size: 16px;
         font-weight: 600;
         line-height: 24.2px;
@@ -18,7 +18,7 @@
     }
 
     .in-pdf-title {
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
         font-size: 20px;
         font-weight: 600;
         line-height: 24.2px;
@@ -39,7 +39,7 @@
         justify-content: center;
         align-items: center;
         padding: 0 0px;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
     }
 
     .in-content {
@@ -51,13 +51,13 @@
 
 
     .in-table-header .head-red {
-        background-color: #00abb3 !important;
+        background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important !important;
         color: white;
         padding: 12px 14px;
         font-weight: 700;
         font-size: 14px;
         border: .5px solid #D9D9D9;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
 
     }
 
@@ -68,7 +68,7 @@
         font-weight: 700;
         font-size: 14px;
         border: .5px solid #D9D9D9;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
 
     }
 
@@ -78,7 +78,7 @@
     }
 
     .in-table-body-container tr.in-table-body:nth-child(even) {
-        background-color: #00abb31A;
+        background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important1A;
     }
 
     .in-table-body td:first-child {
@@ -104,7 +104,7 @@
         border-left: .5px solid #D9D9D9;
         border-right: .5px solid #D9D9D9;
         font-size: 14px;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
 
     }
 
@@ -119,7 +119,7 @@
         border-radius: 30px 0 0 30px;
         position: absolute;
         margin: 0;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
 
     }
 
@@ -137,7 +137,7 @@
         gap: 12px;
         font-size: 24px;
         font-weight: 700;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
     }
 
     .invoice-header-content {
@@ -180,7 +180,7 @@
         align-items: center;
         justify-content: space-between;
         position: relative;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
         margin-top: 12px;
 
     }
@@ -238,12 +238,12 @@
         margin-bottom: 1rem;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
     }
 
 
     .in-table-row-bottom .total-amound {
-        background-color: #00abb3;
+        background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important;
         color: white;
         padding: 8px 6px;
     }
@@ -274,7 +274,7 @@
 
     .in-signature-container {
         width: 100%;
-        font-family: "Inter", sans-serif;
+        font-family: font-family: 'Saira', sans-serif;
         font-size: 12px;
         color: #424242;
         margin-bottom: 12px;
