@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Saira:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 :root {
     --clr-primary: #00abb3;
@@ -21,7 +21,7 @@
     --clr-orange: #ff6565;
     --clr-orange-light: rgba(255, 116, 62, 0.12);
     --clr-red: #ef4444;
-    --ff:'Saira', sans-serif;
+    --ff: "Inter", sans-serif;
 }
 
 .primary {
@@ -41,7 +41,7 @@ html {
 body {
     margin: 0;
     padding: 0 !important;
-    font-family: 'Saira', sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
     line-height: 25px;
     letter-spacing: 0px;
@@ -1558,7 +1558,7 @@ svg {
 /* table css start css */
 .erp-table-section {
     /* padding-top: 30px; */
-    font-family: 'Saira', sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
 .erp-table-section.dashboard .card {
@@ -1588,7 +1588,7 @@ svg {
     font-size: 20px;
     text-transform: capitalize;
     color: #191919;
-    font-family: 'Saira', sans-serif;
+    font-family: "Inter", sans-serif;
     white-space: nowrap;
 }
 
