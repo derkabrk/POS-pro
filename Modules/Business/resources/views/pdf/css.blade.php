@@ -51,7 +51,7 @@
 
 
     .in-table-header .head-red {
-        background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important !important;
+        background-color: #8c68cd !important;
         color: white;
         padding: 12px 14px;
         font-weight: 700;
@@ -78,7 +78,7 @@
     }
 
     .in-table-body-container tr.in-table-body:nth-child(even) {
-        background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important1A;
+        background-color: #8c68cd1A;
     }
 
     .in-table-body td:first-child {
@@ -243,7 +243,7 @@
 
 
     .in-table-row-bottom .total-amound {
-        background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important;
+        background-color: #8c68cd;
         color: white;
         padding: 8px 6px;
     }
