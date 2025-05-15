@@ -163,18 +163,18 @@ class Sale extends Model
         }, $value));
     }
 public const STATUS = [
-    1  => ['name' => 'Pending',    'color' => 'warning'],  
-    2  => ['name' => 'Called 1',   'color' => 'info'],     
-    3  => ['name' => 'Called 2',   'color' => 'info'],
-    4  => ['name' => 'Called 3',   'color' => 'info'],
-    5  => ['name' => 'Called 4',   'color' => 'info'],
-    6  => ['name' => 'Canceled',   'color' => 'danger'], 
-    7  => ['name' => 'Confirmed',  'color' => 'primary'], 
-    8  => ['name' => 'Shipping',   'color' => 'secondary'],
-    9  => ['name' => 'Returned',   'color' => 'dark'], 
-    10 => ['name' => 'Delivered',  'color' => 'success'],   
-    11 => ['name' => 'Paid',       'color' => 'success'],   
-    12 => ['name' => 'Cash Out',   'color' => 'primary'], 
+    1  => ['name' => 'Pending',    'color' => 'btn btn-outline-warning update-status-btn'],  
+    2  => ['name' => 'Called 1',   'color' => 'btn btn-outline-info update-status-btn'],     
+    3  => ['name' => 'Called 2',   'color' => 'btn btn-outline-info update-status-btn'],  
+    4  => ['name' => 'Called 3',   'color' => 'btn btn-outline-info update-status-btn'],  
+    5  => ['name' => 'Called 4',   'color' => 'btn btn-outline-info update-status-btn'],  
+    6  => ['name' => 'Canceled',   'color' => 'btn btn-outline-danger update-status-btn'], 
+    7  => ['name' => 'Confirmed',  'color' => 'btn btn-outline-primary update-status-btn'], 
+    8  => ['name' => 'Shipping',   'color' => 'btn btn-outline-secondary update-status-btn'],
+    9  => ['name' => 'Returned',   'color' => 'btn btn-outline-dark update-status-btn'],
+    10 => ['name' => 'Delivered',  'color' => 'btn btn-outline-success update-status-btn'],  
+    11 => ['name' => 'Paid',       'color' => 'btn btn-outline-success update-status-btn'],
+    12 => ['name' => 'Cash Out',   'color' => 'btn btn-outline-primary update-status-btn'],
 ];
 
 
