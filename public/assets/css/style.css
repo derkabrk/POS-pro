@@ -2677,7 +2677,7 @@ strong {
 }
 
 .small-table tr td {
-    font-family: "Manrope";
+    font-family: "Saira";
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -2720,7 +2720,7 @@ strong {
 
 .title-four {
     text-align: center;
-    font-family: "Manrope";
+    font-family: "Saira";
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
@@ -4177,7 +4177,7 @@ tr.position-relative td {
 }
 
 .invoice-header h1 {
-    font-family: "Manrope";
+    font-family: "Saira";
     font-weight: 600;
     font-size: 24px;
     line-height: 68px;
@@ -4186,7 +4186,7 @@ tr.position-relative td {
 }
 
 .invoice-header h2 {
-    font-family: "Manrope";
+    font-family: "Saira";
     font-weight: 700;
     font-size: 20px;
     line-height: 30px;
@@ -4194,7 +4194,7 @@ tr.position-relative td {
 }
 
 .invoice-header p {
-    font-family: "Manrope";
+    font-family: "Saira";
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
@@ -4206,7 +4206,7 @@ tr.position-relative td {
 }
 
 .invoice-address-section li {
-    font-family: "Manrope";
+    font-family: "Saira";
     font-weight: 400;
     font-size: 13px;
     line-height: 23px;
@@ -4218,7 +4218,7 @@ tr.position-relative td {
 
 .invoice-address-section li p,
 .invoice-address-section li span {
-    font-family: "Manrope";
+    font-family: "Saira";
     font-weight: 400;
     font-size: 13px;
     line-height: 23px;
@@ -4295,7 +4295,7 @@ tr.position-relative td {
 
 .invoice-bank-details h4 {
     display: inline-block;
-    font-family: "Manrope";
+    font-family: "Saira";
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
@@ -4329,7 +4329,7 @@ tr.position-relative td {
 }
 
 .invoice-others-section h6 {
-    font-family: "Manrope";
+    font-family: "Saira";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;

@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Saira:wght@100..900&display=swap");
+
 html {
     overflow-x: hidden;
     padding: 0px;
     margin: 0px;
 }
-$mss: 'Manrope', sans-serif;
-$rss: 'Roboto', sans-serif;
+$mss: 'Saira', sans-serif;
+$rss: 'Saira', sans-serif;
 $acc: #00abb3;
 .bg-green-one{
     background: #04f204 !important;
@@ -14,7 +14,7 @@ $acc: #00abb3;
 body {
     margin: 0;
     padding: 0 !important;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Saira', sans-serif;
     font-size: 14px;
     line-height: 25px;
     letter-spacing: 0px;
@@ -1186,7 +1186,7 @@ b, strong{
 .small-table{
     tr{
         td{
-            font-family: 'Manrope';
+            font-family: 'Saira';
             font-style: normal;
             font-weight: 500;
             font-size: 12px;
@@ -1230,7 +1230,7 @@ b, strong{
 }
 .title-four{
     text-align: center;
-    font-family: 'Manrope';
+    font-family: 'Saira';
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
@@ -1336,7 +1336,7 @@ b, strong{
     span{
         min-width: 165px !important;
         display: inline-block;
-        font-family: 'Manrope';
+        font-family: 'Saira';
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
@@ -1441,7 +1441,7 @@ b, strong{
     border-radius: 10px;
     margin-bottom: 30px;
     .title-seven{
-        font-family: 'Manrope';
+        font-family: 'Saira';
         font-style: normal;
         font-weight: 600;
         font-size: 16px;
@@ -1460,7 +1460,7 @@ b, strong{
         align-items: center;
         margin: 7px 0;
         span{
-            font-family: 'Manrope';
+            font-family: 'Saira';
             font-style: normal;
             font-weight: 400;
             font-size: 16px;
@@ -2280,7 +2280,7 @@ tr.position-relative{
     background: #DBEEF4;
     padding: 20px 0;
     h1{
-        font-family: 'Manrope';
+        font-family: 'Saira';
         font-weight: 600;
         font-size: 24px;
         line-height: 68px;
@@ -2288,14 +2288,14 @@ tr.position-relative{
         text-align: right;
     }
     h2{
-        font-family: 'Manrope';
+        font-family: 'Saira';
         font-weight: 700;
         font-size: 20px;
         line-height: 30px;
         color: #191919;
     }
     p{
-        font-family: 'Manrope';
+        font-family: 'Saira';
         font-weight: 400;
         font-size: 14px;
         line-height: 20px;
@@ -2307,13 +2307,13 @@ tr.position-relative{
     padding-top: 30px;
     li{
         // display: flex;
-        font-family: 'Manrope';
+        font-family: 'Saira';
         font-weight: 400;
         font-size: 13px;
         line-height: 23px;
         color: #0C1928;
         p, span{
-            font-family: 'Manrope';
+            font-family: 'Saira';
             font-weight: 400;
             font-size: 13px;
             line-height: 23px;
@@ -2383,7 +2383,7 @@ tr.position-relative{
     margin-top: 30px;
     h4{
         display: inline-block;
-        font-family: 'Manrope';
+        font-family: 'Saira';
         font-style: normal;
         font-weight: 600;
         font-size: 20px;
@@ -2406,7 +2406,7 @@ tr.position-relative{
     justify-content: space-between;
     align-items: center;
     h6{
-        font-family: 'Manrope';
+        font-family: 'Saira';
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
