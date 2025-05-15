@@ -328,7 +328,7 @@ body {
     border: 0;
     box-shadow: 0px 4px 24px 0px #e4c3c30d;
     border-radius: 12px;
-    background-color: #fff !important;
+    background-color: transparent;
 }
 
 .table th {
