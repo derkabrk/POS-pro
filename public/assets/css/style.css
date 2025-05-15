@@ -23,6 +23,7 @@
     --clr-orange-light: rgba(255, 116, 62, 0.12);
     --clr-red: #ef4444;
     --ff: "Saira", sans-serif;
+    --bs-font-sans-serif: 'Saira', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .primary {
