@@ -7,7 +7,7 @@
 @section('main_content')
     <div class="erp-table-section">
         <div class="container-fluid">
-            <div class="card">
+            <div class="card card bg-transparent border">
                 <div class="card-bodys">
                     <div class="subscription-header">
                         <h4>{{ __('Purchase Plan') }}</h4>

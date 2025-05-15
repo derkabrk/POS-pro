@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card card bg-transparent border">
             <div class="card-bodys">
                 <div class="table-header p-16 d-print-none">
                     <h4>{{ __('Income Report List') }}</h4>

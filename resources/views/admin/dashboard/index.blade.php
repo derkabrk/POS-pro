@@ -107,7 +107,7 @@
 
 
         <div class="erp-table-section dashboard">
-            <div class="card">
+            <div class="card card bg-transparent border">
                 <div class="card-bodys">
                     <div class="table-header p-16">
                         <h4>{{ __('Recent Register') }}</h4>

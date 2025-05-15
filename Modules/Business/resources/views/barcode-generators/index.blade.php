@@ -4,7 +4,7 @@
     <div class="min-vh-100">
         <div class="erp-table-section order-form-section">
             <div class="container-fluid">
-                <div class="card">
+                <div class="card card bg-transparent border">
                     <div class="card-bodys">
                         <div class="table-header barcode-header p-16">
                             <h4>{{ __('Barcode Generate') }}</h4>

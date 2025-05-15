@@ -218,6 +218,9 @@ svg {
     background-color: white;
 }
 .w-52 {
+
+
+
     width: 52px !important;
 }
 .text-blue {
@@ -944,7 +947,7 @@ svg {
 
 .main-header-section {
     padding: 14px 20px;
-    background: #fff;
+    background: transparent;
     -webkit-box-shadow: 8px 10px 80px rgba(0, 15, 55, 0.04);
     box-shadow: 8px 10px 80px rgba(0, 15, 55, 0.04);
 }
@@ -961,7 +964,7 @@ svg {
 }
 
 .main-header-section .profile-info .dropdown-menu {
-    background: #fff;
+    background: transparent;
     -webkit-box-shadow: 0px 0px 7px -5px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 0px 7px -5px rgba(0, 0, 0, 0.75);
     min-width: 160px;
