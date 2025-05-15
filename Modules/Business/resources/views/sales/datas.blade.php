@@ -21,7 +21,7 @@
         <td>
             <button 
                 class="{{ $status['color'] }}"
-                style="color: {{ $status['color'] }}; font-weight: w600;"
+                style="color: {{ $status['text_color'] }}; font-weight: w600;"
                 data-bs-toggle="modal"
                 data-bs-target="#updateStatusModal"
                 data-sale-id="{{ $sale->id }}"
