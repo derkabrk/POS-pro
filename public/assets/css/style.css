@@ -23,7 +23,7 @@
     --clr-orange-light: rgba(255, 116, 62, 0.12);
     --clr-red: #ef4444;
     --ff: "Saira", sans-serif;
-    --vz-body-bg-image: url("../images/img-1.png");
+    --vz-body-bg-image: url("../images/img-1.png"); 
     --bs-font-sans-serif: 'Saira', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
@@ -42,6 +42,7 @@ html {
 }
 
 body {
+
     margin: 0;
     padding: 0 !important;
     font-family: 'Saira', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
@@ -56,9 +57,7 @@ body {
     background-attachment: fixed;
 }
 
-#main-wrapper {
-    background: #fff;
-}
+
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
