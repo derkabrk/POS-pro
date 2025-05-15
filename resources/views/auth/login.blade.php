@@ -1,4 +1,4 @@
-@extends('layouts.master-without-nav')
+@extends('layouts.auth.app')
 @section('title')
     @lang('translation.signin')
 @endsection
