@@ -18,19 +18,22 @@
             $status = \App\Models\Sale::STATUS[$sale->sale_status] ?? ['name' => 'Unknown', 'color' => 'bg-secondary'];
             $disabledStatuses = ['Cash Out', 'Canceled']; // List of statuses to disable the button
         @endphp
-        <td>
-            <button 
-                class="btn btn-soft-{{ $status['color'] }} waves-effect waves-light"
-                data-bs-toggle="modal"
-                data-bs-target="#updateStatusModal"
-                data-sale-id="{{ $sale->id }}"
-                data-current-status="{{ $sale->sale_status }}"
-                data-redirect-from="orders_table"
-                {{ in_array($status['name'], $disabledStatuses) ? 'disabled' : '' }} 
-            >
-                {{ $status['name'] }}
-            </button>
-        </td>
+      <td>
+    <button 
+        type="button"
+        class="btn btn-soft-{{ $status['color'] }} waves-effect waves-light update-status-btn"
+        data-bs-toggle="modal"
+        data-bs-target="#updateStatusModal"
+        data-sale-id="{{ $sale->id }}"
+        data-current-status="{{ $sale->sale_status }}"
+        data-redirect-from="orders_table"
+        @disabled(in_array($status['name'], $disabledStatuses))
+        aria-label="Change status to {{ $status['name'] }}"
+        aria-haspopup="dialog"
+    >
+        {{ $status['name'] }}
+    </button>
+</td>
     @endif
     
 
