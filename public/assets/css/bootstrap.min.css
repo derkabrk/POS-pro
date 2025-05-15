@@ -36,6 +36,7 @@
     --bs-danger: #dc3545;
     --bs-light: #f8f9fa;
     --bs-dark: #212529;
+    --vz-body-bg-image: url("../images/img-1.png"); 
     --bs-primary-rgb: 13, 110, 253;
     --bs-secondary-rgb: 108, 117, 125;
     --bs-success-rgb: 25, 135, 84;
@@ -95,7 +96,7 @@ body {
     line-height: var(--bs-body-line-height);
     color: var(--bs-body-color);
     text-align: var(--bs-body-text-align);
-    background-color: var(--bs-body-bg);
+    background-image: var(--vz-body-bg-image);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
 }
