@@ -1,5 +1,6 @@
-
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset(get_option('general')['favicon'] ?? 'assets/images/logo/favicon.png')}}">
+{{-- Google Fonts: Saira --}}
+<link href="https://fonts.googleapis.com/css?family=Saira:400,700&display=swap" rel="stylesheet">
 <!-- Bootstrap -->
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <!-- Fontawesome -->
