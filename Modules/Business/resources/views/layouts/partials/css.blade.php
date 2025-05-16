@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 @stack('css')
 
 @if (app()->getLocale() == 'ar')
