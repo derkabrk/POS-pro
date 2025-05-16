@@ -1,8 +1,9 @@
 @extends('layouts.auth.app')
+
 @section('title')
-    @lang('translation.signin')
+    {{ __('Login') }}
 @endsection
-@section('content')
+@section('main_content')
 
     <!-- auth-page wrapper -->
     <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
