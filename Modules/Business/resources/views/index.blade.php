@@ -7,14 +7,7 @@
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
-            Dashboard
-        @endslot
-        @slot('title')
-            Ecommerce
-        @endslot
-    @endcomponent
+
 
     <div class="row">
         <div class="col">
