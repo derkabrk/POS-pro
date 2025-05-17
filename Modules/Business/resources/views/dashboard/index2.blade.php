@@ -6,14 +6,7 @@
     <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
-            Dashboards
-        @endslot
-        @slot('title')
-            Analytics
-        @endslot
-    @endcomponent
+   
 
     <div class="row">
         <div class="col-xxl-5">
