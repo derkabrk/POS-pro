@@ -220,7 +220,7 @@ svg {
 }
 .return-card {
     min-height: 85vh !important;
-    background-color: white;
+    background-color: transparent;
 }
 .w-52 {
 
@@ -1950,7 +1950,7 @@ svg {
 }
 .gpt-dashboard-card .couter-box {
     border-radius: 16px;
-    background: #fff;
+    background: transparent;
     padding: 18px;
     -webkit-box-pack: stretch;
     -ms-flex-pack: stretch;
@@ -1961,14 +1961,14 @@ svg {
 }
 
 .gpt-dashboard-card .couter-box p {
-    color: #fff;
+    color: transparent;
     font-size: 18px;
     font-style: normal;
     font-weight: 500;
     line-height: 28px;
 }
 .gpt-dashboard-card .couter-box h5 {
-    color: #fff;
+    color: transparent;
     font-size: 24px;
     line-height: 32px;
     font-style: normal;
@@ -2009,12 +2009,12 @@ svg {
     background: linear-gradient(270deg, #00f39c 0%, #009af3 100%);
 }
 .gpt-dashboard-card .couter-box:nth-child(6) {
-    background-color: #ffe7c8;
+    background-color:  transparent;
 }
 
 .gpt-dashboard-chart .new-card {
     border: none !important;
-    background-color: #fff;
+    background-color: transparent;
     -webkit-box-shadow: 0px 0px 1px rgba(12, 26, 75, 0.24),
         0px 3px 8px -1px rgba(71, 50, 50, 0.05);
     box-shadow: 0px 0px 1px rgba(12, 26, 75, 0.24),
@@ -2024,16 +2024,16 @@ svg {
     min-height: 351px;
 }
 .gpt-dashboard-chart .new-card .col-sm-6:nth-child(1) .four-card {
-    background-color: #ffe9e0;
+    background-color:  transparent;
 }
 .gpt-dashboard-chart .new-card .col-sm-6:nth-child(2) .four-card {
-    background-color: #dafcff;
+    background-color: transparent;
 }
 .gpt-dashboard-chart .new-card .col-sm-6:nth-child(3) .four-card {
-    background-color: #e3e9fe;
+    background-color: transparent;
 }
 .gpt-dashboard-chart .new-card .col-sm-6:nth-child(4) .four-card {
-    background-color: #def5eb;
+    background-color: transparent;
 }
 .gpt-dashboard-chart .new-card .four-card h6 {
     color: #585865;
