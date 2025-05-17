@@ -39,7 +39,7 @@ class DashboardController extends Controller
                                 ->limit(5)
                                 ->get();
 
-        return view('business::dashboard.index', compact('stocks', 'purchases', 'sales'));
+        return view('business::dashboard.index2', compact('stocks', 'purchases', 'sales'));
     }
 
     public function getDashboardData()
