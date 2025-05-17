@@ -5,8 +5,7 @@
 @endsection
 
 @section('main_content')
-    <div class="container-fluid m-h-100">
-            <div class="row">
+  <div class="row">
         <div class="col-xl-3 col-md-6">
             <!-- card -->
             <div class="card card-animate">
@@ -127,6 +126,8 @@
             </div><!-- end card -->
         </div><!-- end col -->
     </div>
+    <div class="container-fluid m-h-100">
+          
         <div class="row gpt-dashboard-chart mb-30">
             <div class="col-md-12 col-lg-12 col-xl-8">
                 @php
