@@ -126,9 +126,9 @@
     <input type="hidden" data-model="Login" id="auth">
 @endsection
 
-@push('js')
-<script src="{{ asset('assets/js/auth.js') }}"></script>
-@endpush
+
 @section('script')
     <script src="{{ URL::asset('build/js/pages/password-addon.init.js') }}"></script>
+    <script src="{{ asset('assets/js/auth.js') }}"></script>
+
 @endsection
