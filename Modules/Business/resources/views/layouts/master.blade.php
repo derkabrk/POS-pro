@@ -25,6 +25,13 @@
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
+                    {{-- Breadcrumb --}}
+                    @hasSection('breadcrumb')
+                        @yield('breadcrumb')
+                    @elseif(View::exists('components.breadcrumb'))
+                        @include('components.breadcrumb')
+                    @endif
+
                     @yield('content')
                 </div>
                 <!-- container-fluid -->
