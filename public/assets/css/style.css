@@ -60,6 +60,14 @@ body {
 }
 
 
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-color: rgba(255, 255, 255, 0.3); /* 30% white overlay */
+    pointer-events: none;
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -416,7 +424,7 @@ svg {
     padding-bottom: 6px;
 }
 .business-stat-container {
-    background-color: white;
+    background-color : transparent;
     border-radius: 12px;
     padding: 2%;
     width: 100%;
@@ -2845,7 +2853,8 @@ label.upload-img-label {
     flex-wrap: wrap;
 } */
 .cards {
-    background-color: white;
+    background-color: transparent !important;
+    color: transparent !important;
 }
 
 .shadow {
