@@ -1,10 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Saira:wght@100..900&display=swap");
+
+
 body {
   margin: 0;
   padding: 0 !important;
   color: #404040;
   font-size: 14px;
-  font-family: "Inter", sans-serif;
+  font-family: 'Saira', sans-serif;
   line-height: 18px;
   background: #ECF1F9;
 }
