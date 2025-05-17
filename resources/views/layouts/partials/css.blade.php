@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap2.min.css') }}">
 
+
 <!-- Fontawesome -->
 <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome/css/fontawesome-all.min.css') }}">
 {{-- jquery-confirm --}}
@@ -19,6 +20,8 @@
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
 <link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
+
+<link rel="stylesheet" href="{{ asset('assets/css/app2.min.css') }}">
 
 <link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
 
