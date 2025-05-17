@@ -1,7 +1,7 @@
 
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset(get_option('general')['favicon'] ?? 'assets/images/logo/favicon.png')}}">
 <!-- Bootstrap -->
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+
 <!-- Bootstrap -->
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/app2.min.css') }}">
