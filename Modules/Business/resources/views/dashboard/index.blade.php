@@ -3,7 +3,12 @@
 @section('title')
     {{ __('Dashboard') }}
 @endsection
+@section('css')
+    <!-- plugin css -->
+    <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 
+    <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" />
+@endsection
 @section('main_content')
   <div class="row">
         <div class="col-xl-3 col-md-6">
