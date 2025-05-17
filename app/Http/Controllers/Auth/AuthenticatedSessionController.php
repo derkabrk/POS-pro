@@ -128,6 +128,59 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
+     * Redirect the user to the Facebook authentication page.
+     */
+    public function redirectToFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    /**
+     * Handle callback from Facebook and sign in or register the user.
+     */
+    public function handleFacebookCallback()
+    {
+        try {
+            $facebookUser = Socialite::driver('facebook')->stateless()->user();
+
+            $user = User::where('email', $facebookUser->getEmail())->first();
+
+            if (!$user) {
+                $user = User::create([
+                    'name' => $facebookUser->getName(),
+                    'email' => $facebookUser->getEmail(),
+                    'email_verified_at' => now(),
+                    'password' => bcrypt(str()->random(16)),
+                    // Add other fields as needed
+                ]);
+            }
+
+            Auth::login($user, true);
+
+            // Adapt redirect logic as in store()
+            if ($user->role == 'shop-owner' || $user->role == 'staff') {
+                $module = Module::find('Business');
+                if ($module && $module->isEnabled()) {
+                    return redirect()->route('business.dashboard.index');
+                } else {
+                    Auth::logout();
+                    return redirect()->route('login')->withErrors([
+                        'email' => $module ? 'Web addon is not active.' : 'Web addon is not installed.',
+                    ]);
+                }
+            } else {
+                $role = Role::where('name', $user->role)->first();
+                $first_role = $role ? $role->permissions->pluck('name')->first() : null;
+                $page = $first_role ? explode('-', $first_role) : ['dashboard'];
+                $redirect_url = route('admin.' . $page[0] . '.index');
+                return redirect($redirect_url);
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('login')->withErrors(['email' => 'Facebook authentication failed.']);
+        }
+    }
+
+    /**
      * Resend OTP to the user's email.
      */
     public function otpResend(Request $request)

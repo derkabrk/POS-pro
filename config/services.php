@@ -36,9 +36,21 @@ return [
         'api_secret' => env('SHOPIFY_API_SECRET'),
     ],
 
-        'youcan' => [
+    'youcan' => [
         'api_key' => env('YOUCAN_API_KEY'),
         'api_secret' => env('YOUCAN_API_SECRET'),
+    ],
+
+    'google' => [
+        'client_id' => env('129150369279-datjjfcfa925nid51nqbmusotddf0782.apps.googleusercontent.com'),
+        'client_secret' => env('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'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
+    ],
+
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('FACEBOOK_REDIRECT_URI'),
     ],
 
 ];
