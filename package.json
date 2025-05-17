@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "build:css": "sass public/assets/scss:public/css"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",

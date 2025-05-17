@@ -8,4 +8,11 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `@import "src/scss/variables";`
+            }
+        }
+    }
 });

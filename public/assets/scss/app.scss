@@ -7,16 +7,18 @@ Contact: support@themesbrand.com
 File: Main Css File
 */
 
-// Fonts
+
+//Fonts
 @import "fonts/fonts";
 
-// Core files
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
+//Core files
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
 @import "variables";
-@import "_variables-custom"; // Make sure this file exists in the same folder as app.scss
+@import "variables-custom";
 @import "variables-dark";
-@import "bootstrap/scss/mixins";
+@import "node_modules/bootstrap/scss/mixins";
+
 
 // Structure
 @import "structure/topbar";
@@ -89,6 +91,8 @@ File: Main Css File
 @import "plugins/emoji-picker";
 @import "plugins/datatables";
 @import "plugins/select2";
+
+// Plugins
 @import "plugins/toastify";
 @import "plugins/choices";
 @import "plugins/flatpicker";
