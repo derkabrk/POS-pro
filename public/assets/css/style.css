@@ -57,12 +57,6 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-       content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background-color: rgba(255, 255, 255, 0.3); /* 30% white overlay */
-    pointer-events: none;
 }
 
 
