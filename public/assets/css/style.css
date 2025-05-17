@@ -64,7 +64,7 @@ body {
     line-height: var(--vz-body-line-height);
     color: var(--vz-body-color);
     text-align: var(--vz-body-text-align);
-    background-color: var(--vz-body-bg);
+    background-color: #041324;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
 
