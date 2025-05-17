@@ -57,6 +57,17 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    margin: 0;
+    font-family: var(--vz-body-font-family);
+    font-size: var(--vz-body-font-size);
+    font-weight: var(--vz-body-font-weight);
+    line-height: var(--vz-body-line-height);
+    color: var(--vz-body-color);
+    text-align: var(--vz-body-text-align);
+    background-color: var(--vz-body-bg);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+
 }
 
 
