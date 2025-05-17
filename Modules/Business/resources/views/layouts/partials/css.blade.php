@@ -1,25 +1,27 @@
 
-<!-- Bootstrap -->
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset(get_option('general')['favicon'] ?? 'assets/images/logo/favicon.png')}}">
-<link rel="stylesheet" href="{{ asset('assets/web/css/bootstrap.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('assets/web/css/swiper-bundle.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('assets/web/fonts/fontawesome/css/all.min.css') }}" />
-<!-- Slick Slider -->
-<link rel="stylesheet" href="{{ asset('assets/web/css/slick.css') }}" />
+<!-- Bootstrap -->
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+<!-- Bootstrap -->
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/app2.min.css') }}">
+<!-- Fontawesome -->
+<link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome/css/fontawesome-all.min.css') }}">
 {{-- jquery-confirm --}}
 <link rel="stylesheet" href="{{ asset('assets/plugins/jquery-confirm/jquery-confirm.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/web/css/slick-theme.css') }}" />
-<!-- Custom Css -->
-<link rel="stylesheet" href="{{ asset('assets/web/css/styles.css') }}" />
-<link rel="stylesheet" href="{{ asset('assets/web/css/responsive.css') }}" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{ asset('assets/css/summernote-lite.css') }}">
+<!-- Lily -->
+<link rel="stylesheet" href="{{ asset('assets/css/lity.css') }}">
+<!-- Style -->
+<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
-@if (app()->getLocale() == 'ar')
-<link rel="stylesheet" href="{{ asset('assets/web/css/arabic.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}">
-@endif
-
 @stack('css')
 
+@if (app()->getLocale() == 'ar')
+<link rel="stylesheet" href="{{ asset('assets/css/arabic.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}">
+@endif
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
