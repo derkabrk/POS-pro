@@ -60,7 +60,7 @@
                                     </div>
 
                                     <div class="mt-4">
-                                        <form method="POST" action="{{ route('login') }}">
+                                        <form method="POST" action="{{ route('login') }}" class="ajaxform_instant_reload">
                                             @csrf
 
                                             <div class="mb-3">
