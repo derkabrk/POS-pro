@@ -2,7 +2,10 @@
 {{-- Google Fonts: Saira --}}
 <link href="https://fonts.googleapis.com/css?family=Saira:400,700&display=swap" rel="stylesheet">
 <!-- Bootstrap -->
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap2.min.css') }}">
+
+<script src="{{ asset('assets/js/layout.js') }}"></script>
 
 
 <!-- Fontawesome -->
@@ -18,6 +21,7 @@
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
+<link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
 
 <link rel="stylesheet" href="{{ asset('assets/css/app2.min.css') }}">
 
