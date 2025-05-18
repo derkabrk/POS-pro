@@ -4,7 +4,7 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="card card bg-transparent border">
+                <div class="card card bg-transparent">
                     <div class="card-body text-center">
                         <a class="theme-btn d-block" href="{{ route('business.subscriptions.index') }}"><i class="fas fa-arrow-left"></i> {{ __('Go Back') }}</a>
                     </div>

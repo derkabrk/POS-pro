@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="card card bg-transparent border">
+        <div class="card card bg-transparent">
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>{{ __('Due List') }}</h4>

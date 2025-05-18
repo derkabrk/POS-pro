@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="card card bg-transparent border">
+        <div class="card card bg-transparent">
             <div class="card-bodys">
                 <div class="table-header p-16 d-print-none">
                     <h4>{{ __('Stock Report List') }}</h4>

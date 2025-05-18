@@ -7,7 +7,7 @@
 @section('main_content')
     <div class="erp-table-section">
         <div class="container-fluid">
-            <div class="card card bg-transparent border">
+            <div class="card card bg-transparent">
                 <div class="card-bodys ">
                     <div class="table-top-form p-16-0">
                         <form action="{{ route('business.currencies.filter') }}" method="post" class="filter-form" table="#currencies-data">

@@ -14,7 +14,7 @@
                             <div class="row">
                                 @foreach ($plans as $plan)
                                     <div class="col-12 col-md-6 col-lg-4 mt-3">
-                                        <div class="card card bg-transparent border">
+                                        <div class="card card bg-transparent">
                                             <div class="card-header py-3 border-0 font-size-update">
                                                 <p>{{ $plan['subscriptionName'] ?? '' }}</p>
                                                 <h4>

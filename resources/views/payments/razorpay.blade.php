@@ -3,7 +3,7 @@
 @section('main_content')
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card card bg-transparent border">
+            <div class="card card bg-transparent">
                 <div class="text-center">
                     <img src="{{ asset($gateway->logo) }}" alt="" height="100">
                 </div>

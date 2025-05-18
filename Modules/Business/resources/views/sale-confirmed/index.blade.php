@@ -8,7 +8,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="erp-table-section">
         <div class="container-fluid">
-            <div class="card card bg-transparent border">
+            <div class="card card bg-transparent">
                 <div class="card-bodys">
                     <div class="table-header p-16">
                         <h4>{{ __('Orders List') }}</h4>

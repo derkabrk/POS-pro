@@ -127,7 +127,7 @@
 
 <div class="erp-table-section">
     <div class="container-fluid">
-        <div class="card card bg-transparent border">
+        <div class="card card bg-transparent">
             <div class="card-bodys">
                 <div class="table-header">
                     <h4>Tickets List</h4>
