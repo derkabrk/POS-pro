@@ -55,8 +55,8 @@
                 <div style="position: absolute; top: 20px; right: 30px;">
                     <img src="{{ asset('assets/images/flags/vn.png') }}" alt="Language" style="width: 24px; height: 24px;">
                 </div>
-                <h3 style="font-weight: bold; color: #153e90;">{{ __('Getfly xin chào') }}</h3>
-                <p style="margin-bottom: 25px;">Truy cập bằng tài khoản được cung cấp</p>
+                <h3 style="font-weight: bold; color: #153e90;">{{ __('Welcome to') }} <span>{{ __(env('APP_NAME')) }}</span></h3>
+                <p style="margin-bottom: 25px;">{{ __('Welcome back, Please login in to your account') }}</p>
                 <form method="POST" action="{{ route('login') }}" class="login_form">
                     @csrf
                     <div class="input-group mb-3">
