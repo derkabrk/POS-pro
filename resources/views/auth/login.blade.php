@@ -120,13 +120,13 @@
                     <div class="social-login mt-4">
                         <div style="text-align:center; color:#aaa; margin-bottom:10px;">{{ __('Or login with') }}</div>
                         <div class="d-flex justify-content-center gap-2">
-                            <a href="{{ url('auth/redirect/google') }}" class="btn btn-light border" style="min-width:44px;">
+                            <a href="{{ route('google.login') }}" class="btn btn-light border" style="min-width:44px; padding:0;">
                                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" style="height:24px; width:24px;">
                             </a>
-                            <a href="{{ url('auth/redirect/facebook') }}" class="btn btn-light border" style="min-width:44px;">
+                            <a href="{{ route('facebook.login') }}" class="btn btn-light border" style="min-width:44px; padding:0;">
                                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" style="height:24px; width:24px;">
                             </a>
-                            <a href="{{ url('auth/redirect/x') }}" class="btn btn-light border" style="min-width:44px;">
+                            <a href="#" class="btn btn-light border disabled" style="min-width:44px; padding:0; opacity:0.5; cursor:not-allowed;" tabindex="-1">
                                 <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px; width:24px;">
                             </a>
                         </div>
