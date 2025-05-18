@@ -5,60 +5,170 @@
 @endsection
 
 @section('main_content')
-<div class="footer">
-    <div class="footer-logo w-100 mx-4">
-        <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="">
-    </div>
-    <div class="mybazar-login-section">
-        <div class="mybazar-login-avatar">
-            <img src="{{ asset(get_option('general')['login_page_image'] ?? 'assets/images/login/login.png') }}" alt="">
-        </div>
-        <div class="mybazar-login-wrapper">
-            <div class="login-wrapper">
-                <div class="login-body w-100">
-                    <h2>{{ __('Welcome to') }}<span>{{ __(env('APP_NAME')) }}</span></h2>
-                    <h6>{{ __('Welcome back, Please login in to your account') }}</h6>
-                    <form method="POST" action="{{ route('login') }}" class="login_form">
-                        @csrf
-                        <div class="input-group">
-                            <span><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
-                            <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}">
-                        </div>
-
-                        <div class="input-group">
-                            <span><img src="{{ asset('assets/images/icons/lock.png') }}" alt="img"></span>
-                            <span class="hide-pass">
-                                <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img">
-                                <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img">
-                            </span>
-                            <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}">
-                        </div>
-
-                        <div class="mt-lg-3 mb-0 forget-password">
-                            <label class="custom-control-label">
-                                <input type="checkbox" name="remember" class="custom-control-input">
-                                <span>{{ __('Remember me') }}</span>
-                            </label>
-                            <a href="{{ route('password.request') }}">{{ ('Forgot Password?') }}</a>
-                        </div>
-
-                        <button type="submit" class="btn login-btn submit-btn">{{ __('Log In') }}</button>
-
-                        <div class="row d-flex flex-wrap mt-2 justify-content-between">
-                            <div class="col">
-                                <a href="{{ route('home') }}">{{ __("Back to Home") }}</a>
-                            </div>
-                            <div class="col text-end">
-                                <a class="text-primary" href="" data-bs-target="#registration-modal" data-bs-toggle="modal">{{ __("Create an account.") }}</a>
-                            </div>
-                        </div>
-                    </form>
+<div style="display: flex; height: 100vh; font-family: 'Segoe UI', sans-serif; background: url('{{ asset('assets/bg-home.jpg') }}') no-repeat center center fixed; background-size: cover; overflow: hidden; position: relative;">
+    <div style="position: absolute; inset: 0; background: rgba(30, 36, 50, 0.72); z-index: 0;"></div>
+    <style>
+        body {
+            background: url('{{ asset('assets/bg-home.jpg') }}') no-repeat center center fixed !important;
+            background-size: cover !important;
+            overflow: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(20,30,50,0.92) 60%, rgba(30,36,60,0.96) 100%);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.98;
+        }
+        /* Fade-in for main content */
+        .fade-in { animation: fadeIn 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: none; }
+        }
+        /* Slide-in for onboarding */
+        .slide-in-left { animation: slideInLeft 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
+        @keyframes slideInLeft {
+            0% { opacity: 0; transform: translateX(-60px); }
+            100% { opacity: 1; transform: none; }
+        }
+        /* Slide-in for login form */
+        .slide-in-right { animation: slideInRight 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
+        @keyframes slideInRight {
+            0% { opacity: 0; transform: translateX(60px); }
+            100% { opacity: 1; transform: none; }
+        }
+        /* Onboarding image zoom */
+        .onboarding-slide img { transition: transform 1.2s cubic-bezier(.39,.575,.565,1.000); }
+        .onboarding-slide.active img { transform: scale(1.04) rotate(-1deg); }
+        .onboarding-dot { transition: background 0.3s; }
+        /* Button hover */
+        .login-btn.submit-btn { transition: background 0.3s, box-shadow 0.3s; box-shadow: 0 2px 8px #153e9033; }
+        .login-btn.submit-btn:hover { background: #1d366f; box-shadow: 0 4px 16px #153e9055; }
+        /* Social icon hover */
+        .social-login a img { transition: transform 0.3s; }
+        .social-login a:hover img { transform: scale(1.18) rotate(-8deg); }
+    </style>
+    <div style="display: flex; flex: 1; position: relative; z-index: 1;" class="fade-in">
+        <!-- Onboarding Left Side -->
+        <div style="flex: 1; background: transparent; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; border-radius: 20px 0 0 20px; position: relative; font-family: 'Segoe UI', sans-serif;" class="slide-in-left">
+            <!-- Logo -->
+            <div>
+                <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="Logo" style="height: 40px;">
+            </div>
+            <!-- Slides -->
+            <div id="onboarding-wrapper" style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                <div class="onboarding-slide active" style="text-align: center;">
+                    <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 1">
+                    <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
+                        {{ __('Cách tốt nhất để dự đoán tương lai là tạo ra nó.') }}
+                    </blockquote>
+                    <div style="font-weight: bold; color: #ccc;">Peter Drucker</div>
                 </div>
+                <div class="onboarding-slide" style="text-align: center; display: none;">
+                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 2">
+                    <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
+                        {{ __('Thành công không phải là điểm đến, mà là hành trình.') }}
+                    </blockquote>
+                    <div style="font-weight: bold; color: #ccc;">Zig Ziglar</div>
+                </div>
+                <div class="onboarding-slide" style="text-align: center; display: none;">
+                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 3">
+                    <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
+                        {{ __('Khách hàng là trung tâm của mọi quyết định.') }}
+                    </blockquote>
+                    <div style="font-weight: bold; color: #ccc;">Jeff Bezos</div>
+                </div>
+            </div>
+            <!-- Navigation Dots -->
+            <div style="text-align: center; margin-top: 10px;">
+                <span class="onboarding-dot active" style="height: 6px; width: 6px; margin: 3px; background: #555; border-radius: 50%; display: inline-block;"></span>
+                <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 3px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
+                <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 3px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
+            </div>
+            <!-- Footer -->
+            <div style="text-align: center; font-size: 12px; color: #777;">
+    © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+</div>
+        </div>
+        <!-- Login Form Right Side -->
+        <div style="flex: 1; background: transparent; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative; font-family: 'Segoe UI', sans-serif;" class="slide-in-right">
+            <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px; font-family: 'Segoe UI', sans-serif;">
+                <div style="position: absolute; top: 20px; right: 30px;">
+                </div>
+                <h3 style="font-weight: bold; color: #153e90;">{{ __('Welcome to') }} <span>{{ __(env('APP_NAME')) }}</span></h3>
+                <p style="margin-bottom: 25px;">{{ __('Welcome back, Please login in to your account') }}</p>
+                <form method="POST" action="{{ route('login') }}" class="ajaxform_instant_reload">
+                    @csrf
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
+                        <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}" style="border: 1px solid #e5e5e5; background: #f9f9f9; border-radius: 6px; padding: 10px 12px;">
+                    </div>
+                    <div class="input-group mb-3 position-relative">
+                        <span class="input-group-text"><img src="{{ asset('assets/images/icons/lock.png') }}" alt="img"></span>
+                        <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}" style="border: 1px solid #e5e5e5; background: #f9f9f9; border-radius: 6px; padding: 10px 12px;">
+                        <span class="hide-pass" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                            <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img" class="hide-icon" style="display: block;">
+                            <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img" class="show-icon" style="display: none;">
+                        </span>
+                    </div>
+                    <div class="mt-lg-3 mb-0 forget-password">
+                        <label class="custom-control-label">
+                            <input type="checkbox" name="remember" class="custom-control-input">
+                            <span>{{ __('Remember me') }}</span>
+                        </label>
+                        <a href="{{ route('password.request') }}">{{ __('Forgot Password?') }}</a>
+                    </div>
+                    <button type="submit" class="btn login-btn submit-btn" style="background: #153e90; color: #fff; border-radius: 6px; border: none; padding: 10px 0; font-weight: 600; width: 100%; margin-top: 18px;">{{ __('Log In') }}</button>
+                    <div class="row d-flex flex-wrap mt-2 justify-content-between">
+                        <div class="col">
+                            <a href="{{ route('home') }}">{{ __('Back to Home') }}</a>
+                        </div>
+                        <div class="col text-end">
+                            <a class="text-primary" href="" data-bs-target="#registration-modal" data-bs-toggle="modal">{{ __('Create an account.') }}</a>
+                        </div>
+                    </div>
+                    <div class="social-login mt-4">
+                        <div style="text-align:center; color:#aaa; margin-bottom:10px;">{{ __('Or login with') }}</div>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="{{ route('google.login') }}" class="btn btn-light border" style="min-width:44px;">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" style="height:24px; width:24px;">
+                            </a>
+                            <a href="#" class="btn btn-light border disabled" style="min-width:44px; opacity:0.5; cursor:not-allowed;" tabindex="-1">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" style="height:24px; width:24px;">
+                            </a>
+                            <a href="#" class="btn btn-light border disabled" style="min-width:44px; opacity:0.5; cursor:not-allowed;" tabindex="-1">
+                                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px; width:24px;">
+                            </a>
+                        </div>
+                    </div>
+                </form>
+                <script>
+                // Password show/hide toggle
+                const passInput = document.querySelector('.form-control.password');
+                const hidePass = document.querySelector('.hide-pass');
+                const hideIcon = hidePass.querySelector('.hide-icon');
+                const showIcon = hidePass.querySelector('.show-icon');
+                hidePass.addEventListener('click', function() {
+                    if (passInput.type === 'password') {
+                        passInput.type = 'text';
+                        hideIcon.style.display = 'none';
+                        showIcon.style.display = 'block';
+                    } else {
+                        passInput.type = 'password';
+                        hideIcon.style.display = 'block';
+                        showIcon.style.display = 'none';
+                    }
+                });
+                </script>
             </div>
         </div>
     </div>
 </div>
-    <input type="hidden" data-model="Login" id="auth">
 @endsection
 
 @push('modal')
@@ -104,6 +214,27 @@
 @push('js')
 <script src="{{ asset('assets/js/auth.js') }}"></script>
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.onboarding-slide');
+    const dots = document.querySelectorAll('.onboarding-dot');
+    let current = 0;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.style.display = i === index ? 'block' : 'none';
+            dots[i].style.background = i === index ? '#555' : '#ccc';
+            dots[i].classList.toggle('active', i === index);
+        });
+    }
+
+    setInterval(() => {
+        current = (current + 1) % slides.length;
+        showSlide(current);
+    }, 4000);
+
+    showSlide(current);
+});
+
 document.querySelector('.login_form').addEventListener('submit', function (e) {
     e.preventDefault();
 
