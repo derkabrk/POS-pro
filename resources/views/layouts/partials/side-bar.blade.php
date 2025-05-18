@@ -405,8 +405,14 @@
     background-color: #4f46e5;
     color: #fff;
     /* Remove transform and box-shadow from active state to prevent auto-selected animation */
-    transform: none;
-    box-shadow: none;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Fix: Only mark as active if the route matches exactly, not for parent/partial matches */
+.side-bar-manu .nav-item .nav-link.active:not(.exact-active) {
+    background-color: inherit;
+    color: #cbd5e1;
 }
 
 .sidebar-icon {
