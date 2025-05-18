@@ -38,50 +38,45 @@
         .social-login a:hover img { transform: scale(1.18) rotate(-8deg); }
     </style>
     <div style="display: flex; flex: 1; position: relative; z-index: 1; gap: 0;" class="fade-in">
-        <!-- Onboarding Left Side -->
-        <div style="flex: 1.3; background: transparent; padding: 0 0 24px 0; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px 0 0 20px; position: relative; font-family: 'Segoe UI', sans-serif; height: 100%; min-width: 380px;">
-            <div style="width: 100%; max-width: 700px; background: transparent; border-radius: 16px; box-shadow: none; padding: 0 28px 18px 28px; display: flex; flex-direction: column; justify-content: space-between; height: 90%; min-height: 340px; max-height: 600px;">
-                <!-- Logo -->
-                <div>
-                    <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="Logo" style="height: 40px;">
-                </div>
-                <!-- Slides -->
-                <div id="onboarding-wrapper" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; height: 100%;">
-                    <div class="onboarding-slide active" style="text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-                        <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=600&h=400" style="height: 100%; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover; min-height: 340px; max-height: 400px;" alt="Step 1">
-                        <blockquote style="font-style: italic; color: #fff; margin-top: 16px;">
-                            {{ __('Cách tốt nhất để dự đoán tương lai là tạo ra nó.') }}
-                        </blockquote>
-                        <div style="font-weight: bold; color: #ccc;">Peter Drucker</div>
+        <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 0; font-family: 'Segoe UI', sans-serif; position: relative; display: flex; min-height: 600px;">
+            <!-- Onboarding Section INSIDE the form card, left side, full height -->
+            <div style="flex: 1.1; background: linear-gradient(120deg, #153e90 60%, #1d366f 100%); border-radius: 16px 0 0 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 220px; max-width: 260px; height: 100%; padding: 0 0 0 0;">
+                <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <!-- Slides -->
+                    <div id="onboarding-wrapper" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <div class="onboarding-slide active" style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400" style="width: 100%; max-width: 180px; border-radius: 12px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 18px;" alt="Step 1">
+                            <blockquote style="font-style: italic; color: #fff; margin-bottom: 8px; font-size: 15px; line-height: 1.3;">
+                                {{ __('Cách tốt nhất để dự đoán tương lai là tạo ra nó.') }}
+                            </blockquote>
+                            <div style="font-weight: bold; color: #ccc; font-size: 13px;">Peter Drucker</div>
+                        </div>
+                        <div class="onboarding-slide" style="text-align: center; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center;">
+                            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=400" style="width: 100%; max-width: 180px; border-radius: 12px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 18px;" alt="Step 2">
+                            <blockquote style="font-style: italic; color: #fff; margin-bottom: 8px; font-size: 15px; line-height: 1.3;">
+                                {{ __('Thành công không phải là điểm đến, mà là hành trình.') }}
+                            </blockquote>
+                            <div style="font-weight: bold; color: #ccc; font-size: 13px;">Zig Ziglar</div>
+                        </div>
+                        <div class="onboarding-slide" style="text-align: center; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center;">
+                            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400" style="width: 100%; max-width: 180px; border-radius: 12px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 18px;" alt="Step 3">
+                            <blockquote style="font-style: italic; color: #fff; margin-bottom: 8px; font-size: 15px; line-height: 1.3;">
+                                {{ __('Khách hàng là trung tâm của mọi quyết định.') }}
+                            </blockquote>
+                            <div style="font-weight: bold; color: #ccc; font-size: 13px;">Jeff Bezos</div>
+                        </div>
                     </div>
-                    <div class="onboarding-slide" style="text-align: center; display: none; height: 100%; flex-direction: column; justify-content: center;">
-                        <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=600&h=400" style="height: 100%; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover; min-height: 340px; max-height: 400px;" alt="Step 2">
-                        <blockquote style="font-style: italic; color: #fff; margin-top: 16px;">
-                            {{ __('Thành công không phải là điểm đến, mà là hành trình.') }}
-                        </blockquote>
-                        <div style="font-weight: bold; color: #ccc;">Zig Ziglar</div>
+                    <!-- Navigation Dots -->
+                    <div style="text-align: center; margin-top: 8px;">
+                        <span class="onboarding-dot active" style="height: 6px; width: 6px; margin: 2px; background: #fff; border-radius: 50%; display: inline-block;"></span>
+                        <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 2px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
+                        <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 2px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
                     </div>
-                    <div class="onboarding-slide" style="text-align: center; display: none; height: 100%; flex-direction: column; justify-content: center;">
-                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=600&h=400" style="height: 100%; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover; min-height: 340px; max-height: 400px;" alt="Step 3">
-                        <blockquote style="font-style: italic; color: #fff; margin-top: 16px;">
-                            {{ __('Khách hàng là trung tâm của mọi quyết định.') }}
-                        </blockquote>
-                        <div style="font-weight: bold; color: #ccc;">Jeff Bezos</div>
-                    </div>
-                </div>
-                <!-- Navigation Dots -->
-                <div style="text-align: center; margin-top: 6px;">
-                    <span class="onboarding-dot active" style="height: 6px; width: 6px; margin: 3px; background: #555; border-radius: 50%; display: inline-block;"></span>
-                    <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 3px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
-                    <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 3px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
                 </div>
             </div>
-        </div>
-        <!-- Login Form Right Side -->
-        <div style="flex: 1; background: transparent; padding: 50px 0; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative; font-family: 'Segoe UI', sans-serif;" class="slide-in-right">
-            <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px; font-family: 'Segoe UI', sans-serif; position: relative;">
-                <div style="position: absolute; top: 20px; right: 30px;">
-                </div>
+            <!-- Login Form Content, right side -->
+            <div style="flex: 2; padding: 32px 28px; display: flex; flex-direction: column; justify-content: center; align-items: stretch;">
+                <div style="position: absolute; top: 20px; right: 30px;"></div>
                 <h3 style="font-weight: bold; color: #153e90;">{{ __('Welcome to') }} <span>{{ __(env('APP_NAME')) }}</span></h3>
                 <p style="margin-bottom: 25px;">{{ __('Welcome back, Please login in to your account') }}</p>
                 <form method="POST" action="{{ route('login') }}" class="login_form">
