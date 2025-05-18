@@ -324,7 +324,7 @@
 <style>
 /* Sidebar container */
 .side-bar {
-    width: 250px;
+    width: 230px;
     height: 100vh;
     background: #0f172a;
     color: #cbd5e1;
@@ -338,11 +338,10 @@
 
 /* Logo section */
 .side-bar-logo {
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 20px;
+    text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent !important;
 }
 
 .side-bar-logo a {
@@ -395,7 +394,13 @@
     background-color: rgba(255, 255, 255, 0.06);
 }
 
-
+.side-bar-manu .nav-link {
+    padding: 0.75rem 0.5rem 0.75rem 0.75rem; /* Decreased left padding */
+    color: #cbd5e1;
+    border-radius: 6px;
+    transition: all 0.3s, transform 0.25s cubic-bezier(.39,.575,.565,1.000);
+    font-size: 0.95rem;
+}
 
 .side-bar-manu .nav-item.active .nav-link {
     background-color: #4f46e5;
