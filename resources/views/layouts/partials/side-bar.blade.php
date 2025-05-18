@@ -324,7 +324,7 @@
 <style>
 /* Sidebar container */
 .side-bar {
-    width: 230;
+    width: 230px;
     height: 100vh;
     position: fixed;
     left: 0;
