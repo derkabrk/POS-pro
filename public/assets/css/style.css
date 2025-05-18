@@ -739,7 +739,12 @@ table th, table td {
     display: inline-block;
     margin-right: 10px;
 }
-
+.table th {
+  
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+}
 .side-bar-manu li a i {
     margin-right: 10px;
 }
