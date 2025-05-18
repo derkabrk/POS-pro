@@ -390,7 +390,7 @@
     color: #ccc;
     display: flex;
     align-items: center;
-    padding: 10px 14px;
+    padding: 10px 0px;
     text-decoration: none;
     transition: color 0.3s ease;
 }

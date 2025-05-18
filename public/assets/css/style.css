@@ -677,7 +677,7 @@ svg {
 .side-bar-manu li {
     position: relative;
     font-size: 11px !important;
-    margin: 5px 0;
+    margin: 5px -7;
 }
 
 .side-bar-manu li a {
