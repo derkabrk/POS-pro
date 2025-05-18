@@ -375,8 +375,15 @@
     margin-bottom: 8px;
     border-radius: 8px;
     transition: background 0.3s ease, transform 0.3s ease;
-    width: 100%;
-    box-sizing: border-box;
+}
+
+.side-bar-manu ul li:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    transform: translateX(4px);
+}
+
+.side-bar-manu ul li.active {
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
 .side-bar-manu ul li a {
@@ -384,36 +391,25 @@
     display: flex;
     align-items: center;
     padding: 10px 14px;
-    width: 100%;
-    box-sizing: border-box;
     text-decoration: none;
-    border-radius: 8px;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: color 0.3s ease;
 }
 
-.side-bar-manu ul li:hover a {
-    background-color: rgba(255, 255, 255, 0.06);
+.side-bar-manu ul li a:hover {
     color: #fff;
-    transform: translateX(4px);
 }
 
 .side-bar-manu ul li.active a {
-    background-color: rgba(255, 255, 255, 0.12);
     color: #fff;
     font-weight: 600;
 }
 
-.side-bar-manu ul li a .sidebar-icon {
-    min-width: 24px;
-    display: inline-flex;
-    justify-content: center;
-    margin-right: 10px;
-}
-
 .side-bar-manu ul li a .sidebar-icon svg {
-    fill: currentColor;
+    margin-right: 10px;
     transition: fill 0.3s ease;
+    fill: currentColor;
 }
+</style>
 
 <script>
 document.querySelector('.close-btn')?.addEventListener('click', () => {
