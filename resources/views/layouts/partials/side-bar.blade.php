@@ -326,7 +326,7 @@
 .side-bar {
     width: 230px;
     height: 100vh;
-    background: #0f172a;
+    background:transparent ;
     color: transparent;
     padding-top: 0;
     position: fixed;
