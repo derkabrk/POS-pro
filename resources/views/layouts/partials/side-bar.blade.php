@@ -327,7 +327,7 @@
     width: 230px;
     height: 100vh;
     background: #0f172a;
-    color: #cbd5e1;
+    color: transparent;
     padding-top: 0;
     position: fixed;
     overflow-y: auto;

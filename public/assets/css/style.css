@@ -1637,7 +1637,7 @@ table th, table td {
     font-weight: 600;
     font-size: 20px;
     text-transform: capitalize;
-    color: #191919;
+    color: white;
     font-family: 'Saira', sans-serif;
     white-space: nowrap;
 }
@@ -4748,21 +4748,21 @@ tr.position-relative td {
 }
 
 .erp-new-invice .table-header h3 strong {
-    color: #000;
+    color: white;
     font-size: 25px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+
 }
 
 .erp-new-invice .table-header p {
-    color: #000;
+    color: white;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+  
 }
 
 .erp-new-invice .bill-invoice-wrp {
@@ -4790,7 +4790,7 @@ tr.position-relative td {
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+  
 }
 
 .erp-new-invice .bill-invoice-wrp hr {
@@ -4806,7 +4806,7 @@ tr.position-relative td {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    font-family: "Lato", sans-serif;
+    
     gap: 50px;
 }
 
@@ -4840,16 +4840,16 @@ tr.position-relative td {
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    
 }
 
 .erp-new-invice .invice-detaisl .address-items p {
-    color: #000;
+    color: white;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    
 }
 
 .erp-new-invice .bill-right-side {
@@ -4860,12 +4860,11 @@ tr.position-relative td {
 .erp-new-invice th {
     background: transparent;
     border: 1px solid #000;
-    color: #000;
+    color: white;
     font-size: 12px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
 }
 
 .erp-new-invice tr {
@@ -4873,31 +4872,31 @@ tr.position-relative td {
 }
 
 .erp-new-invice td {
-    color: #000;
+    color: white;
     font-family: Lato;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+   
     border: none;
     border-right: 1px solid #000;
     border-left: 1px solid #000;
 }
 
 .erp-new-invice td p {
-    color: #000;
-    font-family: Lato;
+    color: white;
+ 
     font-size: 13px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+  
 }
 
 .erp-new-invice td small {
-    color: #000;
-    font-family: "Lato", sans-serif;
+    color: white;
+ 
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
@@ -4917,7 +4916,7 @@ tr.position-relative td {
 .erp-new-invice table .address-items p,
 .erp-new-invice table .address-items strong {
     font-size: 13px;
-    color: #000;
+    color: white;
     line-height: 1;
 }
 
@@ -4948,13 +4947,13 @@ tr.position-relative td {
 .erp-new-invice .signature p {
     display: inline-block;
     border-top: 1px solid #000;
-    color: #000;
+    color:white;
     font-size: 13px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
     padding-top: 10px;
-    font-family: "Lato", sans-serif;
+ 
 }
 
 .erp-new-invice .table-header img {
