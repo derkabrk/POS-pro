@@ -1,4 +1,4 @@
-<nav class="side-bar velzon-style">
+<nav class="side-bar">
     <div class="side-bar-logo">
         <a href="{{ route('admin.dashboard.index') }}">
             <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}"alt="Logo">
@@ -323,42 +323,102 @@
 
 <style>
 /* Sidebar container */
-<style>
-/* Velzon-like Sidebar Styling */
-.side-bar.velzon-style {
-    width: 250px;
+.side-bar {
+    width: 230px;
     height: 100vh;
-    background-color: #0f172a;
-    color: #cbd5e1;
     position: fixed;
     left: 0;
     top: 0;
+    background: linear-gradient(to bottom right, #1e2a38, #273a52);
+    color: #fff;
     overflow-y: auto;
     z-index: 1050;
-    transition: all 0.3s ease-in-out;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.4s ease, background 0.3s ease;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 }
 
 .side-bar-logo {
-    padding: 20px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.side-bar-manu .nav {
-    padding: 0 0.5rem;
-    margin-top: 10px;
+.side-bar-logo img {
+    height: 40px;
+    max-width: 100%;
+    object-fit: contain;
 }
 
-.side-bar-manu .nav-item {
-    margin-bottom: 0.25rem;
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.close-btn:hover {
+    opacity: 1;
+    color: #f26522;
+}
+
+.side-bar-manu ul {
+    padding: 16px;
+    margin: 0;
+    list-style: none;
+}
+
+.side-bar-manu ul li {
+    margin-bottom: 8px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.side-bar-manu ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 16px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    color: #ccc;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+}
+
+.side-bar-manu ul li a .sidebar-icon {
+    margin-right: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+}
+
+.side-bar-manu ul li:hover a {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    transform: translateX(2px);
+}
+
+.side-bar-manu ul li.active a {
+    background-color: #8e5be3;
+    color: #fff;
+    font-weight: 500; /* Keep same as normal to avoid shift */
+    padding: 10px 16px; /* match default */
 }
 
 .side-bar-manu .nav-link {
     padding: 0.75rem 1rem;
     color: #cbd5e1;
     border-radius: 6px;
-    transition: all 0.3s;
+    transition: all 0.3s, transform 0.25s cubic-bezier(.39,.575,.565,1.000);
     font-size: 0.95rem;
 }
 
@@ -366,28 +426,37 @@
 .side-bar-manu .nav-item.active .nav-link {
     background-color: #4f46e5;
     color: #fff;
+    transform: translateX(6px) scale(1.04);
+    box-shadow: 0 4px 18px 0 rgba(79,70,229,0.10);
 }
 
-.side-bar-manu .sidebar-icon {
-    width: 20px;
-    display: inline-block;
-    text-align: center;
+.side-bar-manu ul li a .sidebar-icon svg {
     margin-right: 10px;
-    color: inherit;
+    transition: fill 0.3s ease;
+    fill: currentColor;
 }
-
-.side-bar-manu .nav-label {
-    flex: 1;
-}
-
-.close-btn {
-    background: transparent;
-    border: none;
-    font-size: 18px;
-    color: #fff;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    cursor: pointer;
+.side-bar.collapsed {
+    transform: translateX(-100%);
 }
 </style>
+
+<script>
+document.querySelector('.close-btn')?.addEventListener('click', () => {
+    document.querySelector('.side-bar').style.transform = 'translateX(-100%)';
+});
+
+</script>
+
+<script>
+const sidebar = document.querySelector('.side-bar');
+const closeBtn = document.querySelector('.close-btn');
+
+// Toggle visibility only if sidebar is open
+closeBtn?.addEventListener('click', () => {
+    if (!sidebar.classList.contains('collapsed')) {
+        sidebar.classList.add('collapsed');
+    } else {
+        sidebar.classList.remove('collapsed');
+    }
+});
+</script>
