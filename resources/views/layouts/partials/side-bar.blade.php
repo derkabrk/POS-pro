@@ -328,7 +328,7 @@
     height: 100vh;
     background: #0f172a;
     color: #cbd5e1;
-    padding-top: 1rem;
+    padding-top: 0;
     position: fixed;
     overflow-y: auto;
     font-family: 'Inter', 'Segoe UI', sans-serif;
@@ -337,23 +337,94 @@
 }
 
 /* Logo section */
-.side-bar-image {
-    padding: 0 1.5rem 1.5rem;
+.side-bar-logo {
+    padding: 1rem;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.side-bar-image img,
-.side-bar-image .logo-text {
-    height: 24px;
+.side-bar-logo a {
+    display: block;
+}
+
+.side-bar-logo img {
+    max-height: 40px;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
     color: #fff;
-    font-weight: 600;
-    font-size: 1.5rem;
-    letter-spacing: 0.5px;
 }
 
-/* Section headers */
+/* Menu styling */
+.side-bar-manu ul {
+    list-style: none;
+    padding: 1rem 0;
+    margin: 0;
+}
+
+.side-bar-manu ul li {
+    position: relative;
+}
+
+.side-bar-manu ul li a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    color: #94a3b8;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 0.2s, background-color 0.2s;
+    border-radius: 0.25rem;
+    margin: 0.25rem 0.75rem;
+}
+
+.side-bar-manu ul li a:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.side-bar-manu ul li.active a,
+.side-bar-manu ul li a.active {
+    color: #fff;
+    background-color: #4f46e5; /* Primary brand color - adjust to match your app's color scheme */
+}
+
+.side-bar-manu .nav-item.active .nav-link {
+    background-color: #4f46e5;
+    color: #fff;
+    /* Remove transform and box-shadow from active state to prevent auto-selected animation */
+    transform: none;
+    box-shadow: none;
+}
+
+.sidebar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+}
+
+.sidebar-icon svg {
+    fill: currentColor;
+    width: 20px;
+    height: 20px;
+}
+
+/* Section headers if needed */
 .side-bar-section {
     padding: 1rem 1.5rem 0.5rem;
     color: #64748b;
@@ -363,121 +434,52 @@
     font-weight: 600;
 }
 
-/* Menu styling */
-.side-bar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.side-bar-menu > li {
-    position: relative;
-}
-
-.side-bar-menu > li > a {
-    display: flex;
-    align-items: center;
-    padding: 0.65rem 1.5rem;
-    color: #94a3b8;
-    font-size: 0.875rem;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.side-bar-menu > li > a:hover {
-    color: #e2e8f0;
-}
-
-.side-bar-menu > li > a.active {
-    color: #fff;
-}
-
-.side-bar-menu > li > a .menu-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-right: 0.75rem;
-    color: #94a3b8;
-}
-
-.side-bar-menu > li > a:hover .menu-icon,
-.side-bar-menu > li > a.active .menu-icon {
-    color: #e2e8f0;
-}
-
-.side-bar-menu > li > a .menu-arrow {
-    margin-left: auto;
-    transition: transform 0.2s;
-}
-
-.side-bar-menu > li.open > a .menu-arrow {
-    transform: rotate(90deg);
-}
-
-/* Submenu styling */
+/* Submenu styling - add if needed */
 .side-bar-submenu {
     list-style: none;
-    padding: 0;
+    padding: 0 0 0 2.5rem;
     margin: 0;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
 }
 
-.side-bar-menu > li.open .side-bar-submenu {
-    max-height: 500px;
+.side-bar-manu ul li.menu-open .side-bar-submenu {
+    max-height: 1000px;
 }
 
-.side-bar-submenu > li > a {
+.side-bar-submenu li a {
+    padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem 0.5rem 3.25rem;
     color: #94a3b8;
-    font-size: 0.875rem;
-    text-decoration: none;
+    font-size: 0.8125rem;
     transition: color 0.2s;
 }
 
-.side-bar-submenu > li > a:hover {
-    color: #e2e8f0;
-}
-
-.side-bar-submenu > li > a.active {
+.side-bar-submenu li a:hover {
     color: #fff;
 }
 
-/* Badge styling */
-.menu-badge {
+.side-bar-submenu li.active a {
+    color: #fff;
+}
+
+/* Badge styles if needed */
+.badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: 600;
     border-radius: 0.25rem;
     margin-left: auto;
 }
 
-.menu-badge-hot {
+.badge-hot {
     background-color: #ef4444;
     color: #fff;
-}
-
-/* Divider for submenu items */
-.side-bar-menu > li.has-submenu > a::before {
-    content: "";
-    position: absolute;
-    left: 1.5rem;
-    top: 0;
-    height: 100%;
-    border-left: 1px dashed rgba(255, 255, 255, 0.1);
-    display: none;
-}
-
-.side-bar-menu > li.has-submenu.open > a::before {
-    display: block;
 }
 
 /* Responsive adjustments */
@@ -487,18 +489,41 @@
         transition: transform 0.3s ease;
     }
     
-    .side-bar.show {
+    body.sidebar-open .side-bar {
         transform: translateX(0);
     }
-
 }
 </style>
 
 
 
 <script>
-document.querySelector('.close-btn')?.addEventListener('click', () => {
-    document.querySelector('.side-bar').style.transform = 'translateX(-100%)';
+document.addEventListener('DOMContentLoaded', function() {
+    // Close sidebar button functionality
+    const closeBtn = document.querySelector('.side-bar .close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            document.body.classList.remove('sidebar-open');
+        });
+    }
+
+    // Sidebar toggle button (add this to your header/navbar)
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function() {
+            document.body.classList.toggle('sidebar-open');
+        });
+    }
+
+    // Handle submenu toggles if needed
+    const menuItemsWithSubmenu = document.querySelectorAll('.side-bar-manu ul li.has-submenu');
+    menuItemsWithSubmenu.forEach(item => {
+        const link = item.querySelector('a');
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            item.classList.toggle('menu-open');
+        });
+    });
 });
 
 </script>
