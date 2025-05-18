@@ -323,8 +323,6 @@
 
 <style>
 /* Sidebar container */
-<style>
-/* Sidebar container */
 .side-bar {
     width: 260px;
     height: 100vh;
@@ -377,8 +375,6 @@
     margin-bottom: 8px;
     border-radius: 8px;
     transition: background 0.3s ease, transform 0.3s ease;
-    width: 100%;
-    box-sizing: border-box;
 }
 
 .side-bar-manu ul li:hover {
@@ -388,7 +384,6 @@
 
 .side-bar-manu ul li.active {
     background-color: rgba(255, 255, 255, 0.12);
-    width: 100%;
 }
 
 .side-bar-manu ul li a {
@@ -398,8 +393,6 @@
     padding: 10px 14px;
     text-decoration: none;
     transition: color 0.3s ease;
-    width: 100%;
-    box-sizing: border-box;
 }
 
 .side-bar-manu ul li a:hover {
@@ -422,3 +415,4 @@
 document.querySelector('.close-btn')?.addEventListener('click', () => {
     document.querySelector('.side-bar').style.transform = 'translateX(-100%)';
 });
+</script>
