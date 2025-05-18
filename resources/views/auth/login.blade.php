@@ -49,7 +49,7 @@
     </div>
     <!-- Login Form Right Side -->
     <div style="flex: 1; background: white url('https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=cover&w=800&q=80') no-repeat center center/cover; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative;">
-        <div style="width: 100%; max-width: 400px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px;">
+        <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px;">
             <div style="position: absolute; top: 20px; right: 30px;">
                 <img src="{{ asset('assets/images/flags/vn.png') }}" alt="Language" style="width: 24px; height: 24px;">
             </div>
@@ -88,9 +88,15 @@
                 <div class="social-login mt-4">
                     <div style="text-align:center; color:#aaa; margin-bottom:10px;">{{ __('Or login with') }}</div>
                     <div class="d-flex justify-content-center gap-2">
-                        <a href="{{ url('auth/redirect/google') }}" class="btn btn-light border" style="min-width:44px;"><img src="{{ asset('assets/images/social/google.svg') }}" alt="Google" style="height:22px;"></a>
-                        <a href="{{ url('auth/redirect/facebook') }}" class="btn btn-light border" style="min-width:44px;"><img src="{{ asset('assets/images/social/facebook.svg') }}" alt="Facebook" style="height:22px;"></a>
-                        <a href="{{ url('auth/redirect/microsoft') }}" class="btn btn-light border" style="min-width:44px;"><img src="{{ asset('assets/images/social/microsoft.svg') }}" alt="Microsoft" style="height:22px;"></a>
+                        <a href="{{ url('auth/redirect/google') }}" class="btn btn-light border" style="min-width:44px;">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" style="height:24px; width:24px;">
+                        </a>
+                        <a href="{{ url('auth/redirect/facebook') }}" class="btn btn-light border" style="min-width:44px;">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" style="height:24px; width:24px;">
+                        </a>
+                        <a href="{{ url('auth/redirect/x') }}" class="btn btn-light border" style="min-width:44px;">
+                            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px; width:24px;">
+                        </a>
                     </div>
                 </div>
             </form>
