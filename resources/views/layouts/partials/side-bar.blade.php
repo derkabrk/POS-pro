@@ -395,11 +395,7 @@
     background-color: rgba(255, 255, 255, 0.06);
 }
 
-.side-bar-manu ul li.active a,
-.side-bar-manu ul li a.active {
-    color: #fff;
-    background-color: #4f46e5; /* Primary brand color - adjust to match your app's color scheme */
-}
+
 
 .side-bar-manu .nav-item.active .nav-link {
     background-color: #4f46e5;
