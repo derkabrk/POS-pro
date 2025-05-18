@@ -6,8 +6,10 @@
 
 @section('main_content')
 <div class="footer">
-    <div class="footer-logo w-100 mx-4">
-        <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="">
+    <div class="footer-logo w-100 mx-4 text-center">
+        <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="" style="max-width: 180px; margin-bottom: 1.5rem;">
+        <div class="welcome-label" style="font-size: 2.2rem; font-weight: bold; margin-bottom: 0.5rem; color: #222;">{{ __('Welcome!') }}</div>
+        <div class="welcome-desc" style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">{{ __('We are glad to see you again. Please login to continue to your dashboard and manage your account.') }}</div>
     </div>
     <div class="mybazar-login-section">
         <div class="mybazar-login-avatar">
@@ -20,18 +22,18 @@
                     <h6>{{ __('Welcome back, Please login in to your account') }}</h6>
                     <form method="POST" action="{{ route('login') }}" class="login_form">
                         @csrf
-                        <div class="input-group">
+                        <div class="input-group" style="margin-bottom: 1.2rem;">
                             <span><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
-                            <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}">
+                            <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}" style="border: 2px solid #e0e0e0; border-radius: 8px; padding: 0.8rem 1rem; font-size: 1rem; transition: border-color 0.2s;">
                         </div>
 
-                        <div class="input-group">
+                        <div class="input-group" style="margin-bottom: 1.2rem;">
                             <span><img src="{{ asset('assets/images/icons/lock.png') }}" alt="img"></span>
                             <span class="hide-pass">
                                 <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img">
                                 <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img">
                             </span>
-                            <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}">
+                            <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}" style="border: 2px solid #e0e0e0; border-radius: 8px; padding: 0.8rem 1rem; font-size: 1rem; transition: border-color 0.2s;">
                         </div>
 
                         <div class="mt-lg-3 mb-0 forget-password">
@@ -42,7 +44,19 @@
                             <a href="{{ route('password.request') }}">{{ ('Forgot Password?') }}</a>
                         </div>
 
-                        <button type="submit" class="btn login-btn submit-btn">{{ __('Log In') }}</button>
+                        <button type="submit" class="btn login-btn submit-btn" style="width: 100%; font-size: 1.1rem; padding: 0.8rem 0; margin-bottom: 1.2rem;">{{ __('Log In') }}</button>
+
+                        <div class="social-login-buttons" style="display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.5rem;">
+                            <a href="{{ url('/auth/redirect/google') }}" class="btn btn-light" style="border: 1px solid #e0e0e0; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.7rem; font-size: 1rem;">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" style="width: 22px; height: 22px;"> {{ __('Continue with Google') }}
+                            </a>
+                            <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-light" style="border: 1px solid #e0e0e0; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.7rem; font-size: 1rem;">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" style="width: 22px; height: 22px;"> {{ __('Continue with Facebook') }}
+                            </a>
+                            <a href="{{ url('/auth/redirect/x') }}" class="btn btn-light" style="border: 1px solid #e0e0e0; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.7rem; font-size: 1rem;">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg" alt="X" style="width: 22px; height: 22px;"> {{ __('Continue with X') }}
+                            </a>
+                        </div>
 
                         <div class="row d-flex flex-wrap mt-2 justify-content-between">
                             <div class="col">
