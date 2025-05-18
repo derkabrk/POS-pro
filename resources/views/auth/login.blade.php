@@ -6,6 +6,29 @@
 
 @section('main_content')
 <div class="login-page-container" style="display: flex; min-height: 100vh;">
+    <div class="onboarding-section" style="flex: 1; background: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem 2rem; min-width: 350px;">
+        <div class="onboarding-step" style="display: flex; align-items: center; margin-bottom: 2.5rem;">
+            <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400" alt="Step 1" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
+            <div>
+                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 1: Sign In') }}</div>
+                <div style="color: #666; font-size: 1rem;">{{ __('Access your account securely with your credentials.') }}</div>
+            </div>
+        </div>
+        <div class="onboarding-step" style="display: flex; align-items: center; margin-bottom: 2.5rem;">
+            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=400" alt="Step 2" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
+            <div>
+                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 2: Explore Features') }}</div>
+                <div style="color: #666; font-size: 1rem;">{{ __('Discover powerful tools to manage your business.') }}</div>
+            </div>
+        </div>
+        <div class="onboarding-step" style="display: flex; align-items: center;">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400" alt="Step 3" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
+            <div>
+                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 3: Grow & Succeed') }}</div>
+                <div style="color: #666; font-size: 1rem;">{{ __('Track your progress and grow your business with ease!') }}</div>
+            </div>
+        </div>
+    </div>
     <div class="mybazar-login-section" style="flex: 1; display: flex; align-items: center; justify-content: center;">
         <div class="mybazar-login-wrapper" style="width: 100%; max-width: 420px; margin: 0 auto;">
             <div class="login-wrapper">
@@ -55,29 +78,6 @@
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="walkthrough-section" style="flex: 1; background: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem 2rem; min-width: 350px;">
-        <div class="walkthrough-step" style="display: flex; align-items: center; margin-bottom: 2.5rem;">
-            <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400" alt="Step 1" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
-            <div>
-                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 1: Sign In') }}</div>
-                <div style="color: #666; font-size: 1rem;">{{ __('Access your account securely with your credentials.') }}</div>
-            </div>
-        </div>
-        <div class="walkthrough-step" style="display: flex; align-items: center; margin-bottom: 2.5rem;">
-            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=400" alt="Step 2" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
-            <div>
-                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 2: Explore Features') }}</div>
-                <div style="color: #666; font-size: 1rem;">{{ __('Discover powerful tools to manage your business.') }}</div>
-            </div>
-        </div>
-        <div class="walkthrough-step" style="display: flex; align-items: center;">
-            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400" alt="Step 3" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
-            <div>
-                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 3: Grow & Succeed') }}</div>
-                <div style="color: #666; font-size: 1rem;">{{ __('Track your progress and grow your business with ease!') }}</div>
             </div>
         </div>
     </div>
