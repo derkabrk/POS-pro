@@ -2340,8 +2340,8 @@ table th, table td {
     font-size: 14px;
     line-height: 22px;
     text-align: center;
-    color: #191919;
-    background: #fff;
+    color: white;
+    background: transparent;
     position: relative;
     left: 20px;
     top: 11px;
