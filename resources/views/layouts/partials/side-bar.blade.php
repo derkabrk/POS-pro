@@ -326,28 +326,24 @@
 .side-bar {
     width: 250px;
     height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #0f172a;
+    background: #0f172a;
     color: #cbd5e1;
+    padding-top: 1rem;
+    position: fixed;
     overflow-y: auto;
-    z-index: 1050;
-    transition: all 0.3s ease-in-out;
+    font-family: 'Segoe UI', sans-serif;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1050;
 }
 
 /* Logo section */
 .side-bar-logo {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    text-align: center;
+    padding: 1rem 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .side-bar-logo img {
     max-height: 40px;
-    object-fit: contain;
 }
 .close-btn {
     background: none;
@@ -357,6 +353,9 @@
     opacity: 0.7;
     cursor: pointer;
     transition: opacity 0.3s;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 .close-btn:hover {
     opacity: 1;
@@ -370,6 +369,7 @@
 }
 .side-bar-manu ul li {
     margin-bottom: 6px;
+    position: relative;
 }
 .side-bar-manu ul li a {
     display: flex;
@@ -397,6 +397,7 @@
     font-weight: 600;
 }
 </style>
+
 
 
 <script>
