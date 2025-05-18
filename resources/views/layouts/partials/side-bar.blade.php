@@ -409,10 +409,28 @@
     transition: fill 0.3s ease;
     fill: currentColor;
 }
+.side-bar.collapsed {
+    transform: translateX(-100%);
+}
 </style>
 
 <script>
 document.querySelector('.close-btn')?.addEventListener('click', () => {
     document.querySelector('.side-bar').style.transform = 'translateX(-100%)';
+});
+
+</script>
+
+<script>
+const sidebar = document.querySelector('.side-bar');
+const closeBtn = document.querySelector('.close-btn');
+
+// Toggle visibility only if sidebar is open
+closeBtn?.addEventListener('click', () => {
+    if (!sidebar.classList.contains('collapsed')) {
+        sidebar.classList.add('collapsed');
+    } else {
+        sidebar.classList.remove('collapsed');
+    }
 });
 </script>
