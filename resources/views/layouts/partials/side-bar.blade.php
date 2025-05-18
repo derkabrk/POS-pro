@@ -331,70 +331,166 @@
     padding-top: 1rem;
     position: fixed;
     overflow-y: auto;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 1050;
 }
 
 /* Logo section */
-.side-bar-logo {
-    text-align: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.side-bar-image {
+    padding: 0 1.5rem 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
-.side-bar-logo img {
-    max-height: 40px;
-}
-.close-btn {
-    background: none;
-    border: none;
+
+.side-bar-image img,
+.side-bar-image .logo-text {
+    height: 24px;
     color: #fff;
-    font-size: 18px;
-    opacity: 0.7;
-    cursor: pointer;
-    transition: opacity 0.3s;
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
 }
-.close-btn:hover {
-    opacity: 1;
+
+/* Section headers */
+.side-bar-section {
+    padding: 1rem 1.5rem 0.5rem;
+    color: #64748b;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
 }
 
 /* Menu styling */
-.side-bar-manu ul {
+.side-bar-menu {
     list-style: none;
-    padding: 0.5rem 1rem;
+    padding: 0;
     margin: 0;
 }
-.side-bar-manu ul li {
-    margin-bottom: 6px;
+
+.side-bar-menu > li {
     position: relative;
 }
-.side-bar-manu ul li a {
+
+.side-bar-menu > li > a {
     display: flex;
     align-items: center;
-    padding: 10px 12px;
-    border-radius: 6px;
-    color: #cbd5e1;
-    font-size: 0.95rem;
+    padding: 0.65rem 1.5rem;
+    color: #94a3b8;
+    font-size: 0.875rem;
     text-decoration: none;
-    transition: background 0.3s, color 0.3s;
+    transition: color 0.2s;
 }
-.side-bar-manu ul li a .sidebar-icon {
-    width: 20px;
-    margin-right: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+.side-bar-menu > li > a:hover {
+    color: #e2e8f0;
 }
-.side-bar-manu ul li a:hover,
-.side-bar-manu ul li.active a {
-    background-color: #4f46e5;
+
+.side-bar-menu > li > a.active {
     color: #fff;
 }
-.side-bar-manu ul li.active a {
+
+.side-bar-menu > li > a .menu-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.75rem;
+    color: #94a3b8;
+}
+
+.side-bar-menu > li > a:hover .menu-icon,
+.side-bar-menu > li > a.active .menu-icon {
+    color: #e2e8f0;
+}
+
+.side-bar-menu > li > a .menu-arrow {
+    margin-left: auto;
+    transition: transform 0.2s;
+}
+
+.side-bar-menu > li.open > a .menu-arrow {
+    transform: rotate(90deg);
+}
+
+/* Submenu styling */
+.side-bar-submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.side-bar-menu > li.open .side-bar-submenu {
+    max-height: 500px;
+}
+
+.side-bar-submenu > li > a {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem 0.5rem 3.25rem;
+    color: #94a3b8;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.side-bar-submenu > li > a:hover {
+    color: #e2e8f0;
+}
+
+.side-bar-submenu > li > a.active {
+    color: #fff;
+}
+
+/* Badge styling */
+.menu-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
     font-weight: 600;
+    border-radius: 0.25rem;
+    margin-left: auto;
+}
+
+.menu-badge-hot {
+    background-color: #ef4444;
+    color: #fff;
+}
+
+/* Divider for submenu items */
+.side-bar-menu > li.has-submenu > a::before {
+    content: "";
+    position: absolute;
+    left: 1.5rem;
+    top: 0;
+    height: 100%;
+    border-left: 1px dashed rgba(255, 255, 255, 0.1);
+    display: none;
+}
+
+.side-bar-menu > li.has-submenu.open > a::before {
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .side-bar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .side-bar.show {
+        transform: translateX(0);
+    }
+
 }
 </style>
 
