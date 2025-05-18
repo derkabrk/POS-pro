@@ -7,9 +7,39 @@
 @section('main_content')
 <div style="display: flex; height: 100vh; font-family: 'Segoe UI', sans-serif; background: url('{{ asset('assets/bg-home.jpg') }}') no-repeat center center fixed; background-size: cover; overflow: hidden; position: relative;">
     <div style="position: absolute; inset: 0; background: rgba(30, 36, 50, 0.72); z-index: 0;"></div>
-    <div style="display: flex; flex: 1; position: relative; z-index: 1;">
+    <style>
+        /* Fade-in for main content */
+        .fade-in { animation: fadeIn 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: none; }
+        }
+        /* Slide-in for onboarding */
+        .slide-in-left { animation: slideInLeft 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
+        @keyframes slideInLeft {
+            0% { opacity: 0; transform: translateX(-60px); }
+            100% { opacity: 1; transform: none; }
+        }
+        /* Slide-in for login form */
+        .slide-in-right { animation: slideInRight 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
+        @keyframes slideInRight {
+            0% { opacity: 0; transform: translateX(60px); }
+            100% { opacity: 1; transform: none; }
+        }
+        /* Onboarding image zoom */
+        .onboarding-slide img { transition: transform 1.2s cubic-bezier(.39,.575,.565,1.000); }
+        .onboarding-slide.active img { transform: scale(1.04) rotate(-1deg); }
+        .onboarding-dot { transition: background 0.3s; }
+        /* Button hover */
+        .login-btn.submit-btn { transition: background 0.3s, box-shadow 0.3s; box-shadow: 0 2px 8px #153e9033; }
+        .login-btn.submit-btn:hover { background: #1d366f; box-shadow: 0 4px 16px #153e9055; }
+        /* Social icon hover */
+        .social-login a img { transition: transform 0.3s; }
+        .social-login a:hover img { transform: scale(1.18) rotate(-8deg); }
+    </style>
+    <div style="display: flex; flex: 1; position: relative; z-index: 1;" class="fade-in">
         <!-- Onboarding Left Side -->
-        <div style="flex: 1; background: transparent; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; border-radius: 20px 0 0 20px; position: relative;">
+        <div style="flex: 1; background: transparent; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; border-radius: 20px 0 0 20px; position: relative; font-family: 'Segoe UI', sans-serif;" class="slide-in-left">
             <!-- Logo -->
             <div>
                 <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="Logo" style="height: 40px;">
@@ -50,8 +80,8 @@
 </div>
         </div>
         <!-- Login Form Right Side -->
-        <div style="flex: 1; background: transparent; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative;">
-            <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px;">
+        <div style="flex: 1; background: transparent; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative; font-family: 'Segoe UI', sans-serif;" class="slide-in-right">
+            <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px; font-family: 'Segoe UI', sans-serif;">
                 <div style="position: absolute; top: 20px; right: 30px;">
                     <img src="{{ asset('assets/images/flags/vn.png') }}" alt="Language" style="width: 24px; height: 24px;">
                 </div>
