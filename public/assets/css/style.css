@@ -7266,3 +7266,27 @@ tr.position-relative td {
     right: 10px;
     position: absolute;
 }
+
+/* Social login hover animation */
+.social-login a img {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.social-login a:hover img {
+    transform: scale(1.18) rotate(-8deg);
+    box-shadow: 0 4px 16px #153e9055;
+}
+
+/* Login button hover animation */
+.btn.login-btn.submit-btn {
+    transition: background 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 8px #153e9033;
+}
+.btn.login-btn.submit-btn:hover {
+    background: #1d366f;
+    box-shadow: 0 4px 16px #153e9055;
+}
+.card {
+    background-color: transparent !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+}
