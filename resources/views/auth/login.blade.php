@@ -14,21 +14,21 @@
         <!-- Slides -->
         <div id="onboarding-wrapper" style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
             <div class="onboarding-slide active" style="text-align: center;">
-                <img src="{{ asset('assets/images/onboarding/step1.png') }}" style="max-height: 220px;" alt="Step 1">
+                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=600&h=400" style="max-height: 220px; border-radius: 18px; box-shadow: 0 2px 12px #0001;" alt="Step 1">
                 <blockquote style="font-style: italic; color: #555; margin-top: 20px;">
                     “Cách tốt nhất để dự đoán tương lai là tạo ra nó.”
                 </blockquote>
                 <div style="font-weight: bold; color: #333;">Peter Drucker</div>
             </div>
             <div class="onboarding-slide" style="text-align: center; display: none;">
-                <img src="{{ asset('assets/images/onboarding/step2.png') }}" style="max-height: 220px;" alt="Step 2">
+                <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=600&h=400" style="max-height: 220px; border-radius: 18px; box-shadow: 0 2px 12px #0001;" alt="Step 2">
                 <blockquote style="font-style: italic; color: #555; margin-top: 20px;">
                     “Thành công không phải là điểm đến, mà là hành trình.”
                 </blockquote>
                 <div style="font-weight: bold; color: #333;">Zig Ziglar</div>
             </div>
             <div class="onboarding-slide" style="text-align: center; display: none;">
-                <img src="{{ asset('assets/images/onboarding/step3.png') }}" style="max-height: 220px;" alt="Step 3">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=600&h=400" style="max-height: 220px; border-radius: 18px; box-shadow: 0 2px 12px #0001;" alt="Step 3">
                 <blockquote style="font-style: italic; color: #555; margin-top: 20px;">
                     “Khách hàng là trung tâm của mọi quyết định.”
                 </blockquote>
