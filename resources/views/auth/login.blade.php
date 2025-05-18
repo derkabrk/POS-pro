@@ -1,6 +1,8 @@
 @extends('layouts.auth.app')
 
-@section('title', __('Login'))
+@section('title')
+    {{ __('Login') }}
+@endsection
 
 @section('main_content')
 <div style="display: flex; height: 100vh; font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right, #1d366f, #17316b); overflow: hidden;">
@@ -10,73 +12,78 @@
         <div>
             <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="Logo" style="height: 40px;">
         </div>
-
         <!-- Slides -->
         <div id="onboarding-wrapper" style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
             <div class="onboarding-slide active" style="text-align: center;">
-                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=600&h=400" style="max-height: 220px; border-radius: 18px; box-shadow: 0 2px 12px #0001;" alt="Step 1">
-                <blockquote style="font-style: italic; color: #555; margin-top: 20px;">
-                    “Cách tốt nhất để dự đoán tương lai là tạo ra nó.”
+                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 1">
+                <blockquote style="font-style: italic; color: #153e90; margin-top: 20px;">
+                    {{ __('Cách tốt nhất để dự đoán tương lai là tạo ra nó.') }}
                 </blockquote>
-                <div style="font-weight: bold; color: #333;">Peter Drucker</div>
+                <div style="font-weight: bold; color: #f26522;">Peter Drucker</div>
             </div>
             <div class="onboarding-slide" style="text-align: center; display: none;">
-                <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=600&h=400" style="max-height: 220px; border-radius: 18px; box-shadow: 0 2px 12px #0001;" alt="Step 2">
-                <blockquote style="font-style: italic; color: #555; margin-top: 20px;">
-                    “Thành công không phải là điểm đến, mà là hành trình.”
+                <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 2">
+                <blockquote style="font-style: italic; color: #153e90; margin-top: 20px;">
+                    {{ __('Thành công không phải là điểm đến, mà là hành trình.') }}
                 </blockquote>
-                <div style="font-weight: bold; color: #333;">Zig Ziglar</div>
+                <div style="font-weight: bold; color: #f26522;">Zig Ziglar</div>
             </div>
             <div class="onboarding-slide" style="text-align: center; display: none;">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=600&h=400" style="max-height: 220px; border-radius: 18px; box-shadow: 0 2px 12px #0001;" alt="Step 3">
-                <blockquote style="font-style: italic; color: #555; margin-top: 20px;">
-                    “Khách hàng là trung tâm của mọi quyết định.”
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 3">
+                <blockquote style="font-style: italic; color: #153e90; margin-top: 20px;">
+                    {{ __('Khách hàng là trung tâm của mọi quyết định.') }}
                 </blockquote>
-                <div style="font-weight: bold; color: #333;">Jeff Bezos</div>
+                <div style="font-weight: bold; color: #f26522;">Jeff Bezos</div>
             </div>
         </div>
-
         <!-- Navigation Dots -->
         <div style="text-align: center; margin-top: 10px;">
             <span class="onboarding-dot active" style="height: 6px; width: 6px; margin: 3px; background: #555; border-radius: 50%; display: inline-block;"></span>
             <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 3px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
             <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 3px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
         </div>
-
         <!-- Footer -->
         <div style="text-align: center; font-size: 12px; color: #777;">
-            © {{ date('Y') }} Getfly CRM JSC. All rights reserved. <br>
-            Hệ thống hoạt động tốt nhất trên trình duyệt Firefox và Chrome.
-        </div>
+    © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+</div>
     </div>
-
     <!-- Login Form Right Side -->
-    <div style="flex: 1; background: white; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative;">
-        <div style="width: 100%; max-width: 400px;">
+    <div style="flex: 1; background: white url('https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=cover&w=800&q=80') no-repeat center center/cover; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative;">
+        <div style="width: 100%; max-width: 400px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px;">
             <div style="position: absolute; top: 20px; right: 30px;">
                 <img src="{{ asset('assets/images/flags/vn.png') }}" alt="Language" style="width: 24px; height: 24px;">
             </div>
             <h3 style="font-weight: bold; color: #153e90;">{{ __('Getfly xin chào') }}</h3>
             <p style="margin-bottom: 25px;">Truy cập bằng tài khoản được cung cấp</p>
-
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('login') }}" class="login_form">
                 @csrf
-                <div style="margin-bottom: 15px;">
-                    <input type="email" name="email" class="form-control" placeholder="Tên đăng nhập" required>
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
+                    <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}" style="border: 1px solid #e5e5e5; background: #f9f9f9; border-radius: 6px; padding: 10px 12px;">
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><img src="{{ asset('assets/images/icons/lock.png') }}" alt="img"></span>
+                    <span class="hide-pass">
+                        <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img">
+                        <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img">
+                    </span>
+                    <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}" style="border: 1px solid #e5e5e5; background: #f9f9f9; border-radius: 6px; padding: 10px 12px;">
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <label>
-                        <input type="checkbox" name="remember"> Nhớ mật khẩu
+                <div class="mt-lg-3 mb-0 forget-password">
+                    <label class="custom-control-label">
+                        <input type="checkbox" name="remember" class="custom-control-input">
+                        <span>{{ __('Remember me') }}</span>
                     </label>
+                    <a href="{{ route('password.request') }}">{{ __('Forgot Password?') }}</a>
                 </div>
-                <button type="submit" class="btn btn-primary w-100" style="background: #f26522; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                    ĐĂNG NHẬP
-                </button>
-                <div style="margin-top: 15px; text-align: center;">
-                    <a href="{{ route('password.request') }}" style="color: #888;">Quên mật khẩu?</a>
+                <button type="submit" class="btn login-btn submit-btn" style="background: #153e90; color: #fff; border-radius: 6px; border: none; padding: 10px 0; font-weight: 600; width: 100%; margin-top: 18px;">{{ __('Log In') }}</button>
+                <div class="row d-flex flex-wrap mt-2 justify-content-between">
+                    <div class="col">
+                        <a href="{{ route('home') }}">{{ __('Back to Home') }}</a>
+                    </div>
+                    <div class="col text-end">
+                        <a class="text-primary" href="" data-bs-target="#registration-modal" data-bs-toggle="modal">{{ __('Create an account.') }}</a>
+                    </div>
                 </div>
             </form>
         </div>
@@ -84,7 +91,48 @@
 </div>
 @endsection
 
+@push('modal')
+@include('web.components.signup')
+
+<!-- Verify Modal Start -->
+<div class="modal fade" id="verifymodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content verify-content">
+            <div class="modal-header border-bottom-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body verify-modal-body text-center">
+                <h4 class="mb-0">{{ __('Email Verification') }}</h4>
+                <p class="des p-8-0 pb-3">{{ __('We sent an OTP to your email address') }} <br>
+                    <span id="dynamicEmail"></span>
+                </p>
+                <form action="{{ route('otp-submit') }}" method="post" class="verify_form">
+                    @csrf
+                    <div class="code-input pin-container">
+                        <input class="pin-input otp-input" id="pin-1" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-2" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-3" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-4" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-5" type="number" name="otp[]" maxlength="1">
+                        <input class="pin-input otp-input" id="pin-6" type="number" name="otp[]" maxlength="1">
+                    </div>
+                    <p class="des p-24-0 pt-2">
+                        {{ __('Code sent in') }} <span id="countdown" class="countdown"></span>
+                        <span class="reset text-primary cursor-pointer" id="otp-resend"
+                            data-route="{{ route('otp-resend') }}">{{ __('Resend code') }}</span>
+                    </p>
+                    <button class="verify-btn btn btn-outline-danger submit-btn">{{ __('Verify') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Verify Modal End -->
+@endpush
+
 @push('js')
+<script src="{{ asset('assets/js/auth.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const slides = document.querySelectorAll('.onboarding-slide');
@@ -106,12 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showSlide(current);
 });
-</script>
-@endpush
 
-@push('js')
-<script src="{{ asset('assets/js/auth.js') }}"></script>
-<script>
 document.querySelector('.login_form').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -223,39 +266,6 @@ document.querySelector('.verify_form').addEventListener('submit', function (e) {
             alert('Something went wrong. Please try again.');
         });
 });
-
-(function() {
-    const slides = document.querySelectorAll('.onboarding-slide');
-    const dots = document.querySelectorAll('.onboarding-dot');
-    let current = 0;
-    function showSlide(idx) {
-        slides.forEach((slide, i) => {
-            slide.style.display = i === idx ? 'flex' : 'none';
-            if (i === idx) slide.classList.add('active');
-            else slide.classList.remove('active');
-        });
-        dots.forEach((dot, i) => {
-            dot.style.backgroundColor = i === idx ? '#007bff' : '#ccc';
-            if (i === idx) dot.classList.add('active');
-            else dot.classList.remove('active');
-        });
-    }
-    document.getElementById('onboarding-prev').onclick = function() {
-        current = (current - 1 + slides.length) % slides.length;
-        showSlide(current);
-    };
-    document.getElementById('onboarding-next').onclick = function() {
-        current = (current + 1) % slides.length;
-        showSlide(current);
-    };
-    dots.forEach((dot, i) => {
-        dot.onclick = function() {
-            current = i;
-            showSlide(current);
-        };
-    });
-    showSlide(current);
-})();
 </script>
 @endpush
 
