@@ -175,7 +175,7 @@ ul li a {
     text-decoration: none;
     outline: none !important;
     cursor: pointer;
-    color: #000000;
+    color: white;
     -webkit-transition: all 0.4s ease;
     transition: all 0.4s ease;
 }
@@ -186,7 +186,7 @@ ol li a:hover,
 ul li a:hover {
     outline: none !important;
     text-decoration: none;
-    color: #000000;
+    color: white;
 }
 
 label.img-label {
@@ -485,7 +485,7 @@ svg {
     font-weight: 600;
 }
 .tab-table-container {
-    background-color: white;
+    background-color: transparent;
     border-radius: 12px;
     height: 350px;
 }
@@ -621,7 +621,7 @@ svg {
 }
 
 .dashborad-table-container {
-    background-color: white;
+    background-color: transparent;
     border-radius: 12px;
     box-shadow: 0px 4px 30px 0px #2020200d;
     min-height: 330px;
@@ -631,6 +631,10 @@ svg {
 }
 .p-tb {
     padding: 10px 10px;
+}
+
+table th, table td {
+  color: #fff !important;
 }
 .dashboard-table-content {
     height: 100px !important;

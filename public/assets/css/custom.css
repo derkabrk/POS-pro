@@ -375,6 +375,10 @@ body::before {
     border: 0;
 }
 
+table th, table td {
+  color: #fff !important;
+}
+
 .delete-selected {
     cursor: pointer;
 }
