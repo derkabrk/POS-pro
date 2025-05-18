@@ -16,24 +16,24 @@
         <div id="onboarding-wrapper" style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
             <div class="onboarding-slide active" style="text-align: center;">
                 <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 1">
-                <blockquote style="font-style: italic; color: #153e90; margin-top: 20px;">
+                <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
                     {{ __('Cách tốt nhất để dự đoán tương lai là tạo ra nó.') }}
                 </blockquote>
-                <div style="font-weight: bold; color: #f26522;">Peter Drucker</div>
+                <div style="font-weight: bold; color: #ccc;">Peter Drucker</div>
             </div>
             <div class="onboarding-slide" style="text-align: center; display: none;">
                 <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 2">
-                <blockquote style="font-style: italic; color: #153e90; margin-top: 20px;">
+                <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
                     {{ __('Thành công không phải là điểm đến, mà là hành trình.') }}
                 </blockquote>
-                <div style="font-weight: bold; color: #f26522;">Zig Ziglar</div>
+                <div style="font-weight: bold; color: #ccc;">Zig Ziglar</div>
             </div>
             <div class="onboarding-slide" style="text-align: center; display: none;">
                 <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 3">
-                <blockquote style="font-style: italic; color: #153e90; margin-top: 20px;">
+                <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
                     {{ __('Khách hàng là trung tâm của mọi quyết định.') }}
                 </blockquote>
-                <div style="font-weight: bold; color: #f26522;">Jeff Bezos</div>
+                <div style="font-weight: bold; color: #ccc;">Jeff Bezos</div>
             </div>
         </div>
         <!-- Navigation Dots -->
@@ -48,7 +48,7 @@
 </div>
     </div>
     <!-- Login Form Right Side -->
-    <div style="flex: 1; background: white url('https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=cover&w=800&q=80') no-repeat center center/cover; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative;">
+    <div style="flex: 1; background: linear-gradient(135deg, #232526 0%, #414345 100%); padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative;">
         <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px;">
             <div style="position: absolute; top: 20px; right: 30px;">
                 <img src="{{ asset('assets/images/flags/vn.png') }}" alt="Language" style="width: 24px; height: 24px;">
