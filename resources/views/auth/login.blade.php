@@ -39,8 +39,8 @@
     </style>
     <div style="display: flex; flex: 1; position: relative; z-index: 1;" class="fade-in">
         <!-- Onboarding Left Side -->
-        <div style="flex: 1; background: transparent; padding: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px 0 0 20px; position: relative; font-family: 'Segoe UI', sans-serif; height: 100%;">
-            <div style="width: 100%; max-width: 500px; background: transparent; border-radius: 16px; box-shadow: none; padding: 32px 28px; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+        <div style="flex: 1; background: transparent; padding: 0 40px 40px 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px 0 0 20px; position: relative; font-family: 'Segoe UI', sans-serif; height: 100%;">
+            <div style="width: 100%; max-width: 600px; background: transparent; border-radius: 16px; box-shadow: none; padding: 0 28px 28px 28px; display: flex; flex-direction: column; justify-content: space-between; height: 80%; min-height: 340px;">
                 <!-- Logo -->
                 <div>
                     <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="Logo" style="height: 40px;">
@@ -316,7 +316,6 @@ document.querySelector('.verify_form').addEventListener('submit', function (e) {
 });
 </script>
 @endpush
-``` 
 
 
 
