@@ -61,13 +61,13 @@
                     <span class="input-group-text"><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
                     <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}" style="border: 1px solid #e5e5e5; background: #f9f9f9; border-radius: 6px; padding: 10px 12px;">
                 </div>
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 position-relative">
                     <span class="input-group-text"><img src="{{ asset('assets/images/icons/lock.png') }}" alt="img"></span>
-                    <span class="hide-pass">
-                        <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img">
-                        <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img">
-                    </span>
                     <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}" style="border: 1px solid #e5e5e5; background: #f9f9f9; border-radius: 6px; padding: 10px 12px;">
+                    <span class="hide-pass" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                        <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img" class="hide-icon" style="display: block;">
+                        <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img" class="show-icon" style="display: none;">
+                    </span>
                 </div>
                 <div class="mt-lg-3 mb-0 forget-password">
                     <label class="custom-control-label">
@@ -85,7 +85,33 @@
                         <a class="text-primary" href="" data-bs-target="#registration-modal" data-bs-toggle="modal">{{ __('Create an account.') }}</a>
                     </div>
                 </div>
+                <div class="social-login mt-4">
+                    <div style="text-align:center; color:#aaa; margin-bottom:10px;">{{ __('Or login with') }}</div>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{{ url('auth/redirect/google') }}" class="btn btn-light border" style="min-width:44px;"><img src="{{ asset('assets/images/social/google.svg') }}" alt="Google" style="height:22px;"></a>
+                        <a href="{{ url('auth/redirect/facebook') }}" class="btn btn-light border" style="min-width:44px;"><img src="{{ asset('assets/images/social/facebook.svg') }}" alt="Facebook" style="height:22px;"></a>
+                        <a href="{{ url('auth/redirect/microsoft') }}" class="btn btn-light border" style="min-width:44px;"><img src="{{ asset('assets/images/social/microsoft.svg') }}" alt="Microsoft" style="height:22px;"></a>
+                    </div>
+                </div>
             </form>
+            <script>
+            // Password show/hide toggle
+            const passInput = document.querySelector('.form-control.password');
+            const hidePass = document.querySelector('.hide-pass');
+            const hideIcon = hidePass.querySelector('.hide-icon');
+            const showIcon = hidePass.querySelector('.show-icon');
+            hidePass.addEventListener('click', function() {
+                if (passInput.type === 'password') {
+                    passInput.type = 'text';
+                    hideIcon.style.display = 'none';
+                    showIcon.style.display = 'block';
+                } else {
+                    passInput.type = 'password';
+                    hideIcon.style.display = 'block';
+                    showIcon.style.display = 'none';
+                }
+            });
+            </script>
         </div>
     </div>
 </div>
