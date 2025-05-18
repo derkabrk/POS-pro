@@ -5,49 +5,32 @@
 @endsection
 
 @section('main_content')
-<div class="login-page-container" style="display: flex; min-height: 100vh;">
-    <div class="onboarding-section" style="flex: 1; background: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem 2rem; min-width: 350px;">
-        <div class="onboarding-step" style="display: flex; align-items: center; margin-bottom: 2.5rem;">
-            <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400" alt="Step 1" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
-            <div>
-                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 1: Sign In') }}</div>
-                <div style="color: #666; font-size: 1rem;">{{ __('Access your account securely with your credentials.') }}</div>
-            </div>
-        </div>
-        <div class="onboarding-step" style="display: flex; align-items: center; margin-bottom: 2.5rem;">
-            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=400" alt="Step 2" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
-            <div>
-                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 2: Explore Features') }}</div>
-                <div style="color: #666; font-size: 1rem;">{{ __('Discover powerful tools to manage your business.') }}</div>
-            </div>
-        </div>
-        <div class="onboarding-step" style="display: flex; align-items: center;">
-            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400" alt="Step 3" style="width: 70px; height: 70px; border-radius: 16px; box-shadow: 0 2px 12px #0001; margin-right: 1.2rem; object-fit: cover;">
-            <div>
-                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 3: Grow & Succeed') }}</div>
-                <div style="color: #666; font-size: 1rem;">{{ __('Track your progress and grow your business with ease!') }}</div>
-            </div>
-        </div>
+<div class="footer">
+    <div class="footer-logo w-100 mx-4">
+        <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="">
     </div>
-    <div class="mybazar-login-section" style="flex: 1; display: flex; align-items: center; justify-content: center;">
-        <div class="mybazar-login-wrapper" style="width: 100%; max-width: 420px; margin: 0 auto;">
+    <div class="mybazar-login-section">
+        <div class="mybazar-login-avatar">
+            <img src="{{ asset(get_option('general')['login_page_image'] ?? 'assets/images/login/login.png') }}" alt="">
+        </div>
+        <div class="mybazar-login-wrapper">
             <div class="login-wrapper">
                 <div class="login-body w-100">
-                    <h2>{{ __('Welcome to') }} <span>{{ __(env('APP_NAME')) }}</span></h2>
+                    <h2>{{ __('Welcome to') }}<span>{{ __(env('APP_NAME')) }}</span></h2>
                     <h6>{{ __('Welcome back, Please login in to your account') }}</h6>
                     <form method="POST" action="{{ route('login') }}" class="login_form">
                         @csrf
-                        <div class="input-group" style="margin-bottom: 1.2rem;">
+                        <div class="input-group">
                             <span><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
-                            <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}" style="border: 2px solid #e0e0e0; border-radius: 8px; padding: 0.8rem 1rem; font-size: 1rem; transition: border-color 0.2s;">
+                            <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}">
                         </div>
-                        <div class="input-group" style="margin-bottom: 1.2rem;">
+                        <div class="input-group">
                             <span><img src="{{ asset('assets/images/icons/lock.png') }}" alt="img"></span>
                             <span class="hide-pass">
                                 <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img">
                                 <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img">
                             </span>
-                            <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}" style="border: 2px solid #e0e0e0; border-radius: 8px; padding: 0.8rem 1rem; font-size: 1rem; transition: border-color 0.2s;">
+                            <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}">
                         </div>
                         <div class="mt-lg-3 mb-0 forget-password">
                             <label class="custom-control-label">
@@ -56,18 +39,7 @@
                             </label>
                             <a href="{{ route('password.request') }}">{{ ('Forgot Password?') }}</a>
                         </div>
-                        <button type="submit" class="btn login-btn submit-btn" style="width: 100%; font-size: 1.1rem; padding: 0.8rem 0; margin-bottom: 1.2rem;">{{ __('Log In') }}</button>
-                        <div class="social-login-buttons" style="display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.5rem;">
-                            <a href="{{ url('/auth/redirect/google') }}" class="btn btn-light" style="border: 1px solid #e0e0e0; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.7rem; font-size: 1rem;">
-                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" style="width: 22px; height: 22px;"> {{ __('Continue with Google') }}
-                            </a>
-                            <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-light" style="border: 1px solid #e0e0e0; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.7rem; font-size: 1rem;">
-                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" style="width: 22px; height: 22px;"> {{ __('Continue with Facebook') }}
-                            </a>
-                            <a href="{{ url('/auth/redirect/x') }}" class="btn btn-light" style="border: 1px solid #e0e0e0; border-radius: 8px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.7rem; font-size: 1rem;">
-                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg" alt="X" style="width: 22px; height: 22px;"> {{ __('Continue with X') }}
-                            </a>
-                        </div>
+                        <button type="submit" class="btn login-btn submit-btn">{{ __('Log In') }}</button>
                         <div class="row d-flex flex-wrap mt-2 justify-content-between">
                             <div class="col">
                                 <a href="{{ route('home') }}">{{ __("Back to Home") }}</a>
