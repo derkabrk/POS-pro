@@ -2,8 +2,11 @@
     <div class="d-flex justify-content-between align-items-center">
         <!-- Left -->
         <div class="d-flex align-items-center gap-3">
-        
-               <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger sidebar-opner" id="topnav-hamburger-icon">
+            <button class="btn btn-outline-secondary border-0 sidebar-opner" style="font-size: 1.4rem;">
+                <i class="fal fa-bars"></i>
+            </button>
+
+               <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" id="topnav-hamburger-icon">
                     <span class="hamburger-icon">
                         <span></span>
                         <span></span>
