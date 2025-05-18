@@ -375,34 +375,45 @@
     margin-bottom: 8px;
     border-radius: 8px;
     transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.side-bar-manu ul li:hover {
-    background-color: rgba(255, 255, 255, 0.06);
-    transform: translateX(4px);
-}
-
-.side-bar-manu ul li.active {
-    background-color: rgba(255, 255, 255, 0.12);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .side-bar-manu ul li a {
-    color: #ccc;
     display: flex;
     align-items: center;
-    padding: 10px 0px;
+    justify-content: flex-start;
+    padding: 10px 16px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    color: #ccc;
+    font-weight: 500;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: background 0.3s, color 0.3s;
 }
 
-.side-bar-manu ul li a:hover {
+.side-bar-manu ul li a .sidebar-icon {
+    margin-right: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+}
+
+.side-bar-manu ul li:hover a {
+    background-color: rgba(255, 255, 255, 0.06);
     color: #fff;
+    transform: translateX(2px);
 }
 
 .side-bar-manu ul li.active a {
+    background-color: #8e5be3;
     color: #fff;
-    font-weight: 600;
+    font-weight: 500; /* Keep same as normal to avoid shift */
+    padding: 10px 16px; /* match default */
 }
+
 
 .side-bar-manu ul li a .sidebar-icon svg {
     margin-right: 10px;
