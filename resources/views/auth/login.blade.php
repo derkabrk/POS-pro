@@ -5,11 +5,36 @@
 @endsection
 
 @section('main_content')
-<div class="footer">
-    <div class="footer-logo w-100 mx-4">
-        <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="">
+<div class="footer" style="display: flex; flex-direction: row;">
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fb; padding: 40px 20px; box-sizing: border-box;">
+        <!-- Top Logo -->
+        <div style="align-self: flex-start;">
+            <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="Logo" style="height: 40px;">
+        </div>
+        <!-- Onboarding Steps -->
+        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; width: 100%;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400" alt="Step 1" style="width: 90px; height: 90px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1rem;">
+                <div style="font-weight: bold; font-size: 1.1rem; color: #222;">{{ __('Step 1: Sign In') }}</div>
+                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 220px;">{{ __('Access your account securely with your credentials.') }}</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=400" alt="Step 2" style="width: 90px; height: 90px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1rem;">
+                <div style="font-weight: bold; font-size: 1.1rem; color: #222;">{{ __('Step 2: Explore Features') }}</div>
+                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 220px;">{{ __('Discover powerful tools to manage your business.') }}</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400" alt="Step 3" style="width: 90px; height: 90px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1rem;">
+                <div style="font-weight: bold; font-size: 1.1rem; color: #222;">{{ __('Step 3: Grow & Succeed') }}</div>
+                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 220px;">{{ __('Track your progress and grow your business with ease!') }}</div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div style="margin-top: auto; font-size: 13px; color: #777;">
+            © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+        </div>
     </div>
-    <div class="mybazar-login-section">
+    <div class="mybazar-login-section" style="flex: 1;">
         <div class="mybazar-login-avatar">
             <img src="{{ asset(get_option('general')['login_page_image'] ?? 'assets/images/login/login.png') }}" alt="">
         </div>
