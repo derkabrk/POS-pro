@@ -414,6 +414,21 @@
     padding: 10px 16px; /* match default */
 }
 
+.side-bar-manu .nav-link {
+    padding: 0.75rem 1rem;
+    color: #cbd5e1;
+    border-radius: 6px;
+    transition: all 0.3s, transform 0.25s cubic-bezier(.39,.575,.565,1.000);
+    font-size: 0.95rem;
+}
+
+.side-bar-manu .nav-link:hover,
+.side-bar-manu .nav-item.active .nav-link {
+    background-color: #4f46e5;
+    color: #fff;
+    transform: translateX(6px) scale(1.04);
+    box-shadow: 0 4px 18px 0 rgba(79,70,229,0.10);
+}
 
 .side-bar-manu ul li a .sidebar-icon svg {
     margin-right: 10px;
