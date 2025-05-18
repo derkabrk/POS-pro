@@ -55,7 +55,7 @@ body {
   background-color: #0f172a;
 
   /* background image */
-  background-image: url("{{ asset('bg-home.jpg') }}");
+  background-image: url('../assets/bg-home.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
