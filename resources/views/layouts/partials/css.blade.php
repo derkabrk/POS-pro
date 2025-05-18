@@ -6,6 +6,9 @@
 <!-- Fontawesome -->
 <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome/css/fontawesome-all.min.css') }}">
 {{-- jquery-confirm --}}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
 <link rel="stylesheet" href="{{ asset('assets/plugins/jquery-confirm/jquery-confirm.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/summernote-lite.css') }}">
 <!-- Lily -->
