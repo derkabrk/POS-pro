@@ -11,23 +11,32 @@
         <div style="align-self: flex-start;">
             <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="Logo" style="height: 40px;">
         </div>
-        <!-- Onboarding Steps -->
-        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; width: 100%;">
-            <div style="display: flex; flex-direction: column; align-items: center;">
-                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400" alt="Step 1" style="width: 90px; height: 90px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1rem;">
-                <div style="font-weight: bold; font-size: 1.1rem; color: #222;">{{ __('Step 1: Sign In') }}</div>
-                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 220px;">{{ __('Access your account securely with your credentials.') }}</div>
+        <!-- Onboarding Slider -->
+        <div id="onboarding-slider" style="flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; position: relative; min-height: 320px;">
+            <div class="onboarding-slide active" style="display: flex; flex-direction: column; align-items: center; transition: opacity 0.5s;">
+                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400" alt="Step 1" style="width: 120px; height: 120px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1.2rem;">
+                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 1: Sign In') }}</div>
+                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 260px;">{{ __('Access your account securely with your credentials.') }}</div>
             </div>
-            <div style="display: flex; flex-direction: column; align-items: center;">
-                <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=400" alt="Step 2" style="width: 90px; height: 90px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1rem;">
-                <div style="font-weight: bold; font-size: 1.1rem; color: #222;">{{ __('Step 2: Explore Features') }}</div>
-                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 220px;">{{ __('Discover powerful tools to manage your business.') }}</div>
+            <div class="onboarding-slide" style="display: none; flex-direction: column; align-items: center; transition: opacity 0.5s; position: absolute; left: 0; right: 0;">
+                <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=400&h=400" alt="Step 2" style="width: 120px; height: 120px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1.2rem;">
+                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 2: Explore Features') }}</div>
+                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 260px;">{{ __('Discover powerful tools to manage your business.') }}</div>
             </div>
-            <div style="display: flex; flex-direction: column; align-items: center;">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400" alt="Step 3" style="width: 90px; height: 90px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1rem;">
-                <div style="font-weight: bold; font-size: 1.1rem; color: #222;">{{ __('Step 3: Grow & Succeed') }}</div>
-                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 220px;">{{ __('Track your progress and grow your business with ease!') }}</div>
+            <div class="onboarding-slide" style="display: none; flex-direction: column; align-items: center; transition: opacity 0.5s; position: absolute; left: 0; right: 0;">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400" alt="Step 3" style="width: 120px; height: 120px; border-radius: 16px; box-shadow: 0 2px 12px #0001; object-fit: cover; margin-bottom: 1.2rem;">
+                <div style="font-weight: bold; font-size: 1.2rem; color: #222;">{{ __('Step 3: Grow & Succeed') }}</div>
+                <div style="color: #666; font-size: 1rem; text-align: center; max-width: 260px;">{{ __('Track your progress and grow your business with ease!') }}</div>
             </div>
+            <!-- Slider Controls -->
+            <button id="onboarding-prev" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2rem; color: #bbb; cursor: pointer; z-index: 2;">&#8592;</button>
+            <button id="onboarding-next" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2rem; color: #bbb; cursor: pointer; z-index: 2;">&#8594;</button>
+        </div>
+        <!-- Dots for onboarding steps -->
+        <div style="margin-top: 20px; text-align: center;">
+            <span class="onboarding-dot active" style="height: 8px; width: 8px; margin: 0 3px; background-color: #007bff; border-radius: 50%; display: inline-block; transition: background 0.3s;"></span>
+            <span class="onboarding-dot" style="height: 8px; width: 8px; margin: 0 3px; background-color: #ccc; border-radius: 50%; display: inline-block; transition: background 0.3s;"></span>
+            <span class="onboarding-dot" style="height: 8px; width: 8px; margin: 0 3px; background-color: #ccc; border-radius: 50%; display: inline-block; transition: background 0.3s;"></span>
         </div>
         <!-- Footer -->
         <div style="margin-top: auto; font-size: 13px; color: #777;">
@@ -236,6 +245,39 @@ document.querySelector('.verify_form').addEventListener('submit', function (e) {
             alert('Something went wrong. Please try again.');
         });
 });
+
+(function() {
+    const slides = document.querySelectorAll('.onboarding-slide');
+    const dots = document.querySelectorAll('.onboarding-dot');
+    let current = 0;
+    function showSlide(idx) {
+        slides.forEach((slide, i) => {
+            slide.style.display = i === idx ? 'flex' : 'none';
+            if (i === idx) slide.classList.add('active');
+            else slide.classList.remove('active');
+        });
+        dots.forEach((dot, i) => {
+            dot.style.backgroundColor = i === idx ? '#007bff' : '#ccc';
+            if (i === idx) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+    }
+    document.getElementById('onboarding-prev').onclick = function() {
+        current = (current - 1 + slides.length) % slides.length;
+        showSlide(current);
+    };
+    document.getElementById('onboarding-next').onclick = function() {
+        current = (current + 1) % slides.length;
+        showSlide(current);
+    };
+    dots.forEach((dot, i) => {
+        dot.onclick = function() {
+            current = i;
+            showSlide(current);
+        };
+    });
+    showSlide(current);
+})();
 </script>
 @endpush
 
