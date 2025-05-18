@@ -2354,8 +2354,8 @@ table th, table td {
     font-size: 14px;
     line-height: 22px;
     text-align: center;
-    color: #191919;
-    background: #fff;
+    color: white;
+    background: transparent;
     position: relative;
     left: 10px;
     top: 7px;
@@ -2471,9 +2471,10 @@ table th, table td {
 .role-input-label .form-control {
     -webkit-box-shadow: none;
     box-shadow: none;
-    background: #ffffff;
-    border: 1px solid #e4e5e7;
-    border-radius: 6px;
+    background: transparent;
+    color : white;
+    border: 0.5px solid #2a4562;
+    border-radius: 3px;
     /* padding: 12px 15px; */
     height: 48px;
     font-weight: 400;
