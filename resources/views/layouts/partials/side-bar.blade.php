@@ -1,4 +1,4 @@
-<nav class="side-bar">
+<nav class="side-bar velzon-style">
     <div class="side-bar-logo">
         <a href="{{ route('admin.dashboard.index') }}">
             <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}"alt="Logo">
