@@ -324,7 +324,7 @@
 <style>
 /* Sidebar container */
 .side-bar {
-    width: 260px;
+    width: 230;
     height: 100vh;
     position: fixed;
     left: 0;
@@ -341,7 +341,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px;
+    padding: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
