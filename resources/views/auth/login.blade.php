@@ -83,11 +83,10 @@
         <div style="flex: 1; background: transparent; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative; font-family: 'Segoe UI', sans-serif;" class="slide-in-right">
             <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px; font-family: 'Segoe UI', sans-serif;">
                 <div style="position: absolute; top: 20px; right: 30px;">
-                    <img src="{{ asset('assets/images/flags/vn.png') }}" alt="Language" style="width: 24px; height: 24px;">
                 </div>
                 <h3 style="font-weight: bold; color: #153e90;">{{ __('Welcome to') }} <span>{{ __(env('APP_NAME')) }}</span></h3>
                 <p style="margin-bottom: 25px;">{{ __('Welcome back, Please login in to your account') }}</p>
-                <form method="POST" action="{{ route('login') }}" class="login_form">
+                <form method="POST" action="{{ route('login') }}" class="ajaxform_instant_reload">
                     @csrf
                     <div class="input-group mb-3">
                         <span class="input-group-text"><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
@@ -120,13 +119,13 @@
                     <div class="social-login mt-4">
                         <div style="text-align:center; color:#aaa; margin-bottom:10px;">{{ __('Or login with') }}</div>
                         <div class="d-flex justify-content-center gap-2">
-                            <a href="{{ url('auth/redirect/google') }}" class="btn btn-light border" style="min-width:44px;">
+                            <a href="{{ route('google.login') }}" class="btn btn-light border" style="min-width:44px;">
                                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" style="height:24px; width:24px;">
                             </a>
-                            <a href="{{ url('auth/redirect/facebook') }}" class="btn btn-light border" style="min-width:44px;">
+                            <a href="#" class="btn btn-light border disabled" style="min-width:44px; opacity:0.5; cursor:not-allowed;" tabindex="-1">
                                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" style="height:24px; width:24px;">
                             </a>
-                            <a href="{{ url('auth/redirect/x') }}" class="btn btn-light border" style="min-width:44px;">
+                            <a href="#" class="btn btn-light border disabled" style="min-width:44px; opacity:0.5; cursor:not-allowed;" tabindex="-1">
                                 <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px; width:24px;">
                             </a>
                         </div>
