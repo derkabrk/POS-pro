@@ -320,3 +320,99 @@
         </ul>
     </div>
 </nav>
+
+<style>
+/* Sidebar container */
+.side-bar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: linear-gradient(to bottom right, #1e2a38, #273a52);
+    color: #fff;
+    overflow-y: auto;
+    z-index: 1050;
+    transition: transform 0.4s ease, background 0.3s ease;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+}
+
+.side-bar-logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.side-bar-logo img {
+    height: 40px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.close-btn:hover {
+    opacity: 1;
+    color: #f26522;
+}
+
+.side-bar-manu ul {
+    padding: 16px;
+    margin: 0;
+    list-style: none;
+}
+
+.side-bar-manu ul li {
+    margin-bottom: 8px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.side-bar-manu ul li:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    transform: translateX(4px);
+}
+
+.side-bar-manu ul li.active {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.side-bar-manu ul li a {
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.side-bar-manu ul li a:hover {
+    color: #fff;
+}
+
+.side-bar-manu ul li.active a {
+    color: #fff;
+    font-weight: 600;
+}
+
+.side-bar-manu ul li a .sidebar-icon svg {
+    margin-right: 10px;
+    transition: fill 0.3s ease;
+    fill: currentColor;
+}
+</style>
+
+<script>
+document.querySelector('.close-btn')?.addEventListener('click', () => {
+    document.querySelector('.side-bar').style.transform = 'translateX(-100%)';
+});
+</script>
