@@ -11,6 +11,7 @@
     margin-top: -1px;
 }
 body {
+     background: #0f172a;
     font-family: 'Saira', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
 }
 .text-custom-primary,

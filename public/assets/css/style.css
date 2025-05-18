@@ -49,25 +49,28 @@ body {
     letter-spacing: 0px;
     word-spacing: 0px;
     word-wrap: break-word;
-   
-    background: url('../assets/bg-home.jpg') no-repeat center center fixed !important;
-    background-size: cover !important;
-    overflow: hidden;
-    min-height: 100vh;
-    position: relative;
-}
-body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(120deg, rgba(20,30,50,0.92) 60%, rgba(30,36,60,0.96) 100%);
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.98;
+    background: #f9f9f9;
 }
 
+    body {
+            background: url('{{ asset('assets/bg-home.jpg') }}') no-repeat center center fixed !important;
+            background-size: cover !important;
+            overflow: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(20,30,50,0.92) 60%, rgba(30,36,60,0.96) 100%);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.98;
+        }
+
 #main-wrapper {
-    background: #fff;
+    background: #0f172a;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -677,7 +680,7 @@ svg {
 .side-bar-manu li {
     position: relative;
     font-size: 11px !important;
-    margin: 5px -7;
+    margin: 5px 0;
 }
 
 .side-bar-manu li a {
@@ -7265,28 +7268,4 @@ tr.position-relative td {
     top: 10px;
     right: 10px;
     position: absolute;
-}
-
-/* Social login hover animation */
-.social-login a img {
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.social-login a:hover img {
-    transform: scale(1.18) rotate(-8deg);
-    box-shadow: 0 4px 16px #153e9055;
-}
-
-/* Login button hover animation */
-.btn.login-btn.submit-btn {
-    transition: background 0.3s, box-shadow 0.3s;
-    box-shadow: 0 2px 8px #153e9033;
-}
-.btn.login-btn.submit-btn:hover {
-    background: #1d366f;
-    box-shadow: 0 4px 16px #153e9055;
-}
-.card {
-    background-color: transparent !important;
-    border: 1px solid #000 !important;
-    box-shadow: none !important;
 }
