@@ -1,8 +1,12 @@
-<header id="page-topbar" class="sticky-top">
+<header class="main-header-section sticky-top bg-white shadow-sm" id="page-topbar" style="z-index: 1030;">
     <div class="layout-width">
         <div class="navbar-header">
             <div class="d-flex">
                 <!-- Left -->
+                <button class="btn btn-outline-secondary border-0 sidebar-opner" style="font-size: 1.4rem;">
+                    <i class="fal fa-bars"></i>
+                </button>
+
                 <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" id="topnav-hamburger-icon">
                     <span class="hamburger-icon">
                         <span></span>
@@ -10,104 +14,95 @@
                         <span></span>
                     </span>
                 </button>
-                <a href="{{ route('home') }}" target="_blank" class="btn btn-sm px-3 header-item">
-                    <i class="fas fa-globe fs-16"></i> {{ __('View Website') }}
+                <a href="{{ route('home') }}" target="_blank" class="text-decoration-none text-primary fw-semibold d-flex align-items-center gap-2">
+                    <i class="fas fa-globe"></i> {{ __('View Website') }}
                 </a>
             </div>
 
             <!-- Right -->
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center gap-4">
                 <!-- Language Switch -->
-                <div class="dropdown ms-1 topbar-head-dropdown header-item">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" class="rounded" alt="Header Language" height="20">
+                <div class="dropdown">
+                    <button class="btn btn-light d-flex align-items-center gap-2 px-3 py-1 rounded-pill border" type="button" data-bs-toggle="dropdown">
+                        <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" style="width: 20px;">
+                        {{ languages()[app()->getLocale()]['name'] }}
+                        <i class="fas fa-chevron-down small"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end">
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                         @foreach (languages() as $key => $language)
-                            <a href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}" class="dropdown-item notify-item language" data-lang="{{ $key }}">
-                                <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="user-image" class="me-2 rounded" height="18">
-                                <span class="align-middle">{{ $language['name'] }}</span>
-                                @if (app()->getLocale() == $key)
-                                    <i class="fas fa-check text-success ms-auto"></i>
-                                @endif
-                            </a>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2" href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}">
+                                    <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" style="width: 20px;">
+                                    {{ $language['name'] }}
+                                    @if (app()->getLocale() == $key)
+                                        <i class="fas fa-check text-success ms-auto"></i>
+                                    @endif
+                                </a>
+                            </li>
                         @endforeach
-                    </div>
+                    </ul>
                 </div>
 
                 <!-- Notifications -->
                 @if(auth()->user()->role == 'superadmin')
-                <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
-                        <i class="bx bx-bell fs-22"></i>
+                <div class="dropdown">
+                    <a class="position-relative text-decoration-none" href="#" data-bs-toggle="dropdown">
+                        <i class="far fa-bell fs-5 text-dark"></i>
                         @if(auth()->user()->unreadNotifications->count())
-                        <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{ auth()->user()->unreadNotifications->count() }}<span class="visually-hidden">unread messages</span></span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill small">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                        </span>
                         @endif
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
-                        <div class="dropdown-head bg-primary bg-pattern rounded-top">
-                            <div class="p-3">
-                                <div class="row align-items-center">
-                                    <div class="col">
-                                        <h6 class="m-0 fs-16 fw-semibold text-white">{{ __('Notifications') }}</h6>
-                                    </div>
-                                    <div class="col-auto dropdown-tabs">
-                                        <a href="{{ route('admin.notifications.mtReadAll') }}" class="badge bg-light-subtle text-body fs-13">{{ __('Mark all read') }}</a>
-                                    </div>
-                                </div>
-                            </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end p-0 shadow-lg border-0" style="min-width: 320px; max-height: 400px; overflow-y: auto; border-radius: 8px;">
+                        <div class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">{{ __('Notifications') }}</span>
+                            <a href="{{ route('admin.notifications.mtReadAll') }}" class="text-danger small">{{ __('Mark all read') }}</a>
                         </div>
-                        <div data-simplebar style="max-height: 300px;">
-                            <div class="tab-content position-relative">
-                                <div class="tab-pane fade show active py-2 ps-2">
-                                    @forelse (auth()->user()->unreadNotifications as $notification)
-                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
-                                        <div class="d-flex">
-                                            <div class="flex-grow-1">
-                                                <a href="{{ route('admin.notifications.mtView', $notification->id) }}" class="stretched-link">
-                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">{{ __($notification->data['message'] ?? '') }}</h6>
-                                                </a>
-                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                    <span><i class="mdi mdi-clock-outline"></i> {{ $notification->created_at->diffForHumans() }}</span>
-                                                </p>
-                                            </div>
-                                        </div>
+                        <ul class="list-unstyled mb-0">
+                            @forelse (auth()->user()->unreadNotifications as $notification)
+                            <li class="px-3 py-2 border-bottom hover-bg">
+                                <a href="{{ route('admin.notifications.mtView', $notification->id) }}" class="text-decoration-none d-block text-dark">
+                                    <div class="d-flex justify-content-between">
+                                        <span>{{ __($notification->data['message'] ?? '') }}</span>
+                                        <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
                                     </div>
-                                    @empty
-                                    <div class="text-center p-3">
-                                        <h5 class="m-0">{{ __('No new notifications') }}</h5>
-                                    </div>
-                                    @endforelse
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-2 border-top">
-                            <div class="text-center pt-1">
-                                <a href="{{ route('admin.notifications.index') }}" class="btn btn-primary btn-sm">{{ __('View all') }} <i class="ri-arrow-right-line align-middle"></i></a>
-                            </div>
+                                </a>
+                            </li>
+                            @empty
+                            <li class="px-3 py-3 text-muted text-center">{{ __('No new notifications') }}</li>
+                            @endforelse
+                        </ul>
+                        <div class="px-3 py-2 text-end border-top">
+                            <a href="{{ route('admin.notifications.index') }}" class="text-primary small">{{ __('View all') }}</a>
                         </div>
                     </div>
                 </div>
                 @endif
 
                 <!-- Profile -->
-                <div class="dropdown ms-sm-3 header-item topbar-user">
-                    <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="{{ asset(Auth::user()->image ?? 'assets/images/icons/default-user.png') }}" alt="User">
-                            <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-semibold user-name-text">{{Auth::user()->name}}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{ __('Admin') }}</span>
-                            </span>
-                        </span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <a href="{{ url('cache-clear') }}" class="dropdown-item"><i class="mdi mdi-reload text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('Clear cache') }}</span></a>
-                        <a href="{{ route('admin.profiles.index') }}" class="dropdown-item"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('My Profile') }}</span></a>
-                        <a href="javascript:void(0)" class="dropdown-item logoutButton"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('Logout') }}</span>
-                            <form action="{{ route('logout') }}" method="post" id="logoutForm">@csrf</form>
-                        </a>
-                    </div>
+                <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="d-flex align-items-center text-decoration-none">
+                        <img src="{{ asset(Auth::user()->image ?? 'assets/images/icons/default-user.png') }}" class="rounded-circle" style="width: 36px; height: 36px; object-fit: cover;" alt="User">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                        <li>
+                            <a href="{{ url('cache-clear') }}" class="dropdown-item">
+                                <i class="far fa-undo me-2 text-muted"></i> {{ __('Clear cache') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.profiles.index') }}" class="dropdown-item">
+                                <i class="fal fa-user me-2 text-muted"></i> {{ __('My Profile') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="dropdown-item logoutButton">
+                                <i class="far fa-sign-out me-2 text-muted"></i> {{ __('Logout') }}
+                                <form action="{{ route('logout') }}" method="post" id="logoutForm">@csrf</form>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
