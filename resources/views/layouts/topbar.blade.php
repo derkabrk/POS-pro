@@ -138,80 +138,95 @@
 
                 <div class="dropdown ms-1 topbar-head-dropdown header-item">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        @switch(Session::get('lang'))
-                        @case('ru')
-                        <img src="{{ URL::asset('build/images/flags/russia.svg') }}" class="rounded" alt="Header Language" height="20">
-                        @break
-                        @case('it')
-                        <img src="{{ URL::asset('build/images/flags/italy.svg') }}" class="rounded" alt="Header Language" height="20">
-                        @break
-                        @case('sp')
-                        <img src="{{ URL::asset('build/images/flags/spain.svg') }}" class="rounded" alt="Header Language" height="20">
-                        @break
-                        @case('ch')
-                        <img src="{{ URL::asset('build/images/flags/china.svg') }}" class="rounded" alt="Header Language" height="20">
-                        @break
-                        @case('fr')
-                        <img src="{{ URL::asset('build/images/flags/french.svg') }}" class="rounded" alt="Header Language" height="20">
-                        @break
-                        @case('gr')
-                        <img src="{{ URL::asset('build/images/flags/germany.svg') }}" class="rounded" alt="Header Language" height="20">
-                        @break
-                        @case('ae')
-                        <img src="{{ URL::asset('build/images/flags/ae.svg') }}" class="rounded" alt="Header Language" height="20">
-                        @break
-                        @default
-                        <img src="{{ URL::asset('build/images/flags/us.svg') }}" class="rounded" alt="Header Language" height="20">
-                        @endswitch
+                        @if(function_exists('languages') && app()->getLocale())
+                            <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" class="rounded" alt="Header Language" height="20">
+                        @else
+                            @switch(Session::get('lang'))
+                            @case('ru')
+                            <img src="{{ URL::asset('build/images/flags/russia.svg') }}" class="rounded" alt="Header Language" height="20">
+                            @break
+                            @case('it')
+                            <img src="{{ URL::asset('build/images/flags/italy.svg') }}" class="rounded" alt="Header Language" height="20">
+                            @break
+                            @case('sp')
+                            <img src="{{ URL::asset('build/images/flags/spain.svg') }}" class="rounded" alt="Header Language" height="20">
+                            @break
+                            @case('ch')
+                            <img src="{{ URL::asset('build/images/flags/china.svg') }}" class="rounded" alt="Header Language" height="20">
+                            @break
+                            @case('fr')
+                            <img src="{{ URL::asset('build/images/flags/french.svg') }}" class="rounded" alt="Header Language" height="20">
+                            @break
+                            @case('gr')
+                            <img src="{{ URL::asset('build/images/flags/germany.svg') }}" class="rounded" alt="Header Language" height="20">
+                            @break
+                            @case('ae')
+                            <img src="{{ URL::asset('build/images/flags/ae.svg') }}" class="rounded" alt="Header Language" height="20">
+                            @break
+                            @default
+                            <img src="{{ URL::asset('build/images/flags/us.svg') }}" class="rounded" alt="Header Language" height="20">
+                            @endswitch
+                        @endif
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
+                        @if(function_exists('languages'))
+                            @foreach (languages() as $key => $language)
+                                <a href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}" class="dropdown-item notify-item language" data-lang="{{ $key }}">
+                                    <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="user-image" class="me-2 rounded" height="20">
+                                    <span class="align-middle">{{ $language['name'] }}</span>
+                                    @if (app()->getLocale() == $key)
+                                        <i class="fas fa-check text-success ms-auto"></i>
+                                    @endif
+                                </a>
+                            @endforeach
+                        @else
+                            <!-- item-->
+                            <a href="{{ url('index/en') }}" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
+                                <img src="{{ URL::asset('build/images/flags/us.svg') }}" alt="user-image" class="me-2 rounded" height="20">
+                                <span class="align-middle">English</span>
+                            </a>
 
-                        <!-- item-->
-                        <a href="{{ url('index/en') }}" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
-                            <img src="{{ URL::asset('build/images/flags/us.svg') }}" alt="user-image" class="me-2 rounded" height="20">
-                            <span class="align-middle">English</span>
-                        </a>
+                            <!-- item-->
+                            <a href="{{ url('index/sp') }}" class="dropdown-item notify-item language" data-lang="sp" title="Spanish">
+                                <img src="{{ URL::asset('build/images/flags/spain.svg') }}" alt="user-image" class="me-2 rounded" height="20">
+                                <span class="align-middle">Española</span>
+                            </a>
 
-                        <!-- item-->
-                        <a href="{{ url('index/sp') }}" class="dropdown-item notify-item language" data-lang="sp" title="Spanish">
-                            <img src="{{ URL::asset('build/images/flags/spain.svg') }}" alt="user-image" class="me-2 rounded" height="20">
-                            <span class="align-middle">Española</span>
-                        </a>
+                            <!-- item-->
+                            <a href="{{ url('index/gr') }}" class="dropdown-item notify-item language" data-lang="gr" title="German">
+                                <img src="{{ URL::asset('build/images/flags/germany.svg') }}" alt="user-image" class="me-2 rounded" height="20"> <span class="align-middle">Deutsche</span>
+                            </a>
 
-                        <!-- item-->
-                        <a href="{{ url('index/gr') }}" class="dropdown-item notify-item language" data-lang="gr" title="German">
-                            <img src="{{ URL::asset('build/images/flags/germany.svg') }}" alt="user-image" class="me-2 rounded" height="20"> <span class="align-middle">Deutsche</span>
-                        </a>
+                            <!-- item-->
+                            <a href="{{ url('index/it') }}" class="dropdown-item notify-item language" data-lang="it" title="Italian">
+                                <img src="{{ URL::asset('build/images/flags/italy.svg') }}" alt="user-image" class="me-2 rounded" height="20">
+                                <span class="align-middle">Italiana</span>
+                            </a>
 
-                        <!-- item-->
-                        <a href="{{ url('index/it') }}" class="dropdown-item notify-item language" data-lang="it" title="Italian">
-                            <img src="{{ URL::asset('build/images/flags/italy.svg') }}" alt="user-image" class="me-2 rounded" height="20">
-                            <span class="align-middle">Italiana</span>
-                        </a>
+                            <!-- item-->
+                            <a href="{{ url('index/ru') }}" class="dropdown-item notify-item language" data-lang="ru" title="Russian">
+                                <img src="{{ URL::asset('build/images/flags/russia.svg') }}" alt="user-image" class="me-2 rounded" height="20">
+                                <span class="align-middle">русский</span>
+                            </a>
 
-                        <!-- item-->
-                        <a href="{{ url('index/ru') }}" class="dropdown-item notify-item language" data-lang="ru" title="Russian">
-                            <img src="{{ URL::asset('build/images/flags/russia.svg') }}" alt="user-image" class="me-2 rounded" height="20">
-                            <span class="align-middle">русский</span>
-                        </a>
+                            <!-- item-->
+                            <a href="{{ url('index/ch') }}" class="dropdown-item notify-item language" data-lang="ch" title="Chinese">
+                                <img src="{{ URL::asset('build/images/flags/china.svg') }}" alt="user-image" class="me-2 rounded" height="20">
+                                <span class="align-middle">中国人</span>
+                            </a>
 
-                        <!-- item-->
-                        <a href="{{ url('index/ch') }}" class="dropdown-item notify-item language" data-lang="ch" title="Chinese">
-                            <img src="{{ URL::asset('build/images/flags/china.svg') }}" alt="user-image" class="me-2 rounded" height="20">
-                            <span class="align-middle">中国人</span>
-                        </a>
+                            <!-- item-->
+                            <a href="{{ url('index/fr') }}" class="dropdown-item notify-item language" data-lang="fr" title="French">
+                                <img src="{{ URL::asset('build/images/flags/french.svg') }}" alt="user-image" class="me-2 rounded" height="20">
+                                <span class="align-middle">français</span>
+                            </a>
 
-                        <!-- item-->
-                        <a href="{{ url('index/fr') }}" class="dropdown-item notify-item language" data-lang="fr" title="French">
-                            <img src="{{ URL::asset('build/images/flags/french.svg') }}" alt="user-image" class="me-2 rounded" height="20">
-                            <span class="align-middle">français</span>
-                        </a>
-
-                        <!-- item-->
-                        <a href="{{ url('index/ae') }}" class="dropdown-item notify-item language" data-lang="ar" title="Arabic">
-                            <img src="{{URL::asset('build/images/flags/ae.svg')}}" alt="user-image" class="me-2 rounded" height="18">
-                            <span class="align-middle">Arabic</span>
-                        </a>
+                            <!-- item-->
+                            <a href="{{ url('index/ae') }}" class="dropdown-item notify-item language" data-lang="ar" title="Arabic">
+                                <img src="{{URL::asset('build/images/flags/ae.svg')}}" alt="user-image" class="me-2 rounded" height="18">
+                                <span class="align-middle">Arabic</span>
+                            </a>
+                        @endif
                     </div>
                 </div>
 
@@ -440,7 +455,11 @@
                 <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                         <i class='bx bx-bell fs-22'></i>
-                        <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">3<span class="visually-hidden">unread messages</span></span>
+                        @if(auth()->check() && auth()->user()->role == 'superadmin' && method_exists(auth()->user(), 'unreadNotifications') && auth()->user()->unreadNotifications->count() > 0)
+                            <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{ auth()->user()->unreadNotifications->count() }}<span class="visually-hidden">unread messages</span></span>
+                        @else
+                            <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">3<span class="visually-hidden">unread messages</span></span>
+                        @endif
                     </button>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
 
@@ -448,10 +467,15 @@
                             <div class="p-3">
                                 <div class="row align-items-center">
                                     <div class="col">
-                                        <h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
+                                        <h6 class="m-0 fs-16 fw-semibold text-white"> {{ __('Notifications') }} </h6>
                                     </div>
                                     <div class="col-auto dropdown-tabs">
-                                        <span class="badge bg-light-subtle text-body fs-13"> 4 New</span>
+                                        @if(auth()->check() && auth()->user()->role == 'superadmin' && method_exists(auth()->user(), 'unreadNotifications'))
+                                            <span class="badge bg-light-subtle text-body fs-13"> {{ auth()->user()->unreadNotifications->count() }} New</span>
+                                            <a href="{{ route('admin.notifications.mtReadAll') }}" class="text-danger small">{{ __('Mark all read') }}</a>
+                                        @else
+                                            <span class="badge bg-light-subtle text-body fs-13"> 4 New</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -475,117 +499,147 @@
                                     </li>
                                 </ul>
                             </div>
-
                         </div>
 
                         <div class="tab-content position-relative" id="notificationItemsTabContent">
                             <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
                                 <div data-simplebar style="max-height: 300px;" class="pe-2">
-                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
-                                        <div class="d-flex">
-                                            <div class="avatar-xs me-3 flex-shrink-0">
-                                                <span class="avatar-title bg-info-subtle text-info rounded-circle fs-16">
-                                                    <i class="bx bx-badge-check"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <a href="#!" class="stretched-link">
-                                                    <h6 class="mt-0 mb-2 lh-base">Your <b>Elite</b> author Graphic
-                                                        Optimization <span class="text-secondary">reward</span> is
-                                                        ready!
-                                                    </h6>
-                                                </a>
-                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                    <span><i class="mdi mdi-clock-outline"></i> Just 30 sec ago</span>
-                                                </p>
-                                            </div>
-                                            <div class="px-2 fs-15">
-                                                <div class="form-check notification-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
-                                                    <label class="form-check-label" for="all-notification-check01"></label>
+                                    @if(auth()->check() && auth()->user()->role == 'superadmin' && method_exists(auth()->user(), 'unreadNotifications') && auth()->user()->unreadNotifications->count() > 0)
+                                        @foreach(auth()->user()->unreadNotifications as $notification)
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <div class="avatar-xs me-3 flex-shrink-0">
+                                                    <span class="avatar-title bg-info-subtle text-info rounded-circle fs-16">
+                                                        <i class="bx bx-badge-check"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <a href="{{ route('admin.notifications.mtView', $notification->id) }}" class="stretched-link">
+                                                        <h6 class="mt-0 mb-2 lh-base">{{ __($notification->data['message'] ?? '') }}</h6>
+                                                    </a>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i> {{ $notification->created_at->diffForHumans() }}</span>
+                                                    </p>
+                                                </div>
+                                                <div class="px-2 fs-15">
+                                                    <div class="form-check notification-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check{{ $loop->index }}">
+                                                        <label class="form-check-label" for="all-notification-check{{ $loop->index }}"></label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        @endforeach
+                                    @else
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <div class="avatar-xs me-3 flex-shrink-0">
+                                                    <span class="avatar-title bg-info-subtle text-info rounded-circle fs-16">
+                                                        <i class="bx bx-badge-check"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <a href="#!" class="stretched-link">
+                                                        <h6 class="mt-0 mb-2 lh-base">Your <b>Elite</b> author Graphic
+                                                            Optimization <span class="text-secondary">reward</span> is
+                                                            ready!
+                                                        </h6>
+                                                    </a>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i> Just 30 sec ago</span>
+                                                    </p>
+                                                </div>
+                                                <div class="px-2 fs-15">
+                                                    <div class="form-check notification-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
+                                                        <label class="form-check-label" for="all-notification-check01"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
-                                        <div class="d-flex">
-                                            <img src="{{URL::asset('build/images/users/avatar-2.jpg')}}" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
-                                            <div class="flex-grow-1">
-                                                <a href="#!" class="stretched-link">
-                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
-                                                </a>
-                                                <div class="fs-13 text-muted">
-                                                    <p class="mb-1">Answered to your comment on the cash flow forecast's
-                                                        graph 🔔.</p>
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <img src="{{URL::asset('build/images/users/avatar-2.jpg')}}" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                                <div class="flex-grow-1">
+                                                    <a href="#!" class="stretched-link">
+                                                        <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
+                                                    </a>
+                                                    <div class="fs-13 text-muted">
+                                                        <p class="mb-1">Answered to your comment on the cash flow forecast's
+                                                            graph 🔔.</p>
+                                                    </div>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i> 48 min ago</span>
+                                                    </p>
                                                 </div>
-                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                    <span><i class="mdi mdi-clock-outline"></i> 48 min ago</span>
-                                                </p>
-                                            </div>
-                                            <div class="px-2 fs-15">
-                                                <div class="form-check notification-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="all-notification-check02">
-                                                    <label class="form-check-label" for="all-notification-check02"></label>
+                                                <div class="px-2 fs-15">
+                                                    <div class="form-check notification-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check02">
+                                                        <label class="form-check-label" for="all-notification-check02"></label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
-                                        <div class="d-flex">
-                                            <div class="avatar-xs me-3 flex-shrink-0">
-                                                <span class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
-                                                    <i class='bx bx-message-square-dots'></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <a href="#!" class="stretched-link">
-                                                    <h6 class="mt-0 mb-2 fs-13 lh-base">You have received <b class="text-success">20</b> new messages in the conversation
-                                                    </h6>
-                                                </a>
-                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                    <span><i class="mdi mdi-clock-outline"></i> 2 hrs ago</span>
-                                                </p>
-                                            </div>
-                                            <div class="px-2 fs-15">
-                                                <div class="form-check notification-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="all-notification-check03">
-                                                    <label class="form-check-label" for="all-notification-check03"></label>
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <div class="avatar-xs me-3 flex-shrink-0">
+                                                    <span class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
+                                                        <i class='bx bx-message-square-dots'></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <a href="#!" class="stretched-link">
+                                                        <h6 class="mt-0 mb-2 fs-13 lh-base">You have received <b class="text-success">20</b> new messages in the conversation
+                                                        </h6>
+                                                    </a>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i> 2 hrs ago</span>
+                                                    </p>
+                                                </div>
+                                                <div class="px-2 fs-15">
+                                                    <div class="form-check notification-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check03">
+                                                        <label class="form-check-label" for="all-notification-check03"></label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
-                                        <div class="d-flex">
-                                            <img src="{{URL::asset('build/images/users/avatar-8.jpg')}}" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
-                                            <div class="flex-grow-1">
-                                                <a href="#!" class="stretched-link">
-                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
-                                                </a>
-                                                <div class="fs-13 text-muted">
-                                                    <p class="mb-1">We talked about a project on linkedin.</p>
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <img src="{{URL::asset('build/images/users/avatar-8.jpg')}}" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                                <div class="flex-grow-1">
+                                                    <a href="#!" class="stretched-link">
+                                                        <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
+                                                    </a>
+                                                    <div class="fs-13 text-muted">
+                                                        <p class="mb-1">We talked about a project on linkedin.</p>
+                                                    </div>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i> 4 hrs ago</span>
+                                                    </p>
                                                 </div>
-                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                    <span><i class="mdi mdi-clock-outline"></i> 4 hrs ago</span>
-                                                </p>
-                                            </div>
-                                            <div class="px-2 fs-15">
-                                                <div class="form-check notification-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="all-notification-check04">
-                                                    <label class="form-check-label" for="all-notification-check04"></label>
+                                                <div class="px-2 fs-15">
+                                                    <div class="form-check notification-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="all-notification-check04">
+                                                        <label class="form-check-label" for="all-notification-check04"></label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
 
                                     <div class="my-3 text-center view-all">
-                                        <button type="button" class="btn btn-soft-success waves-effect waves-light">View
-                                            All Notifications <i class="ri-arrow-right-line align-middle"></i></button>
+                                        @if(auth()->check() && auth()->user()->role == 'superadmin' && method_exists(auth()->user(), 'unreadNotifications'))
+                                            <a href="{{ route('admin.notifications.index') }}" class="btn btn-soft-success waves-effect waves-light">{{ __('View All') }} <i class="ri-arrow-right-line align-middle"></i></a>
+                                        @else
+                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">View
+                                                All Notifications <i class="ri-arrow-right-line align-middle"></i></button>
+                                        @endif
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="tab-pane fade py-2 ps-2" id="messages-tab" role="tabpanel" aria-labelledby="messages-tab">
@@ -704,22 +758,42 @@
                 <div class="dropdown ms-sm-3 header-item topbar-user">
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif" alt="Header Avatar">
+                            @if(auth()->check() && method_exists(Auth::user(), 'image') && Auth::user()->image)
+                                <img class="rounded-circle header-profile-user" src="{{ asset(Auth::user()->image) }}" alt="Header Avatar">
+                            @elseif(Auth::user()->avatar != '')
+                                <img class="rounded-circle header-profile-user" src="{{ URL::asset('images/' . Auth::user()->avatar) }}" alt="Header Avatar">
+                            @else
+                                <img class="rounded-circle header-profile-user" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="Header Avatar">
+                            @endif
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-semibold user-name-text">{{Auth::user()->name}}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 text-muted text-muted user-name-sub-text">Founder</span>
+                                @if(method_exists(Auth::user(), 'role'))
+                                    <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{ ucfirst(Auth::user()->role) }}</span>
+                                @else
+                                    <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Founder</span>
+                                @endif
                             </span>
                         </span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <h6 class="dropdown-header">Welcome Anna!</h6>
-                        <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                        <h6 class="dropdown-header">Welcome {{Auth::user()->name}}!</h6>
+                        
+                        @if(auth()->check() && method_exists(Auth::user(), 'role'))
+                            <a class="dropdown-item" href="{{ route('admin.profiles.index') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('My Profile') }}</span></a>
+                        @else
+                            <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                        @endif
+                        
                         <a class="dropdown-item" href="apps-chat"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
                         <a class="dropdown-item" href="apps-tasks-kanban"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
                         <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
+                        
+                        @if(auth()->check() && Route::has('cache-clear'))
+                            <a class="dropdown-item" href="{{ url('cache-clear') }}"><i class="far fa-undo text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('Clear cache') }}</span></a>
+                        @endif
+                        
                         <a class="dropdown-item" href="pages-profile-settings"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
                         <a class="dropdown-item" href="auth-lockscreen-basic"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
                         <a class="dropdown-item " href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span key="t-logout">@lang('translation.logout')</span></a>
@@ -753,7 +827,6 @@
                     <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete It!</button>
                 </div>
             </div>
-
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
