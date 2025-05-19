@@ -10,16 +10,14 @@
 <!-- Fontawesome -->
 <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome/css/fontawesome-all.min.css') }}">
 {{-- jquery-confirm --}}
-<link rel="stylesheet" href="{{ as set('assets/plugins/jquery-confirm/jquery-confirm.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/plugins/jquery-confirm/jquery-confirm.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/summernote-lite.css') }}">
 <!-- Lily -->
 <link rel="stylesheet" href="{{ asset('assets/css/lity.css') }}">
 <!-- Style -->
-
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
-<link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
 
 <link rel="stylesheet" href="{{ asset('assets/css/app2.min.css') }}">
 
