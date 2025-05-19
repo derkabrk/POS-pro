@@ -2,18 +2,15 @@
 {{-- Google Fonts: Saira --}}
 <link href="https://fonts.googleapis.com/css?family=Saira:400,700&display=swap" rel="stylesheet">
 <!-- Bootstrap -->
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap2.min.css') }}">
+<script src="{{ asset('assets/js/layout.js') }}"></script>
 
- 
 
 <!-- Fontawesome -->
 <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome/css/fontawesome-all.min.css') }}">
 {{-- jquery-confirm --}}
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
 <link rel="stylesheet" href="{{ asset('assets/plugins/jquery-confirm/jquery-confirm.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/summernote-lite.css') }}">
 <!-- Lily -->
@@ -23,6 +20,16 @@
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
+
+<link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
+
+<link rel="stylesheet" href="{{ asset('assets/css/app2.min.css') }}">
+
+<link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 @stack('css')
 
 @if (app()->getLocale() == 'ar')
