@@ -3,7 +3,7 @@
 <link href="https://fonts.googleapis.com/css?family=Saira:400,700&display=swap" rel="stylesheet">
 <!-- Bootstrap -->
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min2.css') }}">
-
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 
 <script src="{{ asset('assets/js/layout.js') }}"></script>
 
@@ -16,7 +16,8 @@
 <!-- Lily -->
 <link rel="stylesheet" href="{{ asset('assets/css/lity.css') }}">
 <!-- Style -->
-
+<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
