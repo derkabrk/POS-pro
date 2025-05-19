@@ -5,6 +5,7 @@
 
 @endsection
 @section('content')
+@component('admin.components.breadcrumb')
 @slot('li_1') Ecommerce @endslot
 @slot('title') Orders @endslot
 @endcomponent

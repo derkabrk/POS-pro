@@ -1,353 +1,138 @@
 @extends('layouts.auth.app')
-
 @section('title')
-    {{ __('Login') }}
+    {{ config('app.name') }} | {{ __('Sign In') }}
 @endsection
-
 @section('main_content')
-<div style="display: flex; height: 100vh; font-family: 'Segoe UI', sans-serif; background: url('{{ asset('assets/bg-home.jpg') }}') no-repeat center center fixed; background-size: cover; overflow: hidden; position: relative;">
-    <div style="position: absolute; inset: 0; background: rgba(30, 36, 50, 0.72); z-index: 0;"></div>
-    <style>
-        body {
-            background: url('{{ asset('assets/bg-home.jpg') }}') no-repeat center center fixed !important;
-            background-size: cover !important;
-            overflow: hidden;
-            min-height: 100vh;
-            position: relative;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(120deg, rgba(20,30,50,0.92) 60%, rgba(30,36,60,0.96) 100%);
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.98;
-        }
-        /* Fade-in for main content */
-        .fade-in { animation: fadeIn 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(40px); }
-            100% { opacity: 1; transform: none; }
-        }
-        /* Slide-in for onboarding */
-        .slide-in-left { animation: slideInLeft 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
-        @keyframes slideInLeft {
-            0% { opacity: 0; transform: translateX(-60px); }
-            100% { opacity: 1; transform: none; }
-        }
-        /* Slide-in for login form */
-        .slide-in-right { animation: slideInRight 1.2s cubic-bezier(.39,.575,.565,1.000) both; }
-        @keyframes slideInRight {
-            0% { opacity: 0; transform: translateX(60px); }
-            100% { opacity: 1; transform: none; }
-        }
-        /* Onboarding image zoom */
-        .onboarding-slide img { transition: transform 1.2s cubic-bezier(.39,.575,.565,1.000); }
-        .onboarding-slide.active img { transform: scale(1.04) rotate(-1deg); }
-        .onboarding-dot { transition: background 0.3s; }
-        /* Button hover */
-        .login-btn.submit-btn { transition: background 0.3s, box-shadow 0.3s; box-shadow: 0 2px 8px #153e9033; }
-        .login-btn.submit-btn:hover { background: #1d366f; box-shadow: 0 4px 16px #153e9055; }
-        /* Social icon hover */
-        .social-login a img { transition: transform 0.3s; }
-        .social-login a:hover img { transform: scale(1.18) rotate(-8deg); }
-    </style>
-    <div style="display: flex; flex: 1; position: relative; z-index: 1;" class="fade-in">
-        <!-- Onboarding Left Side -->
-        <div style="flex: 1; background: transparent; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; border-radius: 20px 0 0 20px; position: relative; font-family: 'Segoe UI', sans-serif;" class="slide-in-left">
-            <!-- Logo -->
-            <div>
-                <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="Logo" style="height: 40px;">
-            </div>
-            <!-- Slides -->
-            <div id="onboarding-wrapper" style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
-                <div class="onboarding-slide active" style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 1">
-                    <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
-                        {{ __('Cách tốt nhất để dự đoán tương lai là tạo ra nó.') }}
-                    </blockquote>
-                    <div style="font-weight: bold; color: #ccc;">Peter Drucker</div>
+
+<!-- auth-page wrapper -->
+<div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
+    <div class="bg-overlay"></div>
+    <!-- auth-page content -->
+    <div class="auth-page-content overflow-hidden pt-lg-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card overflow-hidden card-bg-fill border-0 card-border-effect-none">
+                        <div class="row g-0">
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <div class="p-lg-5 p-4 auth-one-bg h-100">
+                                    <div class="bg-overlay"></div>
+                                    <div class="position-relative h-100 d-flex flex-column">
+                                        <div class="mb-4">
+                                            <a href="{{ url('/') }}" class="d-block">
+                                                <img src="{{ asset(get_option('general')['login_page_logo'] ?? 'assets/images/logo/logo.png') }}" alt="{{ config('app.name') }}" height="32">
+                                            </a>
+                                        </div>
+                                        <div class="mt-auto">
+                                            <div class="mb-3">
+                                                <i class="ri-double-quotes-l display-4 text-success"></i>
+                                            </div>
+                                            <div id="qoutescarouselIndicators" class="carousel slide" data-bs-ride="carousel">
+                                                <div class="carousel-indicators">
+                                                    <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                                    <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                                    <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                                </div>
+                                                <div class="carousel-inner text-center text-white pb-5">
+                                                    <div class="carousel-item active">
+                                                        <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                    </div>
+                                                    <div class="carousel-item">
+                                                        <p class="fs-15 fst-italic">" The theme is really great with an amazing customer support."</p>
+                                                    </div>
+                                                    <div class="carousel-item">
+                                                        <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end carousel -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end col -->
+
+                            <div class="col-lg-6">
+                                <div class="p-lg-5 p-4">
+                                    <div>
+                                        <h5 class="text-primary">{{ __('Welcome Back!') }}</h5>
+                                        <p class="text-muted">{{ __('Sign in to continue to') }} {{ config('app.name') }}.</p>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <form method="POST" action="{{ route('login') }}" class="ajaxform_instant_reload">
+                                            @csrf
+
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" required autofocus>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <div class="float-end">
+                                                    <a href="{{ route('password.request') }}" class="text-muted">Forgot password?</a>
+                                                </div>
+                                                <label class="form-label" for="password-input">Password</label>
+                                                <div class="position-relative auth-pass-inputgroup mb-3">
+                                                    <input type="password" name="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password-input" required>
+                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="remember" id="auth-remember-check">
+                                                <label class="form-check-label" for="auth-remember-check">Remember me</label>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <button class="btn btn-primary w-100" type="submit">Sign In</button>
+                                            </div>
+
+                                            <div class="mt-4 text-center">
+                                                <div class="signin-other-title">
+                                                    <h5 class="fs-13 mb-4 title">Sign In with</h5>
+                                                </div>
+                                                <div>
+                                                    <a href="{{ route('facebook.login') }}" class="btn btn-primary btn-icon waves-effect waves-light" title="Sign in with Facebook">
+                                                        <i class="ri-facebook-fill fs-16"></i>
+                                                    </a>
+                                                    <a href="{{ route('google.login') }}" class="btn btn-danger btn-icon waves-effect waves-light" title="Sign in with Google">
+                                                        <i class="ri-google-fill fs-16"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></button>
+                                                    <button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="mt-5 text-center">
+                                        <p class="mb-0">Don't have an account? <a href="#" class="fw-semibold text-primary text-decoration-underline">Signup</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                    </div>
+                    <!-- end card -->
                 </div>
-                <div class="onboarding-slide" style="text-align: center; display: none;">
-                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 2">
-                    <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
-                        {{ __('Thành công không phải là điểm đến, mà là hành trình.') }}
-                    </blockquote>
-                    <div style="font-weight: bold; color: #ccc;">Zig Ziglar</div>
-                </div>
-                <div class="onboarding-slide" style="text-align: center; display: none;">
-                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=600&h=400" style="max-height: 340px; width: 100%; border-radius: 18px; box-shadow: 0 2px 12px #0001; object-fit: cover;" alt="Step 3">
-                    <blockquote style="font-style: italic; color: #fff; margin-top: 20px;">
-                        {{ __('Khách hàng là trung tâm của mọi quyết định.') }}
-                    </blockquote>
-                    <div style="font-weight: bold; color: #ccc;">Jeff Bezos</div>
-                </div>
+                <!-- end col -->
             </div>
-            <!-- Navigation Dots -->
-            <div style="text-align: center; margin-top: 10px;">
-                <span class="onboarding-dot active" style="height: 6px; width: 6px; margin: 3px; background: #555; border-radius: 50%; display: inline-block;"></span>
-                <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 3px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
-                <span class="onboarding-dot" style="height: 6px; width: 6px; margin: 3px; background: #ccc; border-radius: 50%; display: inline-block;"></span>
-            </div>
-            <!-- Footer -->
-            <div style="text-align: center; font-size: 12px; color: #777;">
-    © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
-</div>
+            <!-- end row -->
         </div>
-        <!-- Login Form Right Side -->
-        <div style="flex: 1; background: transparent; padding: 50px 40px; display: flex; align-items: center; justify-content: center; border-radius: 0 20px 20px 0; position: relative; font-family: 'Segoe UI', sans-serif;" class="slide-in-right">
-            <div style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.92); border-radius: 16px; box-shadow: 0 2px 12px #0001; padding: 32px 28px; font-family: 'Segoe UI', sans-serif;">
-                <div style="position: absolute; top: 20px; right: 30px;">
-                </div>
-                <h3 style="font-weight: bold; color: #153e90;">{{ __('Welcome to') }} <span>{{ __(env('APP_NAME')) }}</span></h3>
-                <p style="margin-bottom: 25px;">{{ __('Welcome back, Please login in to your account') }}</p>
-                <form method="POST" action="{{ route('login') }}" class="ajaxform_instant_reload">
-                    @csrf
-                    <div class="input-group mb-3">
-                        <span class="input-group-text"><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
-                        <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}" style="border: 1px solid #e5e5e5; background: #f9f9f9; border-radius: 6px; padding: 10px 12px;">
-                    </div>
-                    <div class="input-group mb-3 position-relative">
-                        <span class="input-group-text"><img src="{{ asset('assets/images/icons/lock.png') }}" alt="img"></span>
-                        <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}" style="border: 1px solid #e5e5e5; background: #f9f9f9; border-radius: 6px; padding: 10px 12px;">
-                        <span class="hide-pass" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer;">
-                            <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img" class="hide-icon" style="display: block;">
-                            <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img" class="show-icon" style="display: none;">
-                        </span>
-                    </div>
-                    <div class="mt-lg-3 mb-0 forget-password">
-                        <label class="custom-control-label">
-                            <input type="checkbox" name="remember" class="custom-control-input">
-                            <span>{{ __('Remember me') }}</span>
-                        </label>
-                        <a href="{{ route('password.request') }}">{{ __('Forgot Password?') }}</a>
-                    </div>
-                    <button type="submit" class="btn login-btn submit-btn" style="background: #153e90; color: #fff; border-radius: 6px; border: none; padding: 10px 0; font-weight: 600; width: 100%; margin-top: 18px;">{{ __('Log In') }}</button>
-                    <div class="row d-flex flex-wrap mt-2 justify-content-between">
-                        <div class="col">
-                            <a href="{{ route('home') }}">{{ __('Back to Home') }}</a>
-                        </div>
-                        <div class="col text-end">
-                            <a class="text-primary" href="" data-bs-target="#registration-modal" data-bs-toggle="modal">{{ __('Create an account.') }}</a>
-                        </div>
-                    </div>
-                    <div class="social-login mt-4">
-                        <div style="text-align:center; color:#aaa; margin-bottom:10px;">{{ __('Or login with') }}</div>
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="{{ route('google.login') }}" class="btn btn-light border" style="min-width:44px;">
-                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" style="height:24px; width:24px;">
-                            </a>
-                            <a href="#" class="btn btn-light border disabled" style="min-width:44px; opacity:0.5; cursor:not-allowed;" tabindex="-1">
-                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" style="height:24px; width:24px;">
-                            </a>
-                            <a href="#" class="btn btn-light border disabled" style="min-width:44px; opacity:0.5; cursor:not-allowed;" tabindex="-1">
-                                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" style="height:24px; width:24px;">
-                            </a>
-                        </div>
-                    </div>
-                </form>
-                <script>
-                // Password show/hide toggle
-                const passInput = document.querySelector('.form-control.password');
-                const hidePass = document.querySelector('.hide-pass');
-                const hideIcon = hidePass.querySelector('.hide-icon');
-                const showIcon = hidePass.querySelector('.show-icon');
-                hidePass.addEventListener('click', function() {
-                    if (passInput.type === 'password') {
-                        passInput.type = 'text';
-                        hideIcon.style.display = 'none';
-                        showIcon.style.display = 'block';
-                    } else {
-                        passInput.type = 'password';
-                        hideIcon.style.display = 'block';
-                        showIcon.style.display = 'none';
-                    }
-                });
-                </script>
-            </div>
-        </div>
+        <!-- end container -->
     </div>
+    <!-- end auth page content -->
 </div>
+<!-- end auth-page-wrapper -->
+
+    <input type="hidden" data-model="Login" id="auth">
 @endsection
 
-@push('modal')
-@include('web.components.signup')
 
-<!-- Verify Modal Start -->
-<div class="modal fade" id="verifymodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content verify-content">
-            <div class="modal-header border-bottom-0">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body verify-modal-body text-center">
-                <h4 class="mb-0">{{ __('Email Verification') }}</h4>
-                <p class="des p-8-0 pb-3">{{ __('We sent an OTP to your email address') }} <br>
-                    <span id="dynamicEmail"></span>
-                </p>
-                <form action="{{ route('otp-submit') }}" method="post" class="verify_form">
-                    @csrf
-                    <div class="code-input pin-container">
-                        <input class="pin-input otp-input" id="pin-1" type="number" name="otp[]" maxlength="1">
-                        <input class="pin-input otp-input" id="pin-2" type="number" name="otp[]" maxlength="1">
-                        <input class="pin-input otp-input" id="pin-3" type="number" name="otp[]" maxlength="1">
-                        <input class="pin-input otp-input" id="pin-4" type="number" name="otp[]" maxlength="1">
-                        <input class="pin-input otp-input" id="pin-5" type="number" name="otp[]" maxlength="1">
-                        <input class="pin-input otp-input" id="pin-6" type="number" name="otp[]" maxlength="1">
-                    </div>
-                    <p class="des p-24-0 pt-2">
-                        {{ __('Code sent in') }} <span id="countdown" class="countdown"></span>
-                        <span class="reset text-primary cursor-pointer" id="otp-resend"
-                            data-route="{{ route('otp-resend') }}">{{ __('Resend code') }}</span>
-                    </p>
-                    <button class="verify-btn btn btn-outline-danger submit-btn">{{ __('Verify') }}</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Verify Modal End -->
-@endpush
+@section('script')
+    <script src="{{ URL::asset('js/pages/password-addon.init.js') }}"></script>
+    <script src="{{ asset('assets/js/auth.js') }}"></script>
 
-@push('js')
-<script src="{{ asset('assets/js/auth.js') }}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const slides = document.querySelectorAll('.onboarding-slide');
-    const dots = document.querySelectorAll('.onboarding-dot');
-    let current = 0;
-
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.style.display = i === index ? 'block' : 'none';
-            dots[i].style.background = i === index ? '#555' : '#ccc';
-            dots[i].classList.toggle('active', i === index);
-        });
-    }
-
-    setInterval(() => {
-        current = (current + 1) % slides.length;
-        showSlide(current);
-    }, 4000);
-
-    showSlide(current);
-});
-
-document.querySelector('.login_form').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-
-    fetch(this.action, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: formData,
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.otp_required) {
-                // Trigger the OTP modal
-                const otpModal = new bootstrap.Modal(document.getElementById('verifymodal'));
-                otpModal.show();
-
-                // Update the email in the modal
-                document.getElementById('dynamicEmail').textContent = formData.get('email');
-
-                // Start the countdown timer
-                startCountdown();
-            } else if (data.redirect) {
-                // Redirect if no OTP is required
-                window.location.href = data.redirect;
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Something went wrong. Please try again.');
-        });
-});
-
-// Countdown Timer for OTP Resend
-let countdownElement = document.getElementById('countdown');
-let countdownTime = 60; // 60 seconds
-
-function startCountdown() {
-    countdownTime = 60; // Reset countdown time
-    const interval = setInterval(() => {
-        if (countdownTime <= 0) {
-            clearInterval(interval);
-            countdownElement.textContent = '';
-            document.getElementById('otp-resend').classList.remove('disabled');
-        } else {
-            countdownElement.textContent = `${countdownTime--}s`;
-            document.getElementById('otp-resend').classList.add('disabled');
-        }
-    }, 1000);
-}
-
-// Resend OTP Logic
-document.getElementById('otp-resend').addEventListener('click', function () {
-    const route = this.getAttribute('data-route');
-
-    fetch(route, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: JSON.stringify({
-            email: document.getElementById('dynamicEmail').textContent,
-        }),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            alert(data.message);
-            startCountdown(); // Restart the countdown timer
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Something went wrong. Please try again.');
-        });
-});
-
-// OTP Verification Logic
-document.querySelector('.verify_form').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-
-    fetch(this.action, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: formData,
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.redirect) {
-                // Dismiss the OTP modal
-                const otpModal = bootstrap.Modal.getInstance(document.getElementById('verifymodal'));
-                otpModal.hide();
-
-                // Redirect to the dashboard
-                window.location.href = data.redirect;
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Something went wrong. Please try again.');
-        });
-});
-</script>
-@endpush
-
-
-
+@endsection
