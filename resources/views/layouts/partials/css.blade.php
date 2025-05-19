@@ -16,8 +16,7 @@
 <!-- Lily -->
 <link rel="stylesheet" href="{{ asset('assets/css/lity.css') }}">
 <!-- Style -->
-<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
