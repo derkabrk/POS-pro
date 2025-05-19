@@ -18,8 +18,8 @@
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
+<link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
 
-<link rel="stylesheet" href="{{ asset('assets/css/app2.min.css') }}">
 
 <link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
 
