@@ -334,8 +334,13 @@
     font-family: 'Inter', 'Segoe UI', sans-serif;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 1050;
-}
+    -ms-overflow-style: none;
 
+}
+.side-bar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
 /* Logo section */
 .side-bar-logo {
     padding: 20px;

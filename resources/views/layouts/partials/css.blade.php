@@ -6,6 +6,8 @@
 
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap2.min.css') }}">
 
+ 
+
 <!-- Fontawesome -->
 <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome/css/fontawesome-all.min.css') }}">
 {{-- jquery-confirm --}}
