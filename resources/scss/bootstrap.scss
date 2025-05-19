@@ -1,0 +1,23 @@
+// Import bootstrap functions first
+@import "bootstrap/scss/functions";
+
+// Import your variables and overrides before Bootstrap's variables
+@import "variables"; 
+@import "bootstrap-override";
+
+// Now import Bootstrap variables
+@import "bootstrap/scss/variables";
+
+// Continue with other Bootstrap imports
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// Layout & components
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+// Import other Bootstrap components as needed

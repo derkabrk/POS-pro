@@ -2,9 +2,20 @@
 {{-- Google Fonts: Saira --}}
 <link href="https://fonts.googleapis.com/css?family=Saira:400,700&display=swap" rel="stylesheet">
 <!-- Bootstrap -->
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min2.css') }}">
 
 <script src="{{ asset('assets/js/layout.js') }}"></script>
+    
+    <!-- Bootstrap Css -->
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    
+    <!-- Icons Css -->
+    <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    
+    <!-- App Css-->
+    <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
+    
+    <!-- Custom Css-->
+    <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
 
 
 <!-- Fontawesome -->
@@ -19,11 +30,6 @@
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
-<link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
-
-
-
-<link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
