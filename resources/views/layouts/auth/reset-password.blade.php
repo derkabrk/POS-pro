@@ -12,7 +12,7 @@
                 <div class="login-header">
                     <h4>{{ get_option('general')['name'] ?? '' }}</h4>
                 </div>
-                <div class="login-body w-100">
+                <div    class="login-body w-100">
                     <h2>{{ __('Change Password') }}</h2>
                     <h6>{{ __('Create new password, it must be Strong password.') }}</h6>
                     <form action="{{ route('password.store') }}" method="post" class="ajaxform_instant_reload">

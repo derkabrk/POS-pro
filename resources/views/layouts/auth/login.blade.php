@@ -12,7 +12,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card overflow-hidden card-bg-fill border-0 card-border-effect-none">
+                    <div class=    "card overflow-hidden card-bg-fill border-0 card-border-effect-none">
                         <div class="row g-0">
                             <div class="col-lg-6 d-none d-lg-block">
                                 <div class="p-lg-5 p-4 auth-one-bg h-100">

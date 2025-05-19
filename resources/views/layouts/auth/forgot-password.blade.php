@@ -11,7 +11,7 @@
         <div class="mybazar-login-avatar">
             <img src="{{ asset('assets/images/login/login.png') }}" alt="">
         </div>
-        <div class="mybazar-login-wrapper">
+        <div class=   "mybazar-login-wrapper">
             <div class="login-wrapper">
                 <div class="login-header">
                     <h4>{{ get_option('general')['name'] ?? '' }}</h4>
