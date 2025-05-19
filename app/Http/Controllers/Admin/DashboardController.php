@@ -20,7 +20,7 @@ class DashboardController extends Controller
     public function index()
     {
         $businesses = Business::with('enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name')->latest()->take(5)->get();
-        return view('admin.dashboard.index', compact('businesses'));
+        return view('index', compact('businesses'));
     }
 
     public function getDashboardData()
