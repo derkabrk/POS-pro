@@ -2,7 +2,7 @@
 {{-- Google Fonts: Saira --}}
 <link href="https://fonts.googleapis.com/css?family=Saira:400,700&display=swap" rel="stylesheet">
 <!-- Bootstrap -->
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min2.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 
 <script src="{{ asset('assets/js/layout.js') }}"></script>
