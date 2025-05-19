@@ -4,7 +4,7 @@
 <link href="{{ URL::asset('libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 
 @endsection
-@section('content')
+@section('main_content')
 @component('admin.components.breadcrumb')
 @slot('li_1') Ecommerce @endslot
 @slot('title') Orders @endslot
