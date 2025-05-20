@@ -433,8 +433,7 @@
                 dateFormat: "d M, Y",
                 allowInput: true
             });
-</script>
-@endsection        }
+        }
         
         // Initialize Choices.js selects
         if (typeof Choices !== 'undefined') {
@@ -457,10 +456,10 @@
     function SearchData() {
         // Get form data
         var formData = new FormData(document.getElementById('filter-form'));
-        
+
         // Show loading indicator
         $('#business-data').html('<tr><td colspan="10" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>');
-        
+
         // Send AJAX request
         $.ajax({
             url: "{{ route('admin.business.filter') }}",
@@ -470,15 +469,13 @@
             contentType: false,
             success: function(response) {
                 $('#business-data').html(response);
-                
                 // Reinitialize tooltip for new content
-                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
                 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
                 });
-                
                 // Show/hide no result message
-                if (response.trim() === '') {
+                if ($.trim(response) === '' || $(response).find('tr').length === 0) {
                     $('.noresult').show();
                 } else {
                     $('.noresult').hide();
@@ -487,7 +484,6 @@
             error: function(xhr) {
                 $('#business-data').html('<tr><td colspan="10" class="text-center text-danger">Error loading data. Please try again.</td></tr>');
                 console.error('Search error:', xhr);
-                
                 // Show error notification
                 Swal.fire({
                     icon: 'error',
@@ -498,7 +494,7 @@
             }
         });
     }
-    
+
     // Tab handling for business types
     $('.nav-tabs .nav-link').on('click', function() {
         var type = $(this).attr('id');
@@ -694,3 +690,5 @@
     } catch (error) {
         console.log("List initialization error: ", error);
     }
+</script>
+@endsection
