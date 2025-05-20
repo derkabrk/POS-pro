@@ -5,6 +5,35 @@
 @section('css')
     <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        .bg-dark {
+            background-color: #0e1726 !important;
+        }
+        .text-light {
+            color: #eaecf4 !important;
+        }
+        .text-white-50 {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+        .border-secondary {
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+        .text-primary {
+            color: #845adf !important;
+        }
+        .text-success {
+            color: #00cf67 !important;
+        }
+        .text-warning {
+            color: #feb019 !important;
+        }
+        .text-info {
+            color: #00cfe8 !important;
+        }
+        .text-danger {
+            color: #ff5b5c !important;
+        }
+    </style>
 @endsection
 @section('content')
     @component('components.breadcrumb')
@@ -226,21 +255,52 @@
 
                     <div class="col-xl-4">
                         <!-- card -->
-                        <div class="card card-height-100">
-                            <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
+                        <div class="card card-height-100 bg-dark">
+                            <div class="card-header align-items-center d-flex bg-transparent border-bottom border-secondary">
+                                <h4 class="card-title mb-0 flex-grow-1 text-light">{{ __('Subscription Plan') }}</h4>
                                 <div class="flex-shrink-0">
-                                    <select class="form-select form-select-sm overview-year">
-                                        @for ($i = date('Y'); $i >= 2022; $i--)
-                                            <option @selected($i == date('Y')) value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
+                                    <div class="dropdown card-header-dropdown">
+                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <span class="text-white-50">Report <i class="mdi mdi-chevron-down ms-1"></i></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#">Download Report</a>
+                                            <a class="dropdown-item" href="#">Export</a>
+                                            <a class="dropdown-item" href="#">Import</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="card-body p-0">
-                                <div class="px-3 py-3">
-                                    <canvas id="plans-chart" class="pie-chart" height="300"></canvas>
+                            <div class="card-body p-0 bg-dark">
+                                <div class="px-4 py-4">
+                                    <canvas id="plans-chart" class="pie-chart" height="280"></canvas>
+                                    
+                                    <div class="mt-4 text-center">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <i class="ri-checkbox-blank-circle-fill text-primary me-2"></i>
+                                                    <span class="text-white-50 fw-medium">Free</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <i class="ri-checkbox-blank-circle-fill text-success me-2"></i>
+                                                    <span class="text-white-50 fw-medium">Standard</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <i class="ri-checkbox-blank-circle-fill text-warning me-2"></i>
+                                                    <span class="text-white-50 fw-medium">Premium</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="hidden" class="overview-year" value="{{ date('Y') }}">
                                 </div>
                             </div>
                         </div>
@@ -472,6 +532,12 @@
             
             // Function to load plans overview
             function loadPlansOverview(year) {
+                // Get the year value - either from the select or the hidden input
+                if (!year) {
+                    const yearElement = document.querySelector('.overview-year');
+                    year = yearElement.value || yearElement.getAttribute('value') || new Date().getFullYear();
+                }
+                
                 fetch(`${plansOverviewURL}?year=${year}`)
                     .then(response => response.json())
                     .then(data => {
@@ -479,27 +545,24 @@
                         // Use either the new API format or fallback to original format
                         const plans = data.plans || data.labels || [];
                         const values = data.values || data.data || [];
-                        const colors = data.colors || null;
                         
                         // Force data if none returned (for testing)
                         if (plans.length === 0 || values.length === 0) {
                             console.warn("No plan data found, using test data");
                             initPlansChart(
-                                ['Free', 'Standard', 'Premium'], 
-                                [30, 50, 20],
-                                ['#8b5cf6', '#10b981', '#f97316']
+                                ['Free', 'Standard', 'Premium', 'Social', 'Referrals'], 
+                                [25.6, 32.0, 23.8, 9.9, 8.7]
                             );
                         } else {
-                            initPlansChart(plans, values, colors);
+                            initPlansChart(plans, values);
                         }
                     })
                     .catch(error => {
                         console.error('Error loading plans overview:', error);
                         // Fallback to test data on error
                         initPlansChart(
-                            ['Free', 'Standard', 'Premium'], 
-                            [30, 50, 20],
-                            ['#8b5cf6', '#10b981', '#f97316']
+                            ['Free', 'Standard', 'Premium', 'Social', 'Referrals'], 
+                            [25.6, 32.0, 23.8, 9.9, 8.7]
                         );
                     });
             }
@@ -546,25 +609,30 @@
                     window.plansChart.destroy();
                 }
                 
-                // Default colors if none provided
-                const defaultColors = [
-                    'rgba(59, 130, 246, 0.7)',  // Blue
-                    'rgba(16, 185, 129, 0.7)',  // Green
-                    'rgba(249, 115, 22, 0.7)',  // Orange
-                    'rgba(236, 72, 153, 0.7)',  // Pink
-                    'rgba(139, 92, 246, 0.7)'   // Purple
+                // Set darker theme colors
+                const darkThemeColors = [
+                    'rgba(132, 90, 223, 0.9)',  // Purple
+                    'rgba(115, 103, 240, 0.9)',  // Indigo
+                    'rgba(0, 207, 232, 0.9)',    // Cyan
+                    'rgba(254, 176, 25, 0.9)',   // Orange
+                    'rgba(255, 91, 92, 0.9)'     // Red
                 ];
+                
+                // Options for dark theme
+                Chart.defaults.color = '#a9a9c8';
+                Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
                 
                 console.log("Initializing plans chart with:", {plans, values, colors}); // Debug
                 
                 window.plansChart = new Chart(ctx, {
-                    type: 'pie',
+                    type: 'doughnut',
                     data: {
                         labels: plans,
                         datasets: [{
                             data: values,
-                            backgroundColor: colors || defaultColors.slice(0, plans.length),
-                            borderWidth: 1
+                            backgroundColor: darkThemeColors.slice(0, plans.length),
+                            borderWidth: 0,
+                            cutout: '60%'
                         }]
                     },
                     options: {
@@ -572,27 +640,87 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                position: 'bottom',
-                                labels: {
-                                    font: {
-                                        size: 12
-                                    }
-                                }
+                                display: false
                             },
                             tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: 'rgba(255, 255, 255, 0.1)',
+                                borderWidth: 1,
+                                padding: 10,
+                                displayColors: false,
                                 callbacks: {
                                     label: function(context) {
                                         const label = context.label || '';
                                         const value = context.raw || 0;
                                         const total = context.dataset.data.reduce((a, b) => a + b, 0);
                                         const percentage = Math.round((value / total) * 100);
-                                        return `${label}: ${value} (${percentage}%)`;
+                                        return `${label}: ${percentage}%`;
+                                    },
+                                    // Add percentage labels directly on the chart
+                                    afterDraw: function(chart) {
+                                        const width = chart.width;
+                                        const height = chart.height;
+                                        const ctx = chart.ctx;
+                                        ctx.restore();
+                                        
+                                        chart.data.datasets[0].data.forEach((value, i) => {
+                                            const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                            const percentage = Math.round((value / total) * 100) + '%';
+                                            const meta = chart.getDatasetMeta(0);
+                                            const arc = meta.data[i];
+                                            const centerX = (arc.x);
+                                            const centerY = (arc.y);
+                                            
+                                            ctx.fillStyle = '#fff';
+                                            ctx.font = 'bold 12px Arial';
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'middle';
+                                            ctx.fillText(percentage, centerX, centerY);
+                                        });
+                                        
+                                        ctx.save();
                                     }
                                 }
                             }
                         }
                     }
                 });
+                
+                // Display percentages on the doughnut
+                addPercentagesToChart();
+            }
+            
+            // Function to add percentages to the doughnut chart
+            function addPercentagesToChart() {
+                setTimeout(function() {
+                    const chart = window.plansChart;
+                    if (!chart) return;
+                    
+                    const ctx = chart.ctx;
+                    const dataset = chart.data.datasets[0];
+                    const meta = chart.getDatasetMeta(0);
+                    
+                    if (!meta.data || !meta.data.length) return;
+                    
+                    const total = dataset.data.reduce((a, b) => a + b, 0);
+                    
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.fillStyle = '#fff';
+                    
+                    meta.data.forEach((element, index) => {
+                        const percentage = Math.round((dataset.data[index] / total) * 100) + '%';
+                        const position = element.getCenterPoint();
+                        
+                        ctx.fillText(percentage, position.x, position.y);
+                    });
+                    
+                    ctx.restore();
+                }, 500);
             }
             
             // Format currency based on position
