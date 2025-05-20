@@ -28,8 +28,7 @@
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('admin.business.filter') }}" method="POST" id="filter-form" class="filter-form" table="#business-data">
-                    @csrf
+                <form action="{{ route('admin.business.filter') }}" method="GET" id="filter-form" class="filter-form" table="#business-data">
                     <div class="row g-3">
                         <div class="col-xxl-3 col-sm-6">
                             <div class="search-box">
@@ -195,7 +194,7 @@
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-end mt-3">
-                            {{ $businesses->links('vendor.pagination.bootstrap-5') }}
+                            {{ $businesses->appends(request()->except('page'))->links('vendor.pagination.bootstrap-5') }}
                         </div>
                     </div>
                 </div>
