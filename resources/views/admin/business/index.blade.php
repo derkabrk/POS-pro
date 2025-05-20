@@ -414,295 +414,39 @@
 </div>
 @endsection
 @section('script')
-<!-- Required Javascript libraries -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-<script src="{{ URL::asset('build/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
-
-<script>
-    // Initialize form elements when document is ready
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/list.js@2.3.1/dist/list.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/list.pagination.js@0.1.1/dist/list.pagination.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+    <script src="{{ asset('assets/js/custom/custom.js') }}"></script>
+    <script>
     $(document).ready(function() {
-        // Initialize flatpickr date pickers
+        // Initialize flatpickr
         if (typeof flatpickr !== 'undefined') {
             flatpickr("[data-provider='flatpickr']", {
                 dateFormat: "d M, Y",
                 allowInput: true
             });
         }
-        
-        // Initialize Choices.js selects safely
+        // Initialize Choices.js
         if (typeof Choices !== 'undefined') {
-            document.querySelectorAll("[data-choices]").forEach(function(element) {
-                if (!element.classList.contains('choices__input') && 
-                    !element.classList.contains('choices__inner') && 
+            document.querySelectorAll('select').forEach(function(element) {
+                if (!element.classList.contains('choices__input') &&
+                    !element.classList.contains('choices__inner') &&
                     !element.parentElement.classList.contains('choices')) {
                     new Choices(element, {
-                        searchEnabled: !(element.getAttribute("data-choices-search-false") === "true"),
+                        searchEnabled: true,
                         itemSelectText: '',
                     });
                 }
             });
         }
-        
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-
-        // Define the search function
-        window.performSearch = function() {
-            // Show loading indicator
-            $('#business-data').html('<tr><td colspan="10" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>');
-            
-            // Get form data
-            var form = $('#filter-form')[0];
-            var formData = new FormData(form);
-            
-            // Make AJAX request
-            $.ajax({
-                url: "{{ route('admin.business.filter') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    // Update table with response
-                    $('#business-data').html(response);
-                    
-                    // Reinitialize tooltips for new content
-                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-                        return new bootstrap.Tooltip(tooltipTriggerEl);
-                    });
-                    
-                    // Show/hide no result message
-                    if ($.trim(response) === '' || $(response).find('tr').length === 0) {
-                        $('.noresult').show();
-                    } else {
-                        $('.noresult').hide();
-                    }
-                },
-                error: function(xhr) {
-                    // Show error message
-                    $('#business-data').html('<tr><td colspan="10" class="text-center text-danger">Error loading data. Please try again.</td></tr>');
-                    console.error('Search error:', xhr);
-                    
-                    // Display error notification
-                    Swal.fire({
-                        icon: 'error',
-                        title: "{{ __('Error') }}",
-                        text: "{{ __('An error occurred while filtering data') }}",
-                        confirmButtonClass: 'btn btn-primary'
-                    });
-                }
-            });
-        };
-        
-        // Button click event
-        $('#filter-button').on('click', function() {
-            performSearch();
-        });
-        
-        // Form submit event (prevent default and use AJAX)
-        $('#filter-form').on('submit', function(e) {
-            e.preventDefault();
-            performSearch();
-        });
-        
-        // Tab handling for business types
-        $('.nav-tabs .nav-link').on('click', function(e) {
-            e.preventDefault();
-            var type = $(this).attr('id');
-            
-            // Update active tab visually
-            $('.nav-tabs .nav-link').removeClass('active');
-            $(this).addClass('active');
-            
-            // Set the correct value in the filter dropdown
-            if (type === 'All') {
-                type = 'all';
-            } else if (type === 'Ecommerce') {
-                type = '1';
-            } else if (type === 'Physical') {
-                type = '0';
-            } else if (type === 'Both') {
-                type = '2';
-            }
-            
-            // Set the filter dropdown value
-            $('#sale_type_filter').val(type).trigger('change.select2');
-            
-            // Apply filter immediately
-            performSearch();
-        });
-        
-        // Setup event listeners for real-time filtering
-        
-        // Search input keyup event with debounce
-        var searchTimeout;
-        $('input[name="search"]').on('keyup', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(function() {
-                performSearch();
-            }, 500); // 500ms delay to avoid too many requests
-        });
-        
-        // Date range picker change event
-        $('#demo-datepicker').on('change', function() {
-            performSearch();
-        });
-        
-        // Per page selector change event
-        $('#per_page').on('change', function() {
-            performSearch();
-        });
-        
-        // Business type filter change event
-        $('#sale_type_filter').on('change', function() {
-            performSearch();
-        });
-        
-        // Check/uncheck all checkboxes
-        $('#checkAll').on('change', function() {
-            $('input[name="checkAll"]').prop('checked', $(this).prop('checked'));
-        });
-        
-        // Function to handle multiple deletions
-       
-        // Handle View Business details
-        $(document).on('click', '.business-view', function() {
-            var name = $(this).data('name');
-            var category = $(this).data('category');
-            var phone = $(this).data('phone');
-            var address = $(this).data('address');
-            var package = $(this).data('package');
-            var lastEnroll = $(this).data('last_enroll');
-            var expiredDate = $(this).data('expired_date');
-            var createdDate = $(this).data('created_date');
-            var image = $(this).data('image');
-            
-            $('.business_name').text(name);
-            $('#category').text(category);
-            $('#phone').text(phone);
-            $('#address').text(address);
-            $('#package').text(package);
-            $('#last_enroll').text(lastEnroll);
-            $('#expired_date').text(expiredDate);
-            $('#created_date').text(createdDate);
-            $('#image').attr('src', image);
-        });
-        
-        // Handle Delete Business action
-        $(document).on('click', '.delete-btn', function() {
-            var businessId = $(this).data('id');
-            var url = "{{ route('admin.business.destroy', ':id') }}";
-            url = url.replace(':id', businessId);
-            $('#delete-form').attr('action', url);
-        });
-        
-        // Handle Upgrade Plan action
-        $(document).on('click', '.upgrade-plan-btn', function() {
-            var businessId = $(this).data('id');
-            var businessName = $(this).data('business-name');
-            
-            // Set modal form values
-            $('#business_id').val(businessId);
-            $('#business_name').val(businessName);
-            
-            // Set the form action URL
-            var url = "{{ route('admin.business.upgrade.plan', ':id') }}";
-            url = url.replace(':id', businessId);
-            $('.upgradePlan').attr('action', url);
-        });
-        
-        // Plan price update on selection
-        $(document).on('change', '#plan_id', function() {
-            var price = $(this).find(':selected').data('price');
-            $('.plan-price').val(price);
-        });
-        
-        // Handle upgrade plan form submission with AJAX
-        $('.upgradePlan').on('submit', function(e) {
-            e.preventDefault();
-            
-            var form = $(this);
-            var formData = new FormData(form[0]);
-            
-            // Show loading indicator
-            var submitBtn = form.find('.submit-btn');
-            var originalText = submitBtn.html();
-            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
-            submitBtn.prop('disabled', true);
-            
-            $.ajax({
-                url: form.attr('action'),
-                type: form.attr('method'),
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    submitBtn.html(originalText);
-                    submitBtn.prop('disabled', false);
-                    
-                    if (response.success) {
-                        Swal.fire({
-                            title: "{{ __('Success!') }}",
-                            text: response.message || "{{ __('Plan upgraded successfully.') }}",
-                            icon: "success",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        }).then(function() {
-                            $('#business-upgrade-modal').modal('hide');
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "{{ __('Error!') }}",
-                            text: response.message || "{{ __('Something went wrong.') }}",
-                            icon: "error",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    submitBtn.html(originalText);
-                    submitBtn.prop('disabled', false);
-                    
-                    // Handle validation errors
-                    var errors = xhr.responseJSON?.errors;
-                    var errorMessage = '';
-                    
-                    if (errors) {
-                        $.each(errors, function(key, value) {
-                            errorMessage += value[0] + '<br>';
-                        });
-                    } else {
-                        errorMessage = "{{ __('An error occurred during the upgrade operation.') }}";
-                    }
-                    
-                    Swal.fire({
-                        title: "{{ __('Error!') }}",
-                        html: errorMessage,
-                        icon: "error",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    });
-                }
-            });
-        });
-        
-        // Initialize List.js for table sorting and search (client-side only)
+        // List.js initialization (guarded)
         try {
-            var orderTable = document.getElementById('orderTable');
+            var orderTable = document.getElementById('datatable');
             var businessData = document.getElementById('business-data');
-            // Only initialize if table and tbody exist and tbody has at least one row
             if (orderTable && businessData && businessData.childNodes.length > 0 && !window.businessList) {
                 var options = {
                     valueNames: [
@@ -715,16 +459,15 @@
                         'last_enroll',
                         'expired_date'
                     ],
-                    page: parseInt($('#per_page').val() || 10),
+                    page: parseInt($('select[name=per_page]').val() || 10),
                     pagination: true,
                     plugins: [
                         ListPagination({})
                     ]
                 };
                 window.businessList = new List('orderList', options);
-                // Event handler for no results
-                businessList.on('updated', function() {
-                    if (businessList.matchingItems.length === 0) {
+                window.businessList.on('updated', function() {
+                    if (window.businessList.matchingItems.length === 0) {
                         $('.noresult').show();
                     } else {
                         $('.noresult').hide();
@@ -732,8 +475,18 @@
                 });
             }
         } catch (error) {
-            console.error("List.js initialization error:", error);
+            console.error('List.js initialization error:', error);
         }
+        // SweetAlert2 fix: use confirmButtonText instead of confirmButtonClass
+        window.showSwalError = function(title, message) {
+            Swal.fire({
+                icon: 'error',
+                title: title,
+                text: message,
+                confirmButtonText: 'OK'
+            });
+        };
     });
-</script>
+    </script>
+@endpush
 @endsection
