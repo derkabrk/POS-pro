@@ -416,6 +416,7 @@
 @endsection
 @section('script')
 <!-- Required Javascript libraries -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="{{ URL::asset('build/libs/jquery/jquery.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/flatpickr/flatpickr.min.js') }}"></script>
