@@ -1,33 +1,46 @@
 @extends('layouts.master')
 
 @section('title')
-    {{ __('Category') }}
+    {{ __('Add Business Category') }}
 @endsection
 
-@section('main_content')
-<div class="erp-table-section">
-    <div class="container-fluid">
-        <div class="card border-0">
-            <div class="card-bodys">
-                <div class="table-header p-16">
-                    <h4>{{__('Add new Category')}}</h4>
-                    @can('business-categories-read')
-                        <a href="{{ route('admin.business-categories.index') }}" class="add-order-btn rounded-2 {{ Route::is('admin.business-categories.create') ? 'active' : '' }}"><i class="far fa-list me-1" aria-hidden="true"></i> {{ __('View List') }}</a>
-                    @endcan
-                </div>
-                <div class="order-form-section p-16">
-                    <form action="{{ route('admin.business-categories.store') }}" method="POST" class="ajaxform_instant_reload">
-                        @csrf
-                        <div class="add-suplier-modal-wrapper d-block">
-                            <div class="row">
-                                <div class="col-lg-6 mb-2">
-                                    <label>{{ __('Buisness Name') }}</label>
-                                    <input type="text" name="name" required class="form-control" placeholder="{{ __('Enter Buisness Name') }}">
-                                </div>
+@section('content')
+    @component('components.breadcrumb')
+        @slot('li_1')
+            {{ __('Business Categories') }}
+        @endslot
+        @slot('title')
+            {{ __('Add Business Category') }}
+        @endslot
+    @endcomponent
 
-                                <div class="col-lg-6 mb-2">
-                                    <div class="col-lg-12">
-                                        <label>{{ __('Status') }}</label>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">{{__('Add new Category')}}</h4>
+                    <div class="flex-shrink-0">
+                        @can('business-categories-read')
+                        <a href="{{ route('admin.business-categories.index') }}" class="btn btn-primary">
+                            <i class="ri-list-check" aria-hidden="true"></i> {{ __('View List') }}
+                        </a>
+                        @endcan
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="live-preview">
+                        <form action="{{ route('admin.business-categories.store') }}" method="POST" class="ajaxform_instant_reload">
+                            @csrf
+                            <div class="row gy-4">
+                                <div class="col-xxl-6 col-md-6">
+                                    <div>
+                                        <label for="name" class="form-label">{{ __('Business Name') }} <span class="text-danger">*</span></label>
+                                        <input type="text" name="name" id="name" required class="form-control" placeholder="{{ __('Enter Business Name') }}">
+                                    </div>
+                                </div>
+                                <div class="col-xxl-6 col-md-6">
+                                    <div>
+                                        <label for="status" class="form-label">{{ __('Status') }}</label>
                                         <div class="form-control d-flex justify-content-between align-items-center radio-switcher">
                                             <p class="dynamic-text mb-0">{{ __('Active') }}</p>
                                             <label class="switch m-0">
@@ -37,24 +50,23 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-12 mb-2">
-                                    <label>{{ __('Description') }}</label>
-                                    <textarea type="text" name="description" class="form-control" rows="3" placeholder="{{ __('Enter Description') }}"></textarea>
+                                <div class="col-12">
+                                    <div>
+                                        <label for="description" class="form-label">{{ __('Description') }}</label>
+                                        <textarea name="description" id="description" class="form-control" rows="3" placeholder="{{ __('Enter Description') }}"></textarea>
+                                    </div>
                                 </div>
-
                                 <div class="col-lg-12">
-                                    <div class="button-group text-center mt-5">
-                                        <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
-                                        <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
+                                    <div class="text-center mt-4">
+                                        <button type="reset" class="btn btn-light me-3">{{ __('Cancel') }}</button>
+                                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
