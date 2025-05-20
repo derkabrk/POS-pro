@@ -426,7 +426,7 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    $(function() {
         // Initialize flatpickr date pickers
         if (typeof flatpickr !== 'undefined') {
             flatpickr("[data-provider='flatpickr']", {
@@ -450,52 +450,42 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
-    });
 
-    // Search functionality using AJAX
-    function SearchData() {
-        // Get form data
-        var formData = new FormData(document.getElementById('filter-form'));
-
-        // Show loading indicator
-        $('#business-data').html('<tr><td colspan="10" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>');
-
-        // Send AJAX request
-        $.ajax({
-            url: "{{ route('admin.business.filter') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                $('#business-data').html(response);
-                // Reinitialize tooltip for new content
-                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl);
-                });
-                // Show/hide no result message
-                if ($.trim(response) === '' || $(response).find('tr').length === 0) {
-                    $('.noresult').show();
-                } else {
-                    $('.noresult').hide();
+        // Search functionality using AJAX
+        window.SearchData = function() {
+            var formData = new FormData(document.getElementById('filter-form'));
+            $('#business-data').html('<tr><td colspan="10" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>');
+            $.ajax({
+                url: "{{ route('admin.business.filter') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $('#business-data').html(response);
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
+                    if ($.trim(response) === '' || $(response).find('tr').length === 0) {
+                        $('.noresult').show();
+                    } else {
+                        $('.noresult').hide();
+                    }
+                },
+                error: function(xhr) {
+                    $('#business-data').html('<tr><td colspan="10" class="text-center text-danger">Error loading data. Please try again.</td></tr>');
+                    console.error('Search error:', xhr);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while filtering data',
+                        confirmButtonClass: 'btn btn-primary'
+                    });
                 }
-            },
-            error: function(xhr) {
-                $('#business-data').html('<tr><td colspan="10" class="text-center text-danger">Error loading data. Please try again.</td></tr>');
-                console.error('Search error:', xhr);
-                // Show error notification
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while filtering data',
-                    confirmButtonClass: 'btn btn-primary'
-                });
-            }
-        });
-    }
+            });
+        };
 
-    $(function() {
         // Tab handling for business types
         $('.nav-tabs .nav-link').on('click', function() {
             var type = $(this).attr('id');
@@ -544,152 +534,152 @@
         $('#checkAll').on('change', function() {
             $('input[name="checkAll"]').prop('checked', $(this).prop('checked'));
         });
-    });
-    
-    // View business details
-    $(document).on('click', '.business-view', function() {
-        var name = $(this).data('name');
-        var category = $(this).data('category');
-        var phone = $(this).data('phone');
-        var address = $(this).data('address');
-        var package = $(this).data('package');
-        var lastEnroll = $(this).data('last_enroll');
-        var expiredDate = $(this).data('expired_date');
-        var createdDate = $(this).data('created_date');
-        var image = $(this).data('image');
+
+        // View business details
+        $(document).on('click', '.business-view', function() {
+            var name = $(this).data('name');
+            var category = $(this).data('category');
+            var phone = $(this).data('phone');
+            var address = $(this).data('address');
+            var package = $(this).data('package');
+            var lastEnroll = $(this).data('last_enroll');
+            var expiredDate = $(this).data('expired_date');
+            var createdDate = $(this).data('created_date');
+            var image = $(this).data('image');
+            
+            $('.business_name').text(name);
+            $('#category').text(category);
+            $('#phone').text(phone);
+            $('#address').text(address);
+            $('#package').text(package);
+            $('#last_enroll').text(lastEnroll);
+            $('#expired_date').text(expiredDate);
+            $('#created_date').text(createdDate);
+            $('#image').attr('src', image);
+        });
         
-        $('.business_name').text(name);
-        $('#category').text(category);
-        $('#phone').text(phone);
-        $('#address').text(address);
-        $('#package').text(package);
-        $('#last_enroll').text(lastEnroll);
-        $('#expired_date').text(expiredDate);
-        $('#created_date').text(createdDate);
-        $('#image').attr('src', image);
-    });
-    
-    // Delete business
-    $(document).on('click', '.delete-btn', function() {
-        var businessId = $(this).data('id');
-        var url = "{{ route('admin.business.destroy', ':id') }}";
-        url = url.replace(':id', businessId);
-        $('#delete-form').attr('action', url);
-    });
-    
-    // Upgrade plan
-    $(document).on('click', '.upgrade-plan-btn', function() {
-        var businessId = $(this).data('id');
-        var businessName = $(this).data('business-name');
+        // Delete business
+        $(document).on('click', '.delete-btn', function() {
+            var businessId = $(this).data('id');
+            var url = "{{ route('admin.business.destroy', ':id') }}";
+            url = url.replace(':id', businessId);
+            $('#delete-form').attr('action', url);
+        });
         
-        $('#business_id').val(businessId);
-        $('#business_name').val(businessName);
+        // Upgrade plan
+        $(document).on('click', '.upgrade-plan-btn', function() {
+            var businessId = $(this).data('id');
+            var businessName = $(this).data('business-name');
+            
+            $('#business_id').val(businessId);
+            $('#business_name').val(businessName);
+            
+            // Set the form action URL
+            var url = "{{ route('admin.business.upgrade.plan', ':id') }}";
+            url = url.replace(':id', businessId);
+            $('.upgradePlan').attr('action', url);
+        });
         
-        // Set the form action URL
-        var url = "{{ route('admin.business.upgrade.plan', ':id') }}";
-        url = url.replace(':id', businessId);
-        $('.upgradePlan').attr('action', url);
-    });
-    
-    // Plan price update
-    $(document).on('change', '#plan_id', function() {
-        var price = $(this).find(':selected').data('price');
-        $('.plan-price').val(price);
-    });
-    
-    // Handle form submission with AJAX
-    $('.upgradePlan').on('submit', function(e) {
-        e.preventDefault();
+        // Plan price update
+        $(document).on('change', '#plan_id', function() {
+            var price = $(this).find(':selected').data('price');
+            $('.plan-price').val(price);
+        });
         
-        var form = $(this);
-        var formData = new FormData(form[0]);
-        
-        $.ajax({
-            url: form.attr('action'),
-            type: form.attr('method'),
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if (response.success) {
-                    Swal.fire({
-                        title: "{{ __('Success!') }}",
-                        text: response.message || "{{ __('Plan upgraded successfully.') }}",
-                        icon: "success",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    }).then(function() {
-                        $('#business-upgrade-modal').modal('hide');
-                        location.reload();
-                    });
-                } else {
+        // Handle form submission with AJAX
+        $('.upgradePlan').on('submit', function(e) {
+            e.preventDefault();
+            
+            var form = $(this);
+            var formData = new FormData(form[0]);
+            
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "{{ __('Success!') }}",
+                            text: response.message || "{{ __('Plan upgraded successfully.') }}",
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function() {
+                            $('#business-upgrade-modal').modal('hide');
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "{{ __('Error!') }}",
+                            text: response.message || "{{ __('Something went wrong.') }}",
+                            icon: "error",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    var errors = xhr.responseJSON?.errors;
+                    var errorMessage = '';
+                    
+                    if (errors) {
+                        $.each(errors, function(key, value) {
+                            errorMessage += value[0] + '<br>';
+                        });
+                    } else {
+                        errorMessage = "{{ __('An error occurred during the upgrade operation.') }}";
+                    }
+                    
                     Swal.fire({
                         title: "{{ __('Error!') }}",
-                        text: response.message || "{{ __('Something went wrong.') }}",
+                        html: errorMessage,
                         icon: "error",
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
                         buttonsStyling: false
                     });
                 }
-            },
-            error: function(xhr) {
-                var errors = xhr.responseJSON?.errors;
-                var errorMessage = '';
+            });
+        });
+        
+        // Initialize sorting functionality
+        var options = {
+            valueNames: [
+                'id',
+                'business_name',
+                'business_category',
+                'business_type',
+                'phone',
+                'package',
+                'last_enroll',
+                'expired_date'
+            ],
+            page: 10,
+            pagination: true,
+            plugins: [
+                ListPagination({})
+            ]
+        };
+        
+        // Initialize List.js if the element exists
+        try {
+            if (document.getElementById('orderTable')) {
+                var businessList = new List('orderList', options);
                 
-                if (errors) {
-                    $.each(errors, function(key, value) {
-                        errorMessage += value[0] + '<br>';
-                    });
-                } else {
-                    errorMessage = "{{ __('An error occurred during the upgrade operation.') }}";
-                }
-                
-                Swal.fire({
-                    title: "{{ __('Error!') }}",
-                    html: errorMessage,
-                    icon: "error",
-                    confirmButtonClass: "btn btn-primary w-xs mt-2",
-                    buttonsStyling: false
+                // Update list after search
+                businessList.on('updated', function() {
+                    if (businessList.matchingItems.length === 0) {
+                        $('.noresult').show();
+                    } else {
+                        $('.noresult').hide();
+                    }
                 });
             }
-        });
-    });
-    
-    // Initialize sorting functionality
-    var options = {
-        valueNames: [
-            'id',
-            'business_name',
-            'business_category',
-            'business_type',
-            'phone',
-            'package',
-            'last_enroll',
-            'expired_date'
-        ],
-        page: 10,
-        pagination: true,
-        plugins: [
-            ListPagination({})
-        ]
-    };
-    
-    // Initialize List.js if the element exists
-    try {
-        if (document.getElementById('orderTable')) {
-            var businessList = new List('orderList', options);
-            
-            // Update list after search
-            businessList.on('updated', function() {
-                if (businessList.matchingItems.length === 0) {
-                    $('.noresult').show();
-                } else {
-                    $('.noresult').hide();
-                }
-            });
+        } catch (error) {
+            console.log("List initialization error: ", error);
         }
-    } catch (error) {
-        console.log("List initialization error: ", error);
-    }
+    });
 </script>
 @endsection
