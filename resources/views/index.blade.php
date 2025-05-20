@@ -224,22 +224,18 @@
 
                             <div class="card-header p-0 border-0 bg-light-subtle">
                                 <div class="row g-0 text-center">
-                                    <div class="col-6 col-sm-6">
-                                        <div class="p-3 border border-dashed border-start-0">
-                                            <h5 class="mb-1 income-value">$0.00</h5>
-                                            <p class="text-muted mb-0">{{ __('Total Subscription') }}</p>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-12">
                                         <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                            <div class="fs-14 text-info">
-                                                <i class="ri-checkbox-blank-circle-fill"></i>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-1">
+                                                    <div class="fs-14 text-info">
+                                                        <i class="ri-checkbox-blank-circle-fill"></i>
+                                                    </div>
+                                                </div>
+                                                <div>Total Subscription: <span class="text-success fw-semibold income-value"></span></div>
                                             </div>
-                                            <p class="text-muted mb-0">{{ __('Monthly Growth') }}</p>
                                         </div>
                                     </div>
-                                    <!--end col-->
                                 </div>
                             </div><!-- end card header -->
 
@@ -427,14 +423,41 @@
 @endsection
 
 @section('script')
+    <!-- Original chart scripts -->
     <script src="{{ asset('assets/js/chart.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/dashboard.js') }}"></script>
     
-    <!-- apexcharts -->
+    <!-- E-commerce template scripts -->
     <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/jsvectormap/maps/world-merc.js') }}"></script>
     <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
-    <!-- dashboard init -->
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    
+    <script>
+        // Initialize counter animations
+        document.addEventListener("DOMContentLoaded", function() {
+            // Add counter animation to dashboard stats
+            var counterElements = document.querySelectorAll('.fs-22.fw-semibold');
+            counterElements.forEach(function(element) {
+                var current = 0;
+                var target = parseInt(element.innerText);
+                if (isNaN(target)) target = 0;
+                var increment = target > 1000 ? 25 : (target > 100 ? 5 : 1);
+                var duration = 1000;
+                var steps = Math.ceil(duration / 30);
+                var step = Math.ceil(target / steps);
+                
+                var timer = setInterval(function() {
+                    current += step;
+                    if (current >= target) {
+                        element.innerText = target;
+                        clearInterval(timer);
+                    } else {
+                        element.innerText = current;
+                    }
+                }, 30);
+            });
+        });
+    </script>
 @endsection
