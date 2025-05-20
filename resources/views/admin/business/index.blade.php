@@ -589,7 +589,7 @@
         $('#business_name').val(businessName);
         
         // Set the form action URL
-        var url = "{{ route('admin.business.upgrade-plan', ':id') }}";
+        var url = "{{ route('admin.business.upgrade.plan', ':id') }}";
         url = url.replace(':id', businessId);
         $('.upgradePlan').attr('action', url);
     });
