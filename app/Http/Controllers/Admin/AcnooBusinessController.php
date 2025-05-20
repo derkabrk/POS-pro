@@ -76,17 +76,22 @@ class AcnooBusinessController extends Controller
 
     public function filter(Request $request)
     {
-        $query = Business::query();
+        $plans = Plan::latest()->get();
+        $gateways = Gateway::latest()->get();
+        $categories = BusinessCategory::latest()->paginate(20);
 
-        // Apply sale_type filter if selected
-        if ($request->has('type') && $request->type !== '') {
-            $query->where('type', intval($request->type));
+        $query = Business::with('enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name');
+
+        // If 'type' is set and not 'all', filter; otherwise, return all
+        if ($request->has('type') && $request->type !== '' && $request->type !== 'all') {
+            $query->where('type', $request->type);
         }
-        $businesses = $query->latest()->paginate($request->per_page ?? 10);
+        // else: no filter, return all
 
+        $businesses = $query->latest()->paginate($request->per_page ?? 20);
 
-          return view('admin.business.dates', compact('businesses',));
-
+        // Return the full business list page with all required variables
+        return view('admin.business.index', compact('businesses', 'gateways', 'plans', 'categories'));
     }
 
     public function create()
