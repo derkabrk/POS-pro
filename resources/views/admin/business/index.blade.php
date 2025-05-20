@@ -100,9 +100,7 @@
                                 @include('admin.business.dates')
                             </tbody>
                         </table>
-                        <tbody class="list form-check-all" id="business-data">
-    @include('admin.business.dates')
-</tbody>
+            
                     </div>
                 </div>
 
