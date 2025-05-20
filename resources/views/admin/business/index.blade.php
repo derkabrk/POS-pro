@@ -336,5 +336,4 @@
         });
     });
 </script>
-@include('admin.business.dates')
 @endsection
