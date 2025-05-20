@@ -226,20 +226,28 @@
 
                     <div class="col-xl-4">
                         <!-- card -->
-                        <div class="card card-height-100">
+                        <div class="card card-height-100" data-colors='["--vz-primary", "--vz-primary-rgb, 0.85", "--vz-primary-rgb, 0.70", "--vz-primary-rgb, 0.60", "--vz-primary-rgb, 0.45"]'>
                             <div class="card-header align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
                                 <div class="flex-shrink-0">
-                                    <select class="form-select form-select-sm overview-year">
-                                        @for ($i = date('Y'); $i >= 2022; $i--)
-                                            <option @selected($i == date('Y')) value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
+                                    <div class="dropdown card-header-dropdown">
+                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <span class="fw-semibold text-uppercase fs-12">Year: 
+                                            </span><span class="text-muted year-display">{{ date('Y') }}<i
+                                                    class="mdi mdi-chevron-down ms-1"></i></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end year-selector">
+                                            @for ($i = date('Y'); $i >= 2022; $i--)
+                                                <a class="dropdown-item year-option" href="#" data-year="{{ $i }}">{{ $i }}</a>
+                                            @endfor
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="card-body p-0">
-                                <div class="px-3 py-3">
+                            <div class="card-body">
+                                <div id="store-visits-source" class="apex-charts" dir="ltr">
                                     <canvas id="plans-chart" class="pie-chart" height="300"></canvas>
                                 </div>
                             </div>
