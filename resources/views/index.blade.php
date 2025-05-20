@@ -263,8 +263,8 @@
                             
                             <div class="card-body">
                                 <div class="table-responsive table-card">
-                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
-                                        <thead class="text-muted table-light">
+                                    <table class="table table-nowrap mb-0 table-borderless table-centered align-middle">
+                                        <thead class="table-light">
                                             <tr>
                                                 <th scope="col" class="ps-4">{{ __('SL') }}.</th>
                                                 <th>{{ __('Date & Time') }}</th>

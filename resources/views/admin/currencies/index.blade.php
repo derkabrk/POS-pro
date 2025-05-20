@@ -45,8 +45,8 @@
                         </div>
                     </form>
                     <div class="table-responsive table-card mb-1">
-                        <table class="table table-sm table-hover table-card table-bordered align-middle" id="erp-table">
-                            <thead class="text-muted table-light align-middle">
+                        <table class="table table-nowrap mb-0" id="erp-table">
+                            <thead class="table-light align-middle">
                                 <tr class="text-uppercase align-middle">
                                     <th style="width:36px;">
                                         <label class="table-custom-checkbox">

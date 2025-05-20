@@ -113,7 +113,7 @@
                         </li>
                     </ul>
 
-                    <div class="table-responsive table-card mb-1">
+                    <div class="table-responsive table-striped mb-1">
                         <table class="table table-nowrap align-middle" id="orderTable">
                             <thead class="text-muted table-light">
                                 <tr class="text-uppercase">

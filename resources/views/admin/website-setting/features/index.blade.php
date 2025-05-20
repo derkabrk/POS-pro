@@ -49,9 +49,9 @@
 
 
                 </div>
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
+                <div class="table-responsive table-card">
+                    <table class="table table-nowrap mb-0" id="datatable">
+                        <thead class="table-light">
                             <tr>
                                 @can('features-delete')
                                     <th style="width: 0; text-align:start">

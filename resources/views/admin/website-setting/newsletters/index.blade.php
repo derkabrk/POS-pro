@@ -21,9 +21,9 @@
                         </form>
                     </div>
 
-                    <div class="responsive-table">
-                        <table class="table" id="datatable">
-                            <thead>
+                    <div class="table-responsive table-card">
+                        <table class="table table-nowrap mb-0" id="datatable">
+                            <thead class="table-light">
                             <tr>
                                 @can('newsletters-delete')
                                     <th class="w-60">

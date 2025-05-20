@@ -24,8 +24,8 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive table-card mb-1">
-                        <table class="table table-sm table-hover table-card table-bordered align-middle">
-                            <thead class="text-muted table-light align-middle">
+                        <table class="table table-nowrap mb-0">
+                            <thead class="table-light">
                                 <tr class="text-uppercase align-middle">
                                     <th>#</th>
                                     <th>{{ __('Name') }}</th>

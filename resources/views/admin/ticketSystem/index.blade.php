@@ -150,7 +150,7 @@
                     </div>
                 @endif
                 <div class="responsive-table m-0">
-                    <table class="table table-bordered table-card align-middle shadow-sm">
+                    <table class="table table-bordered table-striped align-middle shadow-sm">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -265,7 +265,7 @@
 
                 <!-- Table -->
                 <div class="responsive-table">
-                    <table class="table table-bordered table-card align-middle shadow-sm mb-0" style="background: #fff;">
+                    <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 60px;">#</th>
@@ -340,7 +340,7 @@
 
                 <!-- Table -->
                 <div class="responsive-table">
-                    <table class="table table-bordered table-card align-middle shadow-sm mb-0" style="background: #fff;">
+                    <table class="table table-bordered table-striped align-middle shadow-sm mb-0" style="background: #fff;">
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 60px;">#</th>
