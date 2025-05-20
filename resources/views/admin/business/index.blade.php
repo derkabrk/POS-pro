@@ -495,56 +495,57 @@
         });
     }
 
-    // Tab handling for business types
-    $('.nav-tabs .nav-link').on('click', function() {
-        var type = $(this).attr('id');
-        if(type === 'All') {
-            type = 'all';
-        } else if(type === 'Ecommerce') {
-            type = '1';
-        } else if(type === 'Physical') {
-            type = '0';
-        } else if(type === 'Both') {
-            type = '2';
-        }
-        
-        $('#sale_type_filter').val(type).trigger('change');
-        SearchData();
-        
-        // Prevent default tab switching behavior
-        return false;
-    });
-    
-    // Datepicker change event
-    $('#demo-datepicker').on('change', function() {
-        SearchData();
-    });
-    
-    // Per page change event
-    $('#per_page').on('change', function() {
-        SearchData();
-    });
-    
-    // Business type filter change event
-    $('#sale_type_filter').on('change', function() {
-        SearchData();
-    });
-    
-    // Search input keyup event for real-time filtering
-    var searchTimeout;
-    $('input[name="search"]').on('keyup', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(function() {
+    $(function() {
+        // Tab handling for business types
+        $('.nav-tabs .nav-link').on('click', function() {
+            var type = $(this).attr('id');
+            if(type === 'All') {
+                type = 'all';
+            } else if(type === 'Ecommerce') {
+                type = '1';
+            } else if(type === 'Physical') {
+                type = '0';
+            } else if(type === 'Both') {
+                type = '2';
+            }
+            
+            $('#sale_type_filter').val(type).trigger('change');
             SearchData();
-        }, 500); // 500ms delay to avoid too many requests
+            
+            // Prevent default tab switching behavior
+            return false;
+        });
+        
+        // Datepicker change event
+        $('#demo-datepicker').on('change', function() {
+            SearchData();
+        });
+        
+        // Per page change event
+        $('#per_page').on('change', function() {
+            SearchData();
+        });
+        
+        // Business type filter change event
+        $('#sale_type_filter').on('change', function() {
+            SearchData();
+        });
+        
+        // Search input keyup event for real-time filtering
+        var searchTimeout;
+        $('input[name="search"]').on('keyup', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(function() {
+                SearchData();
+            }, 500); // 500ms delay to avoid too many requests
+        });
+        
+        // Check/uncheck all checkboxes
+        $('#checkAll').on('change', function() {
+            $('input[name="checkAll"]').prop('checked', $(this).prop('checked'));
+        });
     });
     
-    // Check/uncheck all checkboxes
-    $('#checkAll').on('change', function() {
-        $('input[name="checkAll"]').prop('checked', $(this).prop('checked'));
-    });
-    
-   
     // View business details
     $(document).on('click', '.business-view', function() {
         var name = $(this).data('name');
