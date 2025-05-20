@@ -415,25 +415,226 @@
 </div>
 @endsection
 @section('script')
+<!-- Required Javascript libraries -->
+<script src="{{ URL::asset('build/libs/jquery/jquery.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/flatpickr/flatpickr.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize flatpickr date pickers
+        if (typeof flatpickr !== 'undefined') {
+            flatpickr("[data-provider='flatpickr']", {
+                dateFormat: "d M, Y",
+                allowInput: true
+            });
+</script>
+@endsection        }
+        
+        // Initialize Choices.js selects
+        if (typeof Choices !== 'undefined') {
+            document.querySelectorAll("[data-choices]").forEach(element => {
+                const choices = new Choices(element, {
+                    searchEnabled: !(element.getAttribute("data-choices-search-false") === "true"),
+                    itemSelectText: '',
+                });
+            });
+        }
+        
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    });
+
+    // Search functionality using AJAX
+    function SearchData() {
+        // Get form data
+        var formData = new FormData(document.getElementById('filter-form'));
+        
+        // Show loading indicator
+        $('#business-data').html('<tr><td colspan="10" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>');
+        
+        // Send AJAX request
+        $.ajax({
+            url: "{{ route('admin.business.filter') }}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#business-data').html(response);
+                
+                // Reinitialize tooltip for new content
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                });
+                
+                // Show/hide no result message
+                if (response.trim() === '') {
+                    $('.noresult').show();
+                } else {
+                    $('.noresult').hide();
+                }
+            },
+            error: function(xhr) {
+                $('#business-data').html('<tr><td colspan="10" class="text-center text-danger">Error loading data. Please try again.</td></tr>');
+                console.error('Search error:', xhr);
+                
+                // Show error notification
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while filtering data',
+                    confirmButtonClass: 'btn btn-primary'
+                });
+            }
+        });
+    }
+    
+    // Tab handling for business types
+    $('.nav-tabs .nav-link').on('click', function() {
+        var type = $(this).attr('id');
+        if(type === 'All') {
+            type = 'all';
+        } else if(type === 'Ecommerce') {
+            type = '1';
+        } else if(type === 'Physical') {
+            type = '0';
+        } else if(type === 'Both') {
+            type = '2';
+        }
+        
+        $('#sale_type_filter').val(type).trigger('change');
+        SearchData();
+        
+        // Prevent default tab switching behavior
+        return false;
+    });
+    
+    // Datepicker change event
+    $('#demo-datepicker').on('change', function() {
+        SearchData();
+    });
+    
+    // Per page change event
+    $('#per_page').on('change', function() {
+        SearchData();
+    });
+    
+    // Business type filter change event
+    $('#sale_type_filter').on('change', function() {
+        SearchData();
+    });
+    
+    // Search input keyup event for real-time filtering
+    var searchTimeout;
+    $('input[name="search"]').on('keyup', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            SearchData();
+        }, 500); // 500ms delay to avoid too many requests
+    });
+    
+    // Check/uncheck all checkboxes
+    $('#checkAll').on('change', function() {
+        $('input[name="checkAll"]').prop('checked', $(this).prop('checked'));
+    });
+    
+    // Function to handle multiple deletions
+    window.deleteMultiple = function() {
+        var selectedItems = $('input[name="checkAll"]:checked');
+        if (selectedItems.length > 0) {
+            Swal.fire({
+                title: "{{ __('Are you sure?') }}",
+                text: "{{ __('You won\'t be able to revert this!') }}",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-primary w-xs me-2',
+                cancelButtonClass: 'btn btn-danger w-xs',
+                confirmButtonText: "{{ __('Yes, delete it!') }}",
+                buttonsStyling: false,
+                showCloseButton: true
+            }).then(function(result) {
+                if (result.value) {
+                    // Create form data with selected IDs
+                    var selectedIds = [];
+                    selectedItems.each(function() {
+                        selectedIds.push($(this).val());
+                    });
+                    
+                    // Send ajax request to delete selected businesses
+                    $.ajax({
+                        url: "{{ route('admin.business.bulk-delete') }}",
+                        type: "POST",
+                        data: {
+                            ids: selectedIds,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "{{ __('Deleted!') }}",
+                                    text: response.message || "{{ __('Selected items have been deleted.') }}",
+                                    icon: "success",
+                                    confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                    buttonsStyling: false
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "{{ __('Error!') }}",
+                                    text: response.message || "{{ __('Something went wrong.') }}",
+                                    icon: "error",
+                                    confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                    buttonsStyling: false
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: "{{ __('Error!') }}",
+                                text: "{{ __('An error occurred during the delete operation.') }}",
+                                icon: "error",
+                                confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                buttonsStyling: false
+                            });
+                        }
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                title: "{{ __('No items selected') }}",
+                text: "{{ __('Please select at least one item to delete.') }}",
+                icon: "warning",
+                confirmButtonClass: "btn btn-primary w-xs mt-2",
+                buttonsStyling: false
+            });
+        }
+    };
+    
     // View business details
-    $(document).on('click', '.view-btn', function() {
-        var businessName = $(this).data('business-name');
+    $(document).on('click', '.business-view', function() {
+        var name = $(this).data('name');
         var category = $(this).data('category');
         var phone = $(this).data('phone');
         var address = $(this).data('address');
         var package = $(this).data('package');
-        var lastEnroll = $(this).data('last-enroll');
-        var expiredDate = $(this).data('expired-date');
-        var createdDate = $(this).data('created-date');
+        var lastEnroll = $(this).data('last_enroll');
+        var expiredDate = $(this).data('expired_date');
+        var createdDate = $(this).data('created_date');
         var image = $(this).data('image');
         
-        $('.business_name').text(businessName);
+        $('.business_name').text(name);
         $('#category').text(category);
         $('#phone').text(phone);
         $('#address').text(address);
@@ -459,6 +660,11 @@
         
         $('#business_id').val(businessId);
         $('#business_name').val(businessName);
+        
+        // Set the form action URL
+        var url = "{{ route('admin.business.upgrade-plan', ':id') }}";
+        url = url.replace(':id', businessId);
+        $('.upgradePlan').attr('action', url);
     });
     
     // Plan price update
@@ -467,9 +673,97 @@
         $('.plan-price').val(price);
     });
     
-    // Search functionality
-    function SearchData() {
-        $('#filter-form').submit();
+    // Handle form submission with AJAX
+    $('.upgradePlan').on('submit', function(e) {
+        e.preventDefault();
+        
+        var form = $(this);
+        var formData = new FormData(form[0]);
+        
+        $.ajax({
+            url: form.attr('action'),
+            type: form.attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: "{{ __('Success!') }}",
+                        text: response.message || "{{ __('Plan upgraded successfully.') }}",
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function() {
+                        $('#business-upgrade-modal').modal('hide');
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: "{{ __('Error!') }}",
+                        text: response.message || "{{ __('Something went wrong.') }}",
+                        icon: "error",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    });
+                }
+            },
+            error: function(xhr) {
+                var errors = xhr.responseJSON?.errors;
+                var errorMessage = '';
+                
+                if (errors) {
+                    $.each(errors, function(key, value) {
+                        errorMessage += value[0] + '<br>';
+                    });
+                } else {
+                    errorMessage = "{{ __('An error occurred during the upgrade operation.') }}";
+                }
+                
+                Swal.fire({
+                    title: "{{ __('Error!') }}",
+                    html: errorMessage,
+                    icon: "error",
+                    confirmButtonClass: "btn btn-primary w-xs mt-2",
+                    buttonsStyling: false
+                });
+            }
+        });
+    });
+    
+    // Initialize sorting functionality
+    var options = {
+        valueNames: [
+            'id',
+            'business_name',
+            'business_category',
+            'business_type',
+            'phone',
+            'package',
+            'last_enroll',
+            'expired_date'
+        ],
+        page: 10,
+        pagination: true,
+        plugins: [
+            ListPagination({})
+        ]
+    };
+    
+    // Initialize List.js if the element exists
+    try {
+        if (document.getElementById('orderTable')) {
+            var businessList = new List('orderList', options);
+            
+            // Update list after search
+            businessList.on('updated', function() {
+                if (businessList.matchingItems.length === 0) {
+                    $('.noresult').show();
+                } else {
+                    $('.noresult').hide();
+                }
+            });
+        }
+    } catch (error) {
+        console.log("List initialization error: ", error);
     }
-</script>
-@endsection
