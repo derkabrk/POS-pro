@@ -28,29 +28,9 @@
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('admin.business.filter') }}" method="GET" id="filter-form" class="filter-form" table="#business-data">
+                <form action="{{ route('admin.business.filter_business') }}" method="POST" id="filter-form" class="filter-form">
+                    @csrf
                     <div class="row g-3">
-                        <div class="col-xxl-3 col-sm-6">
-                            <div class="search-box">
-                                <input type="text" class="form-control search" name="search" placeholder="{{ __('Search...') }}" value="{{ request('search') }}">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                        <div class="col-xxl-2 col-sm-6">
-                            <div>
-                                <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" name="date_range" placeholder="Select date" value="{{ request('date_range') }}">
-                            </div>
-                        </div>
-                        <div class="col-xxl-2 col-sm-4">
-                            <div>
-                                <select class="form-control" data-choices data-choices-search-false name="per_page" id="per_page">
-                                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>{{__('Show- 10')}}</option>
-                                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>{{__('Show- 25')}}</option>
-                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>{{__('Show- 50')}}</option>
-                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>{{__('Show- 100')}}</option>
-                                </select>
-                            </div>
-                        </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
                                 <select class="form-control" data-choices data-choices-search-false name="type" id="sale_type_filter">
@@ -64,7 +44,7 @@
                         <div class="col-xxl-2 col-sm-4">
                             <div>
                                 <button type="submit" class="btn btn-primary w-100" id="filter-button"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
-                                    {{ __('Filters') }}
+                                    {{ __('Filter by Type') }}
                                 </button>
                             </div>
                         </div>
