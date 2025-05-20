@@ -139,38 +139,29 @@
                                     </td>
                                     <td class="phone">{{ $business->user->phone ?? 'N/A' }}</td>
                                     <td class="package">
-                                        {{ $business->getCurrentPackage->plan->subscriptionName ?? 'N/A' }}
+                                        {{ $business->enrolled_plan && $business->enrolled_plan->plan ? $business->enrolled_plan->plan->subscriptionName : '' }}
                                     </td>
                                     <td class="last_enroll">
-                                        @if($business->getCurrentPackage)
-                                            {{ $business->getCurrentPackage->created_at->format('d M, Y') }}
-                                        @else
-                                            N/A
-                                        @endif
+                                        {{ $business->subscriptionDate ? formatted_date($business->subscriptionDate) : '' }}
                                     </td>
                                     <td class="expired_date">
-                                        @if($business->getCurrentPackage)
-                                            {{ $business->getCurrentPackage->expieryDate->format('d M, Y') }}
-                                        @else
-                                            N/A
-                                        @endif
+                                        {{ $business->will_expire ? formatted_date($business->will_expire) : '' }}
                                     </td>
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">
                                             <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#business-view-modal" 
-                                                   data-business-id="{{ $business->id }}"
-                                                   data-business-name="{{ $business->business_name }}"
-                                                   data-category="{{ $business->category->name ?? 'N/A' }}"
-                                                   data-phone="{{ $business->user->phone ?? 'N/A' }}"
-                                                   data-address="{{ $business->address ?? 'N/A' }}"
-                                                   data-package="{{ $business->getCurrentPackage->plan->subscriptionName ?? 'N/A' }}"
-                                                   data-last-enroll="{{ $business->getCurrentPackage->created_at->format('d M, Y') ?? 'N/A' }}"
-                                                   data-expired-date="{{ $business->getCurrentPackage->expieryDate->format('d M, Y') ?? 'N/A' }}"
-                                                   data-created-date="{{ $business->created_at->format('d M, Y') ?? 'N/A' }}"
-                                                   data-image="{{ asset($business->image) }}"
-                                                   class="text-primary d-inline-block view-btn">
-                                                    <i class="ri-eye-fill fs-16"></i>
+                                                <a href="#business-view-modal" class="view-btn business-view" data-bs-toggle="modal"
+                                                   data-image="{{ asset($business->pictureUrl ?? 'assets/img/default-shop.svg') }}"
+                                                   data-name="{{ $business->companyName }}" data-address="{{ $business->address }}"
+                                                   data-category="{{ $business->category->name ?? '' }}"
+                                                   data-type="{{  $business->type}}"
+                                                   data-phone="{{ $business->phoneNumber }}"
+                                                   data-package="{{ $business->enrolled_plan && $business->enrolled_plan->plan ? $business->enrolled_plan->plan->subscriptionName : '' }}"
+                                                   data-last_enroll="{{ $business->subscriptionDate ? formatted_date($business->subscriptionDate) : '' }}"
+                                                   data-expired_date="{{ $business->will_expire ? formatted_date($business->will_expire) : '' }}"
+                                                   data-created_date="{{ $business->created_at ? formatted_date($business->created_at) : '' }}">
+                                                    <i class="fal fa-eye"></i>
+                                                    {{ __('View') }}   
                                                 </a>
                                             </li>
                                             @can('business-update')
