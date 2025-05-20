@@ -86,7 +86,7 @@ class AcnooBusinessController extends Controller
         $businesses = $query->latest()->paginate($request->per_page ?? 10);
 
         return response()->json([
-            'business' => view('admin.business.index', compact('businesses','categories'))->render(),
+            'business' => view('admin.business.index', compact('businesses','categories','plans'))->render(),
         ]);
     }
 
