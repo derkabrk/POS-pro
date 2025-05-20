@@ -549,7 +549,7 @@
     });
     
     // Function to handle multiple deletions
-    window.deleteMultiple = function() {
+   /* window.deleteMultiple = function() {
         var selectedItems = $('input[name="checkAll"]:checked');
         if (selectedItems.length > 0) {
             Swal.fire({
@@ -620,7 +620,7 @@
                 buttonsStyling: false
             });
         }
-    };
+    };*/
     
     // View business details
     $(document).on('click', '.business-view', function() {
