@@ -39,32 +39,32 @@
                         </div>
                         <div class="col-xxl-2 col-sm-6">
                             <div>
-                                <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" name="date_range" placeholder="Select date">
+                                <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" name="date_range" placeholder="Select date" value="{{ request('date_range') }}">
                             </div>
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
                                 <select class="form-control" data-choices data-choices-search-false name="per_page" id="per_page">
-                                    <option value="10">{{__('Show- 10')}}</option>
-                                    <option value="25">{{__('Show- 25')}}</option>
-                                    <option value="50">{{__('Show- 50')}}</option>
-                                    <option value="100">{{__('Show- 100')}}</option>
+                                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>{{__('Show- 10')}}</option>
+                                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>{{__('Show- 25')}}</option>
+                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>{{__('Show- 50')}}</option>
+                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>{{__('Show- 100')}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
                                 <select class="form-control" data-choices data-choices-search-false name="type" id="sale_type_filter">
-                                    <option value="all">{{ __('All') }}</option>
-                                    <option value="1">{{ __('E-commerce') }}</option>
-                                    <option value="2">{{ __('Both') }}</option>
-                                    <option value="0">{{ __('Physical') }}</option>
+                                    <option value="all" {{ request('type') == 'all' ? 'selected' : '' }}>{{ __('All') }}</option>
+                                    <option value="1" {{ request('type') == '1' ? 'selected' : '' }}>{{ __('E-commerce') }}</option>
+                                    <option value="2" {{ request('type') == '2' ? 'selected' : '' }}>{{ __('Both') }}</option>
+                                    <option value="0" {{ request('type') == '0' ? 'selected' : '' }}>{{ __('Physical') }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
-                                <button type="button" class="btn btn-primary w-100" id="filter-button"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                                <button type="submit" class="btn btn-primary w-100" id="filter-button"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
                                     {{ __('Filters') }}
                                 </button>
                             </div>
@@ -194,17 +194,9 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px">
-                                </lord-icon>
-                                <h5 class="mt-2">{{ __('Sorry! No Result Found') }}</h5>
-                                <p class="text-muted">{{ __("We've searched more than 150+ Businesses We did not find any businesses for you search.") }}</p>
-                            </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            {{ $businesses->links('vendor.pagination.bootstrap-5') }}
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        {{ $businesses->links('vendor.pagination.bootstrap-5') }}
                     </div>
                 </div>
 
@@ -419,23 +411,15 @@
 <script src="{{ URL::asset('build/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/flatpickr/flatpickr.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
-
 <script>
-    // Initialize form elements when document is ready
     $(document).ready(function() {
-        // Initialize flatpickr date pickers
+        // Only initialize flatpickr and Choices.js for UI enhancement, not for filtering
         if (typeof flatpickr !== 'undefined') {
             flatpickr("[data-provider='flatpickr']", {
                 dateFormat: "d M, Y",
                 allowInput: true
             });
         }
-        
-        // Initialize Choices.js selects safely
         document.querySelectorAll("[data-choices]").forEach(element => {
             if (!element.classList.contains('choices__input') && !element.classList.contains('choices__inner') && !element.parentElement.classList.contains('choices')) {
                 new Choices(element, {
@@ -444,292 +428,6 @@
                 });
             }
         });
-        
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-
-        // Define the search function
-        window.performSearch = function() {
-            // Show loading indicator
-            $('#business-data').html('<tr><td colspan="10" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>');
-            
-            // Get form data
-            var form = $('#filter-form')[0];
-            var formData = new FormData(form);
-            
-            // Make AJAX request
-            $.ajax({
-                url: "{{ route('admin.business.filter') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    // Update table with response
-                    $('#business-data').html(response);
-                    
-                    // Reinitialize tooltips for new content
-                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-                        return new bootstrap.Tooltip(tooltipTriggerEl);
-                    });
-                    
-                    // Show/hide no result message
-                    if ($.trim(response) === '' || $(response).find('tr').length === 0) {
-                        $('.noresult').show();
-                    } else {
-                        $('.noresult').hide();
-                    }
-                },
-                error: function(xhr) {
-                    // Show error message
-                    $('#business-data').html('<tr><td colspan="10" class="text-center text-danger">Error loading data. Please try again.</td></tr>');
-                    console.error('Search error:', xhr);
-                    
-                    // Display error notification
-                    Swal.fire({
-                        icon: 'error',
-                        title: "{{ __('Error') }}",
-                        text: "{{ __('An error occurred while filtering data') }}",
-                        confirmButtonClass: 'btn btn-primary'
-                    });
-                }
-            });
-        };
-        
-        // Button click event
-        $('#filter-button').on('click', function() {
-            performSearch();
-        });
-        
-        // Form submit event (prevent default and use AJAX)
-        $('#filter-form').on('submit', function(e) {
-            e.preventDefault();
-            performSearch();
-        });
-        
-        // Tab handling for business types
-        $('.nav-tabs .nav-link').on('click', function(e) {
-            e.preventDefault();
-            var type = $(this).attr('id');
-            
-            // Update active tab visually
-            $('.nav-tabs .nav-link').removeClass('active');
-            $(this).addClass('active');
-            
-            // Set the correct value in the filter dropdown
-            if (type === 'All') {
-                type = 'all';
-            } else if (type === 'Ecommerce') {
-                type = '1';
-            } else if (type === 'Physical') {
-                type = '0';
-            } else if (type === 'Both') {
-                type = '2';
-            }
-            
-            // Set the filter dropdown value
-            $('#sale_type_filter').val(type).trigger('change.select2');
-            
-            // Apply filter immediately
-            performSearch();
-        });
-        
-        // Setup event listeners for real-time filtering
-        
-        // Search input keyup event with debounce
-        var searchTimeout;
-        $('input[name="search"]').on('keyup', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(function() {
-                performSearch();
-            }, 500); // 500ms delay to avoid too many requests
-        });
-        
-        // Date range picker change event
-        $('#demo-datepicker').on('change', function() {
-            performSearch();
-        });
-        
-        // Per page selector change event
-        $('#per_page').on('change', function() {
-            performSearch();
-        });
-        
-        // Business type filter change event
-        $('#sale_type_filter').on('change', function() {
-            performSearch();
-        });
-        
-        // Check/uncheck all checkboxes
-        $('#checkAll').on('change', function() {
-            $('input[name="checkAll"]').prop('checked', $(this).prop('checked'));
-        });
-        
-        // Function to handle multiple deletions
-       
-        // Handle View Business details
-        $(document).on('click', '.business-view', function() {
-            var name = $(this).data('name');
-            var category = $(this).data('category');
-            var phone = $(this).data('phone');
-            var address = $(this).data('address');
-            var package = $(this).data('package');
-            var lastEnroll = $(this).data('last_enroll');
-            var expiredDate = $(this).data('expired_date');
-            var createdDate = $(this).data('created_date');
-            var image = $(this).data('image');
-            
-            $('.business_name').text(name);
-            $('#category').text(category);
-            $('#phone').text(phone);
-            $('#address').text(address);
-            $('#package').text(package);
-            $('#last_enroll').text(lastEnroll);
-            $('#expired_date').text(expiredDate);
-            $('#created_date').text(createdDate);
-            $('#image').attr('src', image);
-        });
-        
-        // Handle Delete Business action
-        $(document).on('click', '.delete-btn', function() {
-            var businessId = $(this).data('id');
-            var url = "{{ route('admin.business.destroy', ':id') }}";
-            url = url.replace(':id', businessId);
-            $('#delete-form').attr('action', url);
-        });
-        
-        // Handle Upgrade Plan action
-        $(document).on('click', '.upgrade-plan-btn', function() {
-            var businessId = $(this).data('id');
-            var businessName = $(this).data('business-name');
-            
-            // Set modal form values
-            $('#business_id').val(businessId);
-            $('#business_name').val(businessName);
-            
-            // Set the form action URL
-            var url = "{{ route('admin.business.upgrade.plan', ':id') }}";
-            url = url.replace(':id', businessId);
-            $('.upgradePlan').attr('action', url);
-        });
-        
-        // Plan price update on selection
-        $(document).on('change', '#plan_id', function() {
-            var price = $(this).find(':selected').data('price');
-            $('.plan-price').val(price);
-        });
-        
-        // Handle upgrade plan form submission with AJAX
-        $('.upgradePlan').on('submit', function(e) {
-            e.preventDefault();
-            
-            var form = $(this);
-            var formData = new FormData(form[0]);
-            
-            // Show loading indicator
-            var submitBtn = form.find('.submit-btn');
-            var originalText = submitBtn.html();
-            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
-            submitBtn.prop('disabled', true);
-            
-            $.ajax({
-                url: form.attr('action'),
-                type: form.attr('method'),
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    submitBtn.html(originalText);
-                    submitBtn.prop('disabled', false);
-                    
-                    if (response.success) {
-                        Swal.fire({
-                            title: "{{ __('Success!') }}",
-                            text: response.message || "{{ __('Plan upgraded successfully.') }}",
-                            icon: "success",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        }).then(function() {
-                            $('#business-upgrade-modal').modal('hide');
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "{{ __('Error!') }}",
-                            text: response.message || "{{ __('Something went wrong.') }}",
-                            icon: "error",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    submitBtn.html(originalText);
-                    submitBtn.prop('disabled', false);
-                    
-                    // Handle validation errors
-                    var errors = xhr.responseJSON?.errors;
-                    var errorMessage = '';
-                    
-                    if (errors) {
-                        $.each(errors, function(key, value) {
-                            errorMessage += value[0] + '<br>';
-                        });
-                    } else {
-                        errorMessage = "{{ __('An error occurred during the upgrade operation.') }}";
-                    }
-                    
-                    Swal.fire({
-                        title: "{{ __('Error!') }}",
-                        html: errorMessage,
-                        icon: "error",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    });
-                }
-            });
-        });
-        
-        // Initialize List.js for table sorting and search (client-side only)
-        try {
-            var options = {
-                valueNames: [
-                    'id',
-                    'business_name',
-                    'business_category',
-                    'business_type',
-                    'phone',
-                    'package',
-                    'last_enroll',
-                    'expired_date'
-                ],
-                page: parseInt($('#per_page').val() || 10),
-                pagination: true,
-                plugins: [
-                    ListPagination({})
-                ]
-            };
-            
-            // Initialize List only if not already initialized
-            if (document.getElementById('orderTable') && !window.businessList) {
-                window.businessList = new List('orderList', options);
-                
-                // Event handler for no results
-                businessList.on('updated', function() {
-                    if (businessList.matchingItems.length === 0) {
-                        $('.noresult').show();
-                    } else {
-                        $('.noresult').hide();
-                    }
-                });
-            }
-        } catch (error) {
-            console.error("List.js initialization error:", error);
-        }
     });
 </script>
 @endsection
