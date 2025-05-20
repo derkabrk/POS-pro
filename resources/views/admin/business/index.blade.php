@@ -247,61 +247,57 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header bg-light p-3">
-                                <h5 class="modal-title">{{ __('Business Details') }} (<span class="business_name">{{ $selectedBusiness->companyName ?? '' }}</span>)</h5>
+                                <h5 class="modal-title">{{ __('Business Details') }} (<span class="business_name_modal"></span>)</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                @if(isset($selectedBusiness))
                                 <div class="personal-info">
                                     <div class="row mt-2">
                                         <div class="col-12 text-center">
-                                            <img width="100px" class="rounded-circle border-2 shadow" src="{{ $selectedBusiness->pictureUrl ? asset($selectedBusiness->pictureUrl) : asset('assets/images/icons/upload.png') }}" id="image" alt="">
+                                            <img width="100px" class="rounded-circle border-2 shadow" src="" id="business-image-modal" alt="">
                                         </div>
                                     </div>
                                     <div class="row align-items-center mt-4">
                                         <div class="col-md-4"><p>{{ __('Business Name') }}</p></div>
                                         <div class="col-1"><p>:</p></div>
-                                        <div class="col-md-7"><p>{{ $selectedBusiness->companyName }}</p></div>
+                                        <div class="col-md-7"><p class="business_name_modal"></p></div>
                                     </div>
                                     <div class="row align-items-center mt-3">
                                         <div class="col-md-4"><p>{{ __('Business Category') }}</p></div>
                                         <div class="col-1"><p>:</p></div>
-                                        <div class="col-md-7"><p>{{ $selectedBusiness->category->name ?? '' }}</p></div>
+                                        <div class="col-md-7"><p class="business_category_modal"></p></div>
                                     </div>
                                     <div class="row align-items-center mt-3">
                                         <div class="col-md-4"><p>{{ __('Phone') }}</p></div>
                                         <div class="col-1"><p>:</p></div>
-                                        <div class="col-md-7"><p>{{ $selectedBusiness->phoneNumber }}</p></div>
+                                        <div class="col-md-7"><p class="business_phone_modal"></p></div>
                                     </div>
                                     <div class="row align-items-center mt-3">
                                         <div class="col-md-4"><p>{{ __('Address') }}</p></div>
                                         <div class="col-1"><p>:</p></div>
-                                        <div class="col-md-7"><p>{{ $selectedBusiness->address }}</p></div>
+                                        <div class="col-md-7"><p class="business_address_modal"></p></div>
                                     </div>
                                     <div class="row align-items-center mt-3">
                                         <div class="col-md-4"><p>{{ __('Package') }}</p></div>
                                         <div class="col-1"><p>:</p></div>
-                                        <div class="col-md-7"><p>{{ $selectedBusiness->enrolled_plan->plan->subscriptionName ?? '' }}</p></div>
+                                        <div class="col-md-7"><p class="business_package_modal"></p></div>
                                     </div>
                                     <div class="row align-items-center mt-3">
                                         <div class="col-md-4"><p>{{ __('Upgrade Date') }}</p></div>
                                         <div class="col-1"><p>:</p></div>
-                                        <div class="col-md-7"><p>{{ $selectedBusiness->subscriptionDate }}</p></div>
+                                        <div class="col-md-7"><p class="business_last_enroll_modal"></p></div>
                                     </div>
                                     <div class="row align-items-center mt-3">
                                         <div class="col-md-4"><p>{{ __('Expired Date') }}</p></div>
                                         <div class="col-1"><p>:</p></div>
-                                        <div class="col-md-7"><p>{{ $selectedBusiness->will_expire }}</p></div>
+                                        <div class="col-md-7"><p class="business_expired_date_modal"></p></div>
                                     </div>
                                     <div class="row align-items-center mt-3">
                                         <div class="col-md-4"><p>{{ __('Created date') }}</p></div>
                                         <div class="col-1"><p>:</p></div>
-                                        <div class="col-md-7"><p>{{ $selectedBusiness->created_at }}</p></div>
+                                        <div class="col-md-7"><p class="business_created_date_modal"></p></div>
                                     </div>
                                 </div>
-                                @else
-                                <div class="alert alert-warning">{{ __('No business selected.') }}</div>
-                                @endif
                             </div>
                         </div>
                     </div>
@@ -334,6 +330,19 @@
                 });
             }
         });
+    });
+
+    $(document).on('click', '.business-view', function() {
+        const btn = $(this);
+        $("#business-image-modal").attr('src', btn.data('image'));
+        $(".business_name_modal").text(btn.data('name'));
+        $(".business_category_modal").text(btn.data('category'));
+        $(".business_phone_modal").text(btn.data('phone'));
+        $(".business_address_modal").text(btn.data('address'));
+        $(".business_package_modal").text(btn.data('package'));
+        $(".business_last_enroll_modal").text(btn.data('last_enroll'));
+        $(".business_expired_date_modal").text(btn.data('expired_date'));
+        $(".business_created_date_modal").text(btn.data('created_date'));
     });
 </script>
 @endsection

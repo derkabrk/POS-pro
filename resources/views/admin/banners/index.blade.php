@@ -10,16 +10,16 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="card" id="bannerList">
-            <div class="card-header border-0">
+        <div class="card shadow-lg border-0" id="bannerList">
+            <div class="card-header border-0 bg-primary text-white rounded-top">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
-                        <h5 class="card-title mb-0">{{ __('Banner List') }}</h5>
+                        <h5 class="card-title mb-0 fw-bold">{{ __('Banner List') }}</h5>
                     </div>
                     <div class="col-sm-auto">
-                        <div class="d-flex gap-1 flex-wrap">
+                        <div class="d-flex gap-2 flex-wrap">
                             @can('banners-create')
-                                <a type="button" href="#create-banner-modal" data-bs-toggle="modal" class="btn btn-primary add-btn {{ Route::is('admin.banners.create') ? 'active' : '' }}">
+                                <a type="button" href="#create-banner-modal" data-bs-toggle="modal" class="btn btn-light add-btn {{ Route::is('admin.banners.create') ? 'active' : '' }}">
                                     <i class="ri-add-line align-bottom me-1"></i> {{ __('Create Banner') }}
                                 </a>
                             @endcan
@@ -29,20 +29,20 @@
             </div>
             <div class="card-body pt-0">
                 <div class="table-responsive table-card mb-1">
-                    <table class="table table-nowrap align-middle" id="bannerTable">
-                        <thead class="text-muted table-light">
-                            <tr class="text-uppercase">
+                    <table class="table table-hover table-striped table-bordered align-middle" id="bannerTable" style="min-width: 800px;">
+                        <thead class="text-muted table-light align-middle">
+                            <tr class="text-uppercase align-middle">
                                 @can('banners-delete')
-                                <th scope="col" style="width: 25px;">
+                                <th scope="col" style="width: 40px;">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                     </div>
                                 </th>
                                 @endcan
-                                <th>{{ __('SL') }}</th>
-                                <th>{{ __('Image') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th>{{ __('Action') }}</th>
+                                <th style="width: 60px;">{{ __('SL') }}</th>
+                                <th style="width: 120px;">{{ __('Image') }}</th>
+                                <th style="width: 120px;">{{ __('Status') }}</th>
+                                <th style="width: 120px;">{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="list form-check-all" id="banner-data">
