@@ -78,6 +78,7 @@ class AcnooBusinessController extends Controller
     {
         $query = Business::query();
          $categories = BusinessCategory::latest()->paginate(20);
+         $plans = Plan::latest()->get();
         // Apply sale_type filter if selected
         if ($request->has('type') && $request->type !== '') {
             $query->where('type', intval($request->type));
