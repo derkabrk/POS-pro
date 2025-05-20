@@ -24,7 +24,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive table-card mb-1">
-                        <table class="table table-sm table-hover table-striped table-bordered align-middle">
+                        <table class="table table-sm table-hover table-card table-bordered align-middle">
                             <thead class="text-muted table-light align-middle">
                                 <tr class="text-uppercase align-middle">
                                     <th>#</th>

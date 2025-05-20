@@ -57,7 +57,7 @@
             </div>
 
             <div>
-                <table class="table table-striped">
+                <table class="table table-card">
                     <thead>
                         <tr class="in-table-header">
                             <th class="head-red text-center">{{ __('SL') }}</th>

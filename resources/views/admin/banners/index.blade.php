@@ -29,7 +29,7 @@
             </div>
             <div class="card-body pt-0">
                 <div class="table-responsive table-card mb-1">
-                    <table class="table table-sm table-hover table-striped table-bordered align-middle" id="bannerTable" style="min-width: 600px; font-size: 0.95rem;">
+                    <table class="table table-sm table-hover table-card table-bordered align-middle" id="bannerTable" style="min-width: 600px; font-size: 0.95rem;">
                         <thead class="text-muted table-light align-middle">
                             <tr class="text-uppercase align-middle">
                                 @can('banners-delete')

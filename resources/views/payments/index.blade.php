@@ -32,7 +32,7 @@
                                     @endif
 
                                     <h5 class="payment-title mb-3">{{ ucfirst($gateway->name) }} ({{ optional($gateway->currency)->code }})</h5>
-                                    <table class="table table-striped">
+                                    <table class="table table-card">
                                         <tbody>
 
                                             @php

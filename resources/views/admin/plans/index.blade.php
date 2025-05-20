@@ -50,7 +50,7 @@
             </div>
             <div class="card-body pt-0">
                 <div class="table-responsive table-card mb-1">
-                    <table class="table table-sm table-hover table-striped table-bordered align-middle" id="planTable" style="min-width: 700px; font-size: 0.97rem;">
+                    <table class="table table-sm table-hover table-card table-bordered align-middle" id="planTable" style="min-width: 700px; font-size: 0.97rem;">
                         <thead class="text-muted table-light align-middle">
                             <tr class="text-uppercase align-middle">
                                 @can('plans-delete')
