@@ -63,9 +63,21 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::routeIs('admin.ticketSystem.index') ? 'active' : '' }}" href="{{ route('admin.ticketSystem.index') }}">
+                    <a class="nav-link menu-link" href="#sidebarTicketSystem" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ Request::routeIs('admin.ticketSystem.index', 'admin.ticketSystem.categories') ? 'true' : 'false' }}"
+                        aria-controls="sidebarTicketSystem">
                         <i class="ri-ticket-line"></i> <span>{{ __('Ticket System') }}</span>
                     </a>
+                    <div class="collapse menu-dropdown {{ Request::routeIs('admin.ticketSystem.index', 'admin.ticketSystem.categories') ? 'show' : '' }}" id="sidebarTicketSystem">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="">{{ __('Manage Status') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="">{{ __('Manage Categories') }}</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
 
                 @canany(['business-categories-read'])

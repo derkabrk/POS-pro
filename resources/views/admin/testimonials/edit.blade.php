@@ -4,7 +4,7 @@
     {{ __('Edit Testimonial') }}
 @endsection
 
-@section('main_content')
+@section('content')
 <div class="erp-table-section">
     {{-- {{ dd($testimonial) }} --}}
     <div class="container-fluid">
