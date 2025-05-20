@@ -82,7 +82,7 @@ class AcnooBusinessController extends Controller
         if ($request->has('type') && $request->type !== '') {
             $query->where('type', intval($request->type));
         }
-        $business = $query->latest()->paginate($request->per_page ?? 10);
+        $businesses = $query->latest()->paginate($request->per_page ?? 10);
 
         return response()->json([
             'business' => view('admin.business.index', compact('businesses'))->render(),
