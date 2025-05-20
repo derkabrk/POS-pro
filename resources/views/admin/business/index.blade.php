@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title') {{ __('Business List') }} @endsection
 @section('css')
-<link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('admin/build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
 @component('components.breadcrumb')
@@ -416,10 +416,10 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('admin/build/libs/list.js/list.min.js') }}"></script>
+<script src="{{ URL::asset('admin/build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
+<script src="{{ URL::asset('admin/build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('admin/build/js/app.js') }}"></script>
 
 <script>
     // View business details
