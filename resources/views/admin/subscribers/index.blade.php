@@ -5,63 +5,45 @@
 @endsection
 
 @section('main_content')
-<div class="erp-table-section">
-    <div class="container-fluid">
-        <div class="card card bg-transparent">
-            <div class="card-bodys ">
-                <div class="table-header p-16">
-                    <h4>{{ __('Subscriptions List') }}</h4>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ __('Subscriptions List') }}</h4>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('admin.subscription-reports.filter') }}" method="post" class="filter-form mb-3" table="#subscriber-data">
+                @csrf
+                <div class="row g-2 align-items-center">
+                    <div class="col-auto">
+                        <select name="per_page" class="form-select">
+                            <option value="10">{{__('Show- 10')}}</option>
+                            <option value="25">{{__('Show- 25')}}</option>
+                            <option value="50">{{__('Show- 50')}}</option>
+                            <option value="100">{{__('Show- 100')}}</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <input class="form-control" type="text" name="search" placeholder="{{ __('Search...') }}" value="{{ request('search') }}">
+                    </div>
                 </div>
-                <div class="table-top-form p-16-0">
-                    <form action="{{ route('admin.subscription-reports.filter') }}" method="post" class="filter-form" table="#subscriber-data">
-                        @csrf
-
-                        <div class="table-top-left d-flex gap-3 margin-l-16">
-                            <div class="gpt-up-down-arrow position-relative">
-                                <select name="per_page" class="form-control">
-                                    <option value="10">{{__('Show- 10')}}</option>
-                                    <option value="25">{{__('Show- 25')}}</option>
-                                    <option value="50">{{__('Show- 50')}}</option>
-                                    <option value="100">{{__('Show- 100')}}</option>
-                                </select>
-                                <span></span>
-                            </div>
-
-                            <div class="table-search position-relative">
-                                <input class="form-control" type="text" name="search"
-                                    placeholder="{{ __('Search...') }}" value="{{ request('search') }}">
-                                <span class="position-absolute">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M14.582 14.582L18.332 18.332" stroke="#4D4D4D" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M16.668 9.16797C16.668 5.02584 13.3101 1.66797 9.16797 1.66797C5.02584 1.66797 1.66797 5.02584 1.66797 9.16797C1.66797 13.3101 5.02584 16.668 9.16797 16.668C13.3101 16.668 16.668 13.3101 16.668 9.16797Z" stroke="#4D4D4D" stroke-width="1.25" stroke-linejoin="round"/>
-                                        </svg>
-
-                                </span>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
-
-            </div>
-
+            </form>
             <div class="table-responsive table-card">
                 <table class="table table-nowrap mb-0" id="datatable">
                     <thead class="table-light">
-                    <tr>
-                        <th>{{ __('SL') }}.</th>
-                        <th>{{ __('Date') }}</th>
-                        <th>{{ __('Shop Name') }}</th>
-                        <th>{{ __('Category') }}</th>
-                        <th>{{ __('Package') }}</th>
-                        <th>{{ __('Started') }}</th>
-                        <th>{{ __('End') }}</th>
-                        <th>{{ __('Gateway Method') }}</th>
-                        <th>{{ __('Status') }}</th>
-                        <th>{{ __('Action') }}</th>
-                    </tr>
+                        <tr>
+                            <th>{{ __('SL') }}.</th>
+                            <th>{{ __('Date') }}</th>
+                            <th>{{ __('Shop Name') }}</th>
+                            <th>{{ __('Category') }}</th>
+                            <th>{{ __('Package') }}</th>
+                            <th>{{ __('Started') }}</th>
+                            <th>{{ __('End') }}</th>
+                            <th>{{ __('Gateway Method') }}</th>
+                            <th>{{ __('Status') }}</th>
+                            <th>{{ __('Action') }}</th>
+                        </tr>
                     </thead>
-                    <tbody  id="subscriber-data" class="searchResults">
+                    <tbody id="subscriber-data" class="searchResults">
                         @include('admin.subscribers.datas')
                     </tbody>
                 </table>
@@ -72,7 +54,6 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 <div class="modal fade" id="approve-modal">
