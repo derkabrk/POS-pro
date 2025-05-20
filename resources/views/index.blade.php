@@ -4,7 +4,7 @@
     {{ __('Dashboard') }}
 @endsection
 
-@section('section')
+@section('content')
     <div class="container-fluid">
         <!-- start page title -->
         <div class="row">
