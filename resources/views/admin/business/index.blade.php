@@ -436,20 +436,15 @@
             });
         }
         
-        // Initialize Choices.js selects only if not already initialized
-        if (typeof Choices !== 'undefined') {
-            document.querySelectorAll("[data-choices]").forEach(element => {
-                if (!element.classList.contains('choices__input')) {
-                    if (!element.dataset.choicesInitialized) {
-                        const choices = new Choices(element, {
-                            searchEnabled: !(element.getAttribute("data-choices-search-false") === "true"),
-                            itemSelectText: '',
-                        });
-                        element.dataset.choicesInitialized = 'true';
-                    }
-                }
-            });
-        }
+        // Initialize Choices.js selects (prevent double initialization)
+        document.querySelectorAll("[data-choices]").forEach(element => {
+            if (!element.classList.contains('choices__input') && !element.classList.contains('choices__inner') && !element.parentElement.classList.contains('choices')) {
+                new Choices(element, {
+                    searchEnabled: !(element.getAttribute("data-choices-search-false") === "true"),
+                    itemSelectText: '',
+                });
+            }
+        });
         
         // Initialize tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
@@ -669,20 +664,16 @@
             ]
         };
         
-        // Initialize List.js only if not already initialized
-        try {
-            if (document.getElementById('orderTable') && !window.businessList) {
-                window.businessList = new List('orderList', options);
-                window.businessList.on('updated', function() {
-                    if (window.businessList.matchingItems.length === 0) {
-                        $('.noresult').show();
-                    } else {
-                        $('.noresult').hide();
-                    }
-                });
-            }
-        } catch (error) {
-            console.log("List initialization error: ", error);
+        // Initialize List.js if the element exists and not already initialized
+        if (!window.businessList && document.getElementById('orderTable')) {
+            window.businessList = new List('orderList', options);
+            businessList.on('updated', function() {
+                if (businessList.matchingItems.length === 0) {
+                    $('.noresult').show();
+                } else {
+                    $('.noresult').hide();
+                }
+            });
         }
     });
 </script>
