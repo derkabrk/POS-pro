@@ -77,16 +77,16 @@ class AcnooBusinessController extends Controller
     public function filter(Request $request)
     {
         $query = Business::query();
-        $categories = BusinessCategory::latest()->paginate(20);
-        $plans = Plan::latest()->get();
+
         // Apply sale_type filter if selected
         if ($request->has('type') && $request->type !== '') {
             $query->where('type', intval($request->type));
         }
-        $businesses = $query->latest()->paginate($request->per_page ?? 10);
+        $business = $query->latest()->paginate($request->per_page ?? 10);
 
-        // Return a full HTML page (not JSON)
-        return view('admin.business.index', compact('businesses','categories','plans'));
+        return response()->json([
+            'business' => view('admin.business.dates', compact('business'))->render(),
+        ]);
     }
 
     public function create()
