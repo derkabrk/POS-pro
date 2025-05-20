@@ -142,10 +142,18 @@
                                         {{ $business->getCurrentPackage->plan->subscriptionName ?? 'N/A' }}
                                     </td>
                                     <td class="last_enroll">
-                                        {{ $business->getCurrentPackage->created_at->format('d M, Y') ?? 'N/A' }}
+                                        @if($business->getCurrentPackage)
+                                            {{ $business->getCurrentPackage->created_at->format('d M, Y') }}
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                     <td class="expired_date">
-                                        {{ $business->getCurrentPackage->expieryDate->format('d M, Y') ?? 'N/A' }}
+                                        @if($business->getCurrentPackage)
+                                            {{ $business->getCurrentPackage->expieryDate->format('d M, Y') }}
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">
