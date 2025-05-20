@@ -70,16 +70,10 @@
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Total Shop') }}</p>
                                     </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-success fs-14 mb-0">
-                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +8.24 %
-                                        </h5>
-                                    </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4" id="total_businesses">0</h4>
-                                        <a href="" class="text-decoration-underline">{{ __('View all businesses') }}</a>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_businesses"></h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -99,16 +93,10 @@
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Expired Businesses') }}</p>
                                     </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-danger fs-14 mb-0">
-                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i> +1.24 %
-                                        </h5>
-                                    </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4" id="expired_businesses">0</h4>
-                                        <a href="" class="text-decoration-underline">{{ __('View expired businesses') }}</a>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="expired_businesses"></h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -128,16 +116,10 @@
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Plan Subscribes') }}</p>
                                     </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-success fs-14 mb-0">
-                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +16.38 %
-                                        </h5>
-                                    </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4" id="plan_subscribes">0</h4>
-                                        <a href="" class="text-decoration-underline">{{ __('See details') }}</a>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="plan_subscribes"></h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-success-subtle rounded fs-3">
@@ -157,16 +139,10 @@
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Total Categories') }}</p>
                                     </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-muted fs-14 mb-0">
-                                            +0.00 %
-                                        </h5>
-                                    </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4" id="business_categories">0</h4>
-                                        <a href="" class="text-decoration-underline">{{ __('View all categories') }}</a>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="business_categories"></h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -186,16 +162,10 @@
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Total Plans') }}</p>
                                     </div>
-                                    <div class="flex-shrink-0">
-                                        <h5 class="text-muted fs-14 mb-0">
-                                            +0.00 %
-                                        </h5>
-                                    </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4" id="total_plans">0</h4>
-                                        <a href="" class="text-decoration-underline">{{ __('View plans') }}</a>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_plans"></h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-danger-subtle rounded fs-3">
@@ -226,12 +196,7 @@
                                 <div class="row g-0 text-center">
                                     <div class="col-12">
                                         <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-1">
-                                                    <div class="fs-14 text-info">
-                                                        <i class="ri-checkbox-blank-circle-fill"></i>
-                                                    </div>
-                                                </div>
+                                            <div class="d-flex justify-content-center">
                                                 <div>Total Subscription: <span class="text-success fw-semibold income-value"></span></div>
                                             </div>
                                         </div>
@@ -241,7 +206,19 @@
 
                             <div class="card-body p-0 pb-2">
                                 <div class="w-100">
-                                    <canvas id="monthly-statistics" height="290" class="apex-charts"></canvas>
+                                    <div class="d-flex mb-2 ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-1">
+                                                <div class="fs-14 text-info">
+                                                    <i class="ri-checkbox-blank-circle-fill"></i>
+                                                </div>
+                                            </div>
+                                            <div>Total Subscription: <span class="text-success fw-semibold income-value"></span></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <canvas id="monthly-statistics" height="290" class="apex-charts"></canvas>
+                                    </div>
                                 </div>
                             </div><!-- end card body -->
                         </div><!-- end card -->
@@ -443,6 +420,8 @@
                 var current = 0;
                 var target = parseInt(element.innerText);
                 if (isNaN(target)) target = 0;
+                if (target === 0) return; // Skip animation if value is 0 or empty
+                
                 var increment = target > 1000 ? 25 : (target > 100 ? 5 : 1);
                 var duration = 1000;
                 var steps = Math.ceil(duration / 30);
@@ -458,6 +437,18 @@
                     }
                 }, 30);
             });
+            
+            // Ensure chart data is loaded
+            // This is optional as dashboard.js should already handle this
+            setTimeout(function() {
+                if (typeof yearlyStatistics === 'function') {
+                    yearlyStatistics();
+                }
+                
+                if (typeof plansOverview === 'function') {
+                    plansOverview();
+                }
+            }, 500);
         });
     </script>
 @endsection
