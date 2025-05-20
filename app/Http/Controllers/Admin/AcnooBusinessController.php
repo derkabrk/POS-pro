@@ -84,9 +84,14 @@ class AcnooBusinessController extends Controller
         }
         $businesses = $query->latest()->paginate($request->per_page ?? 10);
 
-        return response()->json([
-            'business' => view('admin.business.dates', compact('businesses'))->render(),
-        ]);
+    
+          if ($request->ajax()) {
+            return response()->json([
+                'business' => view('admin.business.datas', compact('businesses'))->render()
+            ]);
+        }
+    
+        return redirect(url()->previous());
     }
 
     public function create()
