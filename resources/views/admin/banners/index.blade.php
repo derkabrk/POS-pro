@@ -29,20 +29,20 @@
             </div>
             <div class="card-body pt-0">
                 <div class="table-responsive table-card mb-1">
-                    <table class="table table-hover table-striped table-bordered align-middle" id="bannerTable" style="min-width: 800px;">
+                    <table class="table table-sm table-hover table-striped table-bordered align-middle" id="bannerTable" style="min-width: 600px; font-size: 0.95rem;">
                         <thead class="text-muted table-light align-middle">
                             <tr class="text-uppercase align-middle">
                                 @can('banners-delete')
-                                <th scope="col" style="width: 40px;">
+                                <th scope="col" style="width: 36px;">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                     </div>
                                 </th>
                                 @endcan
-                                <th style="width: 60px;">{{ __('SL') }}</th>
-                                <th style="width: 120px;">{{ __('Image') }}</th>
-                                <th style="width: 120px;">{{ __('Status') }}</th>
-                                <th style="width: 120px;">{{ __('Action') }}</th>
+                                <th style="width: 48px;">{{ __('SL') }}</th>
+                                <th style="width: 80px;">{{ __('Image') }}</th>
+                                <th style="width: 80px;">{{ __('Status') }}</th>
+                                <th style="width: 90px;">{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="list form-check-all" id="banner-data">
