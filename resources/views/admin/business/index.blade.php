@@ -100,9 +100,9 @@
                                 @include('admin.business.dates')
                             </tbody>
                         </table>
-                        <div class="d-flex justify-content-end mt-3">
-                            {{ $businesses->appends(request()->except('page'))->links('vendor.pagination.bootstrap-5') }}
-                        </div>
+                        <tbody class="list form-check-all" id="business-data">
+    @include('admin.business.dates')
+</tbody>
                     </div>
                 </div>
 
