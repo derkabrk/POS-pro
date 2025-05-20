@@ -416,9 +416,9 @@
 @section('script')
 <!-- Required Javascript libraries -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <script src="{{ URL::asset('build/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/flatpickr/flatpickr.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
@@ -700,28 +700,28 @@
         
         // Initialize List.js for table sorting and search (client-side only)
         try {
-            var options = {
-                valueNames: [
-                    'id',
-                    'business_name',
-                    'business_category',
-                    'business_type',
-                    'phone',
-                    'package',
-                    'last_enroll',
-                    'expired_date'
-                ],
-                page: parseInt($('#per_page').val() || 10),
-                pagination: true,
-                plugins: [
-                    ListPagination({})
-                ]
-            };
-            
-            // Initialize List only if not already initialized
-            if (document.getElementById('orderTable') && !window.businessList) {
+            var orderTable = document.getElementById('orderTable');
+            var businessData = document.getElementById('business-data');
+            // Only initialize if table and tbody exist and tbody has at least one row
+            if (orderTable && businessData && businessData.childNodes.length > 0 && !window.businessList) {
+                var options = {
+                    valueNames: [
+                        'id',
+                        'business_name',
+                        'business_category',
+                        'business_type',
+                        'phone',
+                        'package',
+                        'last_enroll',
+                        'expired_date'
+                    ],
+                    page: parseInt($('#per_page').val() || 10),
+                    pagination: true,
+                    plugins: [
+                        ListPagination({})
+                    ]
+                };
                 window.businessList = new List('orderList', options);
-                
                 // Event handler for no results
                 businessList.on('updated', function() {
                     if (businessList.matchingItems.length === 0) {
