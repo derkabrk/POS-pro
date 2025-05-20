@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-xxl-2 col-sm-6">
                             <div>
-                                <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" placeholder="Select date">
+                                <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" name="date_range" placeholder="Select date">
                             </div>
                         </div>
                         <div class="col-xxl-2 col-sm-4">
@@ -64,7 +64,7 @@
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
-                                <button type="button" class="btn btn-primary w-100" onclick="SearchData();"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                                <button type="button" class="btn btn-primary w-100" id="filter-button"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
                                     {{ __('Filters') }}
                                 </button>
                             </div>
@@ -150,7 +150,7 @@
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">
                                             <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                <a href="#business-view-modal" class="view-btn business-view" data-bs-toggle="modal"
+                                                <a href="#business-view-modal" class="text-primary d-inline-block view-btn business-view" data-bs-toggle="modal"
                                                    data-image="{{ asset($business->pictureUrl ?? 'assets/img/default-shop.svg') }}"
                                                    data-name="{{ $business->companyName }}" data-address="{{ $business->address }}"
                                                    data-category="{{ $business->category->name ?? '' }}"
@@ -160,8 +160,7 @@
                                                    data-last_enroll="{{ $business->subscriptionDate ? formatted_date($business->subscriptionDate) : '' }}"
                                                    data-expired_date="{{ $business->will_expire ? formatted_date($business->will_expire) : '' }}"
                                                    data-created_date="{{ $business->created_at ? formatted_date($business->created_at) : '' }}">
-                                                    <i class="fal fa-eye"></i>
-                                                    {{ __('View') }}   
+                                                    <i class="ri-eye-fill fs-16"></i>
                                                 </a>
                                             </li>
                                             @can('business-update')
@@ -416,7 +415,6 @@
 @endsection
 @section('script')
 <!-- Required Javascript libraries -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="{{ URL::asset('build/libs/jquery/jquery.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/flatpickr/flatpickr.min.js') }}"></script>
@@ -427,7 +425,8 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
-    $(function() {
+    // Initialize form elements when document is ready
+    $(document).ready(function() {
         // Initialize flatpickr date pickers
         if (typeof flatpickr !== 'undefined') {
             flatpickr("[data-provider='flatpickr']", {
@@ -436,26 +435,36 @@
             });
         }
         
-        // Initialize Choices.js selects (prevent double initialization)
-        document.querySelectorAll("[data-choices]").forEach(element => {
-            if (!element.classList.contains('choices__input') && !element.classList.contains('choices__inner') && !element.parentElement.classList.contains('choices')) {
-                new Choices(element, {
-                    searchEnabled: !(element.getAttribute("data-choices-search-false") === "true"),
-                    itemSelectText: '',
-                });
-            }
-        });
+        // Initialize Choices.js selects safely
+        if (typeof Choices !== 'undefined') {
+            document.querySelectorAll("[data-choices]").forEach(function(element) {
+                if (!element.classList.contains('choices__input') && 
+                    !element.classList.contains('choices__inner') && 
+                    !element.parentElement.classList.contains('choices')) {
+                    new Choices(element, {
+                        searchEnabled: !(element.getAttribute("data-choices-search-false") === "true"),
+                        itemSelectText: '',
+                    });
+                }
+            });
+        }
         
         // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
-        // Search functionality using AJAX
-        window.SearchData = function() {
-            var formData = new FormData(document.getElementById('filter-form'));
+        // Define the search function
+        window.performSearch = function() {
+            // Show loading indicator
             $('#business-data').html('<tr><td colspan="10" class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>');
+            
+            // Get form data
+            var form = $('#filter-form')[0];
+            var formData = new FormData(form);
+            
+            // Make AJAX request
             $.ajax({
                 url: "{{ route('admin.business.filter') }}",
                 type: "POST",
@@ -463,11 +472,16 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
+                    // Update table with response
                     $('#business-data').html(response);
+                    
+                    // Reinitialize tooltips for new content
                     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                         return new bootstrap.Tooltip(tooltipTriggerEl);
                     });
+                    
+                    // Show/hide no result message
                     if ($.trim(response) === '' || $(response).find('tr').length === 0) {
                         $('.noresult').show();
                     } else {
@@ -475,68 +489,165 @@
                     }
                 },
                 error: function(xhr) {
+                    // Show error message
                     $('#business-data').html('<tr><td colspan="10" class="text-center text-danger">Error loading data. Please try again.</td></tr>');
                     console.error('Search error:', xhr);
+                    
+                    // Display error notification
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred while filtering data',
+                        title: "{{ __('Error') }}",
+                        text: "{{ __('An error occurred while filtering data') }}",
                         confirmButtonClass: 'btn btn-primary'
                     });
                 }
             });
         };
-
+        
+        // Button click event
+        $('#filter-button').on('click', function() {
+            performSearch();
+        });
+        
+        // Form submit event (prevent default and use AJAX)
+        $('#filter-form').on('submit', function(e) {
+            e.preventDefault();
+            performSearch();
+        });
+        
         // Tab handling for business types
-        $('.nav-tabs .nav-link').on('click', function() {
+        $('.nav-tabs .nav-link').on('click', function(e) {
+            e.preventDefault();
             var type = $(this).attr('id');
-            if(type === 'All') {
+            
+            // Update active tab visually
+            $('.nav-tabs .nav-link').removeClass('active');
+            $(this).addClass('active');
+            
+            // Set the correct value in the filter dropdown
+            if (type === 'All') {
                 type = 'all';
-            } else if(type === 'Ecommerce') {
+            } else if (type === 'Ecommerce') {
                 type = '1';
-            } else if(type === 'Physical') {
+            } else if (type === 'Physical') {
                 type = '0';
-            } else if(type === 'Both') {
+            } else if (type === 'Both') {
                 type = '2';
             }
             
-            $('#sale_type_filter').val(type).trigger('change');
-            SearchData();
+            // Set the filter dropdown value
+            $('#sale_type_filter').val(type).trigger('change.select2');
             
-            // Prevent default tab switching behavior
-            return false;
+            // Apply filter immediately
+            performSearch();
         });
         
-        // Datepicker change event
-        $('#demo-datepicker').on('change', function() {
-            SearchData();
-        });
+        // Setup event listeners for real-time filtering
         
-        // Per page change event
-        $('#per_page').on('change', function() {
-            SearchData();
-        });
-        
-        // Business type filter change event
-        $('#sale_type_filter').on('change', function() {
-            SearchData();
-        });
-        
-        // Search input keyup event for real-time filtering
+        // Search input keyup event with debounce
         var searchTimeout;
         $('input[name="search"]').on('keyup', function() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(function() {
-                SearchData();
+                performSearch();
             }, 500); // 500ms delay to avoid too many requests
+        });
+        
+        // Date range picker change event
+        $('#demo-datepicker').on('change', function() {
+            performSearch();
+        });
+        
+        // Per page selector change event
+        $('#per_page').on('change', function() {
+            performSearch();
+        });
+        
+        // Business type filter change event
+        $('#sale_type_filter').on('change', function() {
+            performSearch();
         });
         
         // Check/uncheck all checkboxes
         $('#checkAll').on('change', function() {
             $('input[name="checkAll"]').prop('checked', $(this).prop('checked'));
         });
-
-        // View business details
+        
+        // Function to handle multiple deletions
+        window.deleteMultiple = function() {
+            var selectedItems = $('input[name="checkAll"]:checked');
+            if (selectedItems.length > 0) {
+                Swal.fire({
+                    title: "{{ __('Are you sure?') }}",
+                    text: "{{ __('You won\'t be able to revert this!') }}",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-primary w-xs me-2',
+                    cancelButtonClass: 'btn btn-danger w-xs',
+                    confirmButtonText: "{{ __('Yes, delete it!') }}",
+                    buttonsStyling: false,
+                    showCloseButton: true
+                }).then(function(result) {
+                    if (result.value) {
+                        // Create form data with selected IDs
+                        var selectedIds = [];
+                        selectedItems.each(function() {
+                            selectedIds.push($(this).val());
+                        });
+                        
+                        // Send ajax request to delete selected businesses
+                        $.ajax({
+                            url: "{{ route('admin.business.bulk-delete') }}",
+                            type: "POST",
+                            data: {
+                                ids: selectedIds,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: "{{ __('Deleted!') }}",
+                                        text: response.message || "{{ __('Selected items have been deleted.') }}",
+                                        icon: "success",
+                                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                        buttonsStyling: false
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "{{ __('Error!') }}",
+                                        text: response.message || "{{ __('Something went wrong.') }}",
+                                        icon: "error",
+                                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                        buttonsStyling: false
+                                    });
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.fire({
+                                    title: "{{ __('Error!') }}",
+                                    text: "{{ __('An error occurred during the delete operation.') }}",
+                                    icon: "error",
+                                    confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                    buttonsStyling: false
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "{{ __('No items selected') }}",
+                    text: "{{ __('Please select at least one item to delete.') }}",
+                    icon: "warning",
+                    confirmButtonClass: "btn btn-primary w-xs mt-2",
+                    buttonsStyling: false
+                });
+            }
+        };
+        
+        // Handle View Business details
         $(document).on('click', '.business-view', function() {
             var name = $(this).data('name');
             var category = $(this).data('category');
@@ -559,7 +670,7 @@
             $('#image').attr('src', image);
         });
         
-        // Delete business
+        // Handle Delete Business action
         $(document).on('click', '.delete-btn', function() {
             var businessId = $(this).data('id');
             var url = "{{ route('admin.business.destroy', ':id') }}";
@@ -567,11 +678,12 @@
             $('#delete-form').attr('action', url);
         });
         
-        // Upgrade plan
+        // Handle Upgrade Plan action
         $(document).on('click', '.upgrade-plan-btn', function() {
             var businessId = $(this).data('id');
             var businessName = $(this).data('business-name');
             
+            // Set modal form values
             $('#business_id').val(businessId);
             $('#business_name').val(businessName);
             
@@ -581,18 +693,24 @@
             $('.upgradePlan').attr('action', url);
         });
         
-        // Plan price update
+        // Plan price update on selection
         $(document).on('change', '#plan_id', function() {
             var price = $(this).find(':selected').data('price');
             $('.plan-price').val(price);
         });
         
-        // Handle form submission with AJAX
+        // Handle upgrade plan form submission with AJAX
         $('.upgradePlan').on('submit', function(e) {
             e.preventDefault();
             
             var form = $(this);
             var formData = new FormData(form[0]);
+            
+            // Show loading indicator
+            var submitBtn = form.find('.submit-btn');
+            var originalText = submitBtn.html();
+            submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+            submitBtn.prop('disabled', true);
             
             $.ajax({
                 url: form.attr('action'),
@@ -601,6 +719,9 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
+                    submitBtn.html(originalText);
+                    submitBtn.prop('disabled', false);
+                    
                     if (response.success) {
                         Swal.fire({
                             title: "{{ __('Success!') }}",
@@ -623,6 +744,10 @@
                     }
                 },
                 error: function(xhr) {
+                    submitBtn.html(originalText);
+                    submitBtn.prop('disabled', false);
+                    
+                    // Handle validation errors
                     var errors = xhr.responseJSON?.errors;
                     var errorMessage = '';
                     
@@ -645,35 +770,41 @@
             });
         });
         
-        // Initialize sorting functionality
-        var options = {
-            valueNames: [
-                'id',
-                'business_name',
-                'business_category',
-                'business_type',
-                'phone',
-                'package',
-                'last_enroll',
-                'expired_date'
-            ],
-            page: 10,
-            pagination: true,
-            plugins: [
-                ListPagination({})
-            ]
-        };
-        
-        // Initialize List.js if the element exists and not already initialized
-        if (!window.businessList && document.getElementById('orderTable')) {
-            window.businessList = new List('orderList', options);
-            businessList.on('updated', function() {
-                if (businessList.matchingItems.length === 0) {
-                    $('.noresult').show();
-                } else {
-                    $('.noresult').hide();
-                }
-            });
+        // Initialize List.js for table sorting and search (client-side only)
+        try {
+            var options = {
+                valueNames: [
+                    'id',
+                    'business_name',
+                    'business_category',
+                    'business_type',
+                    'phone',
+                    'package',
+                    'last_enroll',
+                    'expired_date'
+                ],
+                page: parseInt($('#per_page').val() || 10),
+                pagination: true,
+                plugins: [
+                    ListPagination({})
+                ]
+            };
+            
+            // Initialize List only if not already initialized
+            if (document.getElementById('orderTable') && !window.businessList) {
+                window.businessList = new List('orderList', options);
+                
+                // Event handler for no results
+                businessList.on('updated', function() {
+                    if (businessList.matchingItems.length === 0) {
+                        $('.noresult').show();
+                    } else {
+                        $('.noresult').hide();
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("List.js initialization error:", error);
         }
     });
 </script>
