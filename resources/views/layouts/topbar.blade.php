@@ -1,4 +1,3 @@
-
 <header id="page-topbar">
     <div class="layout-width">
         <div class="navbar-header">
@@ -367,4 +366,4 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div>
