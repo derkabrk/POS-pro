@@ -71,10 +71,10 @@
                     <div class="collapse menu-dropdown {{ Request::routeIs('admin.ticketSystem.index', 'admin.ticketSystem.categories') ? 'show' : '' }}" id="sidebarTicketSystem">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="">{{ __('Manage Status') }}</a>
+                                <a href="{{ route('admin.ticketSystem.index') }}" class="nav-link {{ Request::routeIs('admin.ticketSystem.index') ? 'active' : '' }}">{{ __('Manage Ticket') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="">{{ __('Manage Categories') }}</a>
+                                <a href="{{ route('admin.ticketSystem.categories') }}" class="nav-link {{ Request::routeIs('admin.ticketSystem.categories') ? 'active' : '' }}">{{ __('Manage Categories') }}</a>
                             </li>
                         </ul>
                     </div>
