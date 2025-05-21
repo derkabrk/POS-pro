@@ -29,6 +29,10 @@ function formattedAmount(amount, decimals){
 $(document).ready(function () {
     getYearlySubscriptions();
     bestPlanSubscribes();
+    // Ensure chart always renders, even if AJAX fails
+    if (!window.statiSticsValu) {
+        subscriptionChart([0,0,0,0,0,0,0,0,0,0,0,0]);
+    }
 });
 
 $(".overview-year").on("change", function () {
@@ -62,7 +66,6 @@ function getYearlySubscriptions(year = new Date().getFullYear()) {
                     : 0;
 
                 totalAmount += subscriptions[i]; // Add to total amount
-
             }
 
             subscriptionChart(subscriptions);
@@ -71,7 +74,10 @@ function getYearlySubscriptions(year = new Date().getFullYear()) {
         error: function (xhr, status, error) {
             console.error("AJAX Error:", status, error);
             console.error("Response:", xhr.responseText);
-        },
+            // Render empty chart on error
+            subscriptionChart([0,0,0,0,0,0,0,0,0,0,0,0]);
+            $(".income-value").text(currencyFormat(0));
+        }
     });
 }
 
