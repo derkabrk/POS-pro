@@ -225,17 +225,18 @@
                     </div><!-- end col -->
 
                     <div class="col-xl-4">
-                        <div class="card card-height-100">
-                            <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="simple_pie_chart"
-                                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
-                                    class="apex-charts donut-chart" dir="ltr"></div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="card card-animate card-height-100">
+        <div class="card-header border-0 align-items-center d-flex bg-light-subtle">
+            <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
+        </div>
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <div id="simple_pie_chart"
+                data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
+                class="apex-charts w-100 donut-chart" style="min-height: 300px; max-width: 100%;"></div>
+            <div id="plan-legend" class="mt-3 w-100"></div>
+        </div>
+    </div>
+</div>
                 </div>
 
                 <div class="row">
@@ -401,6 +402,7 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Subscription plan data from server (PHP)
             var plans = @json($plans ?? []);
             var values = @json($planValues ?? []);
             var colors = [
@@ -413,17 +415,7 @@
             var options = {
                 chart: {
                     type: 'donut',
-                    height: 300,
-                    fontFamily: 'inherit',
-                    toolbar: { show: false },
-                    dropShadow: {
-                        enabled: true,
-                        color: '#000',
-                        top: 2,
-                        left: 2,
-                        blur: 6,
-                        opacity: 0.08
-                    }
+                    height: 300
                 },
                 labels: plans,
                 series: values,
