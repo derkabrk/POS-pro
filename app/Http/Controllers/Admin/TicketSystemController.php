@@ -113,6 +113,15 @@ class TicketSystemController extends Controller
     }
 
     /**
+     * Display the specified ticket details.
+     */
+    public function show($id)
+    {
+        $ticket = TicketSystem::with(['category', 'status', 'assignedUser', 'replies', 'user'])->findOrFail($id);
+        return view('admin.ticketSystem.tickets-details', compact('ticket'));
+    }
+
+    /**
      * Remove the specified ticket from storage.
      */
     public function destroy(TicketSystem $ticketSystem)

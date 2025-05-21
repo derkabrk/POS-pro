@@ -192,7 +192,7 @@
                                             <input class="form-check-input" type="checkbox" name="checkAll" value="{{ $ticket->id }}">
                                         </div>
                                     </th>
-                                    <td class="id"><a href="#" class="fw-medium link-primary">#{{ $ticket->id }}</a></td>
+                                    <td class="id"><a href="{{ route('admin.ticketSystem.show', $ticket->id) }}" class="fw-medium link-primary">#{{ $ticket->id }}</a></td>
                                     <td class="tasks_name">{{ $ticket->title }}</td>
                                     <td class="status">
                                         <form action="{{ route('admin.ticketSystem.updateStatus', $ticket->id) }}" method="POST" class="d-inline">
@@ -255,9 +255,9 @@
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="ri-eye-fill align-bottom me-2 text-muted"></i> View
-                                                    </a>
+                                                    <a class="dropdown-item" href="{{ route('admin.ticketSystem.show', $ticket->id) }}">
+    <i class="ri-eye-fill align-bottom me-2 text-muted"></i> View
+</a>
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item" href="#">

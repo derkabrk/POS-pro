@@ -133,4 +133,5 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('ticketStatus', ADMIN\TicketStatusController::class);
     Route::post('ticketSystem/reply', [ADMIN\TicketSystemController::class, 'reply'])->name('ticketSystem.reply');
     Route::get('ticket-categories', [ADMIN\TicketCategoriesController::class, 'index'])->name('ticketSystem.categories');
+    Route::get('ticketSystem/{ticket}', [ADMIN\TicketSystemController::class, 'show'])->name('ticketSystem.show');
 });
