@@ -390,6 +390,7 @@
 @endsection
 
 @section('script')
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- Chart.js and dashboard functionality -->
     <script src="{{ asset('assets/js/chart.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/dashboard.js') }}"></script>
@@ -404,7 +405,8 @@
         document.addEventListener("DOMContentLoaded", function() {
             // Subscription plan data from server (PHP)
             var plans = @json($plans ?? []);
-            var values = @json($planValues ?? []);
+            // Only show the count of each plan (not values)
+            var planCounts = @json($planCounts ?? []);
             var colors = [
                 getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6',
                 getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim() || '#10b981',
@@ -418,7 +420,7 @@
                     height: 300
                 },
                 labels: plans,
-                series: values,
+                series: planCounts,
                 colors: colors.slice(0, plans.length),
                 legend: {
                     position: 'bottom',
@@ -443,17 +445,13 @@
                         opacity: 0.25
                     },
                     formatter: function (val, opts) {
-                        var total = opts.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                        var percent = total ? Math.round((val / total) * 100) : 0;
-                        return percent + '%';
+                        return val;
                     }
                 },
                 tooltip: {
                     y: {
                         formatter: function(val, opts) {
-                            var total = opts.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                            var percent = total ? Math.round((val / total) * 100) : 0;
-                            return val + ' (' + percent + '%)';
+                            return val + ' ' + opts.w.globals.labels[opts.seriesIndex];
                         }
                     }
                 },
