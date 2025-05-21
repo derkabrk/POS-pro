@@ -222,19 +222,30 @@
                         </div><!-- end card -->
                     </div><!-- end col -->
 
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Gradient Charts</h4>
+                            </div><!-- end card header -->
+                            <div class="card-body">
+                                <div id="line_chart_gradient" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
+                            </div><!-- end card-body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+
                     <div class="col-xl-4">
-    <div class="card card-animate card-height-100">
-        <div class="card-header border-0 align-items-center d-flex bg-light-subtle">
-            <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
-        </div>
-        <div class="card-body d-flex flex-column justify-content-center align-items-center">
-            <div id="simple_pie_chart"
-                data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
-                class="apex-charts w-100 donut-chart" style="min-height: 300px; max-width: 100%;"></div>
-            <div id="plan-legend" class="mt-3 w-100"></div>
-        </div>
-    </div>
-</div>
+                        <div class="card card-animate card-height-100">
+                            <div class="card-header border-0 align-items-center d-flex bg-light-subtle">
+                                <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
+                            </div>
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                <div id="simple_pie_chart"
+                                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
+                                    class="apex-charts w-100 donut-chart" style="min-height: 300px; max-width: 100%;"></div>
+                                <div id="plan-legend" class="mt-3 w-100"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
