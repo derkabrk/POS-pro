@@ -201,4 +201,29 @@ class DashboardController extends Controller
         return response()->json($data);
 
     }
+
+    // Returns monthly subscriptions for the Finance Overview chart
+    public function subscriptionsStatistics() {
+        $businessId = auth()->user()->business_id;
+        $year = request('year') ?? date('Y');
+        $subscriptions = array_fill(0, 12, 0);
+        $totalSubscriptions = 0;
+
+        $sales = \App\Models\Sale::where('business_id', $businessId)
+            ->whereYear('created_at', $year)
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->get();
+
+        foreach ($sales as $sale) {
+            $monthIndex = (int)$sale->month - 1;
+            $subscriptions[$monthIndex] = (int)$sale->count;
+            $totalSubscriptions += (int)$sale->count;
+        }
+
+        return response()->json([
+            'subscriptions' => $subscriptions,
+            'totalSubscriptions' => $totalSubscriptions,
+        ]);
+    }
 }

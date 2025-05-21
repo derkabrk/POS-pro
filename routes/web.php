@@ -64,6 +64,8 @@ Route::group([
 });
 // Payment Routes End
 
+Route::get('/subscriptions-statistics', [\Modules\Business\App\Http\Controllers\DashboardController::class, 'subscriptionsStatistics'])->name('admin.dashboard.subscriptions');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/messages/{userId}', [ChatController::class, 'fetchMessages']);
