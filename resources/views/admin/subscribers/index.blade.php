@@ -4,7 +4,7 @@
     {{ __('Subscriptions List') }}
 @endsection
 
-@section('main_content')
+@section('content')
 <div class="container-fluid">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -15,7 +15,7 @@
                 @csrf
                 <div class="row g-2 align-items-center">
                     <div class="col-auto">
-                        <select name="per_page" class="form-select">
+                        <select name="per_page" class="form-select" data-choices data-choices-sorting-false>
                             <option value="10">{{__('Show- 10')}}</option>
                             <option value="25">{{__('Show- 25')}}</option>
                             <option value="50">{{__('Show- 50')}}</option>

@@ -104,7 +104,7 @@
                             <div class="col-xxl-6 col-md-6">
                                 <div>
                                     <label for="status" class="form-label">Status</label>
-                                    <select name="status" id="status" class="form-control">
+                                    <select name="status" id="status" class="form-control" data-choices data-choices-sorting-false>
                                         <option value="1">Active</option>
                                         <option value="0">Inactive</option>
                                     </select>

@@ -32,7 +32,7 @@
                         @csrf
                         <div class="row g-2 align-items-center">
                             <div class="col-auto">
-                                <select name="per_page" class="form-control">
+                                <select name="per_page" class="form-control" data-choices data-choices-sorting-false>
                                     <option value="10">{{__('Show- 10')}}</option>
                                     <option value="25">{{__('Show- 25')}}</option>
                                     <option value="50">{{__('Show- 50')}}</option>

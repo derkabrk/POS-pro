@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('main_content')
+@section('content')
 <div class="container-fluid">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">{{__('Role')}}</label>
-                        <select name="role" required class="form-select select-2">
+                        <select name="role" required class="form-select select-2" data-choices data-choices-sorting-false>
                             <option value="">{{__('Select a role')}}</option>
                             @foreach ($roles as $role)
                                 <option value="{{ $role->name }}" @selected($user->role == $role->name)>{{ ucfirst($role->name) }}</option>

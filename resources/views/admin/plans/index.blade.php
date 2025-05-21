@@ -21,7 +21,7 @@
 
                         <div class="table-top-left d-flex gap-3 margin-l-16">
                             <div class="gpt-up-down-arrow position-relative">
-                                <select name="per_page" class="form-control">
+                                <select name="per_page" class="form-control" data-choices data-choices-sorting-false>
                                     <option value="10">{{__('Show- 10')}}</option>
                                     <option value="25">{{__('Show- 25')}}</option>
                                     <option value="50">{{__('Show- 50')}}</option>
