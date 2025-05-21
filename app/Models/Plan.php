@@ -31,4 +31,9 @@ class Plan extends Model
     protected $casts = [
         'features' => 'json',
     ];
+
+    public function planSubscribes()
+    {
+        return $this->hasMany(\App\Models\PlanSubscribe::class, 'plan_id');
+    }
 }
