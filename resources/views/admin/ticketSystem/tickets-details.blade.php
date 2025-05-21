@@ -6,7 +6,7 @@
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
-@section('main_content')
+@section('content')
 <!-- Ticket Header Section -->
 <div class="row">
     <div class="col-lg-12">
