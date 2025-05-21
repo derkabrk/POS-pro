@@ -138,7 +138,7 @@
                                 </div>
                             </div>
                             <div>
-                                <canvas id="monthly-statistics" height="290" class="apex-charts"></canvas>
+                                <canvas id="monthly-statistics" height="290" class="gradient-line-chart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="px-3 py-3">
-                            <canvas id="plans-chart" class="pie-chart" height="300"></canvas>
+                            <canvas id="plans-chart" class="donut-chart" height="300"></canvas>
                         </div>
                     </div>
                 </div>
@@ -324,7 +324,96 @@
                     }
                 }]
             };
-            var chart = new ApexCharts(document.querySelector("#plans-chart"), options);
+            var chart = new ApexCharts(document.querySelector("#plans-chart.donut-chart"), options);
+            chart.render();
+
+            // Finance Overview Chart Data (from PHP, not AJAX)
+            var months = @json($financeMonths ?? []);
+            var values = @json($financeValues ?? []);
+            var currencySymbol = document.getElementById('currency_symbol').value;
+            var currencyPosition = document.getElementById('currency_position').value;
+
+            // Gradient for line
+            var chartEl = document.querySelector('#monthly-statistics.gradient-line-chart');
+            var options = {
+                chart: {
+                    type: 'line',
+                    height: 290,
+                    fontFamily: 'inherit',
+                    toolbar: { show: false },
+                    dropShadow: {
+                        enabled: true,
+                        color: '#000',
+                        top: 2,
+                        left: 2,
+                        blur: 6,
+                        opacity: 0.08
+                    }
+                },
+                series: [{
+                    name: 'Total Subscription',
+                    data: values
+                }],
+                xaxis: {
+                    categories: months,
+                    labels: { style: { fontSize: '13px' } }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function(val) {
+                            return currencyPosition === 'left' ? currencySymbol + val : val + currencySymbol;
+                        },
+                        style: { fontSize: '13px' }
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 4,
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'light',
+                        type: 'vertical',
+                        shadeIntensity: 0.5,
+                        gradientToColors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6'],
+                        inverseColors: false,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.1,
+                        stops: [0, 90, 100]
+                    }
+                },
+                markers: {
+                    size: 6,
+                    colors: ['#fff'],
+                    strokeColors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6'],
+                    strokeWidth: 3,
+                    hover: { size: 8 }
+                },
+                grid: {
+                    borderColor: '#e9e9e9',
+                    strokeDashArray: 4,
+                    yaxis: { lines: { show: true } },
+                    xaxis: { lines: { show: false } }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return currencyPosition === 'left' ? currencySymbol + val : val + currencySymbol;
+                        }
+                    }
+                },
+                legend: { show: false },
+                responsive: [{
+                    breakpoint: 600,
+                    options: {
+                        chart: { height: 200 },
+                        xaxis: { labels: { style: { fontSize: '11px' } } },
+                        yaxis: { labels: { style: { fontSize: '11px' } } }
+                    }
+                }]
+            };
+            var chart = new ApexCharts(chartEl, options);
             chart.render();
         });
     </script>
