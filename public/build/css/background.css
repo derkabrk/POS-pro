@@ -5,6 +5,7 @@ body {
   background-position: center center;
   background-attachment: fixed;
   position: relative;
+  background-color: #041324;
 }
 
 body::before {

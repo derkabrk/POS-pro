@@ -224,17 +224,17 @@
                         </div><!-- end card -->
                     </div><!-- end col -->
 
-                    <div class="col-xl-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title mb-0">{{ __('Subscription Plan') }}</h4>
-                            </div><!-- end card header -->
+                    <div class="col-xl-4">
+                        <div class="card card-height-100">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
+                            </div>
                             <div class="card-body">
                                 <div id="simple_pie_chart"
                                     data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
                                     class="apex-charts" dir="ltr"></div>
-                            </div><!-- end card-body -->
-                        </div><!-- end card -->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
