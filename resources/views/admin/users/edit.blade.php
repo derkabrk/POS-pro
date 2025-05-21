@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">{{__('Role')}}</label>
-                        <select name="role" required class="form-select select-2" data-choices data-choices-sorting-false>
+                        <select name="role" required class="form-select select-2">
                             <option value="">{{__('Select a role')}}</option>
                             @foreach ($roles as $role)
                                 <option value="{{ $role->name }}" @selected($user->role == $role->name)>{{ ucfirst($role->name) }}</option>

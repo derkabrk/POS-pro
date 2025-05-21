@@ -4,50 +4,40 @@
     {{ __('Interfaces List') }}
 @endsection
 
-@section('main_content')
-    <div class="erp-table-section">
-        <div class="container-fluid">
-            <div class="card shadow-sm">
-                <div class="card-bodys ">
-                    <div class="table-header p-16">
-                        <h4>{{ __('Interfaces List') }}</h4>
-                        <a href="{{ route('admin.interfaces.create') }}" class="theme-btn print-btn text-light">
-                            <i class="far fa-plus" aria-hidden="true"></i>
-                            {{ __('Create New') }}
-                        </a>
+@section('content')
+    <div class="container-fluid">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ __('Interfaces List') }}</h4>
+                <a href="{{ route('admin.interfaces.create') }}" class="btn btn-primary btn-sm">
+                    <i class="far fa-plus me-1"></i>{{ __('Create New') }}
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.interfaces.filter') }}" method="post" class="row g-3 align-items-center mb-3 filter-form" table="#interfaces-data">
+                    @csrf
+                    <div class="col-auto">
+                        <select name="per_page" class="form-select">
+                            <option value="10">{{ __('Show- 10') }}</option>
+                            <option value="25">{{ __('Show- 25') }}</option>
+                            <option value="50">{{ __('Show- 50') }}</option>
+                            <option value="100">{{ __('Show- 100') }}</option>
+                        </select>
                     </div>
-
-                    <div class="table-top-form p-16-0">
-                        <form action="{{ route('admin.interfaces.filter') }}" method="post" class="filter-form"
-                            table="#interfaces-data">
-                            @csrf
-
-                            <div class="table-top-left d-flex gap-3 margin-l-16">
-                                <div class="gpt-up-down-arrow position-relative">
-                                    <select name="per_page" class="form-control">
-                                        <option value="10">{{ __('Show- 10') }}</option>
-                                        <option value="25">{{ __('Show- 25') }}</option>
-                                        <option value="50">{{ __('Show- 50') }}</option>
-                                        <option value="100">{{ __('Show- 100') }}</option>
-                                    </select>
-                                    <span></span>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="col">
+                        <input class="form-control" type="text" name="search" placeholder="{{ __('Search...') }}" value="{{ request('search') }}">
                     </div>
-                </div>
-
-
+                </form>
                 <div class="table-responsive table-card">
-                    <table class="table table-nowrap mb-0" id="datatable">
+                    <table class="table table-striped table-hover align-middle mb-0" id="datatable">
                         <thead class="table-light">
                             <tr>
                                 @can('interfaces-delete')
                                     <th>
                                         <div class="d-flex align-items-center gap-1">
-                                            <label class="table-custom-checkbox">
-                                                <input type="checkbox" class="table-hidden-checkbox selectAllCheckbox">
-                                                <span class="table-custom-checkmark custom-checkmark"></span>
+                                            <label class="form-check">
+                                                <input type="checkbox" class="form-check-input selectAllCheckbox">
+                                                <span class="form-check-label"></span>
                                             </label>
                                             <i class="fal fa-trash-alt delete-selected"></i>
                                         </div>
@@ -65,7 +55,7 @@
                     </table>
                 </div>
                 <nav>
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-end">
                         <li class="page-item">{{ $interfaces->links('pagination::bootstrap-5') }}</li>
                     </ul>
                 </nav>

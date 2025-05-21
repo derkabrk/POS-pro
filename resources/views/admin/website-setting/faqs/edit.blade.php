@@ -4,55 +4,41 @@
     {{ __('Edit Faqs') }}
 @endsection
 
-@section('main_content')
-    <div class="erp-table-section">
-        <div class="container-fluid">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="table-header">
-                        <h4>{{__('Edit FAQs') }}</h4>
-                        <a href="{{ route('admin.faqs.index') }}" class="theme-btn print-btn text-light">
-                            <i class="fas fa-list" aria-hidden="true"></i>
-                            {{ __('View List') }}
-                        </a>
+@section('content')
+    <div class="container-fluid">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ __('Edit FAQs') }}</h4>
+                <a href="{{ route('admin.faqs.index') }}" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-list me-1"></i>{{ __('View List') }}
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.faqs.update',['faq'=>$faq]) }}" method="post" enctype="multipart/form-data" class="ajaxform_instant_reload">
+                    @csrf
+                    @method('put')
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <label>{{ __('Question') }}</label>
+                            <input type="text" name="question" value="{{ $faq->question }}" class="form-control">
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label>{{ __('Status') }}</label>
+                            <select name="status" required class="form-select">
+                                <option value="0" {{ $faq->status == 0 ? 'selected' : '' }}>{{ __('Active') }}</option>
+                                <option value="1" {{ $faq->status == 1 ? 'selected' : '' }}>{{ __('InActive') }}</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-12 mb-3">
+                            <label>{{ __('Answer') }}</label>
+                            <textarea name="answer" class="form-control">{{ $faq->answer }}</textarea>
+                        </div>
+                        <div class="col-lg-12 text-center mt-4">
+                            <a href="{{ route('admin.faqs.index') }}" class="btn btn-outline-secondary m-2">{{__('Cancel')}}</a>
+                            <button class="btn btn-primary m-2" type="submit">{{__('Update')}}</button>
+                        </div>
                     </div>
-                    <div class="order-form-section">
-                        {{-- form start --}}
-                        <form action="{{ route('admin.faqs.update',['faq'=>$faq]) }}" method="post" enctype="multipart/form-data" class="ajaxform_instant_reload">
-                            @csrf
-                            @method('put')
-                            <div class="add-suplier-modal-wrapper">
-                                <div class="row">
-                                    <div class="col-lg-6 mt-2">
-                                        <label>{{ __('Question') }}</label>
-                                        <input type="text" name="question" value="{{ $faq->question }}" class="form-control">
-                                    </div>
-                                    <div class="col-sm-6 mt-2">
-                                        <label>{{ __('Status') }}</label>
-                                        <div class="gpt-up-down-arrow position-relative">
-                                            <select name="status" required="" class="form-control select-dropdown">
-                                                <option value="0" {{ $faq->status == 0 ? 'selected' : '' }}>{{ __('Active') }}</option>
-                                                <option value="1" {{ $faq->status == 1 ? 'selected' : '' }}>{{ __('InActive') }}</option>
-                                            </select>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 mt-2">
-                                        <label>{{ __('Answer') }}</label>
-                                        <textarea name="answer" class="form-control">{{ $faq->answer }}</textarea>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="button-group text-center mt-5">
-                                            <a href="" class="theme-btn border-btn m-2">{{__('Cancel')}}</a>
-                                            <button class="theme-btn m-2 submit-btn">{{__('Update')}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        {{-- form end --}}
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

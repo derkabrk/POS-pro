@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
-                                <select class="form-control" data-choices data-choices-search-false data-choices-sorting-false name="per_page" id="per_page">
+                                <select class="form-control" name="per_page" id="per_page">
                                     <option value="10">{{__('Show- 10')}}</option>
                                     <option value="25">{{__('Show- 25')}}</option>
                                     <option value="50">{{__('Show- 50')}}</option>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
-                                <select class="form-control" data-choices data-choices-search-false data-choices-sorting-false name="type" id="sale_type_filter">
+                                <select class="form-control" name="type" id="sale_type_filter">
                                     <option value="all">{{ __('All') }}</option>
                                     <option value="1">{{ __('E-commerce') }}</option>
                                     <option value="2">{{ __('Both') }}</option>
@@ -228,7 +228,7 @@
 
                                     <div class="mb-3">
                                         <label for="category-field" class="form-label">{{ __('Category') }}</label>
-                                        <select class="form-control" data-trigger data-choices data-choices-sorting-false name="category_id" id="category-field" required>
+                                        <select class="form-control" data-trigger name="category_id" id="category-field" required>
                                             <option value="">{{ __('Select Category') }}</option>
                                             @foreach($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -243,7 +243,7 @@
 
                                     <div class="mb-3">
                                         <label for="business-type-field" class="form-label">{{ __('Business Type') }}</label>
-                                        <select class="form-control" data-trigger data-choices data-choices-sorting-false name="type" id="business-type-field" required>
+                                        <select class="form-control" data-trigger name="type" id="business-type-field" required>
                                             <option value="">{{ __('Select Type') }}</option>
                                             <option value="0">{{ __('Physical') }}</option>
                                             <option value="1">{{ __('E-commerce') }}</option>
@@ -313,7 +313,7 @@
 
                                     <div class="mb-3">
                                         <label for="plan_id">{{ __('Select A Plan') }}</label>
-                                        <select name="plan_id" id="plan_id" class="form-control" data-choices data-choices-search-false data-choices-sorting-false>
+                                        <select name="plan_id" id="plan_id" class="form-control">
                                             <option value="">{{ __('Select One') }}</option>
                                             @foreach ($plans as $plan)
                                                 <option data-price="{{ $plan->offerPrice ?? $plan->subscriptionPrice }}" value="{{ $plan->id }}">{{ $plan->subscriptionName }}</option>

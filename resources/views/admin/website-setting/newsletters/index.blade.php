@@ -4,56 +4,66 @@
     {{__('Newsletters List') }}
 @endsection
 
-@section('main_content')
-    <div class="erp-table-section">
-        <div class="container-fluid">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="table-header">
-                        <h4>{{ __('Newsletters List') }}</h4>
+@section('content')
+    <div class="container-fluid">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ __('Newsletters List') }}</h4>
+                <a href="{{ route('admin.newsletters.create') }}" class="btn btn-primary btn-sm">
+                    <i class="far fa-plus me-1"></i>{{ __('Create New') }}
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.newsletters.filter') }}" method="post" class="row g-3 align-items-center mb-3 filter-form" table="#newsletters-data">
+                    @csrf
+                    <div class="col-auto">
+                        <select name="per_page" class="form-select">
+                            <option value="10">{{ __('Show- 10') }}</option>
+                            <option value="25">{{ __('Show- 25') }}</option>
+                            <option value="50">{{ __('Show- 50') }}</option>
+                            <option value="100">{{ __('Show- 100') }}</option>
+                        </select>
                     </div>
-                    <div class="table-top-form">
-                        <form action="{{ route('admin.newsletters.index') }}" method="post">
-                            @csrf
-                            <div class="table-search">
-                                <input class="form-control searchInput" type="text" name="search" placeholder="{{ __('Search') }}..." value="{{ request('search') }}">
-                            </div>
-                        </form>
+                    <div class="col">
+                        <input class="form-control" type="text" name="search" placeholder="{{ __('Search...') }}" value="{{ request('search') }}">
                     </div>
-
-                    <div class="table-responsive table-card">
-                        <table class="table table-nowrap mb-0" id="datatable">
-                            <thead class="table-light">
+                </form>
+                <div class="table-responsive table-card">
+                    <table class="table table-striped table-hover align-middle mb-0" id="datatable">
+                        <thead class="table-light">
                             <tr>
                                 @can('newsletters-delete')
-                                    <th class="w-60">
-                                        <div class="d-flex align-items-center gap-3" >
-                                            <input type="checkbox" class="selectAllCheckbox">
+                                    <th>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <label class="form-check">
+                                                <input type="checkbox" class="form-check-input selectAllCheckbox">
+                                                <span class="form-check-label"></span>
+                                            </label>
                                             <i class="fal fa-trash-alt delete-selected"></i>
                                         </div>
                                     </th>
                                 @endcan
                                 <th>{{ __('SL') }}.</th>
                                 <th>{{ __('Email') }}</th>
-                                <th>{{ __('Create At') }}</th>
+                                <th>{{ __('Status') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
-                            </thead>
-                            <tbody class="searchResults">
+                        </thead>
+                        <tbody id="newsletters-data" class="searchResults">
                             @include('admin.website-setting.newsletters.datas')
-                            </tbody>
-                        </table>
-                    </div>
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item">{{ $newsletters->links('pagination::bootstrap-5') }}</li>
-                        </ul>
-                    </nav>
+                        </tbody>
+                    </table>
                 </div>
+                <nav>
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item">{{ $newsletters->links('pagination::bootstrap-5') }}</li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
 @endsection
+
 @push('modal')
     @include('admin.components.multi-delete-modal')
 @endpush

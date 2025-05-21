@@ -1,74 +1,52 @@
 @extends('layouts.master')
 
 @section('title')
-    {{ __('Blogs') }}
+    {{ __('Blogs List') }}
 @endsection
 
-@section('main_content')
-    <div class="erp-table-section">
-        <div class="container-fluid">
-            <div class="card shadow-sm">
-                <div class="card-bodys  ">
-                    <div class="table-header p-16">
-                        <h4 class="mt-2">{{ __('Blog List') }}</h4>
-                        <a href="{{ route('admin.blogs.create') }}" class="theme-btn print-btn text-light">
-                            <i class="far fa-plus" aria-hidden="true"></i>
-                            {{ __('Create New') }}
-                        </a>
+@section('content')
+    <div class="container-fluid">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ __('Blogs List') }}</h4>
+                <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary btn-sm">
+                    <i class="far fa-plus me-1"></i>{{ __('Create New') }}
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.blogs.filter') }}" method="post" class="row g-3 align-items-center mb-3 filter-form" table="#blogs-data">
+                    @csrf
+                    <div class="col-auto">
+                        <select name="per_page" class="form-select">
+                            <option value="10">{{ __('Show- 10') }}</option>
+                            <option value="25">{{ __('Show- 25') }}</option>
+                            <option value="50">{{ __('Show- 50') }}</option>
+                            <option value="100">{{ __('Show- 100') }}</option>
+                        </select>
                     </div>
-                    <div class="table-top-form p-16-0">
-                        <form action="{{ route('admin.blogs.filter') }}" method="post" class="filter-form" table="#blogs-data">
-                            @csrf
-
-                            <div class="table-top-left d-flex gap-3 margin-l-16">
-                                <div class="gpt-up-down-arrow position-relative">
-                                    <select name="per_page" class="form-control">
-                                        <option value="10">{{__('Show- 10')}}</option>
-                                        <option value="25">{{__('Show- 25')}}</option>
-                                        <option value="50">{{__('Show- 50')}}</option>
-                                        <option value="100">{{__('Show- 100')}}</option>
-                                    </select>
-                                    <span></span>
-                                </div>
-
-                                <div class="table-search position-relative">
-                                    <input class="form-control" type="text" name="search"
-                                        placeholder="{{ __('Search...') }}" value="{{ request('search') }}">
-                                    <span class="position-absolute">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M14.582 14.582L18.332 18.332" stroke="#4D4D4D" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M16.668 9.16797C16.668 5.02584 13.3101 1.66797 9.16797 1.66797C5.02584 1.66797 1.66797 5.02584 1.66797 9.16797C1.66797 13.3101 5.02584 16.668 9.16797 16.668C13.3101 16.668 16.668 13.3101 16.668 9.16797Z" stroke="#4D4D4D" stroke-width="1.25" stroke-linejoin="round"/>
-                                            </svg>
-
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="col">
+                        <input class="form-control" type="text" name="search" placeholder="{{ __('Search...') }}" value="{{ request('search') }}">
                     </div>
-
-
-                </div>
-
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
+                </form>
+                <div class="table-responsive table-card">
+                    <table class="table table-striped table-hover align-middle mb-0" id="datatable">
+                        <thead class="table-light">
                             <tr>
-                                @can('users-delete')
+                                @can('blogs-delete')
                                     <th>
                                         <div class="d-flex align-items-center gap-1">
-                                            <label class="table-custom-checkbox">
-                                                <input type="checkbox" class="table-hidden-checkbox selectAllCheckbox">
-                                                <span class="table-custom-checkmark custom-checkmark"></span>
+                                            <label class="form-check">
+                                                <input type="checkbox" class="form-check-input selectAllCheckbox">
+                                                <span class="form-check-label"></span>
                                             </label>
                                             <i class="fal fa-trash-alt delete-selected"></i>
                                         </div>
                                     </th>
                                 @endcan
                                 <th>{{ __('SL') }}.</th>
-                                <th>{{ __('Image') }}</th>
                                 <th>{{ __('Title') }}</th>
                                 <th>{{ __('Status') }}</th>
-                                <th class="print-d-none">{{ __('Action') }}</th>
+                                <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody id="blogs-data" class="searchResults">
@@ -77,7 +55,7 @@
                     </table>
                 </div>
                 <nav>
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-end">
                         <li class="page-item">{{ $blogs->links('pagination::bootstrap-5') }}</li>
                     </ul>
                 </nav>

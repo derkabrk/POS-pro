@@ -59,7 +59,7 @@
                                 <div class="col-xxl-6 col-md-6">
                                     <div>
                                         <label for="position" class="form-label">{{ __('Position') }}</label>
-                                        <select name="position" id="position" class="form-control" data-choices data-choices-sorting-false>
+                                        <select name="position" id="position" class="form-control">
                                             <option value="">{{ __('Select a position') }}</option>
                                             <option value="left">{{ __('left') }}</option>
                                             <option value="right">{{ __('right') }}</option>
@@ -69,7 +69,7 @@
                                 <div class="col-xxl-6 col-md-6">
                                     <div>
                                         <label for="country_name" class="form-label">{{ __('Country') }}</label>
-                                        <select name="country_name" id="country_name" class="form-control" data-choices data-choices-sorting-false>
+                                        <select name="country_name" id="country_name" class="form-control">
                                             <option value="">{{ __('Select a Country') }}</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
@@ -80,7 +80,7 @@
                                 <div class="col-xxl-6 col-md-6">
                                     <div>
                                         <label for="status" class="form-label">{{ __('Status') }}</label>
-                                        <select name="status" id="status" required class="form-control" data-choices data-choices-sorting-false>
+                                        <select name="status" id="status" required class="form-control">
                                             <option value="1">{{ __('Active') }}</option>
                                             <option value="0">{{ __('Inactive') }}</option>
                                         </select>

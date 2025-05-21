@@ -4,7 +4,7 @@
     {{ __('CMS Manage') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="erp-table-section system-settings">
         <div class="container-fluid">
             <div class="card card bg-transparent">

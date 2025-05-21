@@ -4,64 +4,44 @@
     {{ __('Create Feature') }}
 @endsection
 
-@section('main_content')
-    <div class="erp-table-section">
-        <div class="container-fluid">
-            <div class="card shadow-sm">
-                <div class="card-bodys">
-                    <div class="table-header p-16">
-                        <h4>{{  __('Add New Feature') }}</h4>
-                        <div>
-                            <a href="{{ route('admin.features.index') }}" class="theme-btn print-btn text-light">
-                                <i class="fas fa-list me-1"></i>
-                                {{ __("View List") }}
-                            </a>
+@section('content')
+    <div class="container-fluid">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ __('Add New Feature') }}</h4>
+                <a href="{{ route('admin.features.index') }}" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-list me-1"></i>{{ __('View List') }}
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.features.store') }}" method="post" enctype="multipart/form-data" class="ajaxform_instant_reload">
+                    @csrf
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <label>{{ __('Title') }}</label>
+                            <input type="text" name="title" required class="form-control" placeholder="{{ __('Enter Title') }}" >
+                        </div>
+                        <div class="col-lg-6 mb-3">
+                            <label>{{ __('Backgroud Color') }}</label>
+                            <input type="color" name="bg_color" required class="form-control" placeholder="{{ __('Enter Color') }}" >
+                        </div>
+                        <div class="col-lg-6 mb-3">
+                            <label>{{ __('Status') }}</label>
+                            <select name="status" required class="form-select">
+                                <option value="1">{{ __('Active') }}</option>
+                                <option value="0">{{ __('Deactive') }}</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 mb-3">
+                            <label class="img-label">{{ __('Image') }}</label>
+                            <input type="file" name="image" required class="form-control">
+                        </div>
+                        <div class="col-lg-12 text-center mt-4">
+                            <a href="{{ route('admin.features.index') }}" class="btn btn-outline-secondary m-2">{{__('Cancel')}}</a>
+                            <button class="btn btn-primary m-2" type="submit">{{__('Save')}}</button>
                         </div>
                     </div>
-
-                    <div class="order-form-section p-16">
-                        <form action="{{ route('admin.features.store') }}" method="post" enctype="multipart/form-data" class="ajaxform_instant_reload">
-                            @csrf
-
-                            <div class="add-suplier-modal-wrapper">
-                                <div class="row">
-                                    <div class="col-lg-6 mt-2">
-                                        <label>{{ __('Title') }}</label>
-                                        <input type="text" name="title" required class="form-control" placeholder="{{ __('Enter Title') }}" >
-                                    </div>
-
-                                    <div class="col-lg-6 mt-2">
-                                        <label>{{ __('Backgroud Color') }}</label>
-                                        <input type="color" name="bg_color" required class="form-control m-h-48" placeholder="{{ __('Enter Color') }}" >
-                                    </div>
-
-                                    <div class="col-lg-6 mt-2">
-                                        <label>{{ __('Status') }}</label>
-                                        <div class="gpt-up-down-arrow position-relative">
-                                            <select name="status" required="" class="form-control select-dropdown">
-                                                <option value="1">{{ __('Active') }}</option>
-                                                <option value="0">{{ __('Deactive') }}</option>
-                                            </select>
-                                            <span></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6 mt-2">
-                                        <label class="img-label">{{ __('Image') }}</label>
-                                        <input type="file" name="image" class="form-control">
-                                    </div>
-
-                                    <div class="col-lg-12">
-                                        <div class="button-group text-center mt-5">
-                                            <a href="" class="theme-btn border-btn m-2">{{__('Cancel')}}</a>
-                                            <button class="theme-btn m-2 submit-btn">{{__('Save')}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
