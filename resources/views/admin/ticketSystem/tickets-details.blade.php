@@ -1,4 +1,4 @@
-@extends('business::layouts.master')
+@extends('layouts.master')
 
 @section('title', 'Ticket Details')
 
