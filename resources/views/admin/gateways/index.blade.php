@@ -4,7 +4,7 @@
     {{ __('Gateway Settings') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="container-fluid">
         <div class="card shadow-sm mb-4">
             <div class="card-header">
