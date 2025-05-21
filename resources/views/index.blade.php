@@ -180,7 +180,7 @@
 
                 <div class="row">
                     <div class="col-xl-8">
-                        <div class="card card-animate card-height-100 modern-chart">
+                        <div class="card card-animate card-height-100 gradient-chart">
                             <div class="card-header border-0 align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">{{ __('Finance Overview') }}</h4>
                                 <div>
@@ -215,7 +215,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <canvas id="monthly-statistics" height="290" class="modern-chart-canvas"></canvas>
+                                        <canvas id="monthly-statistics" height="290" class="gradient-chart-canvas"></canvas>
                                     </div>
                                 </div>
                             </div><!-- end card body -->
