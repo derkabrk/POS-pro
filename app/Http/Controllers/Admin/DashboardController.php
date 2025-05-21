@@ -19,8 +19,18 @@ class DashboardController extends Controller
 
     public function index()
     {
+        $planData = Plan::withCount('enrolledPlans')->get();
+
+        $plans = $planData->pluck('subscriptionName')->toArray();
+        $planValues = $planData->pluck('enrolled_plans_count')->toArray();
+
         $businesses = Business::with('enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name')->latest()->take(5)->get();
-        return view('index', compact('businesses'));
+
+        return view('index', [
+            'businesses' => $businesses,
+            'plans' => $plans,
+            'planValues' => $planValues,
+        ]);
     }
 
     public function getDashboardData()
