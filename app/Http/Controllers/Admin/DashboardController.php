@@ -26,10 +26,33 @@ class DashboardController extends Controller
 
         $businesses = Business::with('enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name')->latest()->take(5)->get();
 
+        // Finance Overview Data (current year)
+        $year = date('Y');
+        $subscriptions = PlanSubscribe::whereYear('created_at', $year)
+            ->selectRaw('MONTH(created_at) as month, SUM(price) as total')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Prepare months and values arrays
+        $allMonths = [
+            1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun',
+            7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec'
+        ];
+        $financeMonths = array_values($allMonths);
+        $financeValues = array_fill(0, 12, 0);
+
+        foreach ($subscriptions as $sub) {
+            $idx = (int)$sub->month - 1;
+            $financeValues[$idx] = (float)$sub->total;
+        }
+
         return view('index', [
             'businesses' => $businesses,
             'plans' => $plans,
             'planValues' => $planValues,
+            'financeMonths' => $financeMonths,
+            'financeValues' => $financeValues,
         ]);
     }
 
