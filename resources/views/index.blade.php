@@ -232,7 +232,7 @@
                             <div class="card-body">
                                 <div id="simple_pie_chart"
                                     data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
-                                    class="apex-charts" dir="ltr"></div>
+                                    class="apex-charts donut-chart" dir="ltr"></div>
                             </div>
                         </div>
                     </div>
@@ -401,7 +401,6 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Subscription plan data from server (PHP)
             var plans = @json($plans ?? []);
             var values = @json($planValues ?? []);
             var colors = [
@@ -413,15 +412,49 @@
             ];
             var options = {
                 chart: {
-                    type: 'pie',
-                    height: 300
+                    type: 'donut',
+                    height: 300,
+                    fontFamily: 'inherit',
+                    toolbar: { show: false },
+                    dropShadow: {
+                        enabled: true,
+                        color: '#000',
+                        top: 2,
+                        left: 2,
+                        blur: 6,
+                        opacity: 0.08
+                    }
                 },
                 labels: plans,
                 series: values,
                 colors: colors.slice(0, plans.length),
                 legend: {
                     position: 'bottom',
-                    fontSize: '14px'
+                    fontSize: '15px',
+                    fontWeight: 500,
+                    labels: { colors: '#333' },
+                    itemMargin: { horizontal: 12, vertical: 6 }
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontSize: '15px',
+                        fontWeight: 600,
+                        colors: ['#fff']
+                    },
+                    dropShadow: {
+                        enabled: true,
+                        top: 1,
+                        left: 1,
+                        blur: 2,
+                        color: '#222',
+                        opacity: 0.25
+                    },
+                    formatter: function (val, opts) {
+                        var total = opts.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                        var percent = total ? Math.round((val / total) * 100) : 0;
+                        return percent + '%';
+                    }
                 },
                 tooltip: {
                     y: {
@@ -431,9 +464,30 @@
                             return val + ' (' + percent + '%)';
                         }
                     }
-                }
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['#fff']
+                },
+                states: {
+                    hover: {
+                        filter: {
+                            type: 'darken',
+                            value: 0.9
+                        }
+                    }
+                },
+                responsive: [{
+                    breakpoint: 600,
+                    options: {
+                        chart: { height: 220 },
+                        legend: { fontSize: '13px' },
+                        dataLabels: { style: { fontSize: '12px' } }
+                    }
+                }]
             };
-            var chart = new ApexCharts(document.querySelector("#simple_pie_chart"), options);
+            var chart = new ApexCharts(document.querySelector("#simple_pie_chart.donut-chart"), options);
             chart.render();
         });
     </script>
