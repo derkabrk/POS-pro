@@ -215,7 +215,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <canvas id="monthly-statistics" height="290" class="gradient-chart-canvas"></canvas>
+                                        <!-- Replaced canvas with gradient line chart -->
+                                        <div id="line_chart_gradient" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
                                     </div>
                                 </div>
                             </div><!-- end card body -->
@@ -396,9 +397,107 @@
     <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+    <!-- Script for gradient line chart -->
+    <script src="{{ URL::asset('build/js/pages/apexcharts-line.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
     <script>
         var donutChart = null;
+        var gradientLineChart = null;
+        
+        function loadGradientLineChart(year) {
+            var url = $('#yearly-subscriptions-url').val();
+            $.ajax({
+                type: 'GET',
+                url: url + '?year=' + year,
+                dataType: 'json',
+                success: function(data) {
+                    // Format the data for the gradient line chart
+                    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    var seriesData = [];
+                    
+                    // Assume data.subscriptions contains monthly values
+                    if (data.subscriptions && Array.isArray(data.subscriptions)) {
+                        months.forEach((month, index) => {
+                            seriesData.push({
+                                x: month,
+                                y: data.subscriptions[index] || 0
+                            });
+                        });
+                    }
+                    
+                    // ApexCharts configuration for gradient line chart
+                    var options = {
+                        series: [{
+                            name: 'Subscriptions',
+                            data: seriesData
+                        }],
+                        chart: {
+                            height: 290,
+                            type: 'line',
+                            toolbar: {
+                                show: false
+                            }
+                        },
+                        stroke: {
+                            width: 3,
+                            curve: 'smooth'
+                        },
+                        colors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim()],
+                        xaxis: {
+                            categories: months,
+                        },
+                        fill: {
+                            type: 'gradient',
+                            gradient: {
+                                shade: 'dark',
+                                gradientToColors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim()],
+                                shadeIntensity: 1,
+                                type: 'horizontal',
+                                opacityFrom: 1,
+                                opacityTo: 1,
+                            },
+                        },
+                        markers: {
+                            size: 4,
+                            colors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim()],
+                            strokeColors: "#fff",
+                            strokeWidth: 2,
+                            hover: {
+                                size: 7,
+                            }
+                        },
+                        yaxis: {
+                            title: {
+                                text: 'Subscriptions'
+                            },
+                        }
+                    };
+
+                    // Initialize or update chart
+                    if (gradientLineChart) {
+                        gradientLineChart.updateOptions(options);
+                    } else {
+                        gradientLineChart = new ApexCharts(document.querySelector("#line_chart_gradient"), options);
+                        gradientLineChart.render();
+                    }
+                    
+                    // Update total value display
+                    let totalValue = data.totalSubscriptions || 0;
+                    let currencySymbol = $('#currency_symbol').val();
+                    let currencyPosition = $('#currency_position').val();
+                    let formattedValue = currencyPosition === 'left' ? 
+                        currencySymbol + totalValue.toLocaleString() : 
+                        totalValue.toLocaleString() + currencySymbol;
+                    
+                    $('.income-value').text(formattedValue);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading subscription data:', error);
+                }
+            });
+        }
+        
+        // Function to load donut chart
         function loadDonutChart(year) {
             var url = $('#get-plans-overview').val();
             $.ajax({
@@ -493,7 +592,16 @@
                 }
             });
         }
+        
         $(document).ready(function() {
+            // Initialize gradient line chart
+            loadGradientLineChart(new Date().getFullYear());
+            
+            // Update chart when year selection changes
+            $('.yearly-statistics').on('change', function() {
+                loadGradientLineChart($(this).val());
+            });
+            
             // Add year dropdown for donut chart
             var yearSelect = $('<select class="form-select form-select-sm mb-2" id="donut-year-select"></select>');
             var currentYear = new Date().getFullYear();
@@ -501,9 +609,11 @@
                 yearSelect.append('<option value="'+i+'">'+i+'</option>');
             }
             $('#simple_pie_chart').before(yearSelect);
-            // Initial load
+            
+            // Initial load of donut chart
             loadDonutChart(yearSelect.val());
-            // On year change
+            
+            // On year change for donut chart
             yearSelect.on('change', function() {
                 loadDonutChart($(this).val());
             });
