@@ -156,10 +156,10 @@
                                                    data-category="{{ $business->category->name ?? 'N/A' }}"
                                                    data-phone="{{ $business->user->phone ?? 'N/A' }}"
                                                    data-address="{{ $business->address ?? 'N/A' }}"
-                                                   data-package="{{ $business->getCurrentPackage->plan->subscriptionName ?? 'N/A' }}"
-                                                   data-last-enroll="{{ $business->getCurrentPackage->created_at->format('d M, Y') ?? 'N/A' }}"
-                                                   data-expired-date="{{ $business->getCurrentPackage->expieryDate->format('d M, Y') ?? 'N/A' }}"
-                                                   data-created-date="{{ $business->created_at->format('d M, Y') ?? 'N/A' }}"
+                                                   data-package="{{ $business->getCurrentPackage && $business->getCurrentPackage->plan ? $business->getCurrentPackage->plan->subscriptionName : 'N/A' }}"
+                                                   data-last-enroll="{{ $business->getCurrentPackage && $business->getCurrentPackage->created_at ? $business->getCurrentPackage->created_at->format('d M, Y') : 'N/A' }}"
+                                                   data-expired-date="{{ $business->getCurrentPackage && $business->getCurrentPackage->expieryDate ? $business->getCurrentPackage->expieryDate->format('d M, Y') : 'N/A' }}"
+                                                   data-created-date="{{ $business->created_at ? $business->created_at->format('d M, Y') : 'N/A' }}"
                                                    data-image="{{ asset($business->image) }}"
                                                    class="text-primary d-inline-block view-btn">
                                                     <i class="ri-eye-fill fs-16"></i>
