@@ -327,95 +327,100 @@
             var chart = new ApexCharts(document.querySelector("#plans-chart.donut-chart"), options);
             chart.render();
 
-            // Finance Overview Chart Data (from PHP, not AJAX)
-            var financeMonths = @json($financeMonths ?? []);
-            var financeValues = @json($financeValues ?? []);
-            var currencySymbol = document.getElementById('currency_symbol').value;
-            var currencyPosition = document.getElementById('currency_position').value;
+            // --- Finance Overview Chart (Gradient Line) ---
+            (function() {
+                // Get data from PHP variables
+                var financeMonths = @json($financeMonths ?? []);
+                var financeValues = @json($financeValues ?? []);
+                var currencySymbol = document.getElementById('currency_symbol').value;
+                var currencyPosition = document.getElementById('currency_position').value;
 
-            var chartEl = document.querySelector('#monthly-statistics.gradient-line-chart');
-            var financeOptions = {
-                chart: {
-                    type: 'line',
-                    height: 290,
-                    fontFamily: 'inherit',
-                    toolbar: { show: false },
-                    dropShadow: {
-                        enabled: true,
-                        color: '#000',
-                        top: 2,
-                        left: 2,
-                        blur: 6,
-                        opacity: 0.08
-                    }
-                },
-                series: [{
-                    name: 'Total Subscription',
-                    data: financeValues
-                }],
-                xaxis: {
-                    categories: financeMonths,
-                    labels: { style: { fontSize: '13px' } }
-                },
-                yaxis: {
-                    labels: {
-                        formatter: function(val) {
-                            return currencyPosition === 'left' ? currencySymbol + val : val + currencySymbol;
+                // Only render if data is available and element exists
+                var chartEl = document.querySelector('#monthly-statistics.gradient-line-chart');
+                if (chartEl && financeMonths.length && financeValues.length) {
+                    var primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6';
+                    var options = {
+                        chart: {
+                            type: 'line',
+                            height: 290,
+                            fontFamily: 'inherit',
+                            toolbar: { show: false },
+                            dropShadow: {
+                                enabled: true,
+                                color: '#000',
+                                top: 2,
+                                left: 2,
+                                blur: 6,
+                                opacity: 0.08
+                            }
                         },
-                        style: { fontSize: '13px' }
-                    }
-                },
-                stroke: {
-                    curve: 'smooth',
-                    width: 4,
-                },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shade: 'light',
-                        type: 'vertical',
-                        shadeIntensity: 0.5,
-                        gradientToColors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6'],
-                        inverseColors: false,
-                        opacityFrom: 0.7,
-                        opacityTo: 0.1,
-                        stops: [0, 90, 100]
-                    }
-                },
-                markers: {
-                    size: 6,
-                    colors: ['#fff'],
-                    strokeColors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6'],
-                    strokeWidth: 3,
-                    hover: { size: 8 }
-                },
-                grid: {
-                    borderColor: '#e9e9e9',
-                    strokeDashArray: 4,
-                    yaxis: { lines: { show: true } },
-                    xaxis: { lines: { show: false } }
-                },
-                tooltip: {
-                    y: {
-                        formatter: function(val) {
-                            return currencyPosition === 'left' ? currencySymbol + val : val + currencySymbol;
-                        }
-                    }
-                },
-                legend: { show: false },
-                responsive: [{
-                    breakpoint: 600,
-                    options: {
-                        chart: { height: 200 },
-                        xaxis: { labels: { style: { fontSize: '11px' } } },
-                        yaxis: { labels: { style: { fontSize: '11px' } } }
-                    }
-                }]
-            };
-            if (chartEl) {
-                var financeChart = new ApexCharts(chartEl, financeOptions);
-                financeChart.render();
-            }
+                        series: [{
+                            name: 'Total Subscription',
+                            data: financeValues
+                        }],
+                        xaxis: {
+                            categories: financeMonths,
+                            labels: { style: { fontSize: '13px' } }
+                        },
+                        yaxis: {
+                            labels: {
+                                formatter: function(val) {
+                                    return currencyPosition === 'left' ? currencySymbol + val : val + currencySymbol;
+                                },
+                                style: { fontSize: '13px' }
+                            }
+                        },
+                        stroke: {
+                            curve: 'smooth',
+                            width: 4,
+                        },
+                        fill: {
+                            type: 'gradient',
+                            gradient: {
+                                shade: 'light',
+                                type: 'vertical',
+                                shadeIntensity: 0.5,
+                                gradientToColors: [primaryColor],
+                                inverseColors: false,
+                                opacityFrom: 0.7,
+                                opacityTo: 0.1,
+                                stops: [0, 90, 100]
+                            }
+                        },
+                        markers: {
+                            size: 6,
+                            colors: ['#fff'],
+                            strokeColors: [primaryColor],
+                            strokeWidth: 3,
+                            hover: { size: 8 }
+                        },
+                        grid: {
+                            borderColor: '#e9e9e9',
+                            strokeDashArray: 4,
+                            yaxis: { lines: { show: true } },
+                            xaxis: { lines: { show: false } }
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function(val) {
+                                    return currencyPosition === 'left' ? currencySymbol + val : val + currencySymbol;
+                                }
+                            }
+                        },
+                        legend: { show: false },
+                        responsive: [{
+                            breakpoint: 600,
+                            options: {
+                                chart: { height: 200 },
+                                xaxis: { labels: { style: { fontSize: '11px' } } },
+                                yaxis: { labels: { style: { fontSize: '11px' } } }
+                            }
+                        }]
+                    };
+                    var financeChart = new ApexCharts(chartEl, options);
+                    financeChart.render();
+                }
+            })();
         });
     </script>
 @endpush
