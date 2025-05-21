@@ -8,6 +8,7 @@ use App\Models\Business;
 use App\Models\PlanSubscribe;
 use App\Models\BusinessCategory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
@@ -78,14 +79,27 @@ class DashboardController extends Controller
         return response()->json($subscriptions);
     }
 
-    public function plansOverview()
+    public function plansOverview(Request $request)
     {
-        $subscription = PlanSubscribe::with('plan:id,subscriptionName')->select('plan_id', DB::raw('COUNT(*) as plan_count'))
-                        ->groupBy('plan_id')
-                        ->orderByDesc('plan_count')
-                        ->limit(4)
-                        ->get();
+        $year = $request->input('year', date('Y'));
 
-        return response()->json($subscription);
+        $subscription = PlanSubscribe::with('plan:id,subscriptionName')
+            ->select('plan_id', DB::raw('COUNT(*) as plan_count'))
+            ->whereYear('created_at', $year)
+            ->groupBy('plan_id')
+            ->orderByDesc('plan_count')
+            ->get();
+
+        $plans = [];
+        $planCounts = [];
+        foreach ($subscription as $item) {
+            $plans[] = $item->plan->subscriptionName ?? 'Unknown';
+            $planCounts[] = $item->plan_count;
+        }
+
+        return response()->json([
+            'plans' => $plans,
+            'planCounts' => $planCounts,
+        ]);
     }
 }
