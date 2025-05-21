@@ -394,91 +394,121 @@
     <!-- Chart.js and dashboard functionality -->
     <script src="{{ asset('assets/js/chart.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/dashboard.js') }}"></script>
-    
     <!-- Modern UI support scripts -->
     <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Subscription plan data from server (PHP)
-            var plans = @json($plans ?? []);
-            // Only show the count of each plan (not values)
-            var planCounts = @json($planCounts ?? []);
-            var colors = [
-                getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6',
-                getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim() || '#10b981',
-                getComputedStyle(document.documentElement).getPropertyValue('--vz-warning').trim() || '#f97316',
-                getComputedStyle(document.documentElement).getPropertyValue('--vz-danger').trim() || '#ec4899',
-                getComputedStyle(document.documentElement).getPropertyValue('--vz-info').trim() || '#8b5cf6'
-            ];
-            var options = {
-                chart: {
-                    type: 'donut',
-                    height: 300
-                },
-                labels: plans,
-                series: planCounts,
-                colors: colors.slice(0, plans.length),
-                legend: {
-                    position: 'bottom',
-                    fontSize: '15px',
-                    fontWeight: 500,
-                    labels: { colors: '#333' },
-                    itemMargin: { horizontal: 12, vertical: 6 }
-                },
-                dataLabels: {
-                    enabled: true,
-                    style: {
-                        fontSize: '15px',
-                        fontWeight: 600,
-                        colors: ['#fff']
-                    },
-                    dropShadow: {
-                        enabled: true,
-                        top: 1,
-                        left: 1,
-                        blur: 2,
-                        color: '#222',
-                        opacity: 0.25
-                    },
-                    formatter: function (val, opts) {
-                        return val;
+        var donutChart = null;
+        function loadDonutChart(year) {
+            var url = $('#get-plans-overview').val();
+            $.ajax({
+                type: 'GET',
+                url: url + '?year=' + year,
+                dataType: 'json',
+                success: function(data) {
+                    var plans = data.plans || [];
+                    var planCounts = data.planCounts || [];
+                    var colors = [
+                        getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6',
+                        getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim() || '#10b981',
+                        getComputedStyle(document.documentElement).getPropertyValue('--vz-warning').trim() || '#f97316',
+                        getComputedStyle(document.documentElement).getPropertyValue('--vz-danger').trim() || '#ec4899',
+                        getComputedStyle(document.documentElement).getPropertyValue('--vz-info').trim() || '#8b5cf6'
+                    ];
+                    var options = {
+                        chart: {
+                            type: 'donut',
+                            height: 300
+                        },
+                        labels: plans,
+                        series: planCounts,
+                        colors: colors.slice(0, plans.length),
+                        legend: {
+                            position: 'bottom',
+                            fontSize: '15px',
+                            fontWeight: 500,
+                            labels: { colors: '#333' },
+                            itemMargin: { horizontal: 12, vertical: 6 }
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '15px',
+                                fontWeight: 600,
+                                colors: ['#fff']
+                            },
+                            dropShadow: {
+                                enabled: true,
+                                top: 1,
+                                left: 1,
+                                blur: 2,
+                                color: '#222',
+                                opacity: 0.25
+                            },
+                            formatter: function (val, opts) {
+                                return val;
+                            }
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function(val, opts) {
+                                    return val + ' ' + opts.w.globals.labels[opts.seriesIndex];
+                                }
+                            }
+                        },
+                        stroke: {
+                            show: true,
+                            width: 2,
+                            colors: ['#fff']
+                        },
+                        states: {
+                            hover: {
+                                filter: {
+                                    type: 'darken',
+                                    value: 0.9
+                                }
+                            }
+                        },
+                        responsive: [{
+                            breakpoint: 600,
+                            options: {
+                                chart: { height: 220 },
+                                legend: { fontSize: '13px' },
+                                dataLabels: { style: { fontSize: '12px' } }
+                            }
+                        }]
+                    };
+                    if (donutChart) {
+                        donutChart.destroy();
                     }
+                    donutChart = new ApexCharts(document.querySelector("#simple_pie_chart.donut-chart"), options);
+                    donutChart.render();
                 },
-                tooltip: {
-                    y: {
-                        formatter: function(val, opts) {
-                            return val + ' ' + opts.w.globals.labels[opts.seriesIndex];
-                        }
+                error: function(xhr, status, error) {
+                    if (donutChart) {
+                        donutChart.destroy();
                     }
-                },
-                stroke: {
-                    show: true,
-                    width: 2,
-                    colors: ['#fff']
-                },
-                states: {
-                    hover: {
-                        filter: {
-                            type: 'darken',
-                            value: 0.9
-                        }
-                    }
-                },
-                responsive: [{
-                    breakpoint: 600,
-                    options: {
-                        chart: { height: 220 },
-                        legend: { fontSize: '13px' },
-                        dataLabels: { style: { fontSize: '12px' } }
-                    }
-                }]
-            };
-            var chart = new ApexCharts(document.querySelector("#simple_pie_chart.donut-chart"), options);
-            chart.render();
+                    donutChart = null;
+                    $("#simple_pie_chart.donut-chart").html('<div class="text-danger">Failed to load chart</div>');
+                }
+            });
+        }
+        $(document).ready(function() {
+            // Add year dropdown for donut chart
+            var yearSelect = $('<select class="form-select form-select-sm mb-2" id="donut-year-select"></select>');
+            var currentYear = new Date().getFullYear();
+            for (var i = currentYear; i >= 2022; i--) {
+                yearSelect.append('<option value="'+i+'">'+i+'</option>');
+            }
+            $('#simple_pie_chart').before(yearSelect);
+            // Initial load
+            loadDonutChart(yearSelect.val());
+            // On year change
+            yearSelect.on('change', function() {
+                loadDonutChart($(this).val());
+            });
         });
     </script>
 @endsection
