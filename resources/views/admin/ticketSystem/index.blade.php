@@ -176,7 +176,7 @@
                                     </div>
                                 </th>
                                 <th class="sort" data-sort="id">ID</th>
-                                <th class="sort" data-sort="title">Title</th>
+                                <th class="sort" data-sort="tasks_name">Title</th>
                                 <th class="sort" data-sort="status">Status</th>
                                 <th class="sort" data-sort="priority">Priority</th>
                                 <th class="sort" data-sort="category">Category</th>
@@ -193,16 +193,14 @@
                                         </div>
                                     </th>
                                     <td class="id"><a href="#" class="fw-medium link-primary">#{{ $ticket->id }}</a></td>
-                                    <td class="title">{{ $ticket->title }}</td>
+                                    <td class="tasks_name">{{ $ticket->title }}</td>
                                     <td class="status">
                                         <form action="{{ route('admin.ticketSystem.updateStatus', $ticket->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
-                                            <select name="status_id" class="form-select form-select-sm" onchange="this.form.submit()" 
-                                                style="background-color: {{ $ticket->status ? $ticket->status->color : '#fff' }}; color: #fff; border-radius: 4px;">
+                                            <select name="status_id" class="form-select form-select-sm" onchange="this.form.submit()">
                                                 @foreach ($statuses as $status)
-                                                    <option value="{{ $status->id }}" {{ $ticket->status_id == $status->id ? 'selected' : '' }}
-                                                        style="background-color: {{ $status->color }}; color: #fff;">
+                                                    <option value="{{ $status->id }}" {{ $ticket->status_id == $status->id ? 'selected' : '' }}>
                                                         {{ $status->name }}
                                                     </option>
                                                 @endforeach
@@ -210,26 +208,31 @@
                                         </form>
                                     </td>
                                     <td class="priority">
-                                        <span class="badge bg-{{ $ticket->priority === 'High' ? 'danger' : ($ticket->priority === 'Medium' ? 'warning' : 'info') }} text-uppercase">
-                                            {{ $ticket->priority }}
-                                        </span>
+                                        @if($ticket->priority == 'High')
+                                            <span class="badge bg-danger text-uppercase">High</span>
+                                        @elseif($ticket->priority == 'Medium')
+                                            <span class="badge bg-warning text-uppercase">Medium</span>
+                                        @else
+                                            <span class="badge bg-success text-uppercase">Low</span>
+                                        @endif
                                     </td>
                                     <td class="category">
                                         @if($ticket->category)
-                                            <span class="badge bg-light text-dark border">
-                                                <span class="d-inline-block rounded-circle me-1" style="width: 10px; height: 10px; background-color: {{ $ticket->category->color }}"></span>
+                                            <span class="badge rounded-pill" style="background-color: {{ $ticket->category->color }}; color: #fff;">
                                                 {{ $ticket->category->name }}
                                             </span>
                                         @else
-                                            <span class="text-muted">-</span>
+                                            <span class="text-muted">No Category</span>
                                         @endif
                                     </td>
                                     <td class="assigned">
                                         @if ($ticket->assignedUser)
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
-                                                    <div class="avatar-xs bg-primary-subtle text-primary rounded-circle">
-                                                        <span class="avatar-title">{{ substr($ticket->assignedUser->name, 0, 1) }}</span>
+                                                    <div class="avatar-xs">
+                                                        <span class="avatar-title rounded-circle bg-primary text-white">
+                                                            {{ substr($ticket->assignedUser->name, 0, 1) }}
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1 ms-2">
@@ -253,12 +256,17 @@
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item" href="#">
+                                                        <i class="ri-eye-fill align-bottom me-2 text-muted"></i> View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
                                                         <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
                                                     </a>
                                                 </li>
                                                 <li class="dropdown-divider"></li>
                                                 <li>
-                                                    <form action="{{ route('admin.ticketSystem.destroy', $ticket->id) }}" method="POST" style="display:inline-block;">
+                                                    <form action="{{ route('admin.ticketSystem.destroy', $ticket->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this ticket?')">
@@ -275,18 +283,20 @@
                     </table>
                     
                     @if($tickets->isEmpty())
-                    <div class="noresult">
+                    <div class="noresult" style="display: block;">
                         <div class="text-center">
                             <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#8c68cd,secondary:#4788ff" style="width:75px;height:75px"></lord-icon>
                             <h5 class="mt-2">Sorry! No Result Found</h5>
-                            <p class="text-muted mb-0">We couldn't find any tickets matching your search.</p>
+                            <p class="text-muted mb-0">We've searched more than 150+ Tickets We did not find any Tickets for you search.</p>
                         </div>
                     </div>
                     @endif
                 </div>
                 
                 <div class="d-flex justify-content-end mt-2">
-                    {{ $tickets->links('vendor.pagination.bootstrap-5') }}
+                    <div class="pagination-wrap hstack gap-2">
+                        {{ $tickets->links('vendor.pagination.bootstrap-5') }}
+                    </div>
                 </div>
             </div>
             <!--end card-body-->
@@ -303,11 +313,11 @@
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-primary-subtle">
                 <h5 class="modal-title" id="ticketCategoriesModalLabel">Manage Ticket Categories</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
             </div>
             <div class="modal-body">
                 <!-- Form at the top -->
-                <form action="{{ route('admin.ticketCategories.store') }}" method="POST" id="categoryForm" class="mb-4">
+                <form action="{{ route('admin.ticketCategories.store') }}" method="POST" id="categoryForm" class="mb-4 tablelist-form" autocomplete="off">
                     @csrf
                     <div class="row g-3">
                         <div class="col-lg-6">
@@ -319,11 +329,14 @@
                         <div class="col-lg-6">
                             <div>
                                 <label for="category-color" class="form-label">Category Color</label>
-                                <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#000000" title="Choose your color">
+                                <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#3577f1" title="Choose your color">
                             </div>
                         </div>
-                        <div class="col-lg-12 text-end">
-                            <button type="submit" class="btn btn-success">
+                    </div>
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" id="add-btn">
                                 <i class="ri-add-line align-bottom me-1"></i> Add Category
                             </button>
                         </div>
@@ -331,35 +344,51 @@
                 </form>
 
                 <!-- Categories Table -->
-                <div class="table-responsive">
-                    <table class="table align-middle table-nowrap mb-0">
+                <div class="table-responsive table-card mt-3 mb-1">
+                    <table class="table align-middle table-nowrap" id="categoryTable">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col" style="width: 60px;">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" style="width: 50px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="checkAllCategories" value="option">
+                                    </div>
+                                </th>
+                                <th class="sort" data-sort="category_name">Category Name</th>
+                                <th class="sort" data-sort="category_color">Color</th>
+                                <th class="sort" data-sort="action">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="list form-check-all">
                             @foreach($categories as $index => $category)
                                 <tr>
-                                    <td class="fw-semibold">{{ $index + 1 }}</td>
-                                    <td class="text-capitalize">{{ $category->name }}</td>
-                                    <td>
+                                    <th scope="row">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="checkAllCategories" value="{{ $category->id }}">
+                                        </div>
+                                    </th>
+                                    <td class="category_name">{{ $category->name }}</td>
+                                    <td class="category_color">
                                         <div class="d-flex align-items-center">
-                                            <span class="d-inline-block rounded-circle me-2" style="width: 18px; height: 18px; background-color: {{ $category->color }}"></span>
-                                            <span class="badge bg-light text-dark border">{{ $category->color }}</span>
+                                            <div class="flex-shrink-0 me-2">
+                                                <div class="avatar-xs" style="background-color: {{ $category->color }}; border-radius: 4px;"></div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-0">{{ $category->color }}</h6>
+                                            </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="hstack gap-2">
-                                            <button type="button" class="btn btn-sm btn-soft-primary">
-                                                <i class="ri-pencil-fill"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-soft-danger">
-                                                <i class="ri-delete-bin-fill"></i>
-                                            </button>
+                                        <div class="d-flex gap-2">
+                                            <div class="edit">
+                                                <button class="btn btn-sm btn-success edit-item-btn">
+                                                    <i class="ri-pencil-fill align-bottom"></i>
+                                                </button>
+                                            </div>
+                                            <div class="remove">
+                                                <button class="btn btn-sm btn-danger remove-item-btn">
+                                                    <i class="ri-delete-bin-fill align-bottom"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -377,11 +406,6 @@
                         </ul>
                     </div>
                 @endif
-                @if (session('success'))
-                    <div class="alert alert-success mt-3">
-                        {{ session('success') }}
-                    </div>
-                @endif
             </div>
         </div>
     </div>
@@ -393,11 +417,11 @@
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-primary-subtle">
                 <h5 class="modal-title" id="ticketStatusesModalLabel">Manage Ticket Statuses</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-status-modal"></button>
             </div>
             <div class="modal-body">
                 <!-- Form at the top -->
-                <form action="{{ route('admin.ticketStatus.store') }}" method="POST" id="statusForm" class="mb-4">
+                <form action="{{ route('admin.ticketStatus.store') }}" method="POST" id="statusForm" class="tablelist-form" autocomplete="off">
                     @csrf
                     <div class="row g-3">
                         <div class="col-lg-6">
@@ -409,11 +433,14 @@
                         <div class="col-lg-6">
                             <div>
                                 <label for="status-color" class="form-label">Status Color</label>
-                                <input type="color" name="color" id="status-color" class="form-control form-control-color" value="#000000" title="Choose your color">
+                                <input type="color" name="color" id="status-color" class="form-control form-control-color" value="#3577f1" title="Choose your color">
                             </div>
                         </div>
-                        <div class="col-lg-12 text-end">
-                            <button type="submit" class="btn btn-success">
+                    </div>
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" id="add-status-btn">
                                 <i class="ri-add-line align-bottom me-1"></i> Add Status
                             </button>
                         </div>
@@ -421,35 +448,51 @@
                 </form>
 
                 <!-- Statuses Table -->
-                <div class="table-responsive">
-                    <table class="table align-middle table-nowrap mb-0">
+                <div class="table-responsive table-card mt-3 mb-1">
+                    <table class="table align-middle table-nowrap" id="statusTable">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col" style="width: 60px;">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" style="width: 50px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="checkAllStatuses" value="option">
+                                    </div>
+                                </th>
+                                <th class="sort" data-sort="status_name">Status Name</th>
+                                <th class="sort" data-sort="status_color">Color</th>
+                                <th class="sort" data-sort="action">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="list form-check-all">
                             @foreach($statuses as $index => $status)
                                 <tr>
-                                    <td class="fw-semibold">{{ $index + 1 }}</td>
-                                    <td class="text-capitalize">{{ $status->name }}</td>
-                                    <td>
+                                    <th scope="row">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="checkAllStatuses" value="{{ $status->id }}">
+                                        </div>
+                                    </th>
+                                    <td class="status_name">{{ $status->name }}</td>
+                                    <td class="status_color">
                                         <div class="d-flex align-items-center">
-                                            <span class="d-inline-block rounded-circle me-2" style="width: 18px; height: 18px; background-color: {{ $status->color }}"></span>
-                                            <span class="badge bg-light text-dark border">{{ $status->color }}</span>
+                                            <div class="flex-shrink-0 me-2">
+                                                <div class="avatar-xs" style="background-color: {{ $status->color }}; border-radius: 4px;"></div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-0">{{ $status->color }}</h6>
+                                            </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="hstack gap-2">
-                                            <button type="button" class="btn btn-sm btn-soft-primary">
-                                                <i class="ri-pencil-fill"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-soft-danger">
-                                                <i class="ri-delete-bin-fill"></i>
-                                            </button>
+                                        <div class="d-flex gap-2">
+                                            <div class="edit">
+                                                <button class="btn btn-sm btn-success edit-item-btn">
+                                                    <i class="ri-pencil-fill align-bottom"></i>
+                                                </button>
+                                            </div>
+                                            <div class="remove">
+                                                <button class="btn btn-sm btn-danger remove-item-btn">
+                                                    <i class="ri-delete-bin-fill align-bottom"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -465,11 +508,6 @@
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
-                    </div>
-                @endif
-                @if (session('success_status'))
-                    <div class="alert alert-success mt-3">
-                        {{ session('success_status') }}
                     </div>
                 @endif
             </div>
@@ -543,13 +581,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 16);
     });
     
-    // Check/Uncheck all functionality
+    // Check/Uncheck all functionality for main table
     document.getElementById('checkAll').addEventListener('change', function() {
         const isChecked = this.checked;
         document.querySelectorAll('input[name="checkAll"]').forEach(function(checkbox) {
             checkbox.checked = isChecked;
         });
     });
+    
+    // Check/Uncheck all functionality for categories table
+    if (document.getElementById('checkAllCategories')) {
+        document.getElementById('checkAllCategories').addEventListener('change', function() {
+            const isChecked = this.checked;
+            document.querySelectorAll('input[name="checkAllCategories"]').forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+            });
+        });
+    }
+    
+    // Check/Uncheck all functionality for statuses table
+    if (document.getElementById('checkAllStatuses')) {
+        document.getElementById('checkAllStatuses').addEventListener('change', function() {
+            const isChecked = this.checked;
+            document.querySelectorAll('input[name="checkAllStatuses"]').forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+            });
+        });
+    }
 });
 </script>
 @endsection
