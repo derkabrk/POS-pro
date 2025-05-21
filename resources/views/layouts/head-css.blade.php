@@ -9,4 +9,5 @@
 <link href="{{ URL::asset('build/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 <!-- custom Css-->
 <link href="{{ URL::asset('build/css/custom.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+<link href="{{ asset('resources/css/background.css') }}" rel="stylesheet" type="text/css" />
 {{-- @yield('css') --}}
