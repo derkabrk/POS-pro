@@ -215,8 +215,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <!-- Replaced canvas with gradient line chart -->
-                                        <div id="line_chart_gradient" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
+                                        <!-- Line chart container -->
+                                        <div id="line_chart_gradient" class="apex-charts" dir="ltr"></div>
                                     </div>
                                 </div>
                             </div><!-- end card body -->
@@ -224,18 +224,23 @@
                     </div><!-- end col -->
 
                     <div class="col-xl-4">
-    <div class="card card-animate card-height-100">
-        <div class="card-header border-0 align-items-center d-flex bg-light-subtle">
-            <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
-        </div>
-        <div class="card-body d-flex flex-column justify-content-center align-items-center">
-            <div id="simple_pie_chart"
-                data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
-                class="apex-charts w-100 donut-chart" style="min-height: 300px; max-width: 100%;"></div>
-            <div id="plan-legend" class="mt-3 w-100"></div>
-        </div>
-    </div>
-</div>
+                        <div class="card card-animate card-height-100">
+                            <div class="card-header border-0 align-items-center d-flex bg-light-subtle">
+                                <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
+                                <div>
+                                    <select class="form-select form-select-sm" id="donut-year-select">
+                                        @for ($i = date('Y'); $i >= 2022; $i--)
+                                            <option @selected($i == date('Y')) value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                <div id="simple_pie_chart" class="apex-charts w-100" style="min-height: 300px; max-width: 100%;"></div>
+                                <div id="plan-legend" class="mt-3 w-100"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -390,43 +395,57 @@
 
 @section('script')
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <!-- Chart.js and dashboard functionality -->
-    <script src="{{ asset('assets/js/chart.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/custom/dashboard.js') }}"></script>
-    <!-- Modern UI support scripts -->
+    <!-- ApexCharts -->
     <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <!-- Other required scripts -->
     <script src="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
-    <!-- Script for gradient line chart -->
-    <script src="{{ URL::asset('build/js/pages/apexcharts-line.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    
     <script>
-        var donutChart = null;
-        var gradientLineChart = null;
+        // Global variables to store chart instances
+        let donutChart = null;
+        let lineChart = null;
+        let isInitialLoad = true;
         
-        function loadGradientLineChart(year) {
-            var url = $('#yearly-subscriptions-url').val();
+        // Function to format currency
+        function formatCurrency(value, symbol, position) {
+            const formattedNumber = parseFloat(value).toLocaleString();
+            return position === 'left' ? symbol + formattedNumber : formattedNumber + symbol;
+        }
+        
+        // Function to load gradient line chart
+        function loadLineChart(year) {
+            const url = $('#yearly-subscriptions-url').val();
+            
             $.ajax({
                 type: 'GET',
-                url: url + '?year=' + year,
+                url: url,
+                data: { year: year },
                 dataType: 'json',
                 success: function(data) {
-                    // Format the data for the gradient line chart
-                    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    var seriesData = [];
+                    // Format the data for the chart
+                    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const seriesData = [];
                     
-                    // Assume data.subscriptions contains monthly values
                     if (data.subscriptions && Array.isArray(data.subscriptions)) {
-                        months.forEach((month, index) => {
+                        for (let i = 0; i < months.length; i++) {
                             seriesData.push({
-                                x: month,
-                                y: data.subscriptions[index] || 0
+                                x: months[i],
+                                y: data.subscriptions[i] || 0
                             });
-                        });
+                        }
                     }
                     
-                    // ApexCharts configuration for gradient line chart
-                    var options = {
+                    // Format and display total value
+                    const totalValue = data.totalSubscriptions || 0;
+                    const currencySymbol = $('#currency_symbol').val();
+                    const currencyPosition = $('#currency_position').val();
+                    const formattedValue = formatCurrency(totalValue, currencySymbol, currencyPosition);
+                    $('.income-value').text(formattedValue);
+                    
+                    // Chart options
+                    const options = {
                         series: [{
                             name: 'Subscriptions',
                             data: seriesData
@@ -434,188 +453,197 @@
                         chart: {
                             height: 290,
                             type: 'line',
-                            toolbar: {
-                                show: false
-                            }
+                            toolbar: { show: false },
+                            zoom: { enabled: false }
                         },
                         stroke: {
                             width: 3,
                             curve: 'smooth'
                         },
-                        colors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim()],
+                        colors: ['#10b981'], // success color
                         xaxis: {
-                            categories: months,
+                            categories: months
                         },
                         fill: {
                             type: 'gradient',
                             gradient: {
                                 shade: 'dark',
-                                gradientToColors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim()],
+                                gradientToColors: ['#3b82f6'], // primary color
                                 shadeIntensity: 1,
                                 type: 'horizontal',
                                 opacityFrom: 1,
-                                opacityTo: 1,
-                            },
+                                opacityTo: 1
+                            }
                         },
                         markers: {
                             size: 4,
-                            colors: [getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim()],
+                            colors: ['#10b981'],
                             strokeColors: "#fff",
                             strokeWidth: 2,
-                            hover: {
-                                size: 7,
-                            }
+                            hover: { size: 7 }
                         },
                         yaxis: {
-                            title: {
-                                text: 'Subscriptions'
-                            },
+                            title: { text: 'Subscriptions' }
                         }
                     };
-
-                    // Initialize or update chart
-                    if (gradientLineChart) {
-                        gradientLineChart.updateOptions(options);
-                    } else {
-                        gradientLineChart = new ApexCharts(document.querySelector("#line_chart_gradient"), options);
-                        gradientLineChart.render();
+                    
+                    // Clear previous chart before creating a new one
+                    if (lineChart) {
+                        lineChart.destroy();
                     }
                     
-                    // Update total value display
-                    let totalValue = data.totalSubscriptions || 0;
-                    let currencySymbol = $('#currency_symbol').val();
-                    let currencyPosition = $('#currency_position').val();
-                    let formattedValue = currencyPosition === 'left' ? 
-                        currencySymbol + totalValue.toLocaleString() : 
-                        totalValue.toLocaleString() + currencySymbol;
-                    
-                    $('.income-value').text(formattedValue);
+                    // Create new chart
+                    lineChart = new ApexCharts(document.querySelector("#line_chart_gradient"), options);
+                    lineChart.render();
                 },
                 error: function(xhr, status, error) {
                     console.error('Error loading subscription data:', error);
+                    // Clear chart if there's an error
+                    if (lineChart) {
+                        lineChart.destroy();
+                        lineChart = null;
+                    }
+                    $("#line_chart_gradient").html('<div class="text-danger p-3">Failed to load chart data</div>');
                 }
             });
         }
         
         // Function to load donut chart
         function loadDonutChart(year) {
-            var url = $('#get-plans-overview').val();
+            const url = $('#get-plans-overview').val();
+            
             $.ajax({
                 type: 'GET',
-                url: url + '?year=' + year,
+                url: url,
+                data: { year: year },
                 dataType: 'json',
                 success: function(data) {
-                    var plans = data.plans || [];
-                    var planCounts = data.planCounts || [];
-                    var colors = [
-                        getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6',
-                        getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim() || '#10b981',
-                        getComputedStyle(document.documentElement).getPropertyValue('--vz-warning').trim() || '#f97316',
-                        getComputedStyle(document.documentElement).getPropertyValue('--vz-danger').trim() || '#ec4899',
-                        getComputedStyle(document.documentElement).getPropertyValue('--vz-info').trim() || '#8b5cf6'
+                    const plans = data.plans || [];
+                    const planCounts = data.planCounts || [];
+                    
+                    // Default colors if CSS variables aren't available
+                    const colors = [
+                        '#3b82f6', // primary
+                        '#10b981', // success
+                        '#f97316', // warning
+                        '#ec4899', // danger
+                        '#8b5cf6'  // info
                     ];
-                    var options = {
+                    
+                    // Chart options
+                    const options = {
+                        series: planCounts,
                         chart: {
                             type: 'donut',
-                            height: 300
+                            height: 300,
+                            zoom: { enabled: false }
                         },
                         labels: plans,
-                        series: planCounts,
                         colors: colors.slice(0, plans.length),
                         legend: {
                             position: 'bottom',
-                            fontSize: '15px',
-                            fontWeight: 500,
-                            labels: { colors: '#333' },
-                            itemMargin: { horizontal: 12, vertical: 6 }
+                            fontSize: '14px',
+                            offsetY: 5
                         },
                         dataLabels: {
                             enabled: true,
-                            style: {
-                                fontSize: '15px',
-                                fontWeight: 600,
-                                colors: ['#fff']
-                            },
-                            dropShadow: {
-                                enabled: true,
-                                top: 1,
-                                left: 1,
-                                blur: 2,
-                                color: '#222',
-                                opacity: 0.25
-                            },
-                            formatter: function (val, opts) {
-                                return val;
+                            formatter: function(val) {
+                                return Math.round(val) + '%';
                             }
                         },
-                        tooltip: {
-                            y: {
-                                formatter: function(val, opts) {
-                                    return val + ' ' + opts.w.globals.labels[opts.seriesIndex];
-                                }
-                            }
-                        },
-                        stroke: {
-                            show: true,
-                            width: 2,
-                            colors: ['#fff']
-                        },
-                        states: {
-                            hover: {
-                                filter: {
-                                    type: 'darken',
-                                    value: 0.9
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    size: '50%'
                                 }
                             }
                         },
                         responsive: [{
-                            breakpoint: 600,
+                            breakpoint: 480,
                             options: {
-                                chart: { height: 220 },
-                                legend: { fontSize: '13px' },
-                                dataLabels: { style: { fontSize: '12px' } }
+                                chart: { height: 200 },
+                                legend: { position: 'bottom' }
                             }
                         }]
                     };
+                    
+                    // Clear previous chart before creating a new one
                     if (donutChart) {
                         donutChart.destroy();
                     }
-                    donutChart = new ApexCharts(document.querySelector("#simple_pie_chart.donut-chart"), options);
+                    
+                    // Create new chart
+                    donutChart = new ApexCharts(document.querySelector("#simple_pie_chart"), options);
                     donutChart.render();
                 },
                 error: function(xhr, status, error) {
+                    console.error('Error loading plan data:', error);
+                    // Clear chart if there's an error
                     if (donutChart) {
                         donutChart.destroy();
+                        donutChart = null;
                     }
-                    donutChart = null;
-                    $("#simple_pie_chart.donut-chart").html('<div class="text-danger">Failed to load chart</div>');
+                    $("#simple_pie_chart").html('<div class="text-danger p-3">Failed to load chart data</div>');
                 }
             });
         }
         
-        $(document).ready(function() {
-            // Initialize gradient line chart
-            loadGradientLineChart(new Date().getFullYear());
+        // Function to load dashboard data
+        function loadDashboardData() {
+            const url = $('#get-dashboard').val();
             
-            // Update chart when year selection changes
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                success: function(data) {
+                    // Update counter values
+                    $('#total_businesses').text(data.totalBusinesses || 0);
+                    $('#expired_businesses').text(data.expiredBusinesses || 0);
+                    $('#plan_subscribes').text(data.planSubscribes || 0);
+                    $('#business_categories').text(data.businessCategories || 0);
+                    $('#total_plans').text(data.totalPlans || 0);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading dashboard data:', error);
+                }
+            });
+        }
+        
+        // Document ready function
+        $(document).ready(function() {
+            // Load initial data
+            loadDashboardData();
+            
+            // Get current year
+            const currentYear = new Date().getFullYear();
+            
+            // Load initial charts
+            loadLineChart(currentYear);
+            loadDonutChart(currentYear);
+            
+            // Event handler for line chart year selection
             $('.yearly-statistics').on('change', function() {
-                loadGradientLineChart($(this).val());
+                const selectedYear = $(this).val();
+                loadLineChart(selectedYear);
             });
             
-            // Add year dropdown for donut chart
-            var yearSelect = $('<select class="form-select form-select-sm mb-2" id="donut-year-select"></select>');
-            var currentYear = new Date().getFullYear();
-            for (var i = currentYear; i >= 2022; i--) {
-                yearSelect.append('<option value="'+i+'">'+i+'</option>');
-            }
-            $('#simple_pie_chart').before(yearSelect);
+            // Event handler for donut chart year selection
+            $('#donut-year-select').on('change', function() {
+                const selectedYear = $(this).val();
+                loadDonutChart(selectedYear);
+            });
             
-            // Initial load of donut chart
-            loadDonutChart(yearSelect.val());
+            // Layout rightside button event handler
+            $('.layout-rightside-btn').on('click', function() {
+                $('.layout-rightside-col').toggleClass('d-block');
+                $('.overlay').toggleClass('show');
+            });
             
-            // On year change for donut chart
-            yearSelect.on('change', function() {
-                loadDonutChart($(this).val());
+            // Close rightside when clicking overlay
+            $('.overlay').on('click', function() {
+                $('.layout-rightside-col').removeClass('d-block');
+                $(this).removeClass('show');
             });
         });
     </script>
