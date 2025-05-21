@@ -6,6 +6,9 @@ Contact: Themesbrand@gmail.com
 File: Chat init js
 */
 
+import Echo from 'laravel-echo';
+window.Pusher = require('pusher-js');
+
 (function () {
     var dummyUserImage = "assets/images/users/user-dummy-img.jpg";
     var dummyMultiUserImage = "assets/images/users/multi-user.jpg";
@@ -940,6 +943,64 @@ File: Chat init js
                 }
             }
         }, 0);
+    });
+
+    $(function () {
+        let selectedUserId = null;
+        const authUserId = $('#auth-user-id').val();
+
+        // Setup Echo
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: window.PUSHER_APP_KEY || '',
+            cluster: window.PUSHER_APP_CLUSTER || '',
+            forceTLS: true,
+            encrypted: true,
+        });
+
+        // User selection
+        $('.user-item').on('click', function () {
+            selectedUserId = $(this).data('id');
+            fetchMessages();
+        });
+
+        // Fetch messages
+        function fetchMessages() {
+            if (!selectedUserId) return;
+            $.get('/chat/messages/' + selectedUserId, function (messages) {
+                $('#chat-messages').html('');
+                messages.forEach(function (msg) {
+                    const align = msg.sender_id == authUserId ? 'text-end' : 'text-start';
+                    $('#chat-messages').append('<div class="mb-2 ' + align + '"><span class="badge bg-light text-dark">' + msg.message + '</span></div>');
+                });
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+            });
+        }
+
+        // Send message
+        $('#chat-form').on('submit', function (e) {
+            e.preventDefault();
+            const message = $('#chat-input').val();
+            if (!message || !selectedUserId) return;
+            $.post('/chat/send', {
+                receiver_id: selectedUserId,
+                message: message,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            }, function (msg) {
+                $('#chat-input').val('');
+                fetchMessages();
+            });
+        });
+
+        // Listen for new messages
+        if (authUserId) {
+            window.Echo.private('chat.' + authUserId)
+                .listen('ChatMessageSent', (e) => {
+                    if (selectedUserId == e.sender_id) {
+                        fetchMessages();
+                    }
+                });
+        }
     });
 
 })();

@@ -176,6 +176,12 @@
                 </li>
                 @endcanany
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::routeIs('chat.index') ? 'active' : '' }}" href="{{ route('chat.index') }}">
+                        <i class="ri-chat-1-line"></i> <span>{{ __('Chat') }}</span>
+                    </a>
+                </li>
+
                 @canany(['settings-read', 'notifications-read', 'currencies-read', 'sms-read', 'features-read',
                 'blogs-read', 'newsletters-read', 'interfaces-read', 'designs-read', 'testimonials-read', 'terms-read'])
                 <li class="nav-item">

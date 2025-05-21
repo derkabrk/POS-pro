@@ -417,33 +417,34 @@
         // Function to load gradient line chart
         function loadLineChart(year) {
             const url = $('#yearly-subscriptions-url').val();
-            
             $.ajax({
                 type: 'GET',
                 url: url,
                 data: { year: year },
                 dataType: 'json',
                 success: function(data) {
+                    // Prevent infinite re-rendering
+                    if (lineChart) {
+                        lineChart.destroy();
+                        lineChart = null;
+                    }
                     // Format the data for the chart
                     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    const seriesData = [];
-                    
+                    let seriesData = [];
                     if (data.subscriptions && Array.isArray(data.subscriptions)) {
                         for (let i = 0; i < months.length; i++) {
-                            seriesData.push({
-                                x: months[i],
-                                y: data.subscriptions[i] || 0
-                            });
+                            seriesData.push(data.subscriptions[i] || 0);
                         }
+                    } else {
+                        // fallback to zeros if no data
+                        seriesData = Array(12).fill(0);
                     }
-                    
                     // Format and display total value
                     const totalValue = data.totalSubscriptions || 0;
                     const currencySymbol = $('#currency_symbol').val();
                     const currencyPosition = $('#currency_position').val();
                     const formattedValue = formatCurrency(totalValue, currencySymbol, currencyPosition);
                     $('.income-value').text(formattedValue);
-                    
                     // Chart options
                     const options = {
                         series: [{
@@ -460,7 +461,7 @@
                             width: 3,
                             curve: 'smooth'
                         },
-                        colors: ['#10b981'], // success color
+                        colors: ['#10b981'],
                         xaxis: {
                             categories: months
                         },
@@ -468,7 +469,7 @@
                             type: 'gradient',
                             gradient: {
                                 shade: 'dark',
-                                gradientToColors: ['#3b82f6'], // primary color
+                                gradientToColors: ['#3b82f6'],
                                 shadeIntensity: 1,
                                 type: 'horizontal',
                                 opacityFrom: 1,
@@ -484,21 +485,18 @@
                         },
                         yaxis: {
                             title: { text: 'Subscriptions' }
+                        },
+                        noData: {
+                            text: 'No data available',
+                            align: 'center',
+                            verticalAlign: 'middle',
+                            style: { color: '#ccc', fontSize: '16px' }
                         }
                     };
-                    
-                    // Clear previous chart before creating a new one
-                    if (lineChart) {
-                        lineChart.destroy();
-                    }
-                    
-                    // Create new chart
                     lineChart = new ApexCharts(document.querySelector("#line_chart_gradient"), options);
                     lineChart.render();
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error loading subscription data:', error);
-                    // Clear chart if there's an error
                     if (lineChart) {
                         lineChart.destroy();
                         lineChart = null;
