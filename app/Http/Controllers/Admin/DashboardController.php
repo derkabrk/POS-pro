@@ -71,12 +71,27 @@ class DashboardController extends Controller
 
     public function yearlySubscriptions()
     {
-        $subscriptions = PlanSubscribe::whereYear('created_at', request('year') ?? date('Y'))
-                            ->selectRaw('MONTHNAME(created_at) as month, SUM(price) as total_amount')
-                            ->groupBy('month')
-                            ->get();
-
-        return response()->json($subscriptions);
+        $year = request('year') ?? date('Y');
+        $allMonths = [
+            1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun',
+            7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec'
+        ];
+        $subscriptions = array_fill(0, 12, 0);
+        $totalSubscriptions = 0;
+        $subs = PlanSubscribe::whereYear('created_at', $year)
+            ->selectRaw('MONTH(created_at) as month, SUM(price) as total')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+        foreach ($subs as $sub) {
+            $idx = (int)$sub->month - 1;
+            $subscriptions[$idx] = (float)$sub->total;
+            $totalSubscriptions += (float)$sub->total;
+        }
+        return response()->json([
+            'subscriptions' => $subscriptions,
+            'totalSubscriptions' => $totalSubscriptions,
+        ]);
     }
 
     public function plansOverview(Request $request)
