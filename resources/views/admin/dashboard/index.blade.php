@@ -235,4 +235,97 @@
 @push('js')
     <script src="{{ asset('assets/js/chart.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var plans = @json($plans ?? []);
+            var values = @json($planValues ?? []);
+            var colors = [
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6',
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim() || '#10b981',
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-warning').trim() || '#f97316',
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-danger').trim() || '#ec4899',
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-info').trim() || '#8b5cf6'
+            ];
+            var options = {
+                chart: {
+                    type: 'pie',
+                    height: 320,
+                    fontFamily: 'inherit',
+                    toolbar: { show: false },
+                    dropShadow: {
+                        enabled: true,
+                        color: '#000',
+                        top: 2,
+                        left: 2,
+                        blur: 6,
+                        opacity: 0.08
+                    }
+                },
+                labels: plans,
+                series: values,
+                colors: colors.slice(0, plans.length),
+                legend: {
+                    position: 'bottom',
+                    fontSize: '15px',
+                    fontWeight: 500,
+                    labels: { colors: '#333' },
+                    itemMargin: { horizontal: 12, vertical: 6 }
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontSize: '15px',
+                        fontWeight: 600,
+                        colors: ['#fff']
+                    },
+                    dropShadow: {
+                        enabled: true,
+                        top: 1,
+                        left: 1,
+                        blur: 2,
+                        color: '#222',
+                        opacity: 0.25
+                    },
+                    formatter: function (val, opts) {
+                        var total = opts.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                        var percent = total ? Math.round((val / total) * 100) : 0;
+                        return percent + '%';
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val, opts) {
+                            var total = opts.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                            var percent = total ? Math.round((val / total) * 100) : 0;
+                            return val + ' (' + percent + '%)';
+                        }
+                    }
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['#fff']
+                },
+                states: {
+                    hover: {
+                        filter: {
+                            type: 'darken',
+                            value: 0.9
+                        }
+                    }
+                },
+                responsive: [{
+                    breakpoint: 600,
+                    options: {
+                        chart: { height: 260 },
+                        legend: { fontSize: '13px' },
+                        dataLabels: { style: { fontSize: '12px' } }
+                    }
+                }]
+            };
+            var chart = new ApexCharts(document.querySelector("#plans-chart"), options);
+            chart.render();
+        });
+    </script>
 @endpush
