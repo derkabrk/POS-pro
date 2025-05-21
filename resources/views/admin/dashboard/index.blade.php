@@ -328,14 +328,13 @@
             chart.render();
 
             // Finance Overview Chart Data (from PHP, not AJAX)
-            var months = @json($financeMonths ?? []);
-            var values = @json($financeValues ?? []);
+            var financeMonths = @json($financeMonths ?? []);
+            var financeValues = @json($financeValues ?? []);
             var currencySymbol = document.getElementById('currency_symbol').value;
             var currencyPosition = document.getElementById('currency_position').value;
 
-            // Gradient for line
             var chartEl = document.querySelector('#monthly-statistics.gradient-line-chart');
-            var options = {
+            var financeOptions = {
                 chart: {
                     type: 'line',
                     height: 290,
@@ -352,10 +351,10 @@
                 },
                 series: [{
                     name: 'Total Subscription',
-                    data: values
+                    data: financeValues
                 }],
                 xaxis: {
-                    categories: months,
+                    categories: financeMonths,
                     labels: { style: { fontSize: '13px' } }
                 },
                 yaxis: {
@@ -413,8 +412,10 @@
                     }
                 }]
             };
-            var chart = new ApexCharts(chartEl, options);
-            chart.render();
+            if (chartEl) {
+                var financeChart = new ApexCharts(chartEl, financeOptions);
+                financeChart.render();
+            }
         });
     </script>
 @endpush
