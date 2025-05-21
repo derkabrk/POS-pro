@@ -180,7 +180,7 @@
 
                 <div class="row">
                     <div class="col-xl-8">
-                        <div class="card">
+                        <div class="card card-animate card-height-100 modern-chart">
                             <div class="card-header border-0 align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">{{ __('Finance Overview') }}</h4>
                                 <div>
@@ -191,7 +191,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="card-header p-0 border-0 bg-light-subtle">
                                 <div class="row g-0 text-center">
                                     <div class="col-12">
@@ -203,7 +202,6 @@
                                     </div>
                                 </div>
                             </div><!-- end card header -->
-
                             <div class="card-body p-0 pb-2">
                                 <div class="w-100">
                                     <div class="d-flex mb-2 ps-4">
@@ -217,7 +215,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <canvas id="monthly-statistics" height="290" class="apex-charts"></canvas>
+                                        <canvas id="monthly-statistics" height="290" class="modern-chart-canvas"></canvas>
                                     </div>
                                 </div>
                             </div><!-- end card body -->
