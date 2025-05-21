@@ -380,14 +380,21 @@
                                     <td>
                                         <div class="d-flex gap-2">
                                             <div class="edit">
-                                                <button class="btn btn-sm btn-success edit-item-btn">
+                                                <button class="btn btn-sm btn-success edit-item-btn" 
+                                                    data-id="{{ $category->id }}" 
+                                                    data-name="{{ $category->name }}" 
+                                                    data-color="{{ $category->color }}">
                                                     <i class="ri-pencil-fill align-bottom"></i>
                                                 </button>
                                             </div>
                                             <div class="remove">
-                                                <button class="btn btn-sm btn-danger remove-item-btn">
+                                                <button class="btn btn-sm btn-danger remove-item-btn" data-id="{{ $category->id }}">
                                                     <i class="ri-delete-bin-fill align-bottom"></i>
                                                 </button>
+                                                <form id="delete-category-{{ $category->id }}" action="{{ route('admin.ticketCategories.destroy', $category->id) }}" method="POST" style="display:none;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
                                             </div>
                                         </div>
                                     </td>
@@ -484,14 +491,21 @@
                                     <td>
                                         <div class="d-flex gap-2">
                                             <div class="edit">
-                                                <button class="btn btn-sm btn-success edit-item-btn">
+                                                <button class="btn btn-sm btn-success edit-item-btn" 
+                                                    data-id="{{ $status->id }}" 
+                                                    data-name="{{ $status->name }}" 
+                                                    data-color="{{ $status->color }}">
                                                     <i class="ri-pencil-fill align-bottom"></i>
                                                 </button>
                                             </div>
                                             <div class="remove">
-                                                <button class="btn btn-sm btn-danger remove-item-btn">
+                                                <button class="btn btn-sm btn-danger remove-item-btn" data-id="{{ $status->id }}">
                                                     <i class="ri-delete-bin-fill align-bottom"></i>
                                                 </button>
+                                                <form id="delete-status-{{ $status->id }}" action="{{ route('admin.ticketStatus.destroy', $status->id) }}" method="POST" style="display:none;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
                                             </div>
                                         </div>
                                     </td>
@@ -608,6 +622,62 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    // Category Edit/Delete
+    $(document).on('click', '#categoryTable .edit-item-btn', function() {
+        var id = $(this).data('id');
+        var name = $(this).data('name');
+        var color = $(this).data('color');
+        $('#category-name').val(name);
+        $('#category-color').val(color);
+        $('#categoryForm').attr('action', '/admin/ticket-categories/' + id);
+        if ($('#categoryForm input[name="_method"]').length === 0) {
+            $('#categoryForm').append('<input type="hidden" name="_method" value="PUT">');
+        } else {
+            $('#categoryForm input[name="_method"]').val('PUT');
+        }
+        $('#add-btn').html('<i class="ri-save-line align-bottom me-1"></i> Update Category');
+    });
+    $(document).on('click', '#categoryTable .remove-item-btn', function() {
+        var id = $(this).data('id');
+        if (confirm('Are you sure you want to delete this category?')) {
+            $('#delete-category-' + id).submit();
+        }
+    });
+    $('#ticketCategoriesModal').on('hidden.bs.modal', function () {
+        $('#categoryForm').trigger('reset');
+        $('#categoryForm').attr('action', '{{ route('admin.ticketCategories.store') }}');
+        $('#categoryForm input[name="_method"]').remove();
+        $('#add-btn').html('<i class="ri-add-line align-bottom me-1"></i> Add Category');
+    });
+
+    // Status Edit/Delete
+    $(document).on('click', '#statusTable .edit-item-btn', function() {
+        var id = $(this).data('id');
+        var name = $(this).data('name');
+        var color = $(this).data('color');
+        $('#status-name').val(name);
+        $('#status-color').val(color);
+        $('#statusForm').attr('action', '/admin/ticket-status/' + id);
+        if ($('#statusForm input[name="_method"]').length === 0) {
+            $('#statusForm').append('<input type="hidden" name="_method" value="PUT">');
+        } else {
+            $('#statusForm input[name="_method"]').val('PUT');
+        }
+        $('#add-status-btn').html('<i class="ri-save-line align-bottom me-1"></i> Update Status');
+    });
+    $(document).on('click', '#statusTable .remove-item-btn', function() {
+        var id = $(this).data('id');
+        if (confirm('Are you sure you want to delete this status?')) {
+            $('#delete-status-' + id).submit();
+        }
+    });
+    $('#ticketStatusesModal').on('hidden.bs.modal', function () {
+        $('#statusForm').trigger('reset');
+        $('#statusForm').attr('action', '{{ route('admin.ticketStatus.store') }}');
+        $('#statusForm input[name="_method"]').remove();
+        $('#add-status-btn').html('<i class="ri-add-line align-bottom me-1"></i> Add Status');
+    });
 });
 </script>
 @endsection
