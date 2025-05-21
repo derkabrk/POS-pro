@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_businesses"></h4>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_businesses">{{ $total_businesses ?? ($businesses ? count($businesses) : 0) }}</h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="expired_businesses"></h4>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="expired_businesses">{{ $expired_businesses ?? 0 }}</h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="plan_subscribes"></h4>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="plan_subscribes">{{ $plan_subscribes ?? 0 }}</h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-success-subtle rounded fs-3">
@@ -142,7 +142,7 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="business_categories"></h4>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="business_categories">{{ $business_categories ?? 0 }}</h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -165,7 +165,7 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_plans"></h4>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_plans">{{ $total_plans ?? 0 }}</h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-danger-subtle rounded fs-3">

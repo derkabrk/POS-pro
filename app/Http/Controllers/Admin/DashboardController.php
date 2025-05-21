@@ -48,12 +48,25 @@ class DashboardController extends Controller
             $financeValues[$idx] = (float)$sub->total;
         }
 
+        $total_businesses = Business::count();
+        $expired_businesses = Business::where('will_expire', '<', now())->count();
+        $plan_subscribes = PlanSubscribe::count();
+        $business_categories = BusinessCategory::count();
+        $total_plans = Plan::count();
+        $total_staffs = User::whereNotIn('role', ['superadmin', 'staff', 'shop-owner'])->count();
+
         return view('index', [
             'businesses' => $businesses,
             'plans' => $plans,
             'planValues' => $planValues,
             'financeMonths' => $financeMonths,
             'financeValues' => $financeValues,
+            'total_businesses' => $total_businesses,
+            'expired_businesses' => $expired_businesses,
+            'plan_subscribes' => $plan_subscribes,
+            'business_categories' => $business_categories,
+            'total_plans' => $total_plans,
+            'total_staffs' => $total_staffs,
         ]);
     }
 
