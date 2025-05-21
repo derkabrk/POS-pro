@@ -44,6 +44,14 @@ class TicketSystem extends Model
     }
 
     /**
+     * Define the relationship with the User model for the ticket creator.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
      * Define the relationship with the TicketReply model.
      */
     public function replies()
