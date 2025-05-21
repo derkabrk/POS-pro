@@ -224,29 +224,18 @@
                         </div><!-- end card -->
                     </div><!-- end col -->
 
-                    <div class="col-xl-4">
-                        <!-- card -->
-                        <div class="card card-height-100">
-                            <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">{{ __('Subscription Plan') }}</h4>
-                                <div class="flex-shrink-0">
-                                    <select class="form-select form-select-sm overview-year">
-                                        @for ($i = date('Y'); $i >= 2022; $i--)
-                                            <option @selected($i == date('Y')) value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-                            </div>
-
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">{{ __('Subscription Plan') }}</h4>
+                            </div><!-- end card header -->
                             <div class="card-body">
-                                <div class="px-3 py-3">
-                                    <canvas id="plans-chart" class="pie-chart" height="300"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end card -->
+                                <div id="simple_pie_chart"
+                                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
+                                    class="apex-charts" dir="ltr"></div>
+                            </div><!-- end card-body -->
+                        </div><!-- end card -->
                     </div>
-                    <!-- end col -->
                 </div>
 
                 <div class="row">
@@ -411,205 +400,41 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
     
     <script>
-        // Initialize and load dashboard data
         document.addEventListener("DOMContentLoaded", function() {
-            // Get the URLs from hidden fields
-            var dashboardURL = document.getElementById('get-dashboard').value;
-            var plansOverviewURL = document.getElementById('get-plans-overview').value;
-            var subscriptionsURL = document.getElementById('yearly-subscriptions-url').value;
-
-            // Get currency information
-            var currencySymbol = document.getElementById('currency_symbol').value;
-            var currencyPosition = document.getElementById('currency_position').value;
-            
-            // Load dashboard stats
-            fetch(dashboardURL)
-                .then(response => response.json())
-                .then(data => {
-                    // Update dashboard statistics
-                    document.getElementById('total_businesses').textContent = data.total_businesses || '0';
-                    document.getElementById('expired_businesses').textContent = data.expired_businesses || '0';
-                    document.getElementById('plan_subscribes').textContent = data.plan_subscribes || '0';
-                    document.getElementById('business_categories').textContent = data.business_categories || '0';
-                    document.getElementById('total_plans').textContent = data.total_plans || '0';
-                    
-                    // Add animation effect to the counters
-                    animateCounters();
-                })
-                .catch(error => console.error('Error loading dashboard data:', error));
-                
-            // Initialize both charts with current year
-            const currentYear = new Date().getFullYear();
-            loadYearlyStatistics(currentYear);
-            loadPlansOverview(currentYear);
-            
-            // Add event listeners for year selection
-            document.querySelector('.yearly-statistics').addEventListener('change', function() {
-                loadYearlyStatistics(this.value);
-            });
-            
-            document.querySelector('.overview-year').addEventListener('change', function() {
-                loadPlansOverview(this.value);
-            });
-            
-            // Function to load yearly statistics
-            function loadYearlyStatistics(year) {
-                fetch(`${subscriptionsURL}?year=${year}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Set income value
-                        let incomeElements = document.querySelectorAll('.income-value');
-                        incomeElements.forEach(element => {
-                            let amount = formatCurrency(data.total, currencySymbol, currencyPosition);
-                            element.textContent = amount;
-                        });
-                        
-                        // Initialize chart
-                        initMonthlyChart(data.months, data.values);
-                    })
-                    .catch(error => console.error('Error loading yearly statistics:', error));
-            }
-            
-            // Function to load plans overview
-            function loadPlansOverview(year) {
-                fetch(`${plansOverviewURL}?year=${year}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Use either the new API format or fallback to original format
-                        const plans = data.plans || data.labels || [];
-                        const values = data.values || data.data || [];
-                        const colors = data.colors || null;
-                        
-                        initPlansChart(plans, values, colors);
-                    })
-                    .catch(error => console.error('Error loading plans overview:', error));
-            }
-            
-            // Initialize monthly statistics chart
-            function initMonthlyChart(months, values) {
-                const ctx = document.getElementById('monthly-statistics').getContext('2d');
-                
-                // Destroy existing chart if it exists
-                if (window.monthlyChart instanceof Chart) {
-                    window.monthlyChart.destroy();
-                }
-                
-                window.monthlyChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: 'Monthly Subscription',
-                            data: values,
-                            backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                            borderColor: 'rgb(59, 130, 246)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-            
-            // Initialize plans chart
-            function initPlansChart(plans, values, colors) {
-                const ctx = document.getElementById('plans-chart').getContext('2d');
-                
-                // Destroy existing chart if it exists
-                if (window.plansChart instanceof Chart) {
-                    window.plansChart.destroy();
-                }
-                
-                // Default colors if none provided
-                const defaultColors = [
-                    'rgba(59, 130, 246, 0.7)',  // Blue
-                    'rgba(16, 185, 129, 0.7)',  // Green
-                    'rgba(249, 115, 22, 0.7)',  // Orange
-                    'rgba(236, 72, 153, 0.7)',  // Pink
-                    'rgba(139, 92, 246, 0.7)'   // Purple
-                ];
-                
-                window.plansChart = new Chart(ctx, {
+            // Subscription plan data from server (PHP)
+            var plans = @json($plans ?? []);
+            var values = @json($planValues ?? []);
+            var colors = [
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-primary').trim() || '#3b82f6',
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-success').trim() || '#10b981',
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-warning').trim() || '#f97316',
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-danger').trim() || '#ec4899',
+                getComputedStyle(document.documentElement).getPropertyValue('--vz-info').trim() || '#8b5cf6'
+            ];
+            var options = {
+                chart: {
                     type: 'pie',
-                    data: {
-                        labels: plans,
-                        datasets: [{
-                            data: values,
-                            backgroundColor: colors || defaultColors.slice(0, plans.length),
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    font: {
-                                        size: 12
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const label = context.label || '';
-                                        const value = context.raw || 0;
-                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const percentage = Math.round((value / total) * 100);
-                                        return `${label}: ${value} (${percentage}%)`;
-                                    }
-                                }
-                            }
+                    height: 300
+                },
+                labels: plans,
+                series: values,
+                colors: colors.slice(0, plans.length),
+                legend: {
+                    position: 'bottom',
+                    fontSize: '14px'
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val, opts) {
+                            var total = opts.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                            var percent = total ? Math.round((val / total) * 100) : 0;
+                            return val + ' (' + percent + '%)';
                         }
                     }
-                });
-            }
-            
-            // Format currency based on position
-            function formatCurrency(amount, symbol, position) {
-                if (position === 'left') {
-                    return `${symbol}${amount}`;
-                } else {
-                    return `${amount}${symbol}`;
                 }
-            }
-            
-            // Counter animation function
-            function animateCounters() {
-                var counterElements = document.querySelectorAll('.fs-22.fw-semibold');
-                counterElements.forEach(function(element) {
-                    var current = 0;
-                    var target = parseInt(element.innerText);
-                    if (isNaN(target) || target === 0) return;
-                    
-                    var increment = target > 1000 ? 25 : (target > 100 ? 5 : 1);
-                    var duration = 1000;
-                    var steps = Math.ceil(duration / 30);
-                    var step = Math.ceil(target / steps);
-                    
-                    var initialValue = element.innerText;
-                    element.innerText = '0';
-                    
-                    var timer = setInterval(function() {
-                        current += step;
-                        if (current >= target) {
-                            element.innerText = initialValue;
-                            clearInterval(timer);
-                        } else {
-                            element.innerText = current;
-                        }
-                    }, 30);
-                });
-            }
+            };
+            var chart = new ApexCharts(document.querySelector("#simple_pie_chart"), options);
+            chart.render();
         });
     </script>
 @endsection
