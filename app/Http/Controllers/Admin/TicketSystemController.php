@@ -118,7 +118,19 @@ class TicketSystemController extends Controller
     public function show($id)
     {
         $ticket = TicketSystem::with(['category', 'status', 'assignedUser', 'replies', 'user'])->findOrFail($id);
-        return view('admin.ticketSystem.tickets-details', compact('ticket'));
+        // Find related tickets (same category, not this ticket)
+        $relatedTickets = collect();
+        if ($ticket->category_id) {
+            $relatedTickets = TicketSystem::where('category_id', $ticket->category_id)
+                ->where('id', '!=', $ticket->id)
+                ->latest()
+                ->take(5)
+                ->get();
+        }
+        // Optionally, you may want to pass $users and $statuses if used in the view
+        $users = \App\Models\User::all();
+        $statuses = \App\Models\TicketStatus::all();
+        return view('admin.ticketSystem.tickets-details', compact('ticket', 'relatedTickets', 'users', 'statuses'));
     }
 
     /**
