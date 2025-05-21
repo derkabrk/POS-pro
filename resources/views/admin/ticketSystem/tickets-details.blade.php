@@ -127,10 +127,9 @@
             
             <div class="card-body p-4">
                 <h5 class="card-title mb-4">Comments</h5>
-
                 <div data-simplebar style="height: 300px;" class="px-3 mx-n3">
-                    @if($ticket->comments && count($ticket->comments) > 0)
-                        @foreach($ticket->comments as $comment)
+                    @if($ticket->replies && count($ticket->replies) > 0)
+                        @foreach($ticket->replies->where('parent_id', null) as $comment)
                         <div class="d-flex mb-4">
                             <div class="flex-shrink-0">
                                 <div class="avatar-xs">
@@ -142,20 +141,6 @@
                             <div class="flex-grow-1 ms-3">
                                 <h5 class="fs-13">{{ $comment->user->name ?? 'Unknown User' }} <small class="text-muted">{{ $comment->created_at->format('d M Y - h:iA') }}</small></h5>
                                 <p class="text-muted">{{ $comment->message }}</p>
-                                
-                                @if(!empty($comment->attachments))
-                                    <div class="row g-2 mb-3">
-                                        @foreach($comment->attachments as $attachment)
-                                        <div class="col-lg-1 col-sm-2 col-6">
-                                            <a href="{{ route('business.ticketSystem.download', $attachment->id) }}" class="d-block text-center border rounded p-1">
-                                                <i class="ri-file-text-line fs-24 text-primary"></i>
-                                                <small class="d-block text-truncate">{{ $attachment->filename }}</small>
-                                            </a>
-                                        </div>
-                                        @endforeach
-                                    </div>
-                                @endif
-                                
                                 <button type="button" 
                                     class="badge text-muted bg-light reply-comment-btn"
                                     data-bs-toggle="modal" 
@@ -164,9 +149,8 @@
                                     data-parent-id="{{ $comment->id }}">
                                     <i class="mdi mdi-reply"></i> Reply
                                 </button>
-                                
-                                @if(!empty($comment->replies))
-                                    @foreach($comment->replies as $reply)
+                                @if($ticket->replies->where('parent_id', $comment->id)->count() > 0)
+                                    @foreach($ticket->replies->where('parent_id', $comment->id) as $reply)
                                     <div class="d-flex mt-4">
                                         <div class="flex-shrink-0">
                                             <div class="avatar-xs">
@@ -197,7 +181,6 @@
                         </div>
                     @endif
                 </div>
-                
                 <form action="{{ route('business.ticketSystem.reply') }}" method="POST" class="mt-3">
                     @csrf
                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
