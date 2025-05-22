@@ -2,6 +2,51 @@
 @section('title') @lang('translation.chat') @endsection
 @section('css')
 <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css')}}">
+<style>
+.user-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+.user-item:hover {
+    background-color: rgba(13, 138, 188, 0.1) !important;
+    transform: translateX(2px);
+}
+.user-item.active {
+    background-color: rgba(13, 138, 188, 0.15) !important;
+    border-left: 3px solid #0d8abc;
+}
+.chat-input-feedback {
+    display: none;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+.chat-conversation {
+    max-height: 500px;
+    overflow-y: auto;
+}
+.online-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #28a745;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    border: 2px solid white;
+}
+.offline-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    border: 2px solid white;
+}
+</style>
 @endsection
 @section('content')
 
@@ -21,7 +66,7 @@
                 </div>
             </div>
             <div class="search-box">
-                <input type="text" class="form-control bg-light border-light" placeholder="Search here...">
+                <input type="text" class="form-control bg-light border-light" placeholder="Search here..." id="user-search">
                 <i class="ri-search-2-line search-icon"></i>
             </div>
         </div> <!-- .p-4 -->
@@ -57,21 +102,39 @@
 
                     <div class="chat-message-list">
                         <ul class="list-unstyled chat-list chat-user-list" id="user-list">
-                            @foreach($users as $user)
-                                <li class="user-item d-flex align-items-center py-2 px-3 mb-1 rounded {{ $user->is_online ? 'bg-light' : '' }}" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" data-status="{{ $user->is_online ? 'Online' : 'Offline' }}">
-                                    <div class="flex-shrink-0 position-relative me-3">
-                                        <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" class="rounded-circle avatar-md border border-2 {{ $user->is_online ? 'border-success' : 'border-secondary' }}" alt="">
-                                        <span class="position-absolute bottom-0 end-0 translate-middle p-1 bg-{{ $user->is_online ? 'success' : 'secondary' }} border border-light rounded-circle"></span>
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="mb-0 text-truncate fs-15">{{ $user->name }}</h6>
-                                            <span class="badge bg-{{ $user->is_online ? 'success' : 'secondary' }}-subtle text-{{ $user->is_online ? 'success' : 'secondary' }} fs-11">{{ $user->is_online ? 'Online' : 'Offline' }}</span>
+                            @if(isset($users) && count($users) > 0)
+                                @foreach($users as $user)
+                                    <li class="user-item p-3 mb-2" 
+                                        data-user-id="{{ $user->id }}" 
+                                        data-user-name="{{ $user->name }}" 
+                                        data-user-email="{{ $user->email }}" 
+                                        data-user-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" 
+                                        data-user-status="{{ $user->is_online ? 'Online' : 'Offline' }}"
+                                        data-is-online="{{ $user->is_online ? '1' : '0' }}">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 position-relative me-3">
+                                                <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" 
+                                                     class="rounded-circle avatar-sm" 
+                                                     alt="{{ $user->name }}">
+                                                <span class="{{ $user->is_online ? 'online-indicator' : 'offline-indicator' }}"></span>
+                                            </div>
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h6 class="mb-0 text-truncate fs-14 fw-medium">{{ $user->name }}</h6>
+                                                    <span class="badge bg-{{ $user->is_online ? 'success' : 'secondary' }}-subtle text-{{ $user->is_online ? 'success' : 'secondary' }} fs-11">
+                                                        {{ $user->is_online ? 'Online' : 'Offline' }}
+                                                    </span>
+                                                </div>
+                                                <div class="text-muted fs-12 text-truncate">{{ $user->email }}</div>
+                                            </div>
                                         </div>
-                                        <div class="text-muted fs-12 text-truncate">{{ $user->email }}</div>
-                                    </div>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li class="text-center py-4">
+                                    <p class="text-muted">No users available</p>
                                 </li>
-                            @endforeach
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -80,6 +143,9 @@
                 <div class="chat-room-list pt-3" data-simplebar>
                     <div class="sort-contact">
                         <!-- Contacts content can be added here -->
+                        <div class="text-center py-4">
+                            <p class="text-muted">Contacts feature coming soon</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,7 +161,7 @@
                 <!-- conversation user -->
                 <div class="position-relative">
                     <div class="position-relative" id="users-chat">
-                        <div class="p-3 user-chat-topbar bg-transparent">
+                        <div class="p-3 user-chat-topbar">
                             <div class="row align-items-center">
                                 <div class="col-sm-4 col-8">
                                     <div class="d-flex align-items-center">
@@ -106,15 +172,18 @@
                                         </div>
                                         <div class="flex-grow-1 overflow-hidden">
                                             <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0" id="selected-user-avatar">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" class="rounded-circle avatar-xs" alt="" id="selected-user-img">
-                                                    <span class="user-status"></span>
+                                                <div class="flex-shrink-0 position-relative me-3" id="selected-user-avatar-container">
+                                                    <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" 
+                                                         class="rounded-circle avatar-sm" 
+                                                         alt="" 
+                                                         id="selected-user-img">
+                                                    <span class="user-status-indicator" id="selected-user-status-dot"></span>
                                                 </div>
                                                 <div class="flex-grow-1 overflow-hidden">
                                                     <h5 class="text-truncate mb-0 fs-16">
-                                                        <a class="text-reset username" id="selected-user-name">Select a user to chat</a>
+                                                        <span class="text-reset username" id="selected-user-name">Select a user to chat</span>
                                                     </h5>
-                                                    <p class="text-truncate text-muted fs-14 mb-0 userStatus">
+                                                    <p class="text-truncate text-muted fs-14 mb-0">
                                                         <small id="selected-user-status">Choose someone to start chatting</small>
                                                     </p>
                                                 </div>
@@ -126,14 +195,33 @@
                         </div>
                         <!-- end chat user head -->
 
-                        <div class="chat-conversation p-3 p-lg-4" id="chat-messages" data-simplebar style="height: 400px;">
-                            <div id="elmLoader">
-                                <div class="spinner-border text-primary avatar-sm" role="status">
-                                    <span class="visually-hidden">Loading...</span>
+                        <div class="chat-conversation p-3 p-lg-4" id="chat-messages" data-simplebar style="min-height: 400px; max-height: 500px;">
+                            <div id="elmLoader" style="display: none;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border text-primary avatar-sm" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
                                 </div>
                             </div>
                             <ul class="list-unstyled chat-conversation-list" id="users-conversation">
-                                <!-- Messages will be dynamically loaded here -->
+                                <!-- Default welcome message -->
+                                <li class="chat-list">
+                                    <div class="conversation-list">
+                                        <div class="user-chat-content">
+                                            <div class="ctext-wrap">
+                                                <div class="ctext-wrap-content text-center">
+                                                    <div class="avatar-lg mx-auto mb-3">
+                                                        <div class="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                            <i class="ri-message-3-line display-4"></i>
+                                                        </div>
+                                                    </div>
+                                                    <h5 class="mb-2">Welcome to Chat!</h5>
+                                                    <p class="text-muted mb-0">Select a user from the sidebar to start chatting</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
 
@@ -144,8 +232,10 @@
                 </div>
 
                 <!-- Chat Input Section -->
-                <div class="chat-input-section p-3 p-lg-4 bg-transparent">
-                    <form id="chat-form" enctype="multipart/form-data" autocomplete="off">
+                <div class="chat-input-section p-3 p-lg-4" id="chat-input-container" style="display: none;">
+                    <form id="chat-form" autocomplete="off">
+                        @csrf
+                        <div class="chat-input-feedback" id="chat-feedback"></div>
                         <div class="row g-0 align-items-center">
                             <div class="col-auto">
                                 <div class="chat-input-links me-2">
@@ -158,16 +248,20 @@
                             </div>
 
                             <div class="col">
-                                <div class="chat-input-feedback">
-                                    Please Enter a Message
-                                </div>
-                                <input type="text" class="form-control chat-input bg-light border-light" id="chat-input" placeholder="Type your message..." autocomplete="off">
+                                <input type="hidden" id="recipient-id" name="recipient_id" value="">
+                                <input type="text" 
+                                       class="form-control chat-input bg-light border-light" 
+                                       id="chat-input" 
+                                       name="message"
+                                       placeholder="Type your message..." 
+                                       autocomplete="off"
+                                       maxlength="1000">
                             </div>
 
                             <div class="col-auto">
                                 <div class="chat-input-links ms-2">
                                     <div class="links-list-item">
-                                        <button type="submit" class="btn btn-success chat-send waves-effect waves-light">
+                                        <button type="submit" class="btn btn-success chat-send waves-effect waves-light" id="send-btn">
                                             <i class="ri-send-plane-2-fill align-bottom"></i>
                                         </button>
                                     </div>
@@ -201,6 +295,7 @@
 <!-- end chat-wrapper -->
 
 <input type="hidden" id="auth-user-id" value="{{ auth()->id() }}">
+<input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
 
 @endsection
 
@@ -216,171 +311,394 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
-$(function() {
+$(document).ready(function() {
+    // Global variables
     let selectedUserId = null;
     let selectedUserData = {};
-
-    // Initial state: hide chat input and conversation until user is selected
-    $('.chat-input-section').hide();
-    $('#users-conversation').hide();
-    $('#elmLoader').hide();
-    // Remove any welcome message
-    $('#users-conversation').empty();
-
-    // User selection logic
-    $(document).on('click', '.user-item', function(e) {
-        e.preventDefault();
-        $('.user-item').removeClass('active');
-        $(this).addClass('active');
-        selectedUserId = $(this).data('id');
-        selectedUserData = {
-            id: $(this).data('id'),
-            name: $(this).data('name'),
-            email: $(this).data('email'),
-            avatar: $(this).data('avatar'),
-            status: $(this).data('status'),
-            isOnline: $(this).data('status') === 'Online'
-        };
-        // Update chat header
-        $('#selected-user-name').text(selectedUserData.name);
-        $('#selected-user-status').text(selectedUserData.status + ' | ' + selectedUserData.email);
-        $('#selected-user-img').attr('src', selectedUserData.avatar);
-        $('#selected-user-avatar').removeClass('online away').addClass(selectedUserData.isOnline ? 'online' : 'away');
-        // Show chat input and conversation
-        $('.chat-input-section').show();
-        $('#users-conversation').show();
-        $('#elmLoader').show();
-        // Clear previous messages
-        $('#users-conversation').empty();
-        // Load chat messages for selected user (AJAX)
-        loadChatMessages(selectedUserId);
-    });
-
-    // Enable pointer and hover for user list
-    $('#user-list').css('cursor', 'pointer');
-    $(document).on('mouseenter', '.user-item', function() {
-        $(this).addClass('bg-primary-subtle');
-    }).on('mouseleave', '.user-item', function() {
-        $(this).removeClass('bg-primary-subtle');
-    });
-
-    // Form submission logic
-    $('#chat-form').on('submit', function(e) {
-        e.preventDefault();
-        const message = $('#chat-input').val().trim();
-        if (!message || !selectedUserId) {
-            if (!selectedUserId) {
-                $('.chat-input-feedback').text('Please select a user to chat with').show();
-                setTimeout(() => $('.chat-input-feedback').hide(), 3000);
+    let isLoading = false;
+    
+    // Initialize chat state
+    initializeChat();
+    
+    function initializeChat() {
+        // Hide chat input initially
+        $('#chat-input-container').hide();
+        
+        // Setup event listeners
+        setupEventListeners();
+        
+        // Setup user search
+        setupUserSearch();
+        
+        console.log('Chat initialized');
+    }
+    
+    function setupEventListeners() {
+        // User selection click handler
+        $(document).on('click', '.user-item', handleUserSelection);
+        
+        // Form submission handler
+        $('#chat-form').on('submit', handleMessageSubmit);
+        
+        // Enter key handler for chat input
+        $('#chat-input').on('keypress', function(e) {
+            if (e.which === 13 && !e.shiftKey) {
+                e.preventDefault();
+                $('#chat-form').submit();
             }
-            return;
-        }
-        $('.chat-input-feedback').hide();
-        $('.chat-send').prop('disabled', true);
-        $.post('/chat/send', {
-            recipient_id: selectedUserId,
-            message: message,
-            _token: '{{ csrf_token() }}'
-        })
-        .done(function(response) {
-            $('#chat-input').val('');
-            const messageData = {
-                content: message,
-                sender_id: {{ auth()->id() }},
-                sender_name: '{{ auth()->user()->name }}',
-                sender_avatar: '{{ auth()->user()->profile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}',
-                created_at: new Date().toISOString()
-            };
-            appendMessage(messageData, true);
-            $('#users-conversation .text-center').closest('li').remove();
-        })
-        .fail(function(xhr) {
-            $('.chat-input-feedback').text('Failed to send message. Please try again.').show();
-            setTimeout(() => $('.chat-input-feedback').hide(), 3000);
-        })
-        .always(function() {
-            $('.chat-send').prop('disabled', false);
         });
-    });
-
-    // Function to load chat messages
-    function loadChatMessages(userId) {
-        $.get('/chat/messages/' + userId)
-        .done(function(messages) {
-            $('#users-conversation').empty();
-            if (messages && messages.length > 0) {
-                messages.forEach(function(message) {
-                    appendMessage(message, message.sender_id == {{ auth()->id() }});
-                });
-            } else {
-                const welcomeMessage = `
-                    <li class="chat-list left">
-                        <div class="conversation-list">
-                            <div class="user-chat-content">
-                                <div class="ctext-wrap">
-                                    <div class="ctext-wrap-content text-center">
-                                        <p class="mb-0 text-muted">Start your conversation with ${selectedUserData.name}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                `;
-                $('#users-conversation').append(welcomeMessage);
+        
+        // Copy message functionality
+        $(document).on('click', '.copy-message', handleCopyMessage);
+        
+        // Real-time input validation
+        $('#chat-input').on('input', function() {
+            const message = $(this).val().trim();
+            if (message.length > 0) {
+                hideFeedback();
             }
-            scrollToBottom();
-        })
-        .fail(function() {
-            $('#users-conversation').html(`
-                <li class="chat-list">
-                    <div class="conversation-list">
-                        <div class="user-chat-content">
-                            <div class="ctext-wrap">
-                                <div class="ctext-wrap-content text-center">
-                                    <p class="mb-0 text-danger">Failed to load messages</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            `);
         });
     }
-
-    // Function to append message to chat
+    
+    function setupUserSearch() {
+        $('#user-search').on('input', function() {
+            const searchTerm = $(this).val().toLowerCase().trim();
+            
+            $('.user-item').each(function() {
+                const userName = $(this).data('user-name').toLowerCase();
+                const userEmail = $(this).data('user-email').toLowerCase();
+                
+                if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    }
+    
+    function handleUserSelection(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (isLoading) return;
+        
+        // Remove active class from all users
+        $('.user-item').removeClass('active');
+        
+        // Add active class to selected user
+        $(this).addClass('active');
+        
+        // Get user data from data attributes
+        selectedUserId = $(this).data('user-id');
+        selectedUserData = {
+            id: $(this).data('user-id'),
+            name: $(this).data('user-name'),
+            email: $(this).data('user-email'),
+            avatar: $(this).data('user-avatar'),
+            status: $(this).data('user-status'),
+            isOnline: $(this).data('is-online') === 1
+        };
+        
+        console.log('Selected user:', selectedUserData);
+        
+        // Update chat header
+        updateChatHeader();
+        
+        // Show chat input and load messages
+        showChatInterface();
+        
+        // Load chat messages
+        loadChatMessages(selectedUserId);
+    }
+    
+    function updateChatHeader() {
+        $('#selected-user-name').text(selectedUserData.name);
+        $('#selected-user-status').text(selectedUserData.status + ' • ' + selectedUserData.email);
+        $('#selected-user-img').attr('src', selectedUserData.avatar);
+        $('#recipient-id').val(selectedUserData.id);
+        
+        // Update status indicator
+        const statusDot = $('#selected-user-status-dot');
+        statusDot.removeClass('online-indicator offline-indicator');
+        statusDot.addClass(selectedUserData.isOnline ? 'online-indicator' : 'offline-indicator');
+    }
+    
+    function showChatInterface() {
+        $('#chat-input-container').show();
+        $('#chat-input').focus();
+    }
+    
+    function handleMessageSubmit(e) {
+        e.preventDefault();
+        
+        if (isLoading) return;
+        
+        const message = $('#chat-input').val().trim();
+        
+        // Validation
+        if (!message) {
+            showFeedback('Please enter a message', 'error');
+            return;
+        }
+        
+        if (!selectedUserId) {
+            showFeedback('Please select a user to chat with', 'error');
+            return;
+        }
+        
+        if (message.length > 1000) {
+            showFeedback('Message is too long (max 1000 characters)', 'error');
+            return;
+        }
+        
+        // Send message
+        sendMessage(message);
+    }
+    
+    function sendMessage(message) {
+        isLoading = true;
+        
+        // Disable send button and show loading state
+        $('#send-btn').prop('disabled', true).html('<i class="ri-loader-4-line spin"></i>');
+        hideFeedback();
+        
+        // Prepare message data
+        const messageData = {
+            recipient_id: selectedUserId,
+            message: message,
+            _token: $('#csrf-token').val()
+        };
+        
+        console.log('Sending message:', messageData);
+        
+        // Send AJAX request
+        $.ajax({
+            url: '/chat/send',
+            method: 'POST',
+            data: messageData,
+            timeout: 10000
+        })
+        .done(function(response) {
+            console.log('Message sent successfully:', response);
+            
+            // Clear input
+            $('#chat-input').val('');
+            
+            // Create message object for display
+            const displayMessage = {
+                id: response.id || Date.now(),
+                content: message,
+                sender_id: parseInt($('#auth-user-id').val()),
+                sender_name: '{{ auth()->user()->name }}',
+                sender_avatar: '{{ auth()->user()->profile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}',
+                created_at: new Date().toISOString(),
+                is_read: false
+            };
+            
+            // Append message to chat
+            appendMessage(displayMessage, true);
+            
+            // Remove welcome message if exists
+            removeWelcomeMessage();
+            
+            showFeedback('Message sent successfully', 'success');
+            setTimeout(hideFeedback, 2000);
+        })
+        .fail(function(xhr, status, error) {
+            console.error('Failed to send message:', xhr.responseText || error);
+            
+            let errorMessage = 'Failed to send message. Please try again.';
+            
+            if (xhr.status === 422) {
+                const errors = xhr.responseJSON?.errors;
+                if (errors) {
+                    errorMessage = Object.values(errors).flat().join(', ');
+                }
+            } else if (xhr.status === 401) {
+                errorMessage = 'You are not authorized. Please refresh the page.';
+            } else if (xhr.status === 500) {
+                errorMessage = 'Server error. Please try again later.';
+            } else if (status === 'timeout') {
+                errorMessage = 'Request timeout. Please check your connection.';
+            }
+            
+            showFeedback(errorMessage, 'error');
+        })
+        .always(function() {
+            isLoading = false;
+            $('#send-btn').prop('disabled', false).html('<i class="ri-send-plane-2-fill align-bottom"></i>');
+        });
+    }
+    
+    function loadChatMessages(userId) {
+        if (!userId) return;
+        
+        console.log('Loading messages for user:', userId);
+        
+        // Show loader
+        $('#elmLoader').show();
+        $('#users-conversation').empty();
+        
+        $.ajax({
+            url: '/chat/messages/' + userId,
+            method: 'GET',
+            timeout: 10000
+        })
+        .done(function(messages) {
+            console.log('Messages loaded:', messages);
+            
+            if (messages && messages.length > 0) {
+                messages.forEach(function(message) {
+                    const isSent = message.sender_id == parseInt($('#auth-user-id').val());
+                    appendMessage(message, isSent);
+                });
+            } else {
+                showWelcomeMessage();
+            }
+        })
+        .fail(function(xhr, status, error) {
+            console.error('Failed to load messages:', error);
+            showErrorMessage('Failed to load messages. Please try again.');
+        })
+        .always(function() {
+            $('#elmLoader').hide();
+            scrollToBottom();
+        });
+    }
+    
     function appendMessage(message, isSent) {
         const messageClass = isSent ? 'right' : 'left';
+        const authUserId = parseInt($('#auth-user-id').val());
+        
         const messageHtml = `
-            <li class="chat-list ${messageClass}">
+            <li class="chat-list ${messageClass}" data-message-id="${message.id || ''}">
                 <div class="conversation-list">
-                    <div class="chat-avatar">
-                        <img src="${message.sender_avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(message.sender_name || 'User') + '&background=0D8ABC&color=fff'}" alt="" class="rounded-circle avatar-xs">
-                    </div>
+                    ${!isSent ? `<div class="chat-avatar">
+                        <img src="${message.sender_avatar || selectedUserData.avatar}" alt="${message.sender_name || selectedUserData.name}" class="rounded-circle avatar-xs">
+                    </div>` : ''}
                     <div class="user-chat-content">
                         <div class="ctext-wrap">
                             <div class="ctext-wrap-content">
                                 <p class="mb-0 ctext-content">${escapeHtml(message.content)}</p>
+                                <div class="dropdown align-self-start message-box-drop">
+                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                        <i class="ri-more-2-fill"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="conversation-name">
                             <small class="text-muted time">${formatTime(message.created_at)}</small>
-                            ${isSent ? '<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>' : ''}
+                            ${isSent ? `<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>` : ''}
                         </div>
                     </div>
                 </div>
             </li>
         `;
+        
         $('#users-conversation').append(messageHtml);
         scrollToBottom();
     }
-
-    // Function to scroll to bottom
-    function scrollToBottom() {
-        const chatContainer = $('#chat-messages');
-        chatContainer.scrollTop(chatContainer[0].scrollHeight);
+    
+    function showWelcomeMessage() {
+        const welcomeHtml = `
+            <li class="chat-list welcome-message">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content text-center">
+                                <div class="avatar-md mx-auto mb-3">
+                                    <img src="${selectedUserData.avatar}" alt="${selectedUserData.name}" class="rounded-circle">
+                                </div>
+                                <h6 class="mb-1">Start conversation with ${selectedUserData.name}</h6>
+                                <p class="text-muted mb-0 fs-12">Send a message to begin chatting</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        `;
+        $('#users-conversation').append(welcomeHtml);
     }
-
-    // Function to escape HTML
+    
+    function showErrorMessage(message) {
+        const errorHtml = `
+            <li class="chat-list">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content text-center">
+                                <div class="avatar-sm mx-auto mb-2">
+                                    <div class="avatar-title rounded-circle bg-soft-danger text-danger">
+                                        <i class="ri-error-warning-line"></i>
+                                    </div>
+                                </div>
+                                <p class="mb-0 text-danger fs-13">${message}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        `;
+        $('#users-conversation').append(errorHtml);
+    }
+    
+    function removeWelcomeMessage() {
+        $('.welcome-message').remove();
+    }
+    
+    function handleCopyMessage(e) {
+        e.preventDefault();
+        const messageText = $(this).closest('.ctext-wrap').find('.ctext-content').text();
+        
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(messageText).then(function() {
+                $('#copyClipBoard').fadeIn().delay(2000).fadeOut();
+            }).catch(function() {
+                fallbackCopyText(messageText);
+            });
+        } else {
+            fallbackCopyText(messageText);
+        }
+    }
+    
+    function fallbackCopyText(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            $('#copyClipBoard').fadeIn().delay(2000).fadeOut();
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+        }
+        document.body.removeChild(textArea);
+    }
+    
+    function showFeedback(message, type = 'error') {
+        const feedback = $('#chat-feedback');
+        feedback.removeClass('text-success text-danger')
+                .addClass(type === 'success' ? 'text-success' : 'text-danger')
+                .text(message)
+                .show();
+    }
+    
+    function hideFeedback() {
+        $('#chat-feedback').hide();
+    }
+    
+    function scrollToBottom() {
+        const chatContainer = $('#chat-messages')[0];
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }
+    
     function escapeHtml(text) {
         const map = {
             '&': '&amp;',
@@ -389,42 +707,228 @@ $(function() {
             '"': '&quot;',
             "'": '&#039;'
         };
-        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
     }
-
-    // Copy message functionality
-    $(document).on('click', '.copy-message', function(e) {
-        e.preventDefault();
-        const messageText = $(this).closest('.ctext-wrap').find('.ctext-content').text();
-        navigator.clipboard.writeText(messageText).then(function() {
-            $('#copyClipBoard').fadeIn().delay(2000).fadeOut();
+    
+    function formatTime(dateString) {
+        try {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            
+            // Less than 1 minute
+            if (diff < 60000) {
+                return 'Just now';
+            }
+            
+            // Less than 1 hour
+            if (diff < 3600000) {
+                const minutes = Math.floor(diff / 60000);
+                return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+            }
+            
+            // Same day
+            if (date.toDateString() === now.toDateString()) {
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+            
+            // Different day
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } catch (error) {
+            return 'Invalid date';
+        }
+    }
+    
+    // Auto-refresh user list every 30 seconds to update online status
+    setInterval(function() {
+        refreshUserStatus();
+    }, 30000);
+    
+    function refreshUserStatus() {
+        $.ajax({
+            url: '/chat/users/status',
+            method: 'GET',
+            timeout: 5000
+        })
+        .done(function(users) {
+            if (users && Array.isArray(users)) {
+                users.forEach(function(user) {
+                    const userItem = $(`.user-item[data-user-id="${user.id}"]`);
+                    if (userItem.length) {
+                        // Update online status
+                        userItem.attr('data-is-online', user.is_online ? '1' : '0')
+                               .attr('data-user-status', user.is_online ? 'Online' : 'Offline');
+                        
+                        // Update status indicator
+                        const indicator = userItem.find('.online-indicator, .offline-indicator');
+                        indicator.removeClass('online-indicator offline-indicator')
+                                .addClass(user.is_online ? 'online-indicator' : 'offline-indicator');
+                        
+                        // Update status badge
+                        const badge = userItem.find('.badge');
+                        badge.removeClass('bg-success-subtle text-success bg-secondary-subtle text-secondary')
+                             .addClass(user.is_online ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary')
+                             .text(user.is_online ? 'Online' : 'Offline');
+                        
+                        // Update selected user header if this user is currently selected
+                        if (selectedUserId && selectedUserId == user.id) {
+                            selectedUserData.isOnline = user.is_online;
+                            selectedUserData.status = user.is_online ? 'Online' : 'Offline';
+                            updateChatHeader();
+                        }
+                    }
+                });
+            }
+        })
+        .fail(function(xhr, status, error) {
+            console.log('Failed to refresh user status:', error);
         });
+    }
+    
+    // Initialize Pusher for real-time messaging (if available)
+    if (typeof Pusher !== 'undefined') {
+        initializePusher();
+    }
+    
+    function initializePusher() {
+        try {
+            // Initialize Pusher - you'll need to configure this with your Pusher credentials
+            const pusher = new Pusher('your-pusher-key', {
+                cluster: 'your-pusher-cluster',
+                encrypted: true
+            });
+            
+            // Subscribe to user's private channel
+            const authUserId = $('#auth-user-id').val();
+            const channel = pusher.subscribe(`private-user.${authUserId}`);
+            
+            // Listen for new messages
+            channel.bind('message.sent', function(data) {
+                if (data.message && selectedUserId && data.message.sender_id == selectedUserId) {
+                    // Only show message if it's from the currently selected user
+                    appendMessage(data.message, false);
+                    removeWelcomeMessage();
+                }
+            });
+            
+            // Listen for user status changes
+            channel.bind('user.status.changed', function(data) {
+                if (data.user) {
+                    updateUserStatus(data.user);
+                }
+            });
+            
+            console.log('Pusher initialized successfully');
+        } catch (error) {
+            console.log('Pusher initialization failed:', error);
+        }
+    }
+    
+    function updateUserStatus(user) {
+        const userItem = $(`.user-item[data-user-id="${user.id}"]`);
+        if (userItem.length) {
+            userItem.attr('data-is-online', user.is_online ? '1' : '0')
+                   .attr('data-user-status', user.is_online ? 'Online' : 'Offline');
+            
+            const indicator = userItem.find('.online-indicator, .offline-indicator');
+            indicator.removeClass('online-indicator offline-indicator')
+                    .addClass(user.is_online ? 'online-indicator' : 'offline-indicator');
+            
+            const badge = userItem.find('.badge');
+            badge.removeClass('bg-success-subtle text-success bg-secondary-subtle text-secondary')
+                 .addClass(user.is_online ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary')
+                 .text(user.is_online ? 'Online' : 'Offline');
+            
+            if (selectedUserId && selectedUserId == user.id) {
+                selectedUserData.isOnline = user.is_online;
+                selectedUserData.status = user.is_online ? 'Online' : 'Offline';
+                updateChatHeader();
+            }
+        }
+    }
+    
+    // Handle window focus/blur for read receipts
+    $(window).on('focus', function() {
+        if (selectedUserId) {
+            markMessagesAsRead(selectedUserId);
+        }
     });
-
-    // Initial state: hide chat input and conversation until user is selected
-    $('.chat-input-section').hide();
-    $('#users-conversation').hide();
-    $('#elmLoader').hide();
-    // Show instructions when no user is selected
-    $('#users-conversation').html(`
-        <li class="chat-list">
-            <div class="conversation-list">
-                <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content text-center">
-                            <div class="avatar-lg mx-auto mb-3">
-                                <div class="avatar-title rounded-circle bg-soft-primary text-primary">
-                                    <i class="ri-message-3-line display-4"></i>
-                                </div>
-                            </div>
-                            <h5 class="mb-2">Welcome to Chat!</h5>
-                            <p class="text-muted mb-0">Select a user from the sidebar to start chatting</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-    `);
+    
+    function markMessagesAsRead(userId) {
+        $.ajax({
+            url: '/chat/messages/mark-read',
+            method: 'POST',
+            data: {
+                user_id: userId,
+                _token: $('#csrf-token').val()
+            }
+        })
+        .done(function() {
+            // Update UI to show messages as read
+            $('.chat-list.left .check-message-icon').removeClass('text-muted').addClass('text-success');
+        })
+        .fail(function(xhr, status, error) {
+            console.log('Failed to mark messages as read:', error);
+        });
+    }
+    
+    // Handle emoji picker initialization
+    $('#emoji-btn').on('click', function(e) {
+        e.preventDefault();
+        // This would integrate with your emoji picker library
+        // Example implementation depends on the emoji picker you're using
+        console.log('Emoji picker clicked');
+    });
+    
+    // Handle file uploads (if you want to add this feature)
+    function setupFileUpload() {
+        // This is a placeholder for file upload functionality
+        // You can implement file upload by adding an input type="file" and handling it
+    }
+    
+    // Utility function to validate message content
+    function validateMessage(message) {
+        if (!message || message.trim().length === 0) {
+            return { valid: false, error: 'Message cannot be empty' };
+        }
+        
+        if (message.length > 1000) {
+            return { valid: false, error: 'Message is too long (max 1000 characters)' };
+        }
+        
+        // Add more validation rules as needed
+        // Check for spam, inappropriate content, etc.
+        
+        return { valid: true };
+    }
+    
+    // Add CSS animation class for spinner
+    $('<style>')
+        .prop('type', 'text/css')
+        .html(`
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            .spin {
+                animation: spin 1s linear infinite;
+            }
+            .user-item.active {
+                background-color: rgba(13, 138, 188, 0.15) !important;
+                border-left: 3px solid #0d8abc;
+            }
+            .online-indicator {
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.5; }
+                100% { opacity: 1; }
+            }
+        `)
+        .appendTo('head');
+    
+    console.log('Chat application fully initialized');
 });
 </script>
 @endsection
