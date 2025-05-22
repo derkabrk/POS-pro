@@ -1,37 +1,45 @@
-<!DOCTYPE html>
-@if (in_array(app()->getLocale(), ['ar', 'arbh', 'eg-ar', 'fa', 'prs', 'ps', 'ur']))
-    <html lang="{{ app()->getLocale() }}" dir="rtl">
-    @else
-    <html lang="{{ app()->getLocale() }}" dir="auto">
-@endif
+<!doctype html >
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-bs-theme="dark" data-body-image="img-1" data-preloader="disable">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="{{__('IE=edge')}}">
-    <meta name="viewport" content="{{__('width=device-width, initial-scale=1.0')}}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@hasSection('title') @yield('title') | @endif {{ get_option('general')['title'] ?? config('app.name') }}</title>
-    @include('business::layouts.partials.css')
+    <meta charset="utf-8" />
+    <title>@yield('title') | Shyftcom - Business Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico')}}">
+    @include('business::layouts.head-css')
 </head>
-<body>
 
-<!-- Side Bar Start -->
-@include('business::layouts.partials.side-bar')
-<!-- Side Bar End -->
-<div class="section-container">
-    <!-- header start -->
-    @include('business::layouts.partials.header')
-    <!-- header end -->
-    <!-- erp-state-overview-section start -->
-    <div class="min-vh-100">
-        @yield('content')
+@section('body')
+    @include('business::layouts.body')
+@show
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        @include('business::layouts.topbar')
+        @include('business::layouts.sidebar')
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    @yield('content')
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+            @include('business::layouts.footer')
+        </div>
+        <!-- end main content-->
     </div>
-    <!-- erp-state-overview-section end -->
-    <!-- footer start -->
-    @include('business::layouts.partials.footer')
-    <!-- footer end -->
-    @stack('modal')
-</div>
+    <!-- END layout-wrapper -->
 
-@include('business::layouts.partials.script')
+    @include('business::layouts.customizer')
+
+    <!-- JAVASCRIPT -->
+    @include('business::layouts.vendor-scripts')
 </body>
+
 </html>
