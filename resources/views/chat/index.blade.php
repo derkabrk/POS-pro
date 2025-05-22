@@ -502,13 +502,74 @@ $(document).ready(function() {
     function setupUserSearch() {
         $('#user-search').on('input', function() {
             const searchTerm = $(this).val().toLowerCase().trim();
-            $('.user-item').each(function() {
-                const userName = ($(this).data('user-name') || '').toLowerCase();
-                const userEmail = ($(this).data('user-email') || '').toLowerCase();
-                if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
+            if (searchTerm.length === 0) {
+                // If search is empty, reload only chated users
+                $('.user-item').show();
+                return;
+            }
+            // AJAX search in users table
+            $.ajax({
+                url: '/chat/search-users',
+                method: 'GET',
+                data: { q: searchTerm },
+                success: function(users) {
+                    // Remove all user items
+                    $('#user-list').empty();
+                    if (users.length === 0) {
+                        $('#user-list').append('<li class="text-center py-4"><p class="text-muted">No users found</p></li>');
+                        return;
+                    }
+                    users.forEach(function(user) {
+                        // Only show users with at least one chat (latest_message exists)
+                        if (!user.latest_message) return;
+                        const avatar = user.profile_photo_url && user.profile_photo_url.match(/^https?:\/\//) ? user.profile_photo_url :
+                            'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=0D8ABC&color=fff';
+                        const isOnline = user.is_online ? 'Online' : 'Offline';
+                        const badgeClass = user.is_online ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary';
+                        const latestMsg = user.latest_message;
+                        let latestMsgHtml = '';
+                        if (latestMsg) {
+                            if (latestMsg.sender_id == $('#auth-user-id').val()) {
+                                latestMsgHtml = '<span class="fw-semibold text-white">You: </span>' +
+                                    '<span class="text-white">' + escapeHtml((latestMsg.content || latestMsg.message || '').substring(0, 40)) + '</span>';
+                            } else {
+                                latestMsgHtml = '<span class="fw-bold text-white">' + escapeHtml((latestMsg.content || latestMsg.message || '').substring(0, 40)) + '</span>';
+                            }
+                            latestMsgHtml += '<span class="text-muted ms-1 fs-11">' + (latestMsg.created_at_human || '') + '</span>';
+                        }
+                        $('#user-list').append(`
+                            <li class="user-item p-3 mb-2"
+                                data-user-id="${user.id}"
+                                data-user-name="${user.name}"
+                                data-user-email="${user.email}"
+                                data-user-avatar="${avatar}"
+                                data-user-status="${isOnline}"
+                                data-is-online="${user.is_online ? '1' : '0'}"
+                                style="cursor: pointer;">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 position-relative me-3">
+                                        <img src="${avatar}"
+                                             class="rounded-circle avatar-sm"
+                                             alt="${user.name}"
+                                             style="pointer-events: none;">
+                                        <span class="${user.is_online ? 'online-indicator' : 'offline-indicator'}" style="pointer-events: none;"></span>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden" style="pointer-events: none;">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 class="mb-0 text-truncate fs-14 fw-medium">${user.name}</h6>
+                                            <span class="badge ${badgeClass} fs-11">${isOnline}</span>
+                                        </div>
+                                        <div class="text-truncate small mt-1" style="max-width: 90%;">
+                                            ${latestMsgHtml}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        `);
+                    });
+                },
+                error: function() {
+                    $('#user-list').empty().append('<li class="text-center py-4"><p class="text-muted">Search failed</p></li>');
                 }
             });
         });

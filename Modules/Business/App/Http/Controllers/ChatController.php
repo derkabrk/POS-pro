@@ -58,4 +58,32 @@ class ChatController extends Controller
 
         return response()->json($chat);
     }
+
+    public function searchUsers(Request $request)
+    {
+        $authId = Auth::id();
+        $q = $request->input('q', '');
+        $users = User::where('id', '!=', $authId)
+            ->where(function($query) use ($q) {
+                $query->where('name', 'like', "%$q%")
+                      ->orWhere('email', 'like', "%$q%")
+                      ->orWhere('username', 'like', "%$q%")
+                      ;
+            })
+            ->get()
+            ->map(function($user) use ($authId) {
+                $latestMessage = Chat::where(function($q) use ($authId, $user) {
+                    $q->where('sender_id', $authId)->where('receiver_id', $user->id);
+                })->orWhere(function($q) use ($authId, $user) {
+                    $q->where('sender_id', $user->id)->where('receiver_id', $authId);
+                })->latest('created_at')->first();
+                $user->latest_message = $latestMessage;
+                $user->is_online = $user->is_online ?? false;
+                if ($latestMessage) {
+                    $user->latest_message->created_at_human = $latestMessage->created_at ? $latestMessage->created_at->diffForHumans() : '';
+                }
+                return $user;
+            });
+        return response()->json($users->values());
+    }
 }

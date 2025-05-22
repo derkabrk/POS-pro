@@ -282,4 +282,5 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
         $users = \App\Models\User::select('id', 'is_online')->get();
         return response()->json($users);
     })->name('chat.users.status');
+    Route::get('chat/search-users', [Business\ChatController::class, 'searchUsers'])->name('chat.search-users');
 });
