@@ -224,18 +224,14 @@ $(function() {
     $('.chat-input-section').hide();
     $('#users-conversation').hide();
     $('#elmLoader').hide();
-
-    // Remove welcome message until a user is selected
+    // Remove any welcome message
     $('#users-conversation').empty();
 
     // User selection logic
     $(document).on('click', '.user-item', function(e) {
         e.preventDefault();
-        // Remove active class from all users
         $('.user-item').removeClass('active');
-        // Add active class to selected user
         $(this).addClass('active');
-        // Get user data from data attributes
         selectedUserId = $(this).data('id');
         selectedUserData = {
             id: $(this).data('id'),
@@ -245,17 +241,15 @@ $(function() {
             status: $(this).data('status'),
             isOnline: $(this).data('status') === 'Online'
         };
-        // Update chat header with selected user info
+        // Update chat header
         $('#selected-user-name').text(selectedUserData.name);
         $('#selected-user-status').text(selectedUserData.status + ' | ' + selectedUserData.email);
         $('#selected-user-img').attr('src', selectedUserData.avatar);
-        $('#selected-user-avatar')
-            .removeClass('online away')
-            .addClass(selectedUserData.isOnline ? 'online' : 'away');
-        // Show chat interface and hide loader
-        $('#elmLoader').hide();
-        $('#users-conversation').show();
+        $('#selected-user-avatar').removeClass('online away').addClass(selectedUserData.isOnline ? 'online' : 'away');
+        // Show chat input and conversation
         $('.chat-input-section').show();
+        $('#users-conversation').show();
+        $('#elmLoader').show();
         // Clear previous messages
         $('#users-conversation').empty();
         // Load chat messages for selected user (AJAX)
