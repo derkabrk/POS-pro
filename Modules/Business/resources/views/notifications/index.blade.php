@@ -16,15 +16,15 @@
                     </div>
                 </div>
 
-                <div class="responsibe-table m-0">
-                    <table class="table" id="erp-table">
-                        <thead>
-                            <tr>
-                                <th>@lang('SL.')</th>
-                                <th>@lang('Message')</th>
-                                <th>@lang('Created At')</th>
-                                <th>@lang('Read At')</th>
-                                <th>@lang('Action')</th>
+                <div class="table-responsive table-card m-0">
+                    <table class="table table-nowrap mb-0 table-centered align-middle" id="erp-table">
+                        <thead class="table-light">
+                            <tr class="text-uppercase">
+                                <th scope="col">@lang('SL.')</th>
+                                <th scope="col">@lang('Message')</th>
+                                <th scope="col">@lang('Created At')</th>
+                                <th scope="col">@lang('Read At')</th>
+                                <th scope="col">@lang('Action')</th>
                             </tr>
                         </thead>
                         <tbody id="notifications-data" class="searchResults">

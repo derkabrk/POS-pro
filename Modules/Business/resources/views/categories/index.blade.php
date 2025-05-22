@@ -51,8 +51,8 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover" id="datatable">
+                <div class="table-responsive table-card">
+                    <table class="table table-hover table-nowrap mb-0 align-middle table-bordered" id="datatable">
                         <thead class="table-light">
                             <tr>
                                 <th class="text-center">

@@ -16,7 +16,7 @@
     <td class="text-start">{{ formatted_date($income->incomeDate) }}</td>
     <td class="print-d-none">
         <div class="dropdown table-action">
-            <button type="button" data-bs-toggle="dropdown" class="btn btn-link p-0 text-secondary">
+            <button type="button" class="btn btn-link p-0 text-secondary" data-bs-toggle="dropdown">
                 <i class="far fa-ellipsis-v"></i>
             </button>
             <ul class="dropdown-menu">

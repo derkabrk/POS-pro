@@ -38,19 +38,19 @@
                     </div>
                 </div>
                 <div class="responsive-table vatlist-body mt-0">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                <th class="w-60">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="checkbox" class="select-all-delete multi-delete">
+                    <table class="table table-nowrap mb-0" id="datatable">
+                        <thead class="table-light">
+                            <tr class="text-uppercase">
+                                <th scope="col" class="w-60">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input select-all-delete multi-delete">
                                     </div>
                                 </th>
-                                <th class="w-60">{{ __('SL') }}.</th>
-                                <th>{{ __('Name') }}</th>
-                                <th>{{ __('Tax Rate') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th class="text-center">{{ __('Action') }}</th>
+                                <th scope="col" class="w-60">{{ __('SL') }}.</th>
+                                <th scope="col">{{ __('Name') }}</th>
+                                <th scope="col">{{ __('Rate') }}</th>
+                                <th scope="col">{{ __('Status') }}</th>
+                                <th scope="col" class="text-center">{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody id="vat-data">

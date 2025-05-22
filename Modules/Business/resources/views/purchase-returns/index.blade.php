@@ -43,17 +43,17 @@
             </div>
 
             <div class="responsive-table m-0">
-                <table class="table" id="datatable">
-                    <thead>
-                    <tr>
-                        <th>{{ __('SL') }}.</th>
-                        <th>{{ __('Invoice No') }}</th>
-                        <th>{{ __('Date') }}</th>
-                        <th>{{ __('Name') }}</th>
-                        <th>{{ __('Total') }}</th>
-                        <th>{{ __('Paid') }}</th>
-                        <th>{{ __('Return Amount') }}</th>
-                    </tr>
+                <table class="table table-nowrap mb-0" id="datatable">
+                    <thead class="table-light">
+                        <tr class="text-uppercase">
+                            <th scope="col">{{ __('SL') }}.</th>
+                            <th scope="col">{{ __('Invoice No') }}</th>
+                            <th scope="col">{{ __('Date') }}</th>
+                            <th scope="col">{{ __('Party') }}</th>
+                            <th scope="col">{{ __('Total Amount') }}</th>
+                            <th scope="col">{{ __('Paid Amount') }}</th>
+                            <th scope="col">{{ __('Return Amount') }}</th>
+                        </tr>
                     </thead>
                     <tbody id="purchase-return-data">
                         @include('business::purchase-returns.datas')

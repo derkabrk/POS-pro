@@ -32,15 +32,15 @@
         </div>
 
         <div class="responsive-table">
-            <table class="table" id="datatable">
-                <thead>
-                    <tr>
-                        <th class="w-60">{{ __('SL') }}.</th>
-                        <th>{{ __('Name') }}</th>
-                        <th>{{ __('Rate') }}</th>
-                        <th>{{ __('Sub vats') }}</th>
-                        <th>{{ __('Status') }}</th>
-                        <th class="text-center">{{ __('Action') }}</th>
+            <table class="table table-nowrap mb-0" id="datatable">
+                <thead class="table-light">
+                    <tr class="text-uppercase">
+                        <th scope="col" class="w-60">{{ __('SL') }}.</th>
+                        <th scope="col">{{ __('Name') }}</th>
+                        <th scope="col">{{ __('Rate') }}</th>
+                        <th scope="col">{{ __('Sub vats') }}</th>
+                        <th scope="col">{{ __('Status') }}</th>
+                        <th scope="col" class="text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
                 <tbody id="vat_group-data">

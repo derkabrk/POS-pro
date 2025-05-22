@@ -413,8 +413,11 @@
                                     </a>
                                 </div>
                             </div>
-                            
                             <div class="card-body">
+                                @php
+                                    // Ensure $stocks is a collection and limit to 5 items for display
+                                    $displayStocks = collect($stocks ?? [])->take(5);
+                                @endphp
                                 <div class="table-responsive table-card">
                                     <table class="table table-nowrap mb-0 table-borderless table-centered align-middle">
                                         <thead class="table-light">
@@ -427,7 +430,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($stocks as $stock)
+                                            @forelse ($displayStocks as $stock)
                                                 <tr>
                                                     <td class="ps-4">{{ $loop->iteration }}</td>
                                                     <td>
@@ -479,10 +482,10 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                @if(count($stocks) > 0)
+                                @if(count($displayStocks) > 0)
                                 <div class="mt-3 text-center">
                                     <small class="text-muted">
-                                        {{ __('Showing') }} {{ count($stocks) }} {{ __('items that need attention') }}
+                                        {{ __('Showing') }} {{ count($displayStocks) }} {{ __('items that need attention') }}
                                     </small>
                                 </div>
                                 @endif

@@ -32,19 +32,19 @@
                     </div>
                 </div>
             </form>
-            <div class="responsive-table m-0">
-                <table class="table table-hover align-middle table-striped" id="datatable">
+            <div class="table-responsive table-card m-0">
+                <table class="table table-hover table-nowrap mb-0 align-middle table-striped" id="datatable">
                     <thead class="table-light">
-                        <tr>
+                        <tr class="text-uppercase">
                             <th class="w-60 checkbox"></th>
-                            <th>#</th>
-                            <th class="text-start">{{ __('Amount') }}</th>
-                            <th class="text-start">{{ __('Category') }}</th>
-                            <th class="text-start">{{ __('For') }}</th>
-                            <th class="text-start">{{ __('Payment Type') }}</th>
-                            <th class="text-start">{{ __('Reference') }}</th>
-                            <th class="text-start">{{ __('Date') }}</th>
-                            <th class="print-d-none">{{ __('Actions') }}</th>
+                            <th scope="col">#</th>
+                            <th scope="col" class="text-start">{{ __('Amount') }}</th>
+                            <th scope="col" class="text-start">{{ __('Category') }}</th>
+                            <th scope="col" class="text-start">{{ __('For') }}</th>
+                            <th scope="col" class="text-start">{{ __('Payment Type') }}</th>
+                            <th scope="col" class="text-start">{{ __('Reference') }}</th>
+                            <th scope="col" class="text-start">{{ __('Date') }}</th>
+                            <th scope="col" class="print-d-none">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody id="incomes-data">

@@ -1,7 +1,7 @@
 @foreach($sales as $sale)
-        @php
-            $total_return_amount = $sale->saleReturns->sum('total_return_amount');
-        @endphp
+    @php
+        $total_return_amount = $sale->saleReturns->sum('total_return_amount');
+    @endphp
     <tr>
         <td>{{ ($sales->currentPage() - 1) * $sales->perPage() + $loop->iteration }}</td>
         <td>

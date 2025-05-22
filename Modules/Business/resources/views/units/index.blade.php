@@ -51,19 +51,19 @@
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                <th class="w-60">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="checkbox" class="select-all-delete  multi-delete">
+                <div class="responsive-table">
+                    <table class="table table-nowrap mb-0" id="datatable">
+                        <thead class="table-light">
+                            <tr class="text-uppercase">
+                                <th scope="col" class="w-60">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input select-all-delete multi-delete">
                                     </div>
                                 </th>
-                                <th>{{ __('SL') }}.</th>
-                                <th class="text-start">{{ __('Unit Name') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th>{{ __('Action') }}</th>
+                                <th scope="col">{{ __('SL') }}.</th>
+                                <th scope="col" class="text-start">{{ __('Unit Name') }}</th>
+                                <th scope="col" class="text-center">{{ __('Status') }}</th>
+                                <th scope="col" class="print-d-none text-center">{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody id="unit-data">

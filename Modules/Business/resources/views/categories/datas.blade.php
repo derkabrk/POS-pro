@@ -16,7 +16,7 @@
             </div>
         </td>
         <td>
-            <div class="dropdown">
+            <div class="dropdown table-action">
                 <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ __('Actions') }}">
                     <i class="ri-more-2-fill"></i>
                 </button>

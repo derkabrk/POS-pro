@@ -6,12 +6,14 @@
         <td>{{ formatted_date($notification->read_at, 'd M Y - H:i A') }}</td>
         <td>
             <div class="dropdown table-action">
-                <button type="button" data-bs-toggle="dropdown">
+                <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown">
                     <i class="far fa-ellipsis-v"></i>
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="{{ route('business.notifications.mtView', $notification->id) }}"><i class="fas fa-eye"></i> @lang('View')</a>
+                        <a href="{{ route('business.notifications.mtView', $notification->id) }}" class="dropdown-item">
+                            <i class="fas fa-eye me-1"></i> @lang('View')
+                        </a>
                     </li>
                 </ul>
             </div>
