@@ -56,7 +56,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th class="text-center">
-                                    <input type="checkbox" class="form-check-input select-all-delete multi-delete">
+                                    <input type="checkbox" class="form-check-input select-all-delete multi-delete" aria-label="{{ __('Select all categories') }}">
                                 </th>
                                 <th>{{ __('SL') }}.</th>
                                 <th>{{ __('Icon') }}</th>
