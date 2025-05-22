@@ -66,9 +66,7 @@ class ChatController extends Controller
         $users = User::where('id', '!=', $authId)
             ->where(function($query) use ($q) {
                 $query->where('name', 'like', "%$q%")
-                      ->orWhere('email', 'like', "%$q%")
-                      ->orWhere('username', 'like', "%$q%")
-                      ;
+                      ->orWhere('email', 'like', "%$q%");
             })
             ->get()
             ->map(function($user) use ($authId) {
