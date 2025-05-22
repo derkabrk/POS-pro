@@ -105,6 +105,20 @@
         padding: 10px 12px;
     }
 }
+.chat-bubble-sent {
+    background: linear-gradient(135deg, #0d8abc 0%, #0b7ab0 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 12px rgba(13,138,188,0.13);
+    border-radius: 18px 18px 4px 18px !important;
+    border: 1px solid #0d8abc !important;
+}
+.chat-bubble-received {
+    background: linear-gradient(135deg, #e9f3fa 0%, #f5f7fa 100%) !important;
+    color: #222 !important;
+    box-shadow: 0 2px 12px rgba(13,138,188,0.10);
+    border-radius: 18px 18px 18px 4px !important;
+    border: 1px solid #e0eafc !important;
+}
 </style>
 @endsection
 @section('content')
@@ -488,11 +502,9 @@ $(document).ready(function() {
     function setupUserSearch() {
         $('#user-search').on('input', function() {
             const searchTerm = $(this).val().toLowerCase().trim();
-            
             $('.user-item').each(function() {
-                const userName = $(this).data('user-name').toLowerCase();
-                const userEmail = $(this).data('user-email').toLowerCase();
-                
+                const userName = ($(this).data('user-name') || '').toLowerCase();
+                const userEmail = ($(this).data('user-email') || '').toLowerCase();
                 if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
                     $(this).show();
                 } else {
@@ -704,13 +716,14 @@ $(document).ready(function() {
         const avatarHtml = !isSent ? `<div class="chat-avatar">
             <img src="${senderAvatar}" alt="${senderName}" class="rounded-circle">
         </div>` : '';
+        const bubbleClass = isSent ? 'chat-bubble-sent' : 'chat-bubble-received';
         return `
             <li class="chat-list ${messageClass}" data-message-id="${message.id || ''}">
                 <div class="conversation-list">
                     ${avatarHtml}
                     <div class="user-chat-content position-relative">
                         <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
+                            <div class="ctext-wrap-content ${bubbleClass}">
                                 <p class="mb-0 ctext-content">${escapeHtml(content)}</p>
                                 <div class="dropdown align-self-start message-box-drop">
                                     <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -742,13 +755,14 @@ $(document).ready(function() {
         const avatarHtml = !isSent ? `<div class="chat-avatar">
             <img src="${senderAvatar}" alt="${senderName}" class="rounded-circle">
         </div>` : '';
+        const bubbleClass = isSent ? 'chat-bubble-sent' : 'chat-bubble-received';
         const messageHtml = `
             <li class="chat-list ${messageClass}" data-message-id="${message.id || ''}">
                 <div class="conversation-list">
                     ${avatarHtml}
                     <div class="user-chat-content position-relative">
                         <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
+                            <div class="ctext-wrap-content ${bubbleClass}">
                                 <p class="mb-0 ctext-content">${escapeHtml(content)}</p>
                                 <div class="dropdown align-self-start message-box-drop">
                                     <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
