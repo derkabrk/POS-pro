@@ -40,6 +40,12 @@ class ChatController extends Controller
               ->where('receiver_id', Auth::id());
         })->orderBy('created_at')->get();
 
+        // Add 'content' property for frontend compatibility
+        $messages->transform(function($msg) {
+            $msg->content = $msg->message;
+            return $msg;
+        });
+
         return response()->json($messages);
     }
 
