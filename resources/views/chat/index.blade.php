@@ -495,6 +495,13 @@ $(document).ready(function() {
                 loadChatMessages(selectedUserId, true);
             }
         });
+
+        // Tab click: when clicking 'Chats' tab, reload messages for selected user
+        $('a[data-bs-toggle="tab"][href="#chats"]').on('shown.bs.tab', function() {
+            if (selectedUserId) {
+                loadChatMessages(selectedUserId);
+            }
+        });
         
         console.log('Event listeners setup completed');
     }
@@ -695,7 +702,7 @@ $(document).ready(function() {
         console.log('Sending message:', messageData);
         
         $.ajax({
-            url: '/business/chat/send', // updated path
+            url: '/chat/send', // use global route for sending message
             method: 'POST',
             data: messageData,
             timeout: 10000
@@ -719,6 +726,8 @@ $(document).ready(function() {
             appendMessage(displayMessage, true);
             showFeedback('Message sent successfully', 'success');
             setTimeout(hideFeedback, 2000);
+            // Always reload messages after sending (for search results or normal)
+            loadChatMessages(selectedUserId);
         })
         .fail(function(xhr, status, error) {
             console.error('Failed to send message:', xhr.responseText || error);
@@ -756,7 +765,7 @@ $(document).ready(function() {
             messagesLoadedIds.clear();
         }
         $.ajax({
-            url: `/business/chat/messages/${userId}?page=${messagesPage}`, // updated path
+            url: `/chat/messages/${userId}?page=${messagesPage}`, // use global route for fetching messages
             method: 'GET',
             timeout: 10000
         })
