@@ -501,7 +501,7 @@ $(document).ready(function() {
         hideFeedback();
         
         const messageData = {
-            recipient_id: selectedUserId,
+            receiver_id: selectedUserId, // changed from recipient_id to receiver_id
             message: message,
             _token: $('#csrf-token').val()
         };
