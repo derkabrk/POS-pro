@@ -110,15 +110,17 @@
                                         data-user-email="{{ $user->email }}" 
                                         data-user-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" 
                                         data-user-status="{{ $user->is_online ? 'Online' : 'Offline' }}"
-                                        data-is-online="{{ $user->is_online ? '1' : '0' }}">
+                                        data-is-online="{{ $user->is_online ? '1' : '0' }}"
+                                        style="cursor: pointer;">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 position-relative me-3">
                                                 <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" 
                                                      class="rounded-circle avatar-sm" 
-                                                     alt="{{ $user->name }}">
-                                                <span class="{{ $user->is_online ? 'online-indicator' : 'offline-indicator' }}"></span>
+                                                     alt="{{ $user->name }}"
+                                                     style="pointer-events: none;">
+                                                <span class="{{ $user->is_online ? 'online-indicator' : 'offline-indicator' }}" style="pointer-events: none;"></span>
                                             </div>
-                                            <div class="flex-grow-1 overflow-hidden">
+                                            <div class="flex-grow-1 overflow-hidden" style="pointer-events: none;">
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <h6 class="mb-0 text-truncate fs-14 fw-medium">{{ $user->name }}</h6>
                                                     <span class="badge bg-{{ $user->is_online ? 'success' : 'secondary' }}-subtle text-{{ $user->is_online ? 'success' : 'secondary' }} fs-11">
@@ -320,6 +322,29 @@ $(document).ready(function() {
     // Initialize chat state
     initializeChat();
     
+    // Debug: Add click test
+    console.log('Chat script loaded. Testing user list...');
+    
+    // Test if users exist in DOM
+    setTimeout(function() {
+        const userCount = $('.user-item').length;
+        console.log(`Found ${userCount} users in the list`);
+        
+        if (userCount === 0) {
+            console.warn('No users found! Check if $users variable is populated in your controller.');
+        } else {
+            $('.user-item').each(function(index) {
+                const userId = $(this).data('user-id') || $(this).attr('data-user-id');
+                const userName = $(this).data('user-name') || $(this).attr('data-user-name');
+                console.log(`User ${index + 1}: ID=${userId}, Name=${userName}`);
+            });
+        }
+        
+        // Test click handler
+        $('.user-item').first().css('border', '2px solid red');
+        console.log('First user highlighted in red for testing');
+    }, 1000);
+    
     function initializeChat() {
         // Hide chat input initially
         $('#chat-input-container').hide();
@@ -334,14 +359,20 @@ $(document).ready(function() {
     }
     
     function setupEventListeners() {
-        // User selection click handler
-        $(document).on('click', '.user-item', handleUserSelection);
+        // User selection click handler - use more specific selector and event delegation
+        $(document).off('click.userSelection').on('click.userSelection', '.user-item', handleUserSelection);
+        
+        // Also handle click on user item children
+        $(document).off('click.userSelectionChild').on('click.userSelectionChild', '.user-item *', function(e) {
+            e.stopPropagation();
+            $(this).closest('.user-item').trigger('click');
+        });
         
         // Form submission handler
-        $('#chat-form').on('submit', handleMessageSubmit);
+        $('#chat-form').off('submit.chatForm').on('submit.chatForm', handleMessageSubmit);
         
         // Enter key handler for chat input
-        $('#chat-input').on('keypress', function(e) {
+        $('#chat-input').off('keypress.chatInput').on('keypress.chatInput', function(e) {
             if (e.which === 13 && !e.shiftKey) {
                 e.preventDefault();
                 $('#chat-form').submit();
@@ -349,15 +380,17 @@ $(document).ready(function() {
         });
         
         // Copy message functionality
-        $(document).on('click', '.copy-message', handleCopyMessage);
+        $(document).off('click.copyMessage').on('click.copyMessage', '.copy-message', handleCopyMessage);
         
         // Real-time input validation
-        $('#chat-input').on('input', function() {
+        $('#chat-input').off('input.validation').on('input.validation', function() {
             const message = $(this).val().trim();
             if (message.length > 0) {
                 hideFeedback();
             }
         });
+        
+        console.log('Event listeners setup completed');
     }
     
     function setupUserSearch() {
@@ -383,24 +416,35 @@ $(document).ready(function() {
         
         if (isLoading) return;
         
+        const $clickedUser = $(this);
+        
+        console.log('User clicked:', $clickedUser);
+        
         // Remove active class from all users
         $('.user-item').removeClass('active');
         
         // Add active class to selected user
-        $(this).addClass('active');
+        $clickedUser.addClass('active');
         
-        // Get user data from data attributes
-        selectedUserId = $(this).data('user-id');
+        // Get user data from data attributes with fallbacks
+        selectedUserId = $clickedUser.data('user-id') || $clickedUser.attr('data-user-id');
+        
+        if (!selectedUserId) {
+            console.error('No user ID found for selected user');
+            showFeedback('Error selecting user. Please try again.', 'error');
+            return;
+        }
+        
         selectedUserData = {
-            id: $(this).data('user-id'),
-            name: $(this).data('user-name'),
-            email: $(this).data('user-email'),
-            avatar: $(this).data('user-avatar'),
-            status: $(this).data('user-status'),
-            isOnline: $(this).data('is-online') === 1
+            id: selectedUserId,
+            name: $clickedUser.data('user-name') || $clickedUser.attr('data-user-name') || 'Unknown User',
+            email: $clickedUser.data('user-email') || $clickedUser.attr('data-user-email') || '',
+            avatar: $clickedUser.data('user-avatar') || $clickedUser.attr('data-user-avatar') || 'https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff',
+            status: $clickedUser.data('user-status') || $clickedUser.attr('data-user-status') || 'Offline',
+            isOnline: ($clickedUser.data('is-online') || $clickedUser.attr('data-is-online')) === 1 || ($clickedUser.data('is-online') || $clickedUser.attr('data-is-online')) === '1'
         };
         
-        console.log('Selected user:', selectedUserData);
+        console.log('Selected user data:', selectedUserData);
         
         // Update chat header
         updateChatHeader();

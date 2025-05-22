@@ -273,4 +273,13 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('ticketSystem/reply', [Business\TicketSystemController::class, 'reply'])->name('ticketSystem.reply');
     Route::post('sales/import-csv', [Business\AcnooSaleController::class, 'importCsv'])->name('sales.import.csv');
    // Route::resource('shipping', Business\AcnooShippingController::class);
+
+    // Chat routes
+    Route::get('chat', [Business\ChatController::class, 'index'])->name('chat.index');
+    Route::get('chat/messages/{userId}', [Business\ChatController::class, 'fetchMessages'])->name('chat.messages');
+    Route::post('chat/send', [Business\ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('chat/users/status', function() {
+        $users = \App\Models\User::select('id', 'is_online')->get();
+        return response()->json($users);
+    })->name('chat.users.status');
 });
