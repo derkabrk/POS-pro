@@ -13,7 +13,18 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $users = User::where('id', '!=', Auth::id())->get();
+        $authId = Auth::id();
+        $users = User::where('id', '!=', $authId)
+            ->get()
+            ->map(function($user) use ($authId) {
+                $latestMessage = \App\Models\Chat::where(function($q) use ($authId, $user) {
+                    $q->where('sender_id', $authId)->where('receiver_id', $user->id);
+                })->orWhere(function($q) use ($authId, $user) {
+                    $q->where('sender_id', $user->id)->where('receiver_id', $authId);
+                })->latest('created_at')->first();
+                $user->latest_message = $latestMessage;
+                return $user;
+            });
         return view('business::chat.index', compact('users'));
     }
 
