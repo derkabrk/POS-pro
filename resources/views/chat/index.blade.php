@@ -286,6 +286,53 @@ $(function() {
         loadChatMessages(selectedUserId);
     });
 
+    // Enable pointer and hover for user list
+    $('#user-list').css('cursor', 'pointer');
+    $(document).on('mouseenter', '.user-item', function() {
+        $(this).addClass('bg-primary-subtle');
+    }).on('mouseleave', '.user-item', function() {
+        $(this).removeClass('bg-primary-subtle');
+    });
+
+    // Form submission logic
+    $('#chat-form').on('submit', function(e) {
+        e.preventDefault();
+        const message = $('#chat-input').val().trim();
+        if (!message || !selectedUserId) {
+            if (!selectedUserId) {
+                $('.chat-input-feedback').text('Please select a user to chat with').show();
+                setTimeout(() => $('.chat-input-feedback').hide(), 3000);
+            }
+            return;
+        }
+        $('.chat-input-feedback').hide();
+        $('.chat-send').prop('disabled', true);
+        $.post('/chat/send', {
+            recipient_id: selectedUserId,
+            message: message,
+            _token: '{{ csrf_token() }}'
+        })
+        .done(function(response) {
+            $('#chat-input').val('');
+            const messageData = {
+                content: message,
+                sender_id: {{ auth()->id() }},
+                sender_name: '{{ auth()->user()->name }}',
+                sender_avatar: '{{ auth()->user()->profile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}',
+                created_at: new Date().toISOString()
+            };
+            appendMessage(messageData, true);
+            $('#users-conversation .text-center').closest('li').remove();
+        })
+        .fail(function(xhr) {
+            $('.chat-input-feedback').text('Failed to send message. Please try again.').show();
+            setTimeout(() => $('.chat-input-feedback').hide(), 3000);
+        })
+        .always(function() {
+            $('.chat-send').prop('disabled', false);
+        });
+    });
+
     // Function to load chat messages
     function loadChatMessages(userId) {
         $.get('/chat/messages/' + userId)
@@ -296,7 +343,6 @@ $(function() {
                     appendMessage(message, message.sender_id == {{ auth()->id() }});
                 });
             } else {
-                // Show a welcome message or empty state
                 const welcomeMessage = `
                     <li class="chat-list left">
                         <div class="conversation-list">
@@ -330,6 +376,85 @@ $(function() {
             `);
         });
     }
+
+    // Function to append message to chat
+    function appendMessage(message, isSent) {
+        const messageClass = isSent ? 'right' : 'left';
+        const messageHtml = `
+            <li class="chat-list ${messageClass}">
+                <div class="conversation-list">
+                    <div class="chat-avatar">
+                        <img src="${message.sender_avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(message.sender_name || 'User') + '&background=0D8ABC&color=fff'}" alt="" class="rounded-circle avatar-xs">
+                    </div>
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${escapeHtml(message.content)}</p>
+                            </div>
+                        </div>
+                        <div class="conversation-name">
+                            <small class="text-muted time">${formatTime(message.created_at)}</small>
+                            ${isSent ? '<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            </li>
+        `;
+        $('#users-conversation').append(messageHtml);
+        scrollToBottom();
+    }
+
+    // Function to scroll to bottom
+    function scrollToBottom() {
+        const chatContainer = $('#chat-messages');
+        chatContainer.scrollTop(chatContainer[0].scrollHeight);
+    }
+
+    // Function to escape HTML
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    // Copy message functionality
+    $(document).on('click', '.copy-message', function(e) {
+        e.preventDefault();
+        const messageText = $(this).closest('.ctext-wrap').find('.ctext-content').text();
+        navigator.clipboard.writeText(messageText).then(function() {
+            $('#copyClipBoard').fadeIn().delay(2000).fadeOut();
+        });
+    });
+
+    // Initial state: hide chat input and conversation until user is selected
+    $('.chat-input-section').hide();
+    $('#users-conversation').hide();
+    $('#elmLoader').hide();
+    // Show instructions when no user is selected
+    $('#users-conversation').html(`
+        <li class="chat-list">
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content text-center">
+                            <div class="avatar-lg mx-auto mb-3">
+                                <div class="avatar-title rounded-circle bg-soft-primary text-primary">
+                                    <i class="ri-message-3-line display-4"></i>
+                                </div>
+                            </div>
+                            <h5 class="mb-2">Welcome to Chat!</h5>
+                            <p class="text-muted mb-0">Select a user from the sidebar to start chatting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    `);
 });
 </script>
 @endsection
