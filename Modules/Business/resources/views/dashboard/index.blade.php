@@ -79,6 +79,11 @@
                     $showBottomRow = $notStaff || $SalePurchasePermission;
                 @endphp
 
+                @php
+                    // Fetch card data server-side
+                    $dashboardData = app(\Modules\Business\App\Http\Controllers\DashboardController::class)->getDashboardCardData();
+                @endphp
+
                 @if ($showTopRow)
                 <!-- First Row - Main Stats -->
                 <div class="row">
@@ -94,14 +99,13 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_sales"></h4>
-                                        <span class="text-muted small">
-                                            <span id="this_month_total_sales"></span> {{ __('This Month') }}
-                                        </span>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_sales">
+                                            {{ currency_format($dashboardData['total_sales'] ?? 0, 'icon', 2, business_currency()) }}
+                                        </h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                            <i class="fas fa-shopping-cart text-primary"></i>
+                                            <i class="ri-shopping-cart-line text-primary"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -112,7 +116,6 @@
 
                     @if ($notStaff || visible_permission('purchaseListPermission'))
                     <div class="col-xl-3 col-md-6">
-                        <!-- card -->
                         <div class="card card-animate">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
@@ -122,25 +125,23 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_purchase"></h4>
-                                        <span class="text-muted small">
-                                            <span id="this_month_total_purchase"></span> {{ __('This Month') }}
-                                        </span>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_purchase">
+                                            {{ currency_format($dashboardData['total_purchase'] ?? 0, 'icon', 2, business_currency()) }}
+                                        </h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-info-subtle rounded fs-3">
-                                            <i class="fas fa-truck text-info"></i>
+                                            <i class="ri-truck-line text-info"></i>
                                         </span>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
+                            </div>
+                        </div>
+                    </div>
                     @endif
 
                     @if ($notStaff || visible_permission('addIncomePermission'))
                     <div class="col-xl-3 col-md-6">
-                        <!-- card -->
                         <div class="card card-animate">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
@@ -150,25 +151,23 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_income"></h4>
-                                        <span class="text-muted small">
-                                            <span id="this_month_total_income"></span> {{ __('This Month') }}
-                                        </span>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_income">
+                                            {{ currency_format($dashboardData['total_income'] ?? 0, 'icon', 2, business_currency()) }}
+                                        </h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-success-subtle rounded fs-3">
-                                            <i class="fas fa-dollar-sign text-success"></i>
+                                            <i class="ri-money-dollar-circle-line text-success"></i>
                                         </span>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
+                            </div>
+                        </div>
+                    </div>
                     @endif
 
                     @if ($notStaff || visible_permission('addExpensePermission'))
                     <div class="col-xl-3 col-md-6">
-                        <!-- card -->
                         <div class="card card-animate">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
@@ -178,22 +177,23 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_expense"></h4>
-                                        <span class="text-muted small">
-                                            <span id="this_month_total_expense"></span> {{ __('This Month') }}
-                                        </span>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_expense">
+                                            {{ currency_format($dashboardData['total_expense'] ?? 0, 'icon', 2, business_currency()) }}
+                                        </h4>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-danger-subtle rounded fs-3">
-                                            <i class="fas fa-money-bill-wave text-danger"></i>
+                                            <i class="ri-arrow-down-line text-danger"></i>
                                         </span>
                                     </div>
                                 </div>
-                            </div><!-- end card body -->
-                        </div><!-- end card -->
-                    </div><!-- end col -->
+                            </div>
+                        </div>
+                    </div>
                     @endif
-                </div> <!-- end row-->
+                </div>
+                <!-- end row-->
+                @endif
 
                 <!-- Second Row - Additional Stats -->
                 <div class="row">
@@ -297,7 +297,6 @@
                     </div><!-- end col -->
                     @endif
                 </div> <!-- end row-->
-                @endif
 
                 <div class="row">
                     @if ($notStaff || visible_permission('lossProfitPermission'))
@@ -691,6 +690,9 @@
         
         // Function to format currency
         function formatCurrency(value, symbol, position) {
+            if (value === undefined || value === null || isNaN(parseFloat(value))) {
+                value = 0;
+            }
             const formattedNumber = parseFloat(value).toLocaleString();
             return position === 'left' ? symbol + formattedNumber : formattedNumber + symbol;
         }
