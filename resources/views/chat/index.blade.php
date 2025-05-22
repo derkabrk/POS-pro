@@ -58,28 +58,18 @@
                     <div class="chat-message-list">
                         <ul class="list-unstyled chat-list chat-user-list" id="user-list">
                             @foreach($users as $user)
-                                <li class="user-item" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" data-status="{{ $user->is_online ? 'Online' : 'Offline' }}">
-                                    <a href="javascript: void(0);" class="unread-msg-user">
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 chat-user-img {{ $user->is_online ? 'online' : 'away' }} user-own-img align-self-center me-3 ms-0">
-                                                <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" class="rounded-circle avatar-xs" alt="">
-                                                <span class="user-status"></span>
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="text-truncate mb-0 fs-13">
-                                                    <a class="text-reset username">{{ $user->name }}</a>
-                                                </h5>
-                                                <p class="text-truncate text-muted fs-12 mb-0 userStatus">
-                                                    <small>{{ $user->is_online ? 'Online' : 'Offline' }}</small>
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="unread-message">
-                                                    <span class="badge rounded-pill bg-danger-subtle text-danger">3</span>
-                                                </div>
-                                            </div>
+                                <li class="user-item d-flex align-items-center py-2 px-3 mb-1 rounded {{ $user->is_online ? 'bg-light' : '' }}" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" data-status="{{ $user->is_online ? 'Online' : 'Offline' }}">
+                                    <div class="flex-shrink-0 position-relative me-3">
+                                        <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" class="rounded-circle avatar-md border border-2 {{ $user->is_online ? 'border-success' : 'border-secondary' }}" alt="">
+                                        <span class="position-absolute bottom-0 end-0 translate-middle p-1 bg-{{ $user->is_online ? 'success' : 'secondary' }} border border-light rounded-circle"></span>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 class="mb-0 text-truncate fs-15">{{ $user->name }}</h6>
+                                            <span class="badge bg-{{ $user->is_online ? 'success' : 'secondary' }}-subtle text-{{ $user->is_online ? 'success' : 'secondary' }} fs-11">{{ $user->is_online ? 'Online' : 'Offline' }}</span>
                                         </div>
-                                    </a>
+                                        <div class="text-muted fs-12 text-truncate">{{ $user->email }}</div>
+                                    </div>
                                 </li>
                             @endforeach
                         </ul>
@@ -285,12 +275,8 @@ $(function() {
         
         // Update chat header with selected user info
         $('#selected-user-name').text(selectedUserData.name);
-        $('#selected-user-status').text(selectedUserData.status);
-        
-        // Update user avatar in chat header
+        $('#selected-user-status').text(selectedUserData.status + ' | ' + selectedUserData.email);
         $('#selected-user-img').attr('src', selectedUserData.avatar);
-        
-        // Update online status class
         $('#selected-user-avatar')
             .removeClass('online away')
             .addClass(selectedUserData.isOnline ? 'online' : 'away');
