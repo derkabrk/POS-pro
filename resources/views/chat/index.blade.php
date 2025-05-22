@@ -520,8 +520,6 @@ $(document).ready(function() {
                         return;
                     }
                     users.forEach(function(user) {
-                        // Only show users with at least one chat (latest_message exists)
-                        if (!user.latest_message) return;
                         const avatar = user.profile_photo_url && user.profile_photo_url.match(/^https?:\/\//) ? user.profile_photo_url :
                             'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=0D8ABC&color=fff';
                         const isOnline = user.is_online ? 'Online' : 'Offline';
@@ -536,6 +534,8 @@ $(document).ready(function() {
                                 latestMsgHtml = '<span class="fw-bold text-white">' + escapeHtml((latestMsg.content || latestMsg.message || '').substring(0, 40)) + '</span>';
                             }
                             latestMsgHtml += '<span class="text-muted ms-1 fs-11">' + (latestMsg.created_at_human || '') + '</span>';
+                        } else {
+                            latestMsgHtml = '<span class="text-muted">No messages yet</span>';
                         }
                         $('#user-list').append(`
                             <li class="user-item p-3 mb-2"
