@@ -58,9 +58,9 @@
                     <div class="chat-message-list">
                         <ul class="list-unstyled chat-list chat-user-list" id="user-list">
                             @foreach($users as $user)
-                                <li class="user-item" data-id="{{ $user->id }}">
+                                <li class="user-item" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" data-status="{{ $user->is_online ? 'Online' : 'Offline' }}">
                                     <a href="javascript: void(0);" class="unread-msg-user">
-                                        <div class="d-flex align-items-center">
+                                        <div class="d-flex">
                                             <div class="flex-shrink-0 chat-user-img {{ $user->is_online ? 'online' : 'away' }} user-own-img align-self-center me-3 ms-0">
                                                 <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" class="rounded-circle avatar-xs" alt="">
                                                 <span class="user-status"></span>
@@ -70,13 +70,13 @@
                                                     <a class="text-reset username">{{ $user->name }}</a>
                                                 </h5>
                                                 <p class="text-truncate text-muted fs-12 mb-0 userStatus">
-                                                    <small>{{ $user->email }}</small>
+                                                    <small>{{ $user->is_online ? 'Online' : 'Offline' }}</small>
                                                 </p>
                                             </div>
                                             <div class="flex-shrink-0">
-                                                <span class="badge rounded-pill {{ $user->is_online ? 'bg-success' : 'bg-secondary' }} fs-11">
-                                                    {{ $user->is_online ? 'Active' : 'Offline' }}
-                                                </span>
+                                                <div class="unread-message">
+                                                    <span class="badge rounded-pill bg-danger-subtle text-danger">3</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </a>
@@ -116,8 +116,8 @@
                                         </div>
                                         <div class="flex-grow-1 overflow-hidden">
                                             <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" class="rounded-circle avatar-xs" alt="">
+                                                <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0" id="selected-user-avatar">
+                                                    <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" class="rounded-circle avatar-xs" alt="" id="selected-user-img">
                                                     <span class="user-status"></span>
                                                 </div>
                                                 <div class="flex-grow-1 overflow-hidden">
@@ -261,8 +261,7 @@
 // Enhanced logic for sending and receiving messages (AJAX + Pusher)
 $(function() {
     let selectedUserId = null;
-    let selectedUserName = '';
-    let selectedUserStatus = '';
+    let selectedUserData = {};
 
     // User selection logic
     $(document).on('click', '.user-item', function(e) {
@@ -273,27 +272,59 @@ $(function() {
         // Add active class to selected user
         $(this).addClass('active');
         
+        // Get user data from data attributes
         selectedUserId = $(this).data('id');
-        selectedUserName = $(this).find('.username').text();
-        selectedUserStatus = $(this).find('.userStatus small').text();
+        selectedUserData = {
+            id: $(this).data('id'),
+            name: $(this).data('name'),
+            email: $(this).data('email'),
+            avatar: $(this).data('avatar'),
+            status: $(this).data('status'),
+            isOnline: $(this).data('status') === 'Online'
+        };
         
         // Update chat header with selected user info
-        $('#selected-user-name').text(selectedUserName);
-        $('#selected-user-status').text(selectedUserStatus);
+        $('#selected-user-name').text(selectedUserData.name);
+        $('#selected-user-status').text(selectedUserData.status);
         
         // Update user avatar in chat header
-        const userAvatar = $(this).find('img').attr('src');
-        $('.user-chat-topbar .chat-user-img img').attr('src', userAvatar);
+        $('#selected-user-img').attr('src', selectedUserData.avatar);
         
-        // Update online status
-        const isOnline = $(this).find('.bg-success').length > 0;
-        $('.user-chat-topbar .chat-user-img').removeClass('online away').addClass(isOnline ? 'online' : 'away');
+        // Update online status class
+        $('#selected-user-avatar')
+            .removeClass('online away')
+            .addClass(selectedUserData.isOnline ? 'online' : 'away');
         
-        // Hide loader and show chat
+        // Show chat interface and hide loader
         $('#elmLoader').hide();
+        $('#users-conversation').show();
+        $('.chat-input-section').show();
+        
+        // Clear previous messages
+        $('#users-conversation').empty();
         
         // Load chat messages for selected user (AJAX)
         loadChatMessages(selectedUserId);
+        
+        // Show a welcome message or empty state
+        if ($('#users-conversation').children().length === 0) {
+            const welcomeMessage = `
+                <li class="chat-list left">
+                    <div class="conversation-list">
+                        <div class="user-chat-content">
+                            <div class="ctext-wrap">
+                                <div class="ctext-wrap-content text-center">
+                                    <p class="mb-0 text-muted">Start your conversation with ${selectedUserData.name}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `;
+            $('#users-conversation').append(welcomeMessage);
+        }
+        
+        scrollToBottom();
     });
 
     // Form submission logic
@@ -304,6 +335,7 @@ $(function() {
         if (!message || !selectedUserId) {
             if (!selectedUserId) {
                 $('.chat-input-feedback').text('Please select a user to chat with').show();
+                setTimeout(() => $('.chat-input-feedback').hide(), 3000);
             }
             return;
         }
@@ -311,43 +343,81 @@ $(function() {
         // Hide feedback
         $('.chat-input-feedback').hide();
         
+        // Disable send button temporarily
+        $('.chat-send').prop('disabled', true);
+        
         // Send message via AJAX
         $.post('/chat/send', {
             recipient_id: selectedUserId,
             message: message,
             _token: '{{ csrf_token() }}'
-        }, function(response) {
+        })
+        .done(function(response) {
             $('#chat-input').val('');
-            // Optionally append message to chat-messages
-            appendMessage(response.message, true);
-        }).fail(function() {
+            // Append message to chat
+            const messageData = {
+                content: message,
+                sender_id: {{ auth()->id() }},
+                sender_name: '{{ auth()->user()->name }}',
+                sender_avatar: '{{ auth()->user()->profile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}',
+                created_at: new Date().toISOString()
+            };
+            appendMessage(messageData, true);
+            
+            // Remove welcome message if exists
+            $('#users-conversation .text-center').closest('li').remove();
+        })
+        .fail(function(xhr) {
             $('.chat-input-feedback').text('Failed to send message. Please try again.').show();
+            setTimeout(() => $('.chat-input-feedback').hide(), 3000);
+        })
+        .always(function() {
+            $('.chat-send').prop('disabled', false);
         });
     });
 
     // Function to load chat messages
     function loadChatMessages(userId) {
-        $.get('/chat/messages/' + userId, function(messages) {
+        $.get('/chat/messages/' + userId)
+        .done(function(messages) {
             $('#users-conversation').empty();
-            messages.forEach(function(message) {
-                appendMessage(message, message.sender_id == {{ auth()->id() }});
-            });
+            if (messages && messages.length > 0) {
+                messages.forEach(function(message) {
+                    appendMessage(message, message.sender_id == {{ auth()->id() }});
+                });
+            }
             scrollToBottom();
+        })
+        .fail(function() {
+            $('#users-conversation').html(`
+                <li class="chat-list">
+                    <div class="conversation-list">
+                        <div class="user-chat-content">
+                            <div class="ctext-wrap">
+                                <div class="ctext-wrap-content text-center">
+                                    <p class="mb-0 text-danger">Failed to load messages</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `);
         });
     }
 
     // Function to append message to chat
     function appendMessage(message, isSent) {
+        const messageClass = isSent ? 'right' : 'left';
         const messageHtml = `
-            <li class="chat-list ${isSent ? 'right' : 'left'}">
+            <li class="chat-list ${messageClass}">
                 <div class="conversation-list">
                     <div class="chat-avatar">
-                        <img src="${message.sender_avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(message.sender_name) + '&background=0D8ABC&color=fff'}" alt="">
+                        <img src="${message.sender_avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(message.sender_name || 'User') + '&background=0D8ABC&color=fff'}" alt="" class="rounded-circle avatar-xs">
                     </div>
                     <div class="user-chat-content">
                         <div class="ctext-wrap">
                             <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content">${message.content}</p>
+                                <p class="mb-0 ctext-content">${escapeHtml(message.content)}</p>
                             </div>
                             <div class="dropdown align-self-start message-box-drop">
                                 <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -356,13 +426,13 @@ $(function() {
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line align-bottom text-muted me-2"></i>Reply</a>
                                     <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line align-bottom text-muted me-2"></i>Copy</a>
-                                    <a class="dropdown-item delete-message" href="#"><i class="ri-delete-bin-5-line align-bottom text-muted me-2"></i>Delete</a>
+                                    ${isSent ? '<a class="dropdown-item delete-message" href="#"><i class="ri-delete-bin-5-line align-bottom text-muted me-2"></i>Delete</a>' : ''}
                                 </div>
                             </div>
                         </div>
                         <div class="conversation-name">
                             <small class="text-muted time">${formatTime(message.created_at)}</small>
-                            <span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>
+                            ${isSent ? '<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>' : ''}
                         </div>
                     </div>
                 </div>
@@ -384,13 +454,54 @@ $(function() {
         return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     }
 
+    // Function to escape HTML
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    // Copy message functionality
+    $(document).on('click', '.copy-message', function(e) {
+        e.preventDefault();
+        const messageText = $(this).closest('.ctext-wrap').find('.ctext-content').text();
+        navigator.clipboard.writeText(messageText).then(function() {
+            $('#copyClipBoard').fadeIn().delay(2000).fadeOut();
+        });
+    });
+
+    // Initialize empty state
+    $('.chat-input-section').hide();
+    $('#users-conversation').hide();
+    
+    // Show instructions when no user is selected
+    $('#users-conversation').html(`
+        <li class="chat-list">
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content text-center">
+                            <div class="avatar-lg mx-auto mb-3">
+                                <div class="avatar-title rounded-circle bg-soft-primary text-primary">
+                                    <i class="ri-message-3-line display-4"></i>
+                                </div>
+                            </div>
+                            <h5 class="mb-2">Welcome to Chat!</h5>
+                            <p class="text-muted mb-0">Select a user from the sidebar to start chatting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    `);
+
     // Pusher logic for receiving messages
     // ... existing Pusher code from your chat.init.js ...
-    
-    // Initialize with first user if available
-    if ($('.user-item').length > 0) {
-        $('.user-item').first().click();
-    }
 });
 </script>
 @endsection
