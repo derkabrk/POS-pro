@@ -4,7 +4,7 @@
     {{ __('Blog') }}
 @endsection
 
-@section('main_content')
+@section('content')
 <section class="banner-bg p-4">
     <div class="container">
         <p class="mb-0 fw-medium custom-clr-dark">

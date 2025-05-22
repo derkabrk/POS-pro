@@ -4,7 +4,7 @@
     {{ __('Server Error') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="error-page-content">
         <img src="{{ asset('assets/images/errors/server-error.svg') }}" alt="500"/>
         <a href="{{ url('/') }}">

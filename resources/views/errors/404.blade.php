@@ -4,7 +4,7 @@
     {{ __('Not Found') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="error-page-content">
         <img src="{{ asset('assets/images/errors/404.svg') }}" alt="404"/>
         <h4>{{ __('Oopps, Page Not Found...') }}</h4>

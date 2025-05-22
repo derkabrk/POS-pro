@@ -1,6 +1,6 @@
 @extends('layouts.web.blank')
 
-@section('main_content')
+@section('content')
 <section class="payment-method-section">
     <div class="container">
         <div class="payment-method-wrp">

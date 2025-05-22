@@ -2,35 +2,32 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5">{{ __('Create Expense Catgeory') }}</h1>
+                <h5 class="modal-title">{{ __('Create Expense Category') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="personal-info">
-                    <form action="{{ route('business.expense-categories.store') }}" method="post" enctype="multipart/form-data"
-                        class="ajaxform_instant_reload">
-                        @csrf
+                <form action="{{ route('business.expense-categories.store') }}" method="post" enctype="multipart/form-data" class="form-horizontal ajaxform_instant_reload">
+                    @csrf
 
-                        <div class="row">
-                            <div class="col-lg-12 mb-2">
-                                <label>{{ __('Catgeory Name') }}</label>
-                                <input type="text" name="categoryName" required class="form-control" placeholder="{{ __('Enter catgeory Name') }}">
-                            </div>
-
-                            <div class="col-lg-12 mt-1">
-                                <label>{{__('Description')}}</label>
-                                <textarea name="categoryDescription" class="form-control" placeholder="{{ __('Enter Description') }}"></textarea>
-                            </div>
-                         </div>
-
-                        <div class="col-lg-12">
-                            <div class="button-group text-center mt-5">
-                                <button type="reset" class="theme-btn border-btn m-2">{{ __('Reset') }}</button>
-                                <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
-                            </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-3 col-form-label">{{ __('Category Name') }}</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="categoryName" required class="form-control" placeholder="{{ __('Enter category name') }}">
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-3 col-form-label">{{ __('Description') }}</label>
+                        <div class="col-sm-9">
+                            <textarea name="categoryDescription" class="form-control" placeholder="{{ __('Enter description') }}"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="reset" class="btn btn-secondary m-2">{{ __('Reset') }}</button>
+                        <button type="submit" class="btn btn-primary m-2">{{ __('Save') }}</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

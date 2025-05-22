@@ -12,7 +12,7 @@
     @include('layouts.partials.css')
 </head>
 <body>
-@yield('main_content')
+@yield('content')
 
 @include('layouts.partials.script')
 

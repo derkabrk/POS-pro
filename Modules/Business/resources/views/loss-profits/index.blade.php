@@ -4,7 +4,7 @@
     {{ __('Loss Profit') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="erp-table-section">
         <div class="container-fluid">
 

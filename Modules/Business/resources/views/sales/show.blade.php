@@ -2,7 +2,7 @@
 
 @section('title', 'Sale Details')
 
-@section('main_content')
+@section('content')
     <div class="container">
         <h3>Sale Details</h3>
         <p><strong>Invoice No:</strong> {{ $sale->invoiceNumber }}</p>

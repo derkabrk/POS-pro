@@ -23,7 +23,7 @@
     <!-- header end -->
     <!-- erp-state-overview-section start -->
     <div class="min-vh-100">
-        @yield('main_content')
+        @yield('content')
     </div>
     <!-- erp-state-overview-section end -->
     <!-- footer start -->

@@ -4,7 +4,7 @@
     {{ __('Access Denied') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="error-page-content">
         <img src="{{ asset('assets/images/errors/denied.svg') }}" alt="403"/>
         <a href="{{ url('/') }}">

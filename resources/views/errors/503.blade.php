@@ -4,7 +4,7 @@
     {{ __('Service Unavailable') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="error-page-content">
         <img src="{{ asset('assets/images/errors/maintanence.svg') }}" alt="503"/>
         <a href="{{ url('/') }}">

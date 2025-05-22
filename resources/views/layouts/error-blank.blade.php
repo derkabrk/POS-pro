@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="error-page-container">
-    @yield('main_content')
+    @yield('content')
 </div>
 
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>

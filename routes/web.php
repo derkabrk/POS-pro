@@ -5,7 +5,7 @@ use App\Models\PaymentType;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Modules\Business\App\Http\Controllers as Business;
-use App\Http\Controllers\Admin\ChatController;
+use App\Http\Controllers\ChatController;
 
 Route::post('/webhook/{platform}', [Business\OrderSourceController::class, 'handleWebhook'])->name('webhook.handle');
 

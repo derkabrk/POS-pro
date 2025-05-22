@@ -8,7 +8,7 @@
     @include('business::layouts.partials.css')
 </head>
 <body>
-@yield('main_content')
+@yield('content')
 
 @include('business::layouts.partials.script')
 

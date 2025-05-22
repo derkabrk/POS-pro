@@ -4,7 +4,7 @@
     {{ __(env('APP_NAME')) }}
 @endsection
 
-@section('main_content')
+@section('content')
     <section class="home-banner-section">
         <div class="container">
             <div class="row align-items-center pb-5 py-lg-5">

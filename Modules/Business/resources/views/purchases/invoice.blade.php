@@ -4,7 +4,7 @@
     {{ __('Invoice') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="invoice-container">
         <div class="invoice-content position-relative">
             <div class="row py-2 d-flex align-items-start justify-content-between border-bottom print-container">

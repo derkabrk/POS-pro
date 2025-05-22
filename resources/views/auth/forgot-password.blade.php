@@ -2,7 +2,7 @@
     'title' => __('Forget Password')
 ])
 
-@section('main_content')
+@section('content')
 <div class="footer">
     <div class="footer-logo w-100 mx-4">
         <img src="{{ asset('assets/images/login/footer-logo.svg') }}" alt="">

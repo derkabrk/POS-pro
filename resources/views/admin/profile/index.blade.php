@@ -8,7 +8,7 @@
     $user = auth()->user();
 @endphp
 
-@section('main_content')
+@section('content')
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-4 mb-4">

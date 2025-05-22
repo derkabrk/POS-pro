@@ -1,6 +1,6 @@
 @extends('layouts.web.blank')
 
-@section('main_content')
+@section('content')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card card bg-transparent">

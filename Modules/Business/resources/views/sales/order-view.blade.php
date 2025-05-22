@@ -2,7 +2,7 @@
 
 @section('title', 'Order Details')
 
-@section('main_content')
+@section('content')
 @php
     $nextStatuses = \App\Models\Sale::getNextStatuses($sale->sale_status);
 @endphp

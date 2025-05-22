@@ -13,7 +13,7 @@
 </head>
 <body>
 
-@yield('main_content')
+@yield('content')
 
 @include('layouts.web.partials.script')
 

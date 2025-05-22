@@ -10,7 +10,7 @@
 </head>
 
 <body>
-@yield('main_content')
+@yield('content')
 @stack('modal')
 
 @include('layouts.auth.partials.scripts')

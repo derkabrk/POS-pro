@@ -4,7 +4,7 @@
     {{ __('Unauthorized') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="error-page-content">
         <img src="{{ asset('assets/images/errors/unauthorized-img.svg') }}" alt="401"/>
         <h4>{{ __('Unauthorized') }}</h4>

@@ -8,7 +8,7 @@
     $user = auth()->user();
 @endphp
 
-@section('main_content')
+@section('content')
 <div class="erp-state-overview-section">
     <div class="container-fluid">
         <div class="row">

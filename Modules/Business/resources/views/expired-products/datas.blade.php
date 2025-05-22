@@ -1,28 +1,28 @@
 @foreach ($expired_products as $product)
-    <tr>
-        <td>{{ ($expired_products->currentPage() - 1) * $expired_products->perPage() + $loop->iteration }}</td>
+    <tr class="admin-table-row">
+        <td class="admin-table-cell">{{ ($expired_products->currentPage() - 1) * $expired_products->perPage() + $loop->iteration }}</td>
 
-        <td>
-            <img src="{{ asset($product->productPicture ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img">
+        <td class="admin-table-cell">
+            <img src="{{ asset($product->productPicture ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="admin-table-img">
         </td>
 
-        <td>{{ $product->productName }}</td>
-        <td>{{ $product->productCode }}</td>
-        <td>{{ $product->brand->brandName ?? '' }}</td>
-        <td>{{ $product->category->categoryName ?? '' }}</td>
-        <td>{{ $product->unit->unitName ?? '' }}</td>
-        <td>{{ currency_format($product->productPurchasePrice, 'icon', 2, business_currency()) }}</td>
-        <td>{{ currency_format($product->productSalePrice, 'icon', 2, business_currency()) }}</td>
-        <td class="{{ $product->productStock <= $product->alert_qty ? 'text-danger' : 'text-success' }}">{{ $product->productStock }}</td>
-        <td>{{ formatted_date($product->expire_date ?? '') }}</td>
-        <td class="print-d-none">
-            <div class="dropdown table-action">
-                <button type="button" data-bs-toggle="dropdown">
+        <td class="admin-table-cell">{{ $product->productName }}</td>
+        <td class="admin-table-cell">{{ $product->productCode }}</td>
+        <td class="admin-table-cell">{{ $product->brand->brandName ?? '' }}</td>
+        <td class="admin-table-cell">{{ $product->category->categoryName ?? '' }}</td>
+        <td class="admin-table-cell">{{ $product->unit->unitName ?? '' }}</td>
+        <td class="admin-table-cell">{{ currency_format($product->productPurchasePrice, 'icon', 2, business_currency()) }}</td>
+        <td class="admin-table-cell">{{ currency_format($product->productSalePrice, 'icon', 2, business_currency()) }}</td>
+        <td class="admin-table-cell {{ $product->productStock <= $product->alert_qty ? 'text-danger' : 'text-success' }}">{{ $product->productStock }}</td>
+        <td class="admin-table-cell">{{ formatted_date($product->expire_date ?? '') }}</td>
+        <td class="admin-table-cell print-d-none">
+            <div class="dropdown admin-table-action">
+                <button type="button" class="admin-action-btn" data-bs-toggle="dropdown">
                     <i class="far fa-ellipsis-v"></i>
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="#product-view" class="product-view" data-bs-toggle="modal"
+                        <a href="#product-view" class="product-view admin-action-link" data-bs-toggle="modal"
                             data-name="{{ $product->productName }}"
                             data-image="{{ asset($product->productPicture ?? 'assets/images/logo/upload2.jpg') }}"
                             data-code="{{ $product->productCode }}"

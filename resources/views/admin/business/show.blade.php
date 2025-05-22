@@ -2,7 +2,7 @@
 
 @section('title', 'Sale Details')
 
-@section('main_content')
+@section('content')
     <div class="container">
        
     </div>

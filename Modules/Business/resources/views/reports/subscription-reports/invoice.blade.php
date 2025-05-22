@@ -4,7 +4,7 @@
     {{ __('Subscriptions Report') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="invoice-container">
         <div class="invoice-content">
 

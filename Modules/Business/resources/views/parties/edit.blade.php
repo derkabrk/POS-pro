@@ -4,7 +4,7 @@
     {{ request('type') !== 'Supplier' ? __('Edit Customer') : __('Edit Supplier') }}
 @endsection
 
-@section('main_content')
+@section('content')
 <div class="erp-table-section">
     <div class="container-fluid">
         <div class="card border-0">

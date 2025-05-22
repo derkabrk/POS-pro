@@ -23,7 +23,7 @@
         @include('layouts.web.partials.common_header')
     @endif
 
-    @yield('main_content')
+    @yield('content')
 
     @include('layouts.web.partials.footer')
 

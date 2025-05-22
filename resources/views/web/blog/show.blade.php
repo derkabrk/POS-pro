@@ -4,7 +4,7 @@
     {{ __('Blog') }}
 @endsection
 
-@section('main_content')
+@section('content')
     {{-- Banner Code Start --}}
     <section class="banner-bg p-4">
         <div class="container">

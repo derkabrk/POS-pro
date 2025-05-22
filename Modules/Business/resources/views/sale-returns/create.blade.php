@@ -4,7 +4,7 @@
     {{ __('Pos Sale') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="container-fluid">
         <div class="grid row  p-lr2">
             <div class="col-lg-12 return-card card">

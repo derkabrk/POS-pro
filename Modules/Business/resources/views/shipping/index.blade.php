@@ -4,7 +4,7 @@
 Shipping Services
 @endsection
 
-@section('main_content')
+@section('content')
 <div class="container-fluid">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">

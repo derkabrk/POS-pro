@@ -588,24 +588,7 @@
         
         // Function to load dashboard data
         function loadDashboardData() {
-            const url = $('#get-dashboard').val();
-            
-            $.ajax({
-                type: 'GET',
-                url: url,
-                dataType: 'json',
-                success: function(data) {
-                    // Update counter values
-                    $('#total_businesses').text(data.totalBusinesses || 0);
-                    $('#expired_businesses').text(data.expiredBusinesses || 0);
-                    $('#plan_subscribes').text(data.planSubscribes || 0);
-                    $('#business_categories').text(data.businessCategories || 0);
-                    $('#total_plans').text(data.totalPlans || 0);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error loading dashboard data:', error);
-                }
-            });
+            // Remove AJAX update to avoid overwriting server-rendered values
         }
         
         // Document ready function

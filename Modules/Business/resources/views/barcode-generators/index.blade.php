@@ -1,6 +1,6 @@
 @extends('business::layouts.master')
 
-@section('main_content')
+@section('content')
     <div class="min-vh-100">
         <div class="erp-table-section order-form-section">
             <div class="container-fluid">

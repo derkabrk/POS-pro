@@ -2,7 +2,7 @@
     'title' => __('Reset Password')
 ])
 
-@section('main_content')
+@section('content')
     <div class="mybazar-login-section">
         <div class="mybazar-login-avatar">
             <img src="{{ asset('assets/images/login/login-avatar.png') }}" alt="">

@@ -1,38 +1,39 @@
 @foreach($brands as $brand)
     <tr>
-        <td class="w-60 checkbox">
-            <input type="checkbox" name="ids[]" class="delete-checkbox-item  multi-delete" value="{{ $brand->id }}">
+        <td style="width: 25px;">
+            <div class="form-check">
+                <input class="form-check-input delete-checkbox-item multi-delete" type="checkbox" name="ids[]" value="{{ $brand->id }}">
+            </div>
         </td>
         <td>{{ ($brands->currentPage() - 1) * $brands->perPage() + $loop->iteration }}</td>
         <td>
-            <img src="{{ asset($brand->icon ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img">
+            <img src="{{ asset($brand->icon ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img" style="max-width: 40px; max-height: 40px;">
         </td>
-
         <td class="text-start">{{ $brand->brandName }}</td>
         <td class="text-start">{{ Str::limit($brand->description, 20, '...') }}</td>
         <td>
-            <label class="switch">
-                <input type="checkbox" {{ $brand->status == 1 ? 'checked' : '' }} class="status" data-url="{{ route('business.brands.status', $brand->id) }}">
-                <span class="slider round"></span>
-            </label>
+            <div class="form-check form-switch">
+                <input class="form-check-input status" type="checkbox" {{ $brand->status == 1 ? 'checked' : '' }} data-url="{{ route('business.brands.status', $brand->id) }}">
+            </div>
         </td>
-        <td class="print-d-none">
-            <div class="dropdown table-action">
-                <button type="button" data-bs-toggle="dropdown">
-                    <i class="far fa-ellipsis-v"></i>
+        <td>
+            <div class="dropdown">
+                <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="ri-more-2-fill"></i>
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="#brand-edit-modal" data-bs-toggle="modal" class="brand-edit-btn"
+                        <a href="#brand-edit-modal" data-bs-toggle="modal" class="dropdown-item brand-edit-btn"
                         data-url="{{ route('business.brands.update', $brand->id) }}"
                         data-brands-name="{{ $brand->brandName }}"
                         data-brands-icon="{{ asset($brand->icon) }}"
-                        data-brands-description="{{ $brand->description }}"><i class="fal fa-pencil-alt"></i>{{__('Edit')}}</a>
+                        data-brands-description="{{ $brand->description }}">
+                            <i class="ri-pencil-fill align-bottom me-2 text-primary"></i>{{__('Edit')}}
+                        </a>
                     </li>
                     <li>
-                        <a href="{{ route('business.brands.destroy', $brand->id) }}" class="confirm-action" data-method="DELETE">
-                            <i class="fal fa-trash-alt"></i>
-                            {{ __('Delete') }}
+                        <a href="{{ route('business.brands.destroy', $brand->id) }}" class="dropdown-item confirm-action text-danger" data-method="DELETE">
+                            <i class="ri-delete-bin-5-fill align-bottom me-2"></i>{{ __('Delete') }}
                         </a>
                     </li>
                 </ul>

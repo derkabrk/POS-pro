@@ -4,7 +4,7 @@
     {{ __('Sale Return Reports') }}
 @endsection
 
-@section('main_content')
+@section('content')
 <div class="erp-table-section">
     <div class="container-fluid">
         <div class="mb-4 d-flex loss-flex  gap-3 loss-profit-container d-print-none">

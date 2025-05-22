@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/calculator.css') }}">
 @endpush
 
-@section('main_content')
+@section('content')
     <div class="container-fluid">
         <div class="grid row sales-main-container p-lr">
             <div class="sales-container">

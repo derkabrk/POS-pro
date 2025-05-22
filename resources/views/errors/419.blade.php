@@ -4,7 +4,7 @@
     {{ __('Expired') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div class="error-page-content">
         <img src="{{ asset('assets/images/errors/expired.svg') }}" alt="419"/>
         <h4>{{ __('Oops.!, Page Expired') }}</h4>

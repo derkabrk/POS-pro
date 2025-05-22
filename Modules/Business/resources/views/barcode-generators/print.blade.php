@@ -4,7 +4,7 @@
     {{ __('Invoice') }}
 @endsection
 
-@section('main_content')
+@section('content')
     <div id="barcodePrintArea" class="barcode-container ">
         <div class="row g-2 ">
             @foreach ($generatedBarcodes ?? [] as $barcode)
