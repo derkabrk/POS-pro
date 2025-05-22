@@ -206,11 +206,14 @@
                                                         {{ $user->is_online ? 'Online' : 'Offline' }}
                                                     </span>
                                                 </div>
-                                                <div class="text-muted fs-12 text-truncate">{{ $user->email }}</div>
                                                 @if(isset($user->latest_message) && $user->latest_message)
-                                                    <div class="text-truncate small text-dark mt-1" style="max-width: 90%;">
-                                                        <span class="fw-semibold">{{ $user->latest_message->sender_id == auth()->id() ? 'You: ' : '' }}</span>
-                                                        {{ \Illuminate\Support\Str::limit($user->latest_message->content, 40) }}
+                                                    <div class="text-truncate small mt-1" style="max-width: 90%;">
+                                                        @if($user->latest_message->sender_id == auth()->id())
+                                                            <span class="fw-semibold text-muted">You: </span>
+                                                            <span class="text-dark">{{ \Illuminate\Support\Str::limit($user->latest_message->content, 40) }}</span>
+                                                        @else
+                                                            <span class="fw-bold text-dark">{{ \Illuminate\Support\Str::limit($user->latest_message->content, 40) }}</span>
+                                                        @endif
                                                         <span class="text-muted ms-1 fs-11">{{ $user->latest_message->created_at ? $user->latest_message->created_at->diffForHumans() : '' }}</span>
                                                     </div>
                                                 @endif
@@ -682,8 +685,13 @@ $(document).ready(function() {
     
     function appendMessage(message, isSent) {
         const messageClass = isSent ? 'right' : 'left';
+        // Fallbacks for undefined/null values
+        const senderName = message.sender_name || (isSent ? '{{ auth()->user()->name }}' : (selectedUserData.name || 'Unknown'));
+        const senderAvatar = message.sender_avatar || (isSent ? ('{{ auth()->user()->profile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}') : (selectedUserData.avatar || 'https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff'));
+        const content = typeof message.content === 'undefined' || message.content === null ? '' : message.content;
+        const createdAt = message.created_at || new Date().toISOString();
         const avatarHtml = !isSent ? `<div class="chat-avatar">
-            <img src="${message.sender_avatar || selectedUserData.avatar}" alt="${message.sender_name || selectedUserData.name}" class="rounded-circle">
+            <img src="${senderAvatar}" alt="${senderName}" class="rounded-circle">
         </div>` : '';
         const messageHtml = `
             <li class="chat-list ${messageClass}" data-message-id="${message.id || ''}">
@@ -692,7 +700,7 @@ $(document).ready(function() {
                     <div class="user-chat-content position-relative">
                         <div class="ctext-wrap">
                             <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content">${escapeHtml(message.content)}</p>
+                                <p class="mb-0 ctext-content">${escapeHtml(content)}</p>
                                 <div class="dropdown align-self-start message-box-drop">
                                     <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         <i class="ri-more-2-fill"></i>
@@ -703,7 +711,7 @@ $(document).ready(function() {
                                 </div>
                             </div>
                             <div class="conversation-name">
-                                <small class="text-muted time">${formatTime(message.created_at)}</small>
+                                <small class="text-muted time">${formatTime(createdAt)}</small>
                                 ${isSent ? `<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>` : ''}
                             </div>
                         </div>
