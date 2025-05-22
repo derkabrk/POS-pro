@@ -302,6 +302,7 @@
 @endsection
 
 @section('script')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 <!-- fgEmojiPicker js -->
 <script src="{{ URL::asset('build/libs/fg-emoji-picker/fgEmojiPicker.js') }}"></script>
@@ -311,6 +312,11 @@
 <script src="{{ URL::asset('build/js/pages/chat.init.js') }}"></script>
 <script src="{{ asset('js/pages/chat.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+<script>
+  window.PUSHER_APP_KEY = "{{ env('PUSHER_APP_KEY') }}";
+  window.PUSHER_APP_CLUSTER = "{{ env('PUSHER_APP_CLUSTER') }}";
+</script>
 
 <script>
 $(document).ready(function() {
@@ -426,553 +432,553 @@ $(document).ready(function() {
         // Add active class to selected user
         $clickedUser.addClass('active');
         
-        // Get user data from data attributes with fallbacks
-        selectedUserId = $clickedUser.data('user-id') || $clickedUser.attr('data-user-id');
-        
+        // Get user data from data attributes with fallbacksdback('Error selecting user. Please try again.', 'error');
+        selectedUserId = $clickedUser.data('user-id') || $clickedUser.attr('data-user-id');   return;
+        }
         if (!selectedUserId) {
-            console.error('No user ID found for selected user');
             showFeedback('Error selecting user. Please try again.', 'error');
             return;
-        }
+        }wn User',
         
-        selectedUserData = {
+        selectedUserData = {i-avatars.com/api/?name=User&background=0D8ABC&color=fff',
             id: selectedUserId,
-            name: $clickedUser.data('user-name') || $clickedUser.attr('data-user-name') || 'Unknown User',
-            email: $clickedUser.data('user-email') || $clickedUser.attr('data-user-email') || '',
+            name: $clickedUser.data('user-name') || $clickedUser.attr('data-user-name') || 'Unknown User',  isOnline: ($clickedUser.data('is-online') || $clickedUser.attr('data-is-online')) === 1 || ($clickedUser.data('is-online') || $clickedUser.attr('data-is-online')) === '1'
+            email: $clickedUser.data('user-email') || $clickedUser.attr('data-user-email') || '',};
             avatar: $clickedUser.data('user-avatar') || $clickedUser.attr('data-user-avatar') || 'https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff',
-            status: $clickedUser.data('user-status') || $clickedUser.attr('data-user-status') || 'Offline',
+            status: $clickedUser.data('user-status') || $clickedUser.attr('data-user-status') || 'Offline',console.log('Selected user data:', selectedUserData);
             isOnline: ($clickedUser.data('is-online') || $clickedUser.attr('data-is-online')) === 1 || ($clickedUser.data('is-online') || $clickedUser.attr('data-is-online')) === '1'
-        };
-        
+        };er
+        updateChatHeader();
         console.log('Selected user data:', selectedUserData);
-        
-        // Update chat header
+        nd load messages
+        // Update chat headershowChatInterface();
         updateChatHeader();
         
-        // Show chat input and load messages
-        showChatInterface();
+        // Show chat input and load messages   loadChatMessages(selectedUserId);
+        showChatInterface();}
         
         // Load chat messages
         loadChatMessages(selectedUserId);
-    }
-    
-    function updateChatHeader() {
+    } ' + selectedUserData.email);
+    UserData.avatar);
+    function updateChatHeader() {$('#recipient-id').val(selectedUserData.id);
         $('#selected-user-name').text(selectedUserData.name);
         $('#selected-user-status').text(selectedUserData.status + ' • ' + selectedUserData.email);
         $('#selected-user-img').attr('src', selectedUserData.avatar);
         $('#recipient-id').val(selectedUserData.id);
-        
-        // Update status indicator
+           statusDot.addClass(selectedUserData.isOnline ? 'online-indicator' : 'offline-indicator');
+        // Update status indicator}
         const statusDot = $('#selected-user-status-dot');
         statusDot.removeClass('online-indicator offline-indicator');
-        statusDot.addClass(selectedUserData.isOnline ? 'online-indicator' : 'offline-indicator');
+        statusDot.addClass(selectedUserData.isOnline ? 'online-indicator' : 'offline-indicator');).show();
+    }   $('#chat-input').focus();
     }
-    
     function showChatInterface() {
-        $('#chat-input-container').show();
-        $('#chat-input').focus();
+        $('#chat-input-container').show();ubmit(e) {
+        $('#chat-input').focus();e.preventDefault();
     }
-    
+    if (isLoading) return;
     function handleMessageSubmit(e) {
-        e.preventDefault();
+        e.preventDefault();const message = $('#chat-input').val().trim();
         
         if (isLoading) return;
         
-        const message = $('#chat-input').val().trim();
-        
-        // Validation
+        const message = $('#chat-input').val().trim();dback('Please enter a message', 'error');
+           return;
+        // Validation}
         if (!message) {
             showFeedback('Please enter a message', 'error');
-            return;
+            return;dback('Please select a user to chat with', 'error');
+        }   return;
         }
-        
         if (!selectedUserId) {
             showFeedback('Please select a user to chat with', 'error');
-            return;
+            return;dback('Message is too long (max 1000 characters)', 'error');
+        }   return;
         }
-        
         if (message.length > 1000) {
             showFeedback('Message is too long (max 1000 characters)', 'error');
-            return;
-        }
+            return;   sendMessage(message);
+        }}
         
-        // Send message
-        sendMessage(message);
+        // Send messagemessage) {
+        sendMessage(message);isLoading = true;
     }
     
-    function sendMessage(message) {
-        isLoading = true;
+    function sendMessage(message) {prop('disabled', true).html('<i class="ri-loader-4-line spin"></i>');
+        isLoading = true;hideFeedback();
         
-        // Disable send button and show loading state
+        // Disable send button and show loading stateta
         $('#send-btn').prop('disabled', true).html('<i class="ri-loader-4-line spin"></i>');
-        hideFeedback();
+        hideFeedback();ectedUserId,
         
-        // Prepare message data
-        const messageData = {
+        // Prepare message data  _token: $('#csrf-token').val()
+        const messageData = {};
             recipient_id: selectedUserId,
-            message: message,
+            message: message,console.log('Sending message:', messageData);
             _token: $('#csrf-token').val()
-        };
+        };AJAX request
         
-        console.log('Sending message:', messageData);
+        console.log('Sending message:', messageData);d',
         
-        // Send AJAX request
-        $.ajax({
+        // Send AJAX requestata,
+        $.ajax({  timeout: 10000
             url: '/chat/send',
             method: 'POST',
-            data: messageData,
+            data: messageData,console.log('Message sent successfully:', response);
             timeout: 10000
         })
-        .done(function(response) {
+        .done(function(response) {$('#chat-input').val('');
             console.log('Message sent successfully:', response);
-            
+             for display
             // Clear input
-            $('#chat-input').val('');
+            $('#chat-input').val('');| Date.now(),
             
-            // Create message object for display
+            // Create message object for display()),
             const displayMessage = {
-                id: response.id || Date.now(),
-                content: message,
-                sender_id: parseInt($('#auth-user-id').val()),
-                sender_name: '{{ auth()->user()->name }}',
+                id: response.id || Date.now(),ofile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}',
+                content: message,w Date().toISOString(),
+                sender_id: parseInt($('#auth-user-id').val()),  is_read: false
+                sender_name: '{{ auth()->user()->name }}',};
                 sender_avatar: '{{ auth()->user()->profile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}',
                 created_at: new Date().toISOString(),
-                is_read: false
+                is_read: falseappendMessage(displayMessage, true);
             };
-            
-            // Append message to chat
+            ge if exists
+            // Append message to chatremoveWelcomeMessage();
             appendMessage(displayMessage, true);
-            
-            // Remove welcome message if exists
+            essfully', 'success');
+            // Remove welcome message if exists  setTimeout(hideFeedback, 2000);
             removeWelcomeMessage();
             
-            showFeedback('Message sent successfully', 'success');
+            showFeedback('Message sent successfully', 'success');console.error('Failed to send message:', xhr.responseText || error);
             setTimeout(hideFeedback, 2000);
-        })
+        })let errorMessage = 'Failed to send message. Please try again.';
         .fail(function(xhr, status, error) {
             console.error('Failed to send message:', xhr.responseText || error);
-            
+            = xhr.responseJSON?.errors;
             let errorMessage = 'Failed to send message. Please try again.';
-            
+               errorMessage = Object.values(errors).flat().join(', ');
             if (xhr.status === 422) {
                 const errors = xhr.responseJSON?.errors;
-                if (errors) {
+                if (errors) {authorized. Please refresh the page.';
                     errorMessage = Object.values(errors).flat().join(', ');
-                }
+                }Please try again later.';
             } else if (xhr.status === 401) {
-                errorMessage = 'You are not authorized. Please refresh the page.';
-            } else if (xhr.status === 500) {
+                errorMessage = 'You are not authorized. Please refresh the page.';   errorMessage = 'Request timeout. Please check your connection.';
+            } else if (xhr.status === 500) {}
                 errorMessage = 'Server error. Please try again later.';
-            } else if (status === 'timeout') {
+            } else if (status === 'timeout') {  showFeedback(errorMessage, 'error');
                 errorMessage = 'Request timeout. Please check your connection.';
             }
             
-            showFeedback(errorMessage, 'error');
-        })
-        .always(function() {
+            showFeedback(errorMessage, 'error'); $('#send-btn').prop('disabled', false).html('<i class="ri-send-plane-2-fill align-bottom"></i>');
+        })   });
+        .always(function() {}
             isLoading = false;
-            $('#send-btn').prop('disabled', false).html('<i class="ri-send-plane-2-fill align-bottom"></i>');
-        });
+            $('#send-btn').prop('disabled', false).html('<i class="ri-send-plane-2-fill align-bottom"></i>');s(userId) {
+        });if (!userId) return;
     }
-    
+    console.log('Loading messages for user:', userId);
     function loadChatMessages(userId) {
         if (!userId) return;
         
-        console.log('Loading messages for user:', userId);
+        console.log('Loading messages for user:', userId);$('#users-conversation').empty();
         
         // Show loader
-        $('#elmLoader').show();
+        $('#elmLoader').show();ssages/' + userId,
         $('#users-conversation').empty();
-        
+          timeout: 10000
         $.ajax({
             url: '/chat/messages/' + userId,
-            method: 'GET',
+            method: 'GET',console.log('Messages loaded:', messages);
             timeout: 10000
         })
         .done(function(messages) {
-            console.log('Messages loaded:', messages);
-            
+            console.log('Messages loaded:', messages);d == parseInt($('#auth-user-id').val());
+             appendMessage(message, isSent);
             if (messages && messages.length > 0) {
                 messages.forEach(function(message) {
-                    const isSent = message.sender_id == parseInt($('#auth-user-id').val());
-                    appendMessage(message, isSent);
+                    const isSent = message.sender_id == parseInt($('#auth-user-id').val());   showWelcomeMessage();
+                    appendMessage(message, isSent);  }
                 });
             } else {
                 showWelcomeMessage();
-            }
+            }  showErrorMessage('Failed to load messages. Please try again.');
         })
         .fail(function(xhr, status, error) {
-            console.error('Failed to load messages:', error);
-            showErrorMessage('Failed to load messages. Please try again.');
-        })
-        .always(function() {
+            console.error('Failed to load messages:', error);ide();
+            showErrorMessage('Failed to load messages. Please try again.'); scrollToBottom();
+        })   });
+        .always(function() {}
             $('#elmLoader').hide();
             scrollToBottom();
         });
-    }
+    }const authUserId = parseInt($('#auth-user-id').val());
     
     function appendMessage(message, isSent) {
-        const messageClass = isSent ? 'right' : 'left';
+        const messageClass = isSent ? 'right' : 'left';}" data-message-id="${message.id || ''}">
         const authUserId = parseInt($('#auth-user-id').val());
         
-        const messageHtml = `
+        const messageHtml = `"${message.sender_avatar || selectedUserData.avatar}" alt="${message.sender_name || selectedUserData.name}" class="rounded-circle avatar-xs">
             <li class="chat-list ${messageClass}" data-message-id="${message.id || ''}">
-                <div class="conversation-list">
+                <div class="conversation-list">t">
                     ${!isSent ? `<div class="chat-avatar">
                         <img src="${message.sender_avatar || selectedUserData.avatar}" alt="${message.sender_name || selectedUserData.name}" class="rounded-circle avatar-xs">
-                    </div>` : ''}
+                    </div>` : ''}nt)}</p>
                     <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
+                        <div class="ctext-wrap">" role="button" data-bs-toggle="dropdown">
+                            <div class="ctext-wrap-content"><i class="ri-more-2-fill"></i>
                                 <p class="mb-0 ctext-content">${escapeHtml(message.content)}</p>
                                 <div class="dropdown align-self-start message-box-drop">
-                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                        <i class="ri-more-2-fill"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
+                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">li><a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a></li>
+                                        <i class="ri-more-2-fill"></i>ul>
+                                    </a>div>
+                                    <ul class="dropdown-menu">div>
                                         <li><a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a></li>
                                     </ul>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="conversation-name">
-                            <small class="text-muted time">${formatTime(message.created_at)}</small>
-                            ${isSent ? `<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>` : ''}
-                        </div>
+                            </div>isSent ? `<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>` : ''}
+                        </div>div>
+                        <div class="conversation-name">div>
+                            <small class="text-muted time">${formatTime(message.created_at)}</small>/div>
+                            ${isSent ? `<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>` : ''}  </li>
+                        </div>`;
                     </div>
-                </div>
-            </li>
-        `;
+                </div>ation').append(messageHtml);
+            </li>   scrollToBottom();
+        `;}
         
-        $('#users-conversation').append(messageHtml);
+        $('#users-conversation').append(messageHtml);ge() {
         scrollToBottom();
-    }
+    }e">
     
-    function showWelcomeMessage() {
+    function showWelcomeMessage() {t">
         const welcomeHtml = `
-            <li class="chat-list welcome-message">
+            <li class="chat-list welcome-message">er">
                 <div class="conversation-list">
-                    <div class="user-chat-content">
+                    <div class="user-chat-content">mg src="${selectedUserData.avatar}" alt="${selectedUserData.name}" class="rounded-circle">
                         <div class="ctext-wrap">
-                            <div class="ctext-wrap-content text-center">
-                                <div class="avatar-md mx-auto mb-3">
-                                    <img src="${selectedUserData.avatar}" alt="${selectedUserData.name}" class="rounded-circle">
-                                </div>
-                                <h6 class="mb-1">Start conversation with ${selectedUserData.name}</h6>
-                                <p class="text-muted mb-0 fs-12">Send a message to begin chatting</p>
-                            </div>
+                            <div class="ctext-wrap-content text-center">>
+                                <div class="avatar-md mx-auto mb-3"> class="text-muted mb-0 fs-12">Send a message to begin chatting</p>
+                                    <img src="${selectedUserData.avatar}" alt="${selectedUserData.name}" class="rounded-circle">div>
+                                </div>div>
+                                <h6 class="mb-1">Start conversation with ${selectedUserData.name}</h6>div>
+                                <p class="text-muted mb-0 fs-12">Send a message to begin chatting</p>/div>
+                            </div>  </li>
                         </div>
-                    </div>
-                </div>
+                    </div>   $('#users-conversation').append(welcomeHtml);
+                </div>}
             </li>
-        `;
+        `;ge(message) {
         $('#users-conversation').append(welcomeHtml);
     }
     
-    function showErrorMessage(message) {
+    function showErrorMessage(message) {t">
         const errorHtml = `
-            <li class="chat-list">
+            <li class="chat-list">er">
                 <div class="conversation-list">
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content text-center">
+                    <div class="user-chat-content">g-soft-danger text-danger">
+                        <div class="ctext-wrap"> class="ri-error-warning-line"></i>
+                            <div class="ctext-wrap-content text-center">div>
                                 <div class="avatar-sm mx-auto mb-2">
-                                    <div class="avatar-title rounded-circle bg-soft-danger text-danger">
-                                        <i class="ri-error-warning-line"></i>
-                                    </div>
-                                </div>
-                                <p class="mb-0 text-danger fs-13">${message}</p>
-                            </div>
+                                    <div class="avatar-title rounded-circle bg-soft-danger text-danger"> class="mb-0 text-danger fs-13">${message}</p>
+                                        <i class="ri-error-warning-line"></i>div>
+                                    </div>div>
+                                </div>div>
+                                <p class="mb-0 text-danger fs-13">${message}</p>/div>
+                            </div>  </li>
                         </div>
-                    </div>
-                </div>
+                    </div>   $('#users-conversation').append(errorHtml);
+                </div>}
             </li>
         `;
-        $('#users-conversation').append(errorHtml);
-    }
+        $('#users-conversation').append(errorHtml);   $('.welcome-message').remove();
+    }}
     
-    function removeWelcomeMessage() {
+    function removeWelcomeMessage() {age(e) {
         $('.welcome-message').remove();
-    }
+    }const messageText = $(this).closest('.ctext-wrap').find('.ctext-content').text();
     
     function handleCopyMessage(e) {
-        e.preventDefault();
-        const messageText = $(this).closest('.ctext-wrap').find('.ctext-content').text();
+        e.preventDefault();n() {
+        const messageText = $(this).closest('.ctext-wrap').find('.ctext-content').text();').fadeIn().delay(2000).fadeOut();
         
-        if (navigator.clipboard) {
+        if (navigator.clipboard) { fallbackCopyText(messageText);
             navigator.clipboard.writeText(messageText).then(function() {
                 $('#copyClipBoard').fadeIn().delay(2000).fadeOut();
-            }).catch(function() {
-                fallbackCopyText(messageText);
-            });
+            }).catch(function() {   fallbackCopyText(messageText);
+                fallbackCopyText(messageText);   }
+            });}
         } else {
             fallbackCopyText(messageText);
-        }
+        }ent.createElement('textarea');
     }
-    
-    function fallbackCopyText(text) {
+    ndChild(textArea);
+    function fallbackCopyText(text) {rea.select();
         const textArea = document.createElement('textarea');
         textArea.value = text;
-        document.body.appendChild(textArea);
+        document.body.appendChild(textArea);pBoard').fadeIn().delay(2000).fadeOut();
         textArea.select();
-        try {
+        try {   console.error('Failed to copy text: ', err);
             document.execCommand('copy');
-            $('#copyClipBoard').fadeIn().delay(2000).fadeOut();
-        } catch (err) {
+            $('#copyClipBoard').fadeIn().delay(2000).fadeOut();   document.body.removeChild(textArea);
+        } catch (err) {}
             console.error('Failed to copy text: ', err);
-        }
+        }ror') {
         document.body.removeChild(textArea);
     }
-    
-    function showFeedback(message, type = 'error') {
-        const feedback = $('#chat-feedback');
-        feedback.removeClass('text-success text-danger')
+     === 'success' ? 'text-success' : 'text-danger')
+    function showFeedback(message, type = 'error') {ssage)
+        const feedback = $('#chat-feedback');           .show();
+        feedback.removeClass('text-success text-danger')}
                 .addClass(type === 'success' ? 'text-success' : 'text-danger')
                 .text(message)
-                .show();
-    }
+                .show();   $('#chat-feedback').hide();
+    }}
     
     function hideFeedback() {
-        $('#chat-feedback').hide();
+        $('#chat-feedback').hide();= $('#chat-messages')[0];
     }
-    
-    function scrollToBottom() {
-        const chatContainer = $('#chat-messages')[0];
+       chatContainer.scrollTop = chatContainer.scrollHeight;
+    function scrollToBottom() {   }
+        const chatContainer = $('#chat-messages')[0];}
         if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            chatContainer.scrollTop = chatContainer.scrollHeight;ml(text) {
         }
-    }
+    },
     
     function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
+        const map = {,
+            '&': '&amp;',  "'": '&#039;'
             '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
+            '>': '&gt;',   return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
+            '"': '&quot;',}
             "'": '&#039;'
-        };
+        };formatTime(dateString) {
         return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
-    }
+    }ateString);
     
-    function formatTime(dateString) {
+    function formatTime(dateString) {const diff = now - date;
         try {
-            const date = new Date(dateString);
+            const date = new Date(dateString);te
             const now = new Date();
-            const diff = now - date;
-            
+            const diff = now - date;   return 'Just now';
+            }
             // Less than 1 minute
             if (diff < 60000) {
                 return 'Just now';
             }
-            
-            // Less than 1 hour
+               return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+            // Less than 1 hour}
             if (diff < 3600000) {
                 const minutes = Math.floor(diff / 60000);
                 return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+            }   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
-            
             // Same day
             if (date.toDateString() === now.toDateString()) {
-                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });oLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
-            
-            // Different day
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+               return 'Invalid date';
+            // Different day   }
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });}
         } catch (error) {
-            return 'Invalid date';
+            return 'Invalid date';t every 30 seconds to update online status
         }
-    }
-    
-    // Auto-refresh user list every 30 seconds to update online status
-    setInterval(function() {
-        refreshUserStatus();
+    }hUserStatus();
     }, 30000);
-    
-    function refreshUserStatus() {
+    // Auto-refresh user list every 30 seconds to update online status
+    setInterval(function() {reshUserStatus() {
+        refreshUserStatus();
+    }, 30000);ers/status',
+    ,
+    function refreshUserStatus() {  timeout: 5000
         $.ajax({
             url: '/chat/users/status',
-            method: 'GET',
+            method: 'GET', {
             timeout: 5000
-        })
+        })ser-item[data-user-id="${user.id}"]`);
         .done(function(users) {
             if (users && Array.isArray(users)) {
                 users.forEach(function(user) {
-                    const userItem = $(`.user-item[data-user-id="${user.id}"]`);
+                    const userItem = $(`.user-item[data-user-id="${user.id}"]`);       .attr('data-user-status', user.is_online ? 'Online' : 'Offline');
                     if (userItem.length) {
                         // Update online status
-                        userItem.attr('data-is-online', user.is_online ? '1' : '0')
+                        userItem.attr('data-is-online', user.is_online ? '1' : '0')e-indicator');
                                .attr('data-user-status', user.is_online ? 'Online' : 'Offline');
-                        
+                                .addClass(user.is_online ? 'online-indicator' : 'offline-indicator');
                         // Update status indicator
                         const indicator = userItem.find('.online-indicator, .offline-indicator');
                         indicator.removeClass('online-indicator offline-indicator')
                                 .addClass(user.is_online ? 'online-indicator' : 'offline-indicator');
-                        
-                        // Update status badge
+                         text-success' : 'bg-secondary-subtle text-secondary')
+                        // Update status badge     .text(user.is_online ? 'Online' : 'Offline');
                         const badge = userItem.find('.badge');
-                        badge.removeClass('bg-success-subtle text-success bg-secondary-subtle text-secondary')
-                             .addClass(user.is_online ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary')
+                        badge.removeClass('bg-success-subtle text-success bg-secondary-subtle text-secondary')rently selected
+                             .addClass(user.is_online ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary')) {
                              .text(user.is_online ? 'Online' : 'Offline');
-                        
-                        // Update selected user header if this user is currently selected
-                        if (selectedUserId && selectedUserId == user.id) {
-                            selectedUserData.isOnline = user.is_online;
-                            selectedUserData.status = user.is_online ? 'Online' : 'Offline';
-                            updateChatHeader();
+                        atus = user.is_online ? 'Online' : 'Offline';
+                        // Update selected user header if this user is currently selected   updateChatHeader();
+                        if (selectedUserId && selectedUserId == user.id) {   }
+                            selectedUserData.isOnline = user.is_online; }
+                            selectedUserData.status = user.is_online ? 'Online' : 'Offline';   });
+                            updateChatHeader();  }
                         }
                     }
-                });
-            }
-        })
+                }); console.log('Failed to refresh user status:', error);
+            }   });
+        })}
         .fail(function(xhr, status, error) {
-            console.log('Failed to refresh user status:', error);
-        });
+            console.log('Failed to refresh user status:', error);essaging (if available)
+        });undefined') {
+    }   initializePusher();
     }
-    
     // Initialize Pusher for real-time messaging (if available)
-    if (typeof Pusher !== 'undefined') {
+    if (typeof Pusher !== 'undefined') {initializePusher() {
         initializePusher();
-    }
-    
-    function initializePusher() {
-        try {
-            // Initialize Pusher - you'll need to configure this with your Pusher credentials
+    }e this with your Pusher credentials
+    her-key', {
+    function initializePusher() {pusher-cluster',
+        try { encrypted: true
+            // Initialize Pusher - you'll need to configure this with your Pusher credentials});
             const pusher = new Pusher('your-pusher-key', {
                 cluster: 'your-pusher-cluster',
                 encrypted: true
-            });
+            });const channel = pusher.subscribe(`private-user.${authUserId}`);
             
             // Subscribe to user's private channel
             const authUserId = $('#auth-user-id').val();
-            const channel = pusher.subscribe(`private-user.${authUserId}`);
-            
-            // Listen for new messages
-            channel.bind('message.sent', function(data) {
-                if (data.message && selectedUserId && data.message.sender_id == selectedUserId) {
-                    // Only show message if it's from the currently selected user
+            const channel = pusher.subscribe(`private-user.${authUserId}`);electedUserId) {
+            he currently selected user
+            // Listen for new messagesage, false);
+            channel.bind('message.sent', function(data) {   removeWelcomeMessage();
+                if (data.message && selectedUserId && data.message.sender_id == selectedUserId) { }
+                    // Only show message if it's from the currently selected user});
                     appendMessage(data.message, false);
                     removeWelcomeMessage();
-                }
+                }tatus.changed', function(data) {
             });
-            
-            // Listen for user status changes
-            channel.bind('user.status.changed', function(data) {
+               updateUserStatus(data.user);
+            // Listen for user status changes }
+            channel.bind('user.status.changed', function(data) {});
                 if (data.user) {
-                    updateUserStatus(data.user);
+                    updateUserStatus(data.user);Pusher initialized successfully');
                 }
-            });
-            
-            console.log('Pusher initialized successfully');
+            });   console.log('Pusher initialization failed:', error);
+               }
+            console.log('Pusher initialized successfully');}
         } catch (error) {
             console.log('Pusher initialization failed:', error);
-        }
+        }ser-item[data-user-id="${user.id}"]`);
     }
     
-    function updateUserStatus(user) {
+    function updateUserStatus(user) {       .attr('data-user-status', user.is_online ? 'Online' : 'Offline');
         const userItem = $(`.user-item[data-user-id="${user.id}"]`);
-        if (userItem.length) {
+        if (userItem.length) {e-indicator');
             userItem.attr('data-is-online', user.is_online ? '1' : '0')
-                   .attr('data-user-status', user.is_online ? 'Online' : 'Offline');
+                   .attr('data-user-status', user.is_online ? 'Online' : 'Offline');        .addClass(user.is_online ? 'online-indicator' : 'offline-indicator');
             
             const indicator = userItem.find('.online-indicator, .offline-indicator');
             indicator.removeClass('online-indicator offline-indicator')
-                    .addClass(user.is_online ? 'online-indicator' : 'offline-indicator');
-            
-            const badge = userItem.find('.badge');
-            badge.removeClass('bg-success-subtle text-success bg-secondary-subtle text-secondary')
-                 .addClass(user.is_online ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary')
+                    .addClass(user.is_online ? 'online-indicator' : 'offline-indicator'); text-success' : 'bg-secondary-subtle text-secondary')
                  .text(user.is_online ? 'Online' : 'Offline');
-            
-            if (selectedUserId && selectedUserId == user.id) {
-                selectedUserData.isOnline = user.is_online;
-                selectedUserData.status = user.is_online ? 'Online' : 'Offline';
+            const badge = userItem.find('.badge');
+            badge.removeClass('bg-success-subtle text-success bg-secondary-subtle text-secondary')) {
+                 .addClass(user.is_online ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary')
+                 .text(user.is_online ? 'Online' : 'Offline');atus = user.is_online ? 'Online' : 'Offline';
+               updateChatHeader();
+            if (selectedUserId && selectedUserId == user.id) {   }
+                selectedUserData.isOnline = user.is_online;   }
+                selectedUserData.status = user.is_online ? 'Online' : 'Offline';}
                 updateChatHeader();
-            }
-        }
+            }ad receipts
+        }ction() {
     }
-    
-    // Handle window focus/blur for read receipts
-    $(window).on('focus', function() {
+       markMessagesAsRead(selectedUserId);
+    // Handle window focus/blur for read receipts }
+    $(window).on('focus', function() {});
         if (selectedUserId) {
-            markMessagesAsRead(selectedUserId);
+            markMessagesAsRead(selectedUserId);kMessagesAsRead(userId) {
         }
-    });
-    
+    });sages/mark-read',
+     'POST',
     function markMessagesAsRead(userId) {
         $.ajax({
-            url: '/chat/messages/mark-read',
-            method: 'POST',
+            url: '/chat/messages/mark-read',   _token: $('#csrf-token').val()
+            method: 'POST',  }
             data: {
                 user_id: userId,
                 _token: $('#csrf-token').val()
-            }
+            }  $('.chat-list.left .check-message-icon').removeClass('text-muted').addClass('text-success');
         })
         .done(function() {
-            // Update UI to show messages as read
-            $('.chat-list.left .check-message-icon').removeClass('text-muted').addClass('text-success');
-        })
+            // Update UI to show messages as read console.log('Failed to mark messages as read:', error);
+            $('.chat-list.left .check-message-icon').removeClass('text-muted').addClass('text-success');   });
+        })}
         .fail(function(xhr, status, error) {
             console.log('Failed to mark messages as read:', error);
-        });
+        });ck', function(e) {
     }
     
-    // Handle emoji picker initialization
-    $('#emoji-btn').on('click', function(e) {
-        e.preventDefault();
+    // Handle emoji picker initialization the emoji picker you're using
+    $('#emoji-btn').on('click', function(e) { console.log('Emoji picker clicked');
+        e.preventDefault();});
         // This would integrate with your emoji picker library
-        // Example implementation depends on the emoji picker you're using
+        // Example implementation depends on the emoji picker you're usingou want to add this feature)
         console.log('Emoji picker clicked');
     });
-    
-    // Handle file uploads (if you want to add this feature)
+       // You can implement file upload by adding an input type="file" and handling it
+    // Handle file uploads (if you want to add this feature)}
     function setupFileUpload() {
-        // This is a placeholder for file upload functionality
+        // This is a placeholder for file upload functionalitysage content
         // You can implement file upload by adding an input type="file" and handling it
     }
-    
-    // Utility function to validate message content
+       return { valid: false, error: 'Message cannot be empty' };
+    // Utility function to validate message content}
     function validateMessage(message) {
         if (!message || message.trim().length === 0) {
-            return { valid: false, error: 'Message cannot be empty' };
-        }
+            return { valid: false, error: 'Message cannot be empty' };   return { valid: false, error: 'Message is too long (max 1000 characters)' };
+        }}
         
         if (message.length > 1000) {
-            return { valid: false, error: 'Message is too long (max 1000 characters)' };
+            return { valid: false, error: 'Message is too long (max 1000 characters)' };// Check for spam, inappropriate content, etc.
         }
-        
-        // Add more validation rules as needed
+           return { valid: true };
+        // Add more validation rules as needed}
         // Check for spam, inappropriate content, etc.
-        
+        nimation class for spinner
         return { valid: true };
-    }
+    }type', 'text/css')
     
     // Add CSS animation class for spinner
     $('<style>')
-        .prop('type', 'text/css')
+        .prop('type', 'text/css')   100% { transform: rotate(360deg); }
         .html(`
             @keyframes spin {
-                0% { transform: rotate(0deg); }
+                0% { transform: rotate(0deg); }   animation: spin 1s linear infinite;
                 100% { transform: rotate(360deg); }
             }
-            .spin {
-                animation: spin 1s linear infinite;
+            .spin { 188, 0.15) !important;
+                animation: spin 1s linear infinite;   border-left: 3px solid #0d8abc;
             }
             .user-item.active {
-                background-color: rgba(13, 138, 188, 0.15) !important;
+                background-color: rgba(13, 138, 188, 0.15) !important;   animation: pulse 2s infinite;
                 border-left: 3px solid #0d8abc;
             }
             .online-indicator {
-                animation: pulse 2s infinite;
-            }
-            @keyframes pulse {
+                animation: pulse 2s infinite;}
+            }   100% { opacity: 1; }
+            @keyframes pulse {  }
                 0% { opacity: 1; }
-                50% { opacity: 0.5; }
+                50% { opacity: 0.5; }    .appendTo('head');
                 100% { opacity: 1; }
-            }
+            } console.log('Chat application fully initialized');
         `)
         .appendTo('head');
-    
-    console.log('Chat application fully initialized');
-});
-</script>
-@endsection
+
+
+
+
+
+@endsection</script>});    console.log('Chat application fully initialized');    @endsection
