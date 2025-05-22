@@ -81,7 +81,7 @@
 
                 @php
                     // Fetch card data server-side
-                    $dashboardData = app(\Modules\Business\App\Http\Controllers\DashboardController::class)->getDashboardCardData();
+                    $dashboardData = app(\Modules\Business\App\Http\Controllers\DashboardController::class)->getDashboardData();
                 @endphp
 
                 @if ($showTopRow)
