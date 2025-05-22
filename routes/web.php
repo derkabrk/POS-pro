@@ -72,6 +72,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
 });
 
+// Global chat user search route
+Route::get('/chat/search-users', [App\Http\Controllers\ChatController::class, 'searchUsers'])->name('chat.search-users');
+
 Route::get('/cache-clear', function () {
     Artisan::call('cache:clear');
     Artisan::call('config:clear');

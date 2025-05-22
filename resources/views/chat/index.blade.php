@@ -509,7 +509,7 @@ $(document).ready(function() {
             }
             // AJAX search in users table
             $.ajax({
-                url: '/business/chat/search-users', // updated path
+                url: '/chat/search-users', // now using global route
                 method: 'GET',
                 data: { q: searchTerm },
                 success: function(users) {

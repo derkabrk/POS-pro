@@ -66,4 +66,31 @@ class ChatController extends Controller
 
         return response()->json($chat);
     }
+
+    // Add a global user search endpoint for chat (search only users table, not chats)
+    public function searchUsers(Request $request)
+    {
+        $q = $request->input('q');
+        $authId = Auth::id();
+        $users = User::where('id', '!=', $authId)
+            ->where(function($query) use ($q) {
+                $query->where('name', 'like', "%$q%")
+                      ->orWhere('email', 'like', "%$q%") ;
+            })
+            ->get();
+        // Attach latest message if exists, but do not filter by chat
+        $users = $users->map(function($user) use ($authId) {
+            $latestMessage = Chat::where(function($q) use ($authId, $user) {
+                $q->where('sender_id', $authId)->where('receiver_id', $user->id);
+            })->orWhere(function($q) use ($authId, $user) {
+                $q->where('sender_id', $user->id)->where('receiver_id', $authId);
+            })->latest('created_at')->first();
+            if ($latestMessage) {
+                $latestMessage->content = $latestMessage->message;
+            }
+            $user->latest_message = $latestMessage;
+            return $user;
+        });
+        return response()->json($users->values());
+    }
 }
