@@ -413,6 +413,10 @@ $(document).ready(function() {
     let selectedUserId = null;
     let selectedUserData = {};
     let isLoading = false;
+    let messagesPage = 1;
+    let messagesLastPage = false;
+    let isMessagesLoading = false;
+    let messagesLoadedIds = new Set();
     
     // Initialize chat state
     initializeChat();
@@ -482,6 +486,13 @@ $(document).ready(function() {
             const message = $(this).val().trim();
             if (message.length > 0) {
                 hideFeedback();
+            }
+        });
+        
+        // Infinite scroll event
+        $('#chat-messages').off('scroll.infinite').on('scroll.infinite', function() {
+            if ($(this).scrollTop() === 0 && !isMessagesLoading && !messagesLastPage) {
+                loadChatMessages(selectedUserId, true);
             }
         });
         
@@ -648,39 +659,91 @@ $(document).ready(function() {
         });
     }
     
-    function loadChatMessages(userId) {
-        if (!userId) return;
-        
-        console.log('Loading messages for user:', userId);
-        
+    function loadChatMessages(userId, append = false) {
+        if (!userId || isMessagesLoading || messagesLastPage) return;
+        isMessagesLoading = true;
         $('#elmLoader').show();
-        $('#users-conversation').empty();
-        
+        if (!append) {
+            $('#users-conversation').empty();
+            messagesPage = 1;
+            messagesLastPage = false;
+            messagesLoadedIds.clear();
+        }
         $.ajax({
-            url: '/chat/messages/' + userId,
+            url: `/chat/messages/${userId}?page=${messagesPage}`,
             method: 'GET',
             timeout: 10000
         })
-        .done(function(messages) {
-            console.log('Messages loaded:', messages);
-            
-            if (messages && messages.length > 0) {
+        .done(function(response) {
+            let messages = response.data || response;
+            if (Array.isArray(messages) && messages.length > 0) {
+                // If paginated, reverse for prepend
+                if (append) messages = messages.reverse();
                 messages.forEach(function(message) {
-                    const isSent = message.sender_id == parseInt($('#auth-user-id').val());
-                    appendMessage(message, isSent);
+                    if (!messagesLoadedIds.has(message.id)) {
+                        const isSent = message.sender_id == parseInt($('#auth-user-id').val());
+                        if (append) {
+                            $('#users-conversation').prepend(appendMessageHtml(message, isSent));
+                        } else {
+                            appendMessage(message, isSent);
+                        }
+                        messagesLoadedIds.add(message.id);
+                    }
                 });
-            } else {
+                messagesPage++;
+                if (response.last_page && messagesPage > response.last_page) {
+                    messagesLastPage = true;
+                }
+            } else if (!append) {
                 showWelcomeMessage();
             }
         })
         .fail(function(xhr, status, error) {
-            console.error('Failed to load messages:', error);
             showErrorMessage('Failed to load messages. Please try again.');
         })
         .always(function() {
             $('#elmLoader').hide();
-            scrollToBottom();
+            isMessagesLoading = false;
+            if (!append) scrollToBottom();
         });
+    }
+
+    // Helper for infinite scroll: prepend message HTML
+    function appendMessageHtml(message, isSent) {
+        const messageClass = isSent ? 'right' : 'left';
+        const senderName = message.sender_name || (isSent ? '{{ auth()->user()->name }}' : (selectedUserData.name || 'Unknown'));
+        const senderAvatar = message.sender_avatar || (isSent ? ('{{ auth()->user()->profile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}') : (selectedUserData.avatar || 'https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff'));
+        const content = typeof message.content === 'undefined' || message.content === null ? '' : message.content;
+        const createdAt = message.created_at || new Date().toISOString();
+        const avatarHtml = !isSent ? `<div class="chat-avatar">
+            <img src="${senderAvatar}" alt="${senderName}" class="rounded-circle">
+        </div>` : '';
+        return `
+            <li class="chat-list ${messageClass}" data-message-id="${message.id || ''}">
+                <div class="conversation-list">
+                    ${avatarHtml}
+                    <div class="user-chat-content position-relative">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${escapeHtml(content)}</p>
+                                <div class="dropdown align-self-start message-box-drop">
+                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                        <i class="ri-more-2-fill"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="conversation-name">
+                                <small class="text-muted time">${formatTime(createdAt)}</small>
+                                ${isSent ? `<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        `;
     }
     
     function appendMessage(message, isSent) {

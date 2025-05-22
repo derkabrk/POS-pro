@@ -21,6 +21,9 @@ class ChatController extends Controller
                 })->orWhere(function($q) use ($authId, $user) {
                     $q->where('sender_id', $user->id)->where('receiver_id', $authId);
                 })->latest('created_at')->first();
+                if ($latestMessage) {
+                    $latestMessage->content = $latestMessage->message;
+                }
                 $user->latest_message = $latestMessage;
                 return $user;
             });
