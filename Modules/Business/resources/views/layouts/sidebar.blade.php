@@ -23,7 +23,7 @@
             <i class="ri-record-circle-line"></i>
         </button>
     </div>
-    <div id="scrollbar">
+    <div id="scrollbar" style="height: 100vh; overflow-y: auto;">
         <div class="container-fluid">
             <div id="two-column-menu"></div>
             <ul class="navbar-nav" id="navbar-nav">
