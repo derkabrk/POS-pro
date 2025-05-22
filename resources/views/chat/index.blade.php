@@ -46,6 +46,85 @@
     right: 2px;
     border: 2px solid white;
 }
+/* Improved chat message bubbles */
+.chat-list.left .conversation-list {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+.chat-list.right .conversation-list {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+.chat-avatar {
+    margin: 0 10px 0 0;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+}
+.chat-list.right .chat-avatar {
+    margin: 0 0 0 10px;
+}
+.chat-avatar img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 1px 4px rgba(13,138,188,0.10);
+}
+.ctext-wrap-content {
+    background: #f5f7fa;
+    border-radius: 18px 18px 18px 4px;
+    padding: 12px 18px;
+    box-shadow: 0 2px 8px rgba(13,138,188,0.07);
+    font-size: 15px;
+    color: #222;
+    position: relative;
+    max-width: 420px;
+    word-break: break-word;
+    transition: background 0.2s;
+}
+.chat-list.right .ctext-wrap-content {
+    background: #0d8abc;
+    color: #fff;
+    border-radius: 18px 18px 4px 18px;
+}
+.ctext-wrap-content:hover {
+    background: #e9f3fa;
+}
+.chat-list.right .ctext-wrap-content:hover {
+    background: #0b7ab0;
+}
+.conversation-name {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #8a99b5;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.check-message-icon {
+    font-size: 13px;
+    margin-left: 2px;
+}
+.message-box-drop {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    z-index: 2;
+}
+.ctext-content {
+    margin-bottom: 0;
+    white-space: pre-line;
+}
+@media (max-width: 600px) {
+    .ctext-wrap-content {
+        max-width: 90vw;
+        padding: 10px 12px;
+    }
+}
 </style>
 @endsection
 @section('content')
@@ -128,6 +207,13 @@
                                                     </span>
                                                 </div>
                                                 <div class="text-muted fs-12 text-truncate">{{ $user->email }}</div>
+                                                @if(isset($user->latest_message) && $user->latest_message)
+                                                    <div class="text-truncate small text-dark mt-1" style="max-width: 90%;">
+                                                        <span class="fw-semibold">{{ $user->latest_message->sender_id == auth()->id() ? 'You: ' : '' }}</span>
+                                                        {{ \Illuminate\Support\Str::limit($user->latest_message->content, 40) }}
+                                                        <span class="text-muted ms-1 fs-11">{{ $user->latest_message->created_at ? $user->latest_message->created_at->diffForHumans() : '' }}</span>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </li>
@@ -596,14 +682,14 @@ $(document).ready(function() {
     
     function appendMessage(message, isSent) {
         const messageClass = isSent ? 'right' : 'left';
-        
+        const avatarHtml = !isSent ? `<div class="chat-avatar">
+            <img src="${message.sender_avatar || selectedUserData.avatar}" alt="${message.sender_name || selectedUserData.name}" class="rounded-circle">
+        </div>` : '';
         const messageHtml = `
             <li class="chat-list ${messageClass}" data-message-id="${message.id || ''}">
                 <div class="conversation-list">
-                    ${!isSent ? `<div class="chat-avatar">
-                        <img src="${message.sender_avatar || selectedUserData.avatar}" alt="${message.sender_name || selectedUserData.name}" class="rounded-circle avatar-xs">
-                    </div>` : ''}
-                    <div class="user-chat-content">
+                    ${avatarHtml}
+                    <div class="user-chat-content position-relative">
                         <div class="ctext-wrap">
                             <div class="ctext-wrap-content">
                                 <p class="mb-0 ctext-content">${escapeHtml(message.content)}</p>
@@ -625,7 +711,6 @@ $(document).ready(function() {
                 </div>
             </li>
         `;
-        
         $('#users-conversation').append(messageHtml);
         scrollToBottom();
     }
