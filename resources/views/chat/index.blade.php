@@ -1,59 +1,316 @@
 @extends('layouts.master')
-@section('title', 'Chat')
+@section('title') @lang('translation.chat') @endsection
+@section('css')
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css')}}">
+@endsection
 @section('content')
-<div class="row">
-    <div class="col-md-4">
-        <div class="list-group" id="user-list">
-            @foreach($users as $user)
-                <a href="#" class="list-group-item list-group-item-action user-item d-flex align-items-center justify-content-between" data-id="{{ $user->id }}">
-                    <div class="d-flex align-items-center">
-                        <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" alt="Profile" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                        <div>
-                            <div class="fw-bold">{{ $user->name }}</div>
-                            <div class="text-muted small">{{ $user->email }}</div>
+
+<div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
+    <div class="chat-leftsidebar border bg-transparent">
+        <div class="px-4 pt-4 mb-3">
+            <div class="d-flex align-items-start">
+                <div class="flex-grow-1">
+                    <h5 class="mb-4">Chats</h5>
+                </div>
+                <div class="flex-shrink-0">
+                    <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="Add Contact">
+                        <button type="button" class="btn btn-soft-success btn-sm">
+                            <i class="ri-add-line align-bottom"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="search-box">
+                <input type="text" class="form-control bg-light border-light" placeholder="Search here...">
+                <i class="ri-search-2-line search-icon"></i>
+            </div>
+        </div> <!-- .p-4 -->
+
+        <ul class="nav nav-tabs nav-tabs-custom nav-success nav-justified" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#chats" role="tab">
+                    Chats
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#contacts" role="tab">
+                    Contacts
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content text-muted">
+            <div class="tab-pane active" id="chats" role="tabpanel">
+                <div class="chat-room-list pt-3" data-simplebar>
+                    <div class="d-flex align-items-center px-4 mb-2">
+                        <div class="flex-grow-1">
+                            <h4 class="mb-0 fs-11 text-muted text-uppercase">Direct Messages</h4>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="New Message">
+                                <button type="button" class="btn btn-soft-success btn-sm shadow-none">
+                                    <i class="ri-add-line align-bottom"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <span class="badge rounded-pill {{ $user->is_online ? 'bg-success' : 'bg-secondary' }} ms-2" style="min-width: 60px;">{{ $user->is_online ? 'Active' : 'Offline' }}</span>
-                </a>
-            @endforeach
+
+                    <div class="chat-message-list">
+                        <ul class="list-unstyled chat-list chat-user-list" id="user-list">
+                            @foreach($users as $user)
+                                <li class="user-item" data-id="{{ $user->id }}">
+                                    <a href="javascript: void(0);" class="unread-msg-user">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 chat-user-img {{ $user->is_online ? 'online' : 'away' }} user-own-img align-self-center me-3 ms-0">
+                                                <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" class="rounded-circle avatar-xs" alt="">
+                                                <span class="user-status"></span>
+                                            </div>
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <h5 class="text-truncate mb-0 fs-13">
+                                                    <a class="text-reset username">{{ $user->name }}</a>
+                                                </h5>
+                                                <p class="text-truncate text-muted fs-12 mb-0 userStatus">
+                                                    <small>{{ $user->email }}</small>
+                                                </p>
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <span class="badge rounded-pill {{ $user->is_online ? 'bg-success' : 'bg-secondary' }} fs-11">
+                                                    {{ $user->is_online ? 'Active' : 'Offline' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="contacts" role="tabpanel">
+                <div class="chat-room-list pt-3" data-simplebar>
+                    <div class="sort-contact">
+                        <!-- Contacts content can be added here -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">Chat</div>
-            <div class="card-body" id="chat-messages" style="height: 400px; overflow-y: auto;">
-                {{-- Messages will be dynamically loaded here --}}
-            </div>
-            <div class="card-footer">
-                <form id="chat-form" autocomplete="off">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="chat-input" placeholder="Type a message...">
-                        <button class="btn btn-primary" type="submit">Send</button>
+    <!-- end chat leftsidebar -->
+
+    <!-- Start User chat -->
+    <div class="user-chat w-100 overflow-hidden">
+        <div class="chat-content d-lg-flex">
+            <!-- start chat conversation section -->
+            <div class="w-100 overflow-hidden position-relative">
+                <!-- conversation user -->
+                <div class="position-relative">
+                    <div class="position-relative" id="users-chat">
+                        <div class="p-3 user-chat-topbar bg-transparent">
+                            <div class="row align-items-center">
+                                <div class="col-sm-4 col-8">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 d-block d-lg-none me-3">
+                                            <a href="javascript: void(0);" class="user-chat-remove fs-18 p-1">
+                                                <i class="ri-arrow-left-s-line align-bottom"></i>
+                                            </a>
+                                        </div>
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
+                                                    <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" class="rounded-circle avatar-xs" alt="">
+                                                    <span class="user-status"></span>
+                                                </div>
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <h5 class="text-truncate mb-0 fs-16">
+                                                        <a class="text-reset username" id="selected-user-name">Select a user to chat</a>
+                                                    </h5>
+                                                    <p class="text-truncate text-muted fs-14 mb-0 userStatus">
+                                                        <small id="selected-user-status">Choose someone to start chatting</small>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8 col-4">
+                                    <ul class="list-inline user-chat-nav text-end mb-0">
+                                        <li class="list-inline-item m-0">
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i data-feather="search" class="icon-sm"></i>
+                                                </button>
+                                                <div class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg">
+                                                    <div class="p-2">
+                                                        <div class="search-box">
+                                                            <input type="text" class="form-control bg-light border-light" placeholder="Search here..." onkeyup="searchMessages()" id="searchMessage">
+                                                            <i class="ri-search-2-line search-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class="list-inline-item m-0">
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i data-feather="more-vertical" class="icon-sm"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="#"><i class="ri-inbox-archive-line align-bottom text-muted me-2"></i> Archive</a>
+                                                    <a class="dropdown-item" href="#"><i class="ri-mic-off-line align-bottom text-muted me-2"></i> Muted</a>
+                                                    <a class="dropdown-item" href="#"><i class="ri-delete-bin-5-line align-bottom text-muted me-2"></i> Delete</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end chat user head -->
+
+                        <div class="chat-conversation p-3 p-lg-4" id="chat-messages" data-simplebar style="height: 400px;">
+                            <div id="elmLoader">
+                                <div class="spinner-border text-primary avatar-sm" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <ul class="list-unstyled chat-conversation-list" id="users-conversation">
+                                <!-- Messages will be dynamically loaded here -->
+                            </ul>
+                        </div>
+
+                        <div class="alert alert-warning alert-dismissible copyclipboard-alert px-4 fade show" id="copyClipBoard" role="alert" style="display: none;">
+                            Message copied
+                        </div>
                     </div>
-                </form>
+                </div>
+
+                <!-- Chat Input Section -->
+                <div class="chat-input-section p-3 p-lg-4 bg-transparent">
+                    <form id="chat-form" enctype="multipart/form-data" autocomplete="off">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-auto">
+                                <div class="chat-input-links me-2">
+                                    <div class="links-list-item">
+                                        <button type="button" class="btn btn-link text-decoration-none emoji-btn" id="emoji-btn">
+                                            <i class="bx bx-smile align-middle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="chat-input-feedback">
+                                    Please Enter a Message
+                                </div>
+                                <input type="text" class="form-control chat-input bg-light border-light" id="chat-input" placeholder="Type your message..." autocomplete="off">
+                            </div>
+
+                            <div class="col-auto">
+                                <div class="chat-input-links ms-2">
+                                    <div class="links-list-item">
+                                        <button type="submit" class="btn btn-success chat-send waves-effect waves-light">
+                                            <i class="ri-send-plane-2-fill align-bottom"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="replyCard" style="display: none;">
+                    <div class="card mb-0">
+                        <div class="card-body py-3">
+                            <div class="replymessage-block mb-0 d-flex align-items-start">
+                                <div class="flex-grow-1">
+                                    <h5 class="conversation-name"></h5>
+                                    <p class="mb-0"></p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <button type="button" id="close_toggle" class="btn btn-sm btn-link mt-n2 me-n3 fs-18">
+                                        <i class="bx bx-x align-middle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<!-- end chat-wrapper -->
+
 <input type="hidden" id="auth-user-id" value="{{ auth()->id() }}">
+
 @endsection
+
 @section('script')
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+<!-- fgEmojiPicker js -->
+<script src="{{ URL::asset('build/libs/fg-emoji-picker/fgEmojiPicker.js') }}"></script>
+<!-- Pusher -->
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<!-- chat init js -->
+<script src="{{ URL::asset('build/js/pages/chat.init.js') }}"></script>
 <script src="{{ asset('js/pages/chat.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+
 <script>
-// Example logic for sending and receiving messages (AJAX + Pusher)
+// Enhanced logic for sending and receiving messages (AJAX + Pusher)
 $(function() {
     let selectedUserId = null;
+    let selectedUserName = '';
+    let selectedUserStatus = '';
+
+    // User selection logic
     $(document).on('click', '.user-item', function(e) {
         e.preventDefault();
+        
+        // Remove active class from all users
+        $('.user-item').removeClass('active');
+        // Add active class to selected user
+        $(this).addClass('active');
+        
         selectedUserId = $(this).data('id');
+        selectedUserName = $(this).find('.username').text();
+        selectedUserStatus = $(this).find('.userStatus small').text();
+        
+        // Update chat header with selected user info
+        $('#selected-user-name').text(selectedUserName);
+        $('#selected-user-status').text(selectedUserStatus);
+        
+        // Update user avatar in chat header
+        const userAvatar = $(this).find('img').attr('src');
+        $('.user-chat-topbar .chat-user-img img').attr('src', userAvatar);
+        
+        // Update online status
+        const isOnline = $(this).find('.bg-success').length > 0;
+        $('.user-chat-topbar .chat-user-img').removeClass('online away').addClass(isOnline ? 'online' : 'away');
+        
+        // Hide loader and show chat
+        $('#elmLoader').hide();
+        
         // Load chat messages for selected user (AJAX)
-        // ...
+        loadChatMessages(selectedUserId);
     });
+
+    // Form submission logic
     $('#chat-form').on('submit', function(e) {
         e.preventDefault();
-        const message = $('#chat-input').val();
-        if (!message || !selectedUserId) return;
+        const message = $('#chat-input').val().trim();
+        
+        if (!message || !selectedUserId) {
+            if (!selectedUserId) {
+                $('.chat-input-feedback').text('Please select a user to chat with').show();
+            }
+            return;
+        }
+        
+        // Hide feedback
+        $('.chat-input-feedback').hide();
+        
         // Send message via AJAX
         $.post('/chat/send', {
             recipient_id: selectedUserId,
@@ -62,10 +319,78 @@ $(function() {
         }, function(response) {
             $('#chat-input').val('');
             // Optionally append message to chat-messages
+            appendMessage(response.message, true);
+        }).fail(function() {
+            $('.chat-input-feedback').text('Failed to send message. Please try again.').show();
         });
     });
+
+    // Function to load chat messages
+    function loadChatMessages(userId) {
+        $.get('/chat/messages/' + userId, function(messages) {
+            $('#users-conversation').empty();
+            messages.forEach(function(message) {
+                appendMessage(message, message.sender_id == {{ auth()->id() }});
+            });
+            scrollToBottom();
+        });
+    }
+
+    // Function to append message to chat
+    function appendMessage(message, isSent) {
+        const messageHtml = `
+            <li class="chat-list ${isSent ? 'right' : 'left'}">
+                <div class="conversation-list">
+                    <div class="chat-avatar">
+                        <img src="${message.sender_avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(message.sender_name) + '&background=0D8ABC&color=fff'}" alt="">
+                    </div>
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${message.content}</p>
+                            </div>
+                            <div class="dropdown align-self-start message-box-drop">
+                                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="ri-more-2-fill"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line align-bottom text-muted me-2"></i>Reply</a>
+                                    <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line align-bottom text-muted me-2"></i>Copy</a>
+                                    <a class="dropdown-item delete-message" href="#"><i class="ri-delete-bin-5-line align-bottom text-muted me-2"></i>Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="conversation-name">
+                            <small class="text-muted time">${formatTime(message.created_at)}</small>
+                            <span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        `;
+        $('#users-conversation').append(messageHtml);
+        scrollToBottom();
+    }
+
+    // Function to scroll to bottom
+    function scrollToBottom() {
+        const chatContainer = $('#chat-messages');
+        chatContainer.scrollTop(chatContainer[0].scrollHeight);
+    }
+
+    // Function to format time
+    function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+
     // Pusher logic for receiving messages
-    // ...existing code in chat.init.js...
+    // ... existing Pusher code from your chat.init.js ...
+    
+    // Initialize with first user if available
+    if ($('.user-item').length > 0) {
+        $('.user-item').first().click();
+    }
 });
 </script>
 @endsection
