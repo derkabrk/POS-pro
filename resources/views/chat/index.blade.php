@@ -209,10 +209,10 @@
                                                 @if(isset($user->latest_message) && $user->latest_message)
                                                     <div class="text-truncate small mt-1" style="max-width: 90%;">
                                                         @if($user->latest_message->sender_id == auth()->id())
-                                                            <span class="fw-semibold text-muted">You: </span>
-                                                            <span class="text-dark">{{ \Illuminate\Support\Str::limit($user->latest_message->content, 40) }}</span>
+                                                            <span class="fw-semibold text-white">You: </span>
+                                                            <span class="text-white">{{ \Illuminate\Support\Str::limit($user->latest_message->content ?? $user->latest_message->message, 40) }}</span>
                                                         @else
-                                                            <span class="fw-bold text-dark">{{ \Illuminate\Support\Str::limit($user->latest_message->content, 40) }}</span>
+                                                            <span class="fw-bold text-white">{{ \Illuminate\Support\Str::limit($user->latest_message->content ?? $user->latest_message->message, 40) }}</span>
                                                         @endif
                                                         <span class="text-muted ms-1 fs-11">{{ $user->latest_message->created_at ? $user->latest_message->created_at->diffForHumans() : '' }}</span>
                                                     </div>
