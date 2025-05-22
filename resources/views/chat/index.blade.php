@@ -175,14 +175,16 @@
 
                     <div class="chat-message-list">
                         <ul class="list-unstyled chat-list chat-user-list" id="user-list">
-                            @if(isset($users) && count($users) > 0)
-                                @php
-                                    // Sort users by latest message time descending
-                                    $users = collect($users)->sortByDesc(function($user) {
-                                        return optional($user->latest_message)->created_at;
-                                    })->values();
-                                @endphp
-                                @foreach($users as $user)
+                            @php
+                                // Only show users with at least one chat (latest_message exists)
+                                $chatedUsers = isset($users) ? collect($users)->filter(function($user) {
+                                    return isset($user->latest_message) && $user->latest_message;
+                                })->sortByDesc(function($user) {
+                                    return optional($user->latest_message)->created_at;
+                                })->values() : collect();
+                            @endphp
+                            @if($chatedUsers->count() > 0)
+                                @foreach($chatedUsers as $user)
                                     <li class="user-item p-3 mb-2"
                                         data-user-id="{{ $user->id }}"
                                         data-user-name="{{ $user->name }}"
@@ -206,24 +208,22 @@
                                                         {{ $user->is_online ? 'Online' : 'Offline' }}
                                                     </span>
                                                 </div>
-                                                @if(isset($user->latest_message) && $user->latest_message)
-                                                    <div class="text-truncate small mt-1" style="max-width: 90%;">
-                                                        @if($user->latest_message->sender_id == auth()->id())
-                                                            <span class="fw-semibold text-white">You: </span>
-                                                            <span class="text-white">{{ \Illuminate\Support\Str::limit($user->latest_message->content ?? $user->latest_message->message, 40) }}</span>
-                                                        @else
-                                                            <span class="fw-bold text-white">{{ \Illuminate\Support\Str::limit($user->latest_message->content ?? $user->latest_message->message, 40) }}</span>
-                                                        @endif
-                                                        <span class="text-muted ms-1 fs-11">{{ $user->latest_message->created_at ? $user->latest_message->created_at->diffForHumans() : '' }}</span>
-                                                    </div>
-                                                @endif
+                                                <div class="text-truncate small mt-1" style="max-width: 90%;">
+                                                    @if($user->latest_message->sender_id == auth()->id())
+                                                        <span class="fw-semibold text-white">You: </span>
+                                                        <span class="text-white">{{ \Illuminate\Support\Str::limit($user->latest_message->content ?? $user->latest_message->message, 40) }}</span>
+                                                    @else
+                                                        <span class="fw-bold text-white">{{ \Illuminate\Support\Str::limit($user->latest_message->content ?? $user->latest_message->message, 40) }}</span>
+                                                    @endif
+                                                    <span class="text-muted ms-1 fs-11">{{ $user->latest_message->created_at ? $user->latest_message->created_at->diffForHumans() : '' }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </li>
                                 @endforeach
                             @else
                                 <li class="text-center py-4">
-                                    <p class="text-muted">No users available</p>
+                                    <p class="text-muted">No users with chat history</p>
                                 </li>
                             @endif
                         </ul>
