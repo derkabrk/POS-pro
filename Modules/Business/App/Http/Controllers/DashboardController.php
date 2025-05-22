@@ -86,18 +86,8 @@ class DashboardController extends Controller
     public function getDashboardData()
     {
         $data = $this->buildDashboardData();
-        // If this is an AJAX request, return JSON
+        // If this is an AJAX request, return raw numbers for JS formatting
         if (request()->expectsJson() || request()->ajax()) {
-            // Format currency for AJAX response
-            $currency = business_currency();
-            $data['total_sales'] = currency_format($data['total_sales'], 'icon', 2, $currency, true);
-            $data['this_month_total_sales'] = currency_format($data['this_month_total_sales'], 'icon', 2, $currency, true);
-            $data['total_purchase'] = currency_format($data['total_purchase'], 'icon', 2, $currency, true);
-            $data['this_month_total_purchase'] = currency_format($data['this_month_total_purchase'], 'icon', 2, $currency, true);
-            $data['total_income'] = currency_format($data['total_income'], 'icon', 2, $currency, true);
-            $data['this_month_total_income'] = currency_format($data['this_month_total_income'], 'icon', 2, $currency, true);
-            $data['total_expense'] = currency_format($data['total_expense'], 'icon', 2, $currency, true);
-            $data['this_month_total_expense'] = currency_format($data['this_month_total_expense'], 'icon', 2, $currency, true);
             return response()->json($data);
         }
         // Otherwise, return array for server-side
