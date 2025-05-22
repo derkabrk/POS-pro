@@ -42,103 +42,66 @@ class DashboardController extends Controller
         return view('business::dashboard.index', compact('stocks', 'purchases', 'sales'));
     }
 
-    public function getDashboardData()
+    // Build dashboard data for both AJAX and server-side
+    protected function buildDashboardData()
     {
         $businessId = auth()->user()->business_id;
-
-        $data['total_sales'] = currency_format(Sale::where('business_id', $businessId)->sum('totalAmount'), 'icon', 2, business_currency(), true);
-        $data['this_month_total_sales'] = currency_format(Sale::where('business_id', $businessId)
+        $data = [];
+        $data['total_sales'] = Sale::where('business_id', $businessId)->sum('totalAmount');
+        $data['this_month_total_sales'] = Sale::where('business_id', $businessId)
             ->whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
-            ->sum('totalAmount'), 'icon', 2, business_currency(), true);
-
-        $data['total_purchase'] = currency_format(Purchase::where('business_id', $businessId)->sum('totalAmount'), 'icon', 2, business_currency(), true);
-        $data['this_month_total_purchase'] = currency_format(Purchase::where('business_id', $businessId)
+            ->sum('totalAmount');
+        $data['total_purchase'] = Purchase::where('business_id', $businessId)->sum('totalAmount');
+        $data['this_month_total_purchase'] = Purchase::where('business_id', $businessId)
             ->whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
-            ->sum('totalAmount'), 'icon', 2, business_currency(), true);
-
-        // Get total and monthly lossProfit
-        $sale_loss_profit = Sale::where('business_id', auth()->user()->business_id)->sum('lossProfit');
-        $this_month_loss_profit = Sale::where('business_id', auth()->user()->business_id)
+            ->sum('totalAmount');
+        $sale_loss_profit = Sale::where('business_id', $businessId)->sum('lossProfit');
+        $this_month_loss_profit = Sale::where('business_id', $businessId)
             ->whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->sum('lossProfit');
-
-        // Get total income and expense
         $total_income = Income::where('business_id', $businessId)->sum('amount');
         $this_month_total_income = Income::where('business_id', $businessId)
             ->whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->sum('amount');
-
         $total_expense = Expense::where('business_id', $businessId)->sum('amount');
         $this_month_total_expense = Expense::where('business_id', $businessId)
             ->whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->sum('amount');
-
-        // Update income and expense based on lossProfit value
         $total_income += $sale_loss_profit > 0 ? $sale_loss_profit : 0;
         $total_expense += $sale_loss_profit < 0 ? abs($sale_loss_profit) : 0;
-
         $this_month_total_income += $this_month_loss_profit > 0 ? $this_month_loss_profit : 0;
         $this_month_total_expense += $this_month_loss_profit < 0 ? abs($this_month_loss_profit) : 0;
+        $data['total_income'] = $total_income;
+        $data['this_month_total_income'] = $this_month_total_income;
+        $data['total_expense'] = $total_expense;
+        $data['this_month_total_expense'] = $this_month_total_expense;
+        return $data;
+    }
 
-        // Format data for display
-        $data['total_income'] = currency_format($total_income, 'icon', 2, business_currency(), true);
-        $data['this_month_total_income'] = currency_format($this_month_total_income, 'icon', 2, business_currency(), true);
-
-        $data['total_expense'] = currency_format($total_expense, 'icon', 2, business_currency(), true);
-        $data['this_month_total_expense'] = currency_format($this_month_total_expense, 'icon', 2, business_currency(), true);
-
-
-        $data['total_customer'] = Party::where('business_id', $businessId)->where('type', '!=', 'Supplier')->count();
-        $data['this_month_total_customer'] = Party::where('business_id', $businessId)
-            ->where('type', '!=', 'Supplier')
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
-            ->count();
-
-        $data['total_supplier'] = Party::where('business_id', $businessId)->whereType('Supplier')->count();
-        $data['this_month_total_supplier'] = Party::where('business_id', $businessId)
-            ->whereType('Supplier')
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
-            ->count();
-
-
-        $sale_return_id = SaleReturn::where('business_id', $businessId)
-                                    ->pluck('id');
-        $data['total_sales_return'] = currency_format(SaleReturnDetails::whereIn('sale_return_id', $sale_return_id)
-                                     ->sum('return_amount'), 'icon', 2, business_currency(), true);
-
-
-        $saleReturns = SaleReturn::where('business_id', $businessId)
-                                    ->whereYear('return_date', now()->year)
-                                    ->whereMonth('return_date', now()->month)
-                                    ->pluck('id');
-
-        $data['this_month_total_sale_return'] = currency_format(SaleReturnDetails::whereIn('sale_return_id', $saleReturns)
-                                                 ->sum('return_amount'), 'icon', 2, business_currency(), true);
-
-
-
-        $purchase_return_id = PurchaseReturn::where('business_id', $businessId)
-                              ->pluck('id');
-        $data['total_purchase_return'] = currency_format(PurchaseReturnDetail::whereIn('purchase_return_id', $purchase_return_id)
-                                        ->sum('return_amount'), 'icon', 2, business_currency(), true);
-
-
-        $purchaseReturns = PurchaseReturn::where('business_id', $businessId)
-                                    ->whereYear('return_date', now()->year)
-                                    ->whereMonth('return_date', now()->month)
-                                    ->pluck('id');
-
-        $data['this_month_total_purchase_return'] = currency_format(PurchaseReturnDetail::whereIn('purchase_return_id', $purchaseReturns)
-                                                    ->sum('return_amount'), 'icon', 2, business_currency(), true);
-
-        return response()->json($data);
+    public function getDashboardData()
+    {
+        $data = $this->buildDashboardData();
+        // If this is an AJAX request, return JSON
+        if (request()->expectsJson() || request()->ajax()) {
+            // Format currency for AJAX response
+            $currency = business_currency();
+            $data['total_sales'] = currency_format($data['total_sales'], 'icon', 2, $currency, true);
+            $data['this_month_total_sales'] = currency_format($data['this_month_total_sales'], 'icon', 2, $currency, true);
+            $data['total_purchase'] = currency_format($data['total_purchase'], 'icon', 2, $currency, true);
+            $data['this_month_total_purchase'] = currency_format($data['this_month_total_purchase'], 'icon', 2, $currency, true);
+            $data['total_income'] = currency_format($data['total_income'], 'icon', 2, $currency, true);
+            $data['this_month_total_income'] = currency_format($data['this_month_total_income'], 'icon', 2, $currency, true);
+            $data['total_expense'] = currency_format($data['total_expense'], 'icon', 2, $currency, true);
+            $data['this_month_total_expense'] = currency_format($data['this_month_total_expense'], 'icon', 2, $currency, true);
+            return response()->json($data);
+        }
+        // Otherwise, return array for server-side
+        return $data;
     }
 
     public function overall_report() {
