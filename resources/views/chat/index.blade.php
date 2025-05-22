@@ -122,38 +122,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-8 col-4">
-                                    <ul class="list-inline user-chat-nav text-end mb-0">
-                                        <li class="list-inline-item m-0">
-                                            <div class="dropdown">
-                                                <button class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i data-feather="search" class="icon-sm"></i>
-                                                </button>
-                                                <div class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg">
-                                                    <div class="p-2">
-                                                        <div class="search-box">
-                                                            <input type="text" class="form-control bg-light border-light" placeholder="Search here..." onkeyup="searchMessages()" id="searchMessage">
-                                                            <i class="ri-search-2-line search-icon"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li class="list-inline-item m-0">
-                                            <div class="dropdown">
-                                                <button class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i data-feather="more-vertical" class="icon-sm"></i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" href="#"><i class="ri-inbox-archive-line align-bottom text-muted me-2"></i> Archive</a>
-                                                    <a class="dropdown-item" href="#"><i class="ri-mic-off-line align-bottom text-muted me-2"></i> Muted</a>
-                                                    <a class="dropdown-item" href="#"><i class="ri-delete-bin-5-line align-bottom text-muted me-2"></i> Delete</a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                         <!-- end chat user head -->
@@ -251,6 +219,14 @@
 $(function() {
     let selectedUserId = null;
     let selectedUserData = {};
+
+    // Initial state: hide chat input and conversation until user is selected
+    $('.chat-input-section').hide();
+    $('#users-conversation').hide();
+    $('#elmLoader').hide();
+
+    // Remove welcome message until a user is selected
+    $('#users-conversation').empty();
 
     // User selection logic
     $(document).on('click', '.user-item', function(e) {
