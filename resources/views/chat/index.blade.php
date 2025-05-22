@@ -46,59 +46,45 @@
     right: 2px;
     border: 2px solid white;
 }
-/* Improved chat message bubbles */
-.chat-list.left .conversation-list {
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 10px;
-}
-.chat-list.right .conversation-list {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: flex-end;
-    margin-bottom: 10px;
-}
-.chat-avatar {
-    margin: 0 10px 0 0;
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-}
-.chat-list.right .chat-avatar {
-    margin: 0 0 0 10px;
-}
-.chat-avatar img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 1px 4px rgba(13,138,188,0.10);
-}
+/* Enhanced chat message bubbles */
 .ctext-wrap-content {
-    background: #f5f7fa;
+    background: linear-gradient(135deg, #e9f3fa 0%, #f5f7fa 100%);
     border-radius: 18px 18px 18px 4px;
-    padding: 12px 18px;
-    box-shadow: 0 2px 8px rgba(13,138,188,0.07);
+    padding: 14px 22px;
+    box-shadow: 0 2px 12px rgba(13,138,188,0.10);
     font-size: 15px;
     color: #222;
     position: relative;
     max-width: 420px;
     word-break: break-word;
     transition: background 0.2s;
+    border: 1px solid #e0eafc;
 }
 .chat-list.right .ctext-wrap-content {
-    background: #0d8abc;
+    background: linear-gradient(135deg, #0d8abc 0%, #0b7ab0 100%);
     color: #fff;
     border-radius: 18px 18px 4px 18px;
+    border: 1px solid #0d8abc;
 }
 .ctext-wrap-content:hover {
-    background: #e9f3fa;
+    background: #d6eaff;
 }
 .chat-list.right .ctext-wrap-content:hover {
     background: #0b7ab0;
 }
+.ctext-wrap-content .dropdown {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+}
+.ctext-content {
+    margin-bottom: 0;
+    white-space: pre-line;
+    font-size: 15px;
+    line-height: 1.7;
+}
 .conversation-name {
-    margin-top: 4px;
+    margin-top: 6px;
     font-size: 12px;
     color: #8a99b5;
     display: flex;
@@ -109,15 +95,9 @@
     font-size: 13px;
     margin-left: 2px;
 }
-.message-box-drop {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    z-index: 2;
-}
-.ctext-content {
-    margin-bottom: 0;
-    white-space: pre-line;
+.chat-avatar img {
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(13,138,188,0.13);
 }
 @media (max-width: 600px) {
     .ctext-wrap-content {
@@ -182,19 +162,25 @@
                     <div class="chat-message-list">
                         <ul class="list-unstyled chat-list chat-user-list" id="user-list">
                             @if(isset($users) && count($users) > 0)
+                                @php
+                                    // Sort users by latest message time descending
+                                    $users = collect($users)->sortByDesc(function($user) {
+                                        return optional($user->latest_message)->created_at;
+                                    })->values();
+                                @endphp
                                 @foreach($users as $user)
-                                    <li class="user-item p-3 mb-2" 
-                                        data-user-id="{{ $user->id }}" 
-                                        data-user-name="{{ $user->name }}" 
-                                        data-user-email="{{ $user->email }}" 
-                                        data-user-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" 
+                                    <li class="user-item p-3 mb-2"
+                                        data-user-id="{{ $user->id }}"
+                                        data-user-name="{{ $user->name }}"
+                                        data-user-email="{{ $user->email }}"
+                                        data-user-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}"
                                         data-user-status="{{ $user->is_online ? 'Online' : 'Offline' }}"
                                         data-is-online="{{ $user->is_online ? '1' : '0' }}"
                                         style="cursor: pointer;">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 position-relative me-3">
-                                                <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}" 
-                                                     class="rounded-circle avatar-sm" 
+                                                <img src="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}"
+                                                     class="rounded-circle avatar-sm"
                                                      alt="{{ $user->name }}"
                                                      style="pointer-events: none;">
                                                 <span class="{{ $user->is_online ? 'online-indicator' : 'offline-indicator' }}" style="pointer-events: none;"></span>
