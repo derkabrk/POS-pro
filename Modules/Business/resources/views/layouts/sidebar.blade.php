@@ -36,11 +36,11 @@
                 </li>
                 @if (auth()->user()->role != 'staff' || visible_permission('salePermission') || visible_permission('salesListPermission'))
                     <li class="nav-item">
-                        <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.sales.index', 'business.sales.create', 'business.sales.edit', 'business.sale-returns.create', 'business.sale-returns.index') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="collapse" aria-expanded="false">
+                        <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.sales.index', 'business.sales.create', 'business.sales.edit', 'business.sale-returns.create', 'business.sale-returns.index') ? 'active' : '' }}" href="#salesMenu" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="salesMenu">
                             <i class="ri-shopping-cart-line"></i>
                             <span>{{ __('Sales') }}</span>
                         </a>
-                        <ul class="collapse">
+                        <ul class="collapse" id="salesMenu">
                             @if (auth()->user()->role != 'staff' || visible_permission('salePermission'))
                                 <li><a class="nav-link menu-link {{ Request::routeIs('business.sales.create') ? 'active' : '' }}" href="{{ route('business.sales.create') }}">{{ __('Sale New') }}</a></li>
                             @endif
@@ -55,11 +55,11 @@
 
                 @if (auth()->user()->role != 'staff' || visible_permission('purchasePermission') || visible_permission('purchaseListPermission'))
                     <li class="nav-item">
-                        <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.purchases.index', 'business.purchases.create', 'business.purchases.edit', 'business.purchase-returns.create', 'business.purchase-returns.index') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="collapse" aria-expanded="false">
+                        <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.purchases.index', 'business.purchases.create', 'business.purchases.edit', 'business.purchase-returns.create', 'business.purchase-returns.index') ? 'active' : '' }}" href="#purchasesMenu" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="purchasesMenu">
                             <i class="ri-file-list-3-line"></i>
                             <span>{{ __('Purchases') }}</span>
                         </a>
-                        <ul class="collapse">
+                        <ul class="collapse" id="purchasesMenu">
                             @if (auth()->user()->role != 'staff' || visible_permission('purchasePermission'))
                                 <li><a class="nav-link menu-link {{ Request::routeIs('business.purchases.create') ? 'active' : '' }}" href="{{ route('business.purchases.create') }}">{{ __('Purchase New') }}</a></li>
                             @endif
@@ -288,4 +288,3 @@
 <!-- Left Sidebar End -->
 <!-- Vertical Overlay-->
 <div class="vertical-overlay"></div>
-```
