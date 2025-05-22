@@ -248,7 +248,6 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
-// Enhanced logic for sending and receiving messages (AJAX + Pusher)
 $(function() {
     let selectedUserId = null;
     let selectedUserData = {};
@@ -256,12 +255,10 @@ $(function() {
     // User selection logic
     $(document).on('click', '.user-item', function(e) {
         e.preventDefault();
-        
         // Remove active class from all users
         $('.user-item').removeClass('active');
         // Add active class to selected user
         $(this).addClass('active');
-        
         // Get user data from data attributes
         selectedUserId = $(this).data('id');
         selectedUserData = {
@@ -272,7 +269,6 @@ $(function() {
             status: $(this).data('status'),
             isOnline: $(this).data('status') === 'Online'
         };
-        
         // Update chat header with selected user info
         $('#selected-user-name').text(selectedUserData.name);
         $('#selected-user-status').text(selectedUserData.status + ' | ' + selectedUserData.email);
@@ -280,86 +276,14 @@ $(function() {
         $('#selected-user-avatar')
             .removeClass('online away')
             .addClass(selectedUserData.isOnline ? 'online' : 'away');
-        
         // Show chat interface and hide loader
         $('#elmLoader').hide();
         $('#users-conversation').show();
         $('.chat-input-section').show();
-        
         // Clear previous messages
         $('#users-conversation').empty();
-        
         // Load chat messages for selected user (AJAX)
         loadChatMessages(selectedUserId);
-        
-        // Show a welcome message or empty state
-        if ($('#users-conversation').children().length === 0) {
-            const welcomeMessage = `
-                <li class="chat-list left">
-                    <div class="conversation-list">
-                        <div class="user-chat-content">
-                            <div class="ctext-wrap">
-                                <div class="ctext-wrap-content text-center">
-                                    <p class="mb-0 text-muted">Start your conversation with ${selectedUserData.name}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            `;
-            $('#users-conversation').append(welcomeMessage);
-        }
-        
-        scrollToBottom();
-    });
-
-    // Form submission logic
-    $('#chat-form').on('submit', function(e) {
-        e.preventDefault();
-        const message = $('#chat-input').val().trim();
-        
-        if (!message || !selectedUserId) {
-            if (!selectedUserId) {
-                $('.chat-input-feedback').text('Please select a user to chat with').show();
-                setTimeout(() => $('.chat-input-feedback').hide(), 3000);
-            }
-            return;
-        }
-        
-        // Hide feedback
-        $('.chat-input-feedback').hide();
-        
-        // Disable send button temporarily
-        $('.chat-send').prop('disabled', true);
-        
-        // Send message via AJAX
-        $.post('/chat/send', {
-            recipient_id: selectedUserId,
-            message: message,
-            _token: '{{ csrf_token() }}'
-        })
-        .done(function(response) {
-            $('#chat-input').val('');
-            // Append message to chat
-            const messageData = {
-                content: message,
-                sender_id: {{ auth()->id() }},
-                sender_name: '{{ auth()->user()->name }}',
-                sender_avatar: '{{ auth()->user()->profile_photo_url ?? "https://ui-avatars.com/api/?name=" . urlencode(auth()->user()->name) . "&background=0D8ABC&color=fff" }}',
-                created_at: new Date().toISOString()
-            };
-            appendMessage(messageData, true);
-            
-            // Remove welcome message if exists
-            $('#users-conversation .text-center').closest('li').remove();
-        })
-        .fail(function(xhr) {
-            $('.chat-input-feedback').text('Failed to send message. Please try again.').show();
-            setTimeout(() => $('.chat-input-feedback').hide(), 3000);
-        })
-        .always(function() {
-            $('.chat-send').prop('disabled', false);
-        });
     });
 
     // Function to load chat messages
@@ -371,6 +295,22 @@ $(function() {
                 messages.forEach(function(message) {
                     appendMessage(message, message.sender_id == {{ auth()->id() }});
                 });
+            } else {
+                // Show a welcome message or empty state
+                const welcomeMessage = `
+                    <li class="chat-list left">
+                        <div class="conversation-list">
+                            <div class="user-chat-content">
+                                <div class="ctext-wrap">
+                                    <div class="ctext-wrap-content text-center">
+                                        <p class="mb-0 text-muted">Start your conversation with ${selectedUserData.name}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `;
+                $('#users-conversation').append(welcomeMessage);
             }
             scrollToBottom();
         })
@@ -390,104 +330,6 @@ $(function() {
             `);
         });
     }
-
-    // Function to append message to chat
-    function appendMessage(message, isSent) {
-        const messageClass = isSent ? 'right' : 'left';
-        const messageHtml = `
-            <li class="chat-list ${messageClass}">
-                <div class="conversation-list">
-                    <div class="chat-avatar">
-                        <img src="${message.sender_avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(message.sender_name || 'User') + '&background=0D8ABC&color=fff'}" alt="" class="rounded-circle avatar-xs">
-                    </div>
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content">${escapeHtml(message.content)}</p>
-                            </div>
-                            <div class="dropdown align-self-start message-box-drop">
-                                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="ri-more-2-fill"></i>
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line align-bottom text-muted me-2"></i>Reply</a>
-                                    <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line align-bottom text-muted me-2"></i>Copy</a>
-                                    ${isSent ? '<a class="dropdown-item delete-message" href="#"><i class="ri-delete-bin-5-line align-bottom text-muted me-2"></i>Delete</a>' : ''}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="conversation-name">
-                            <small class="text-muted time">${formatTime(message.created_at)}</small>
-                            ${isSent ? '<span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span>' : ''}
-                        </div>
-                    </div>
-                </div>
-            </li>
-        `;
-        $('#users-conversation').append(messageHtml);
-        scrollToBottom();
-    }
-
-    // Function to scroll to bottom
-    function scrollToBottom() {
-        const chatContainer = $('#chat-messages');
-        chatContainer.scrollTop(chatContainer[0].scrollHeight);
-    }
-
-    // Function to format time
-    function formatTime(timestamp) {
-        const date = new Date(timestamp);
-        return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    }
-
-    // Function to escape HTML
-    function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-    }
-
-    // Copy message functionality
-    $(document).on('click', '.copy-message', function(e) {
-        e.preventDefault();
-        const messageText = $(this).closest('.ctext-wrap').find('.ctext-content').text();
-        navigator.clipboard.writeText(messageText).then(function() {
-            $('#copyClipBoard').fadeIn().delay(2000).fadeOut();
-        });
-    });
-
-    // Initialize empty state
-    $('.chat-input-section').hide();
-    $('#users-conversation').hide();
-    
-    // Show instructions when no user is selected
-    $('#users-conversation').html(`
-        <li class="chat-list">
-            <div class="conversation-list">
-                <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content text-center">
-                            <div class="avatar-lg mx-auto mb-3">
-                                <div class="avatar-title rounded-circle bg-soft-primary text-primary">
-                                    <i class="ri-message-3-line display-4"></i>
-                                </div>
-                            </div>
-                            <h5 class="mb-2">Welcome to Chat!</h5>
-                            <p class="text-muted mb-0">Select a user from the sidebar to start chatting</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-    `);
-
-    // Pusher logic for receiving messages
-    // ... existing Pusher code from your chat.init.js ...
 });
 </script>
 @endsection
