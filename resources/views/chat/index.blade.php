@@ -520,8 +520,15 @@ $(document).ready(function() {
                         return;
                     }
                     users.forEach(function(user) {
-                        const avatar = user.profile_photo_url && user.profile_photo_url.match(/^https?:\/\//) ? user.profile_photo_url :
-                            'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=0D8ABC&color=fff';
+                        // Defensive: fallback for missing fields
+                        const name = user.name || 'Unknown';
+                        const email = user.email || '';
+                        let avatar = '';
+                        if (user.profile_photo_url && typeof user.profile_photo_url === 'string' && user.profile_photo_url.match(/^https?:\/\//)) {
+                            avatar = user.profile_photo_url;
+                        } else {
+                            avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=0D8ABC&color=fff';
+                        }
                         const isOnline = user.is_online ? 'Online' : 'Offline';
                         const badgeClass = user.is_online ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary';
                         const latestMsg = user.latest_message;
@@ -540,8 +547,8 @@ $(document).ready(function() {
                         $('#user-list').append(`
                             <li class="user-item p-3 mb-2"
                                 data-user-id="${user.id}"
-                                data-user-name="${user.name}"
-                                data-user-email="${user.email}"
+                                data-user-name="${name}"
+                                data-user-email="${email}"
                                 data-user-avatar="${avatar}"
                                 data-user-status="${isOnline}"
                                 data-is-online="${user.is_online ? '1' : '0'}"
@@ -550,13 +557,13 @@ $(document).ready(function() {
                                     <div class="flex-shrink-0 position-relative me-3">
                                         <img src="${avatar}"
                                              class="rounded-circle avatar-sm"
-                                             alt="${user.name}"
+                                             alt="${name}"
                                              style="pointer-events: none;">
                                         <span class="${user.is_online ? 'online-indicator' : 'offline-indicator'}" style="pointer-events: none;"></span>
                                     </div>
                                     <div class="flex-grow-1 overflow-hidden" style="pointer-events: none;">
                                         <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="mb-0 text-truncate fs-14 fw-medium">${user.name}</h6>
+                                            <h6 class="mb-0 text-truncate fs-14 fw-medium">${name}</h6>
                                             <span class="badge ${badgeClass} fs-11">${isOnline}</span>
                                         </div>
                                         <div class="text-truncate small mt-1" style="max-width: 90%;">
