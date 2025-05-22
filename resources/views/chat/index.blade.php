@@ -509,7 +509,7 @@ $(document).ready(function() {
             }
             // AJAX search in users table
             $.ajax({
-                url: '/chat/search-users',
+                url: '/business/chat/search-users', // updated path
                 method: 'GET',
                 data: { q: searchTerm },
                 success: function(users) {
@@ -675,7 +675,7 @@ $(document).ready(function() {
         console.log('Sending message:', messageData);
         
         $.ajax({
-            url: '/chat/send',
+            url: '/business/chat/send', // updated path
             method: 'POST',
             data: messageData,
             timeout: 10000
@@ -736,7 +736,7 @@ $(document).ready(function() {
             messagesLoadedIds.clear();
         }
         $.ajax({
-            url: `/chat/messages/${userId}?page=${messagesPage}`,
+            url: `/business/chat/messages/${userId}?page=${messagesPage}`, // updated path
             method: 'GET',
             timeout: 10000
         })
@@ -988,7 +988,7 @@ $(document).ready(function() {
     
     function refreshUserStatus() {
         $.ajax({
-            url: '/chat/users/status',
+            url: '/business/chat/users/status', // updated path
             method: 'GET',
             timeout: 5000
         })
@@ -1029,8 +1029,15 @@ $(document).ready(function() {
     
     function initializePusher() {
         try {
-            const pusher = new Pusher('your-pusher-key', {
-                cluster: 'your-pusher-cluster',
+            // Use actual Pusher key and cluster from .env
+            const pusherKey = window.PUSHER_APP_KEY || '{{ env('PUSHER_APP_KEY') }}';
+            const pusherCluster = window.PUSHER_APP_CLUSTER || '{{ env('PUSHER_APP_CLUSTER') }}';
+            if (!pusherKey || !pusherCluster || pusherKey === 'your-pusher-key' || pusherCluster === 'your-pusher-cluster') {
+                console.error('Pusher key/cluster not set. Please check your .env and JS config.');
+                return;
+            }
+            const pusher = new Pusher(pusherKey, {
+                cluster: pusherCluster,
                 encrypted: true
             });
             
@@ -1085,7 +1092,7 @@ $(document).ready(function() {
     
     function markMessagesAsRead(userId) {
         $.ajax({
-            url: '/chat/messages/mark-read',
+            url: '/business/chat/messages/mark-read', // updated path
             method: 'POST',
             data: {
                 user_id: userId,
