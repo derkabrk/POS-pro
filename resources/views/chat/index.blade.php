@@ -503,8 +503,17 @@ $(document).ready(function() {
         $('#user-search').on('input', function() {
             const searchTerm = $(this).val().toLowerCase().trim();
             if (searchTerm.length === 0) {
-                // If search is empty, reload only chated users
-                $('.user-item').show();
+                // If search is empty, reload only chated users (from server-rendered Blade)
+                // Option 1: Reload page (simple, always correct)
+                // location.reload();
+                // Option 2: Re-render from original Blade (no reload)
+                const $original = $('#user-list').data('original');
+                if ($original) {
+                    $('#user-list').html($original);
+                } else {
+                    // Fallback: reload page if no backup
+                    location.reload();
+                }
                 return;
             }
             // AJAX search in users table
@@ -516,7 +525,13 @@ $(document).ready(function() {
                     // Remove all user items
                     $('#user-list').empty();
                     if (users.length === 0) {
-                        $('#user-list').append('<li class="text-center py-4"><p class="text-muted">No users found</p></li>');
+                        // If no results, show original chat list
+                        const $original = $('#user-list').data('original');
+                        if ($original) {
+                            $('#user-list').html($original);
+                        } else {
+                            $('#user-list').append('<li class="text-center py-4"><p class="text-muted">No users found</p></li>');
+                        }
                         return;
                     }
                     users.forEach(function(user) {
@@ -580,6 +595,11 @@ $(document).ready(function() {
                 }
             });
         });
+        // On page load, backup the original chat list for restoration
+        const $userList = $('#user-list');
+        if (!$userList.data('original')) {
+            $userList.data('original', $userList.html());
+        }
     }
     
     function handleUserSelection(e) {
