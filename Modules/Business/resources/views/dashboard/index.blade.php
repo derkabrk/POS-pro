@@ -80,6 +80,7 @@
                 @endphp
 
                 @if ($showTopRow)
+                <!-- First Row - Main Stats -->
                 <div class="row">
                     @if ($notStaff || visible_permission('salesListPermission'))
                     <div class="col-xl-3 col-md-6">
@@ -185,6 +186,109 @@
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-danger-subtle rounded fs-3">
                                             <i class="fas fa-money-bill-wave text-danger"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                    @endif
+                </div> <!-- end row-->
+
+                <!-- Second Row - Additional Stats -->
+                <div class="row">
+                    @if ($notStaff || visible_permission('partiesPermission'))
+                    <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Total Parties') }}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_parties">0</h4>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-warning-subtle rounded fs-3">
+                                            <i class="fas fa-users text-warning"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                    @endif
+
+                    @if ($notStaff || visible_permission('stockPermission'))
+                    <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Total Products') }}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="total_products">0</h4>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-secondary-subtle rounded fs-3">
+                                            <i class="fas fa-boxes text-secondary"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                    @endif
+
+                    @if ($notStaff || visible_permission('stockPermission'))
+                    <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Low Stock Items') }}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="low_stock_count">{{ count($stocks) }}</h4>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-danger-subtle rounded fs-3">
+                                            <i class="fas fa-exclamation-triangle text-danger"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                    @endif
+
+                    @if ($notStaff || visible_permission('shippingPermission'))
+                    <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ __('Pending Orders') }}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-0" id="pending_orders">0</h4>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-info-subtle rounded fs-3">
+                                            <i class="fas fa-clock text-info"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -300,10 +404,10 @@
 
                 @if ($notStaff || visible_permission('stockPermission'))
                 <div class="row">
-                    <div class="col-xl-6">
+                    <div class="col-xl-12">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">{{ __('Low Stock') }}</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">{{ __('Low Stock Alert') }}</h4>
                                 <div class="flex-shrink-0">
                                     <a href="{{ route('business.stocks.index', ['alert_qty' => true]) }}" class="btn btn-soft-primary btn-sm">
                                         <i class="ri-list-check me-1 align-middle"></i> {{ __('View All') }}
@@ -317,29 +421,72 @@
                                         <thead class="table-light">
                                             <tr>
                                                 <th scope="col" class="ps-4">{{ __('SL') }}.</th>
-                                                <th>{{ __('Name') }}</th>
-                                                <th class="text-center">{{ __('Alert Qty') }}</th>
+                                                <th>{{ __('Product Name') }}</th>
+                                                <th class="text-center">{{ __('Current Stock') }}</th>
+                                                <th class="text-center">{{ __('Alert Quantity') }}</th>
                                                 <th class="text-center">{{ __('Status') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($stocks as $stock)
+                                            @forelse ($stocks as $stock)
                                                 <tr>
-                                                    <td class="ps-4">{{ $loop->index + 1 }}</td>
-                                                    <td>{{ $stock->productName }}</td>
-                                                    <td class="text-center">{{ $stock->productStock }}</td>
+                                                    <td class="ps-4">{{ $loop->iteration }}</td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar-xs me-3">
+                                                                <span class="avatar-title rounded-circle bg-light text-body">
+                                                                    <i class="ri-product-hunt-line"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <h6 class="mb-0">{{ $stock->productName ?? 'N/A' }}</h6>
+                                                                <small class="text-muted">{{ $stock->productCode ?? '' }}</small>
+                                                            </div>
+                                                        </div>
+                                                    </td>
                                                     <td class="text-center">
-                                                        @if ($stock->productStock <= $stock->alert_qty)
-                                                            <span class="badge bg-danger-subtle text-danger">{{ __('Low Stock') }}</span>
+                                                        <span class="badge {{ ($stock->productStock ?? 0) <= ($stock->alert_qty ?? 0) ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success' }} fs-12">
+                                                            {{ $stock->productStock ?? 0 }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-center">{{ $stock->alert_qty ?? 0 }}</td>
+                                                    <td class="text-center">
+                                                        @if (($stock->productStock ?? 0) <= ($stock->alert_qty ?? 0))
+                                                            <span class="badge bg-danger-subtle text-danger">
+                                                                <i class="ri-alert-line me-1"></i>{{ __('Low Stock') }}
+                                                            </span>
                                                         @else
-                                                            <span class="badge bg-success-subtle text-success">{{ __('In Stock') }}</span>
+                                                            <span class="badge bg-success-subtle text-success">
+                                                                <i class="ri-checkbox-circle-line me-1"></i>{{ __('In Stock') }}
+                                                            </span>
                                                         @endif
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center py-4">
+                                                        <div class="d-flex flex-column align-items-center">
+                                                            <div class="avatar-md mb-2">
+                                                                <span class="avatar-title rounded-circle bg-light text-body fs-2">
+                                                                    <i class="ri-inbox-line"></i>
+                                                                </span>
+                                                            </div>
+                                                            <h5 class="mb-1">{{ __('No Low Stock Items') }}</h5>
+                                                            <p class="text-muted mb-0">{{ __('All products are adequately stocked') }}</p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
+                                @if(count($stocks) > 0)
+                                <div class="mt-3 text-center">
+                                    <small class="text-muted">
+                                        {{ __('Showing') }} {{ count($stocks) }} {{ __('items that need attention') }}
+                                    </small>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
