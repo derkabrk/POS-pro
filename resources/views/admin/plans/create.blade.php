@@ -68,29 +68,41 @@
                                 </div>
                                 <div class="col-xxl-6 col-md-6">
                                     <div>
-                                        <label for="permissions" class="form-label">{{ __('Plan Permissions') }} <span class="text-danger">*</span></label>
-                                        <select name="permissions[]" id="permissions" class="form-control" multiple required>
-                                            <option value="business_access">{{ __('Business Access') }}</option>
-                                            <option value="sales_access">{{ __('Sales Access') }}</option>
-                                            <option value="purchase_access">{{ __('Purchase Access') }}</option>
-                                            <option value="products_access">{{ __('Products Access') }}</option>
-                                            <option value="reports_access">{{ __('Reports Access') }}</option>
-                                            <option value="bulk_message">{{ __('Bulk Messaging') }}</option>
-                                            <option value="roles_access">{{ __('User Roles') }}</option>
-                                            <option value="settings_access">{{ __('Settings') }}</option>
-                                            <option value="expenses_access">{{ __('Expenses') }}</option>
-                                            <option value="incomes_access">{{ __('Incomes') }}</option>
-                                            <option value="parties_access">{{ __('Parties') }}</option>
-                                            <option value="shipping_access">{{ __('Shipping') }}</option>
-                                            <option value="subscriptions_access">{{ __('Subscriptions') }}</option>
-                                            <option value="currencies_access">{{ __('Currencies') }}</option>
-                                            <option value="vat_access">{{ __('VAT/Tax') }}</option>
-                                            <option value="notifications_access">{{ __('Notifications') }}</option>
-                                            <option value="order_source_access">{{ __('Order Source') }}</option>
-                                            <option value="ticket_system_access">{{ __('Ticket System') }}</option>
-                                            <option value="chat_access">{{ __('Chat') }}</option>
-                                        </select>
-                                        <small class="text-muted">{{ __('Hold Ctrl (Windows) or Command (Mac) to select multiple permissions.') }}</small>
+                                        <label class="form-label">{{ __('Plan Permissions') }} <span class="text-danger">*</span></label>
+                                        <div class="row g-2">
+                                            @php
+                                                $permissions = [
+                                                    'business_access' => __('Business Access'),
+                                                    'sales_access' => __('Sales Access'),
+                                                    'purchase_access' => __('Purchase Access'),
+                                                    'products_access' => __('Products Access'),
+                                                    'reports_access' => __('Reports Access'),
+                                                    'bulk_message' => __('Bulk Messaging'),
+                                                    'roles_access' => __('User Roles'),
+                                                    'settings_access' => __('Settings'),
+                                                    'expenses_access' => __('Expenses'),
+                                                    'incomes_access' => __('Incomes'),
+                                                    'parties_access' => __('Parties'),
+                                                    'shipping_access' => __('Shipping'),
+                                                    'subscriptions_access' => __('Subscriptions'),
+                                                    'currencies_access' => __('Currencies'),
+                                                    'vat_access' => __('VAT/Tax'),
+                                                    'notifications_access' => __('Notifications'),
+                                                    'order_source_access' => __('Order Source'),
+                                                    'ticket_system_access' => __('Ticket System'),
+                                                    'chat_access' => __('Chat'),
+                                                ];
+                                            @endphp
+                                            @foreach($permissions as $permKey => $permLabel)
+                                                <div class="col-6 col-md-6">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permKey }}" id="perm_{{ $permKey }}">
+                                                        <label class="form-check-label" for="perm_{{ $permKey }}">{{ $permLabel }}</label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <small class="text-muted">{{ __('Select the features this plan will allow access to.') }}</small>
                                     </div>
                                 </div>
                                 <div class="col-xxl-6 col-md-6">
