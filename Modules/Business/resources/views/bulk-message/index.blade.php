@@ -36,6 +36,13 @@
                                 <option value="viber">Viber</option>
                             </select>
                         </div>
+                        <div class="mb-3" id="email-customize-section" style="display:none;">
+                            <label for="email_subject" class="form-label fw-semibold">{{ __('Email Subject') }}</label>
+                            <input type="text" name="email_subject" id="email_subject" class="form-control mb-2" placeholder="{{ __('Subject') }}">
+                            <label for="email_body" class="form-label fw-semibold">{{ __('Email Body (HTML allowed)') }}</label>
+                            <textarea name="email_body" id="email_body" class="form-control" rows="6" placeholder="{{ __('Write your email content here...') }}"></textarea>
+                            <div class="form-text">You can use HTML for formatting. The message field will be ignored for email if this is filled.</div>
+                        </div>
                         <div class="mb-4">
                             <label class="form-label fw-semibold">{{ __('Select Users') }}</label>
                             <div class="list-group">
@@ -80,6 +87,16 @@
                 const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
                 recipientsInput.value = selected.join(', ');
             });
+        });
+
+        const typeSelect = document.getElementById('type');
+        const emailCustomizeSection = document.getElementById('email-customize-section');
+        typeSelect.addEventListener('change', function() {
+            if (this.value === 'email') {
+                emailCustomizeSection.style.display = '';
+            } else {
+                emailCustomizeSection.style.display = 'none';
+            }
         });
     });
 </script>

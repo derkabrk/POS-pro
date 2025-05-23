@@ -25,11 +25,15 @@ class BulkMessageController extends Controller
         $type = $request->type;
         $recipients = array_filter(array_map('trim', explode(',', $request->recipients)));
         $message = $request->message;
+        $subject = $request->input('email_subject') ?: 'Bulk Message';
+        $emailBody = $request->input('email_body');
         $results = [];
-        // Fetch users by email or phone
-        $users = \App\Models\User::where(function($q) use ($recipients) {
-            $q->whereIn('email', $recipients)->orWhereIn('phone', $recipients);
-        })->get();
+        // Fetch users by email or phone, but only those who are customers of the current business
+        $businessId = auth()->user()->business_id;
+        $users = \App\Models\User::where('business_id', $businessId)
+            ->where(function($q) use ($recipients) {
+                $q->whereIn('email', $recipients)->orWhereIn('phone', $recipients);
+            })->get();
         foreach ($recipients as $recipient) {
             $user = $users->first(function($u) use ($recipient) {
                 return $u->email === $recipient || $u->phone === $recipient;
@@ -39,9 +43,17 @@ class BulkMessageController extends Controller
                 case 'email':
                     if ($user && $user->email) {
                         try {
-                            Mail::raw($message, function ($mail) use ($user) {
-                                $mail->to($user->email)->subject('Bulk Message');
-                            });
+                            if ($emailBody) {
+                                Mail::send([], [], function ($mail) use ($user, $subject, $emailBody) {
+                                    $mail->to($user->email)
+                                         ->subject($subject)
+                                         ->setBody($emailBody, 'text/html');
+                                });
+                            } else {
+                                Mail::raw($message, function ($mail) use ($user, $subject) {
+                                    $mail->to($user->email)->subject($subject);
+                                });
+                            }
                             $results[] = ['recipient' => $display, 'status' => 'sent'];
                         } catch (\Exception $e) {
                             $results[] = ['recipient' => $display, 'status' => 'failed', 'error' => $e->getMessage()];
