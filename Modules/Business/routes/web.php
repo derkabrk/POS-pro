@@ -52,6 +52,8 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('sales/import-excel', [Business\AcnooSaleController::class, 'importExcel'])->name('sales.import.excel');
     // Google Sheet Import
     Route::post('sales/import-googlesheet', [Business\AcnooSaleController::class, 'importGoogleSheet'])->name('sales.import.googlesheet');
+    // CSV Import
+    Route::post('sales/import-csv', [Business\AcnooSaleController::class, 'importCsv'])->name('sales.import.csv');
 
     Route::post('sale-return/filter', [Business\SaleReturnController::class, 'acnooFilter'])->name('sale-returns.filter');
 
