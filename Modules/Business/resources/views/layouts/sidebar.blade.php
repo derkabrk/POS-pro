@@ -146,7 +146,8 @@
                     </li>
                 @endif
 
-                @if(auth()->user()->hasPlanPermission('bulk_message'))
+               
+                @if (auth()->user()->role != 'staff' || visible_permission('bulk_message'))
                     <li class="nav-item">
                         <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.create') ? 'active' : '' }}" href="{{ route('business.bulk-message.create') }}">
                             <i class="bi bi-envelope-paper-fill me-2"></i>
