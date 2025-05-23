@@ -109,7 +109,10 @@
         const recipientsInput = document.getElementById('recipients');
         checkboxes.forEach(cb => {
             cb.addEventListener('change', function() {
-                const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
+                const selected = Array.from(checkboxes)
+                    .filter(c => c.checked)
+                    .map(c => c.value)
+                    .filter(v => v && /.+@.+\..+/.test(v)); // Only include valid-looking emails
                 recipientsInput.value = selected.join(', ');
             });
         });
