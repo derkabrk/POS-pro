@@ -126,7 +126,7 @@
                                         </div>
                                     </th>
                                     <td class="id">{{ $loop->iteration }}</td>
-                                    <td class="business_name">{{ $business->business_name ?? 'N/A' }}</td>
+                                    <td class="business_name">{{ $business->companyName ?? 'N/A' }}</td>
                                     <td class="business_category">{{ $business->category->name ?? 'N/A' }}</td>
                                     <td class="business_type">
                                         @if($business->type == 0)
@@ -137,7 +137,7 @@
                                             <span class="badge bg-success-subtle text-success">{{ __('Both') }}</span>
                                         @endif
                                     </td>
-                                    <td class="phone">{{ $business->user->phone ?? 'N/A' }}</td>
+                                    <td class="phone">{{ $business->phoneNumber ?? 'N/A' }}</td>
                                     <td class="package">
                                         {{ optional(optional($business->getCurrentPackage)->plan)->subscriptionName ?? 'N/A' }}
                                     </td>
@@ -145,7 +145,7 @@
                                         {{ optional($business->getCurrentPackage)->created_at ? optional($business->getCurrentPackage)->created_at->format('d M, Y') : 'N/A' }}
                                     </td>
                                     <td class="expired_date">
-                                        {{ optional($business->getCurrentPackage)->expieryDate ? optional($business->getCurrentPackage)->expieryDate->format('d M, Y') : 'N/A' }}
+                                        {{ $business->will_expire ? \Carbon\Carbon::parse($business->will_expire)->format('d M, Y') : 'N/A' }}
                                     </td>
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">
