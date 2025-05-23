@@ -87,7 +87,7 @@
                                     <div id="plan-permissions-list" class="list-group list-group-flush rounded shadow-sm bg-light"></div>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold fs-6">{{ __('Select Users') }}</label>
+                                    <label class="form-label fw-bold fs-6">{{ __('Select Customers') }}</label>
                                     <div class="mb-2">
                                         <input type="checkbox" id="select-all-users" class="form-check-input me-1">
                                         <label for="select-all-users" class="form-label fw-normal fs-7">{{ __('Select All') }}</label>
