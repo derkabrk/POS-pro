@@ -27,6 +27,7 @@
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
                             <div class="ms-2">
+                                <!-- CSV Import -->
                                 <form action="{{ route('business.sales.import.csv') }}" method="POST" enctype="multipart/form-data" id="import-csv-form">
                                     @csrf
                                     <input type="file" name="csv_file" id="import-csv-input" accept=".csv" style="display: none;" onchange="document.getElementById('import-csv-form').submit();">
@@ -36,10 +37,51 @@
                                     <span id="csv-file-name" class="ms-2 text-secondary" style="font-size: 0.95em;"></span>
                                 </form>
                             </div>
+                            <!-- Excel Import -->
+                            <div class="ms-2">
+                                <form action="{{ route('business.sales.import.excel') }}" method="POST" enctype="multipart/form-data" id="import-excel-form">
+                                    @csrf
+                                    <input type="file" name="excel_file" id="import-excel-input" accept=".xlsx,.xls" style="display: none;" onchange="document.getElementById('import-excel-form').submit();">
+                                    <label for="import-excel-input" class="btn btn-success" style="cursor:pointer;">
+                                        <i class="ri-file-excel-2-line align-bottom me-1"></i> {{ __('Import Excel') }}
+                                    </label>
+                                    <span id="excel-file-name" class="ms-2 text-secondary" style="font-size: 0.95em;"></span>
+                                </form>
+                            </div>
+                            <!-- Google Sheet Import -->
+                            <div class="ms-2">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importGoogleSheetModal">
+                                    <i class="ri-google-fill align-bottom me-1"></i> {{ __('Import Google Sheet') }}
+                                </button>
+                            </div>
                             <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
                                 <i class="ri-delete-bin-2-line"></i>
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Google Sheet Import Modal -->
+            <div class="modal fade" id="importGoogleSheetModal" tabindex="-1" aria-labelledby="importGoogleSheetModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="{{ route('business.sales.import.googlesheet') }}" method="POST">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="importGoogleSheetModalLabel">{{ __('Import from Google Sheet') }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="google_sheet_url" class="form-label">{{ __('Google Sheet URL') }}</label>
+                                    <input type="url" class="form-control" id="google_sheet_url" name="google_sheet_url" placeholder="https://docs.google.com/spreadsheets/d/..." required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button type="submit" class="btn btn-warning">{{ __('Import') }}</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -165,6 +207,11 @@
     document.getElementById('import-csv-input').addEventListener('change', function(){
         const fileName = this.files[0] ? this.files[0].name : '';
         document.getElementById('csv-file-name').textContent = fileName;
+    });
+
+    document.getElementById('import-excel-input').addEventListener('change', function(){
+        const fileName = this.files[0] ? this.files[0].name : '';
+        document.getElementById('excel-file-name').textContent = fileName;
     });
 
     document.addEventListener("DOMContentLoaded", function () {

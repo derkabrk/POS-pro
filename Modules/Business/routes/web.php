@@ -42,6 +42,11 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('sale/mail/{sale_id}', [Business\AcnooSaleController::class, 'sendMail'])->name('sales.mail');
     Route::post('create-customer', [Business\AcnooSaleController::class, 'createCustomer'])->name('sales.store.customer');
 
+    // Excel Import
+    Route::post('sales/import-excel', [Business\AcnooSaleController::class, 'importExcel'])->name('sales.import.excel');
+    // Google Sheet Import
+    Route::post('sales/import-googlesheet', [Business\AcnooSaleController::class, 'importGoogleSheet'])->name('sales.import.googlesheet');
+
     Route::post('sale-return/filter', [Business\SaleReturnController::class, 'acnooFilter'])->name('sale-returns.filter');
 
 

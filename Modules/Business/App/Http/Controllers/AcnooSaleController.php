@@ -1288,4 +1288,100 @@ class AcnooSaleController extends Controller
 
         return redirect()->back()->with('success', "$imported sales imported successfully from CSV.");
     }
+
+    /**
+     * Import sales from Excel file (.xlsx, .xls)
+     */
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|file|mimes:xlsx,xls|max:4096',
+        ]);
+
+        // Use PhpSpreadsheet for Excel import
+        try {
+            $file = $request->file('excel_file');
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $rows = $sheet->toArray(null, true, true, true);
+
+            $header = array_shift($rows);
+            $header = array_map('trim', $header);
+            $businessId = auth()->user()->business_id;
+            $userId = auth()->id();
+            $imported = 0;
+
+            foreach ($rows as $row) {
+                $data = array_combine($header, $row);
+                \App\Models\Sale::create([
+                    'business_id'    => $businessId,
+                    'user_id'        => $userId,
+                    'order_source_id'=> null,
+                    'invoiceNumber'  => $data['invoiceNumber'] ?? uniqid('INV-'),
+                    'customer_name'  => $data['customer_name'] ?? '',
+                    'customer_email' => $data['customer_email'] ?? null,
+                    'totalAmount'    => $data['totalAmount'] ?? 0.0,
+                    'paidAmount'     => $data['paidAmount'] ?? 0.0,
+                    'dueAmount'      => $data['dueAmount'] ?? 0.0,
+                    'saleDate'       => $data['saleDate'] ?? now(),
+                    'sale_status'    => $data['sale_status'] ?? 1,
+                    'meta'           => json_encode($data),
+                ]);
+                $imported++;
+            }
+            return redirect()->back()->with('success', "$imported sales imported successfully from Excel.");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Excel import failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Import sales from Google Sheet (by public URL)
+     */
+    public function importGoogleSheet(Request $request)
+    {
+        $request->validate([
+            'google_sheet_url' => 'required|url',
+        ]);
+        $sheetUrl = $request->input('google_sheet_url');
+        // Convert Google Sheet URL to CSV export URL
+        if (preg_match('/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/', $sheetUrl, $matches)) {
+            $sheetId = $matches[1];
+            $csvUrl = "https://docs.google.com/spreadsheets/d/$sheetId/export?format=csv";
+        } else {
+            return redirect()->back()->with('error', 'Invalid Google Sheet URL.');
+        }
+        try {
+            $csv = file_get_contents($csvUrl);
+            $lines = explode("\n", $csv);
+            $header = str_getcsv(array_shift($lines));
+            $header = array_map('trim', $header);
+            $businessId = auth()->user()->business_id;
+            $userId = auth()->id();
+            $imported = 0;
+            foreach ($lines as $line) {
+                if (trim($line) === '') continue;
+                $row = str_getcsv($line);
+                $data = array_combine($header, $row);
+                \App\Models\Sale::create([
+                    'business_id'    => $businessId,
+                    'user_id'        => $userId,
+                    'order_source_id'=> null,
+                    'invoiceNumber'  => $data['invoiceNumber'] ?? uniqid('INV-'),
+                    'customer_name'  => $data['customer_name'] ?? '',
+                    'customer_email' => $data['customer_email'] ?? null,
+                    'totalAmount'    => $data['totalAmount'] ?? 0.0,
+                    'paidAmount'     => $data['paidAmount'] ?? 0.0,
+                    'dueAmount'      => $data['dueAmount'] ?? 0.0,
+                    'saleDate'       => $data['saleDate'] ?? now(),
+                    'sale_status'    => $data['sale_status'] ?? 1,
+                    'meta'           => json_encode($data),
+                ]);
+                $imported++;
+            }
+            return redirect()->back()->with('success', "$imported sales imported successfully from Google Sheet.");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Google Sheet import failed: ' . $e->getMessage());
+        }
+    }
 }
