@@ -4,173 +4,233 @@
     {{ __('Sales List') }}
 @endsection
 
+@section('css')
+<link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+@endsection
+
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
-    <div class="admin-table-section">
-        <div class="container-fluid">
-            <div class="card bg-light">
-                <div class="card-body">
-                    <div class="table-header p-3">
-                        <h4 class="mb-0">{{ __('Sales List') }}</h4>
+
+@component('components.breadcrumb')
+@slot('li_1') Business @endslot
+@slot('title') Sales @endslot
+@endcomponent
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="salesList">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h5 class="card-title mb-0">{{ __('Sales History') }}</h5>
                     </div>
-                    <div class="table-top-form p-3">
-                        <form action="{{ route('business.sales.filter') }}" method="post" class="filter-form" table="#sales-data">
-                            @csrf
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="form-group">
-                                    <select name="per_page" class="form-control">
-                                        <option value="10">{{ __('Show- 10') }}</option>
-                                        <option value="25">{{ __('Show- 25') }}</option>
-                                        <option value="50">{{ __('Show- 50') }}</option>
-                                        <option value="100">{{ __('Show- 100') }}</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <select name="sale_type" id="sale_type_filter" class="form-control">
-                                        <option value="">{{ __('All Sales') }}</option>
-                                        <option value="0">{{ __('Physical Sale') }}</option>
-                                        <option value="1">{{ __('E-commerce Sale') }}</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <select name="order_source_id" id="order_source_filter" class="form-control">
-                                        <option value="">{{ __('All Order Sources') }}</option>
-                                        @foreach($orderSources as $orderSource)
-                                            <option value="{{ $orderSource->id }}">{{ $orderSource->account_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group position-relative">
-                                    <input type="text" name="search" class="form-control" placeholder="{{ __('Search...') }}">
-                                    <span class="position-absolute search-icon">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M14.582 14.582L18.332 18.332" stroke="#4D4D4D" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M16.668 9.16797C16.668 5.02584 13.3101 1.66797 9.16797 1.66797C5.02584 1.66797 1.66797 5.02584 1.66797 9.16797C1.66797 13.3101 5.02584 16.668 9.16797 16.668C13.3101 16.668 16.668 13.3101 16.668 9.16797Z" stroke="#4D4D4D" stroke-width="1.25" stroke-linejoin="round"/>
-                                        </svg>
-                                    </span>
-                                </div>
+                    <div class="col-sm-auto">
+                        <div class="d-flex gap-1 flex-wrap">
+                            <div class="ms-2">
+                                <form action="{{ route('business.sales.import.csv') }}" method="POST" enctype="multipart/form-data" id="import-csv-form">
+                                    @csrf
+                                    <input type="file" name="csv_file" id="import-csv-input" accept=".csv" style="display: none;" onchange="document.getElementById('import-csv-form').submit();">
+                                    <label for="import-csv-input" class="btn btn-info" style="cursor:pointer;">
+                                        <i class="ri-file-download-line align-bottom me-1"></i> {{ __('Import CSV') }}
+                                    </label>
+                                    <span id="csv-file-name" class="ms-2 text-secondary" style="font-size: 0.95em;"></span>
+                                </form>
                             </div>
-                        </form>
-
-                        <div class="ms-2">
-                            <form action="{{ route('business.sales.import.csv') }}" method="POST" enctype="multipart/form-data" id="import-csv-form">
-                                @csrf
-                                <input type="file" name="csv_file" id="import-csv-input" accept=".csv" style="display: none;" onchange="document.getElementById('import-csv-form').submit();">
-                                <label for="import-csv-input" class="btn btn-outline-primary d-flex align-items-center gap-2 mb-0" style="cursor:pointer;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
-                                        <rect width="18" height="18" x="3" y="3" fill="#0d6efd" rx="4"/>
-                                        <path fill="#fff" d="M12 7v6m0 0v4m0-4h4m-4 0H8"/>
-                                    </svg>
-                                    {{ __('Import CSV') }}
-                                </label>
-                                <span id="csv-file-name" class="ms-2 text-secondary" style="font-size: 0.95em;"></span>
-                            </form>
+                            <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()">
+                                <i class="ri-delete-bin-2-line"></i>
+                            </button>
                         </div>
-
-                        <script>
-                            document.getElementById('import-csv-input').addEventListener('change', function(){
-                                const fileName = this.files[0] ? this.files[0].name : '';
-                                document.getElementById('csv-file-name').textContent = fileName;
-                            });
-                        </script>
                     </div>
                 </div>
+            </div>
+            
+            <div class="card-body border border-dashed border-end-0 border-start-0">
+                <form action="{{ route('business.sales.filter') }}" method="post" class="filter-form" table="#sales-data">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-xxl-5 col-sm-6">
+                            <div class="search-box">
+                                <input type="text" name="search" class="form-control search" placeholder="{{ __('Search for tracking, party name, status or something...') }}">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-xxl-2 col-sm-6">
+                            <div>
+                                <select name="per_page" class="form-control" data-choices data-choices-search-false>
+                                    <option value="">{{ __('Show Records') }}</option>
+                                    <option value="10" selected>{{ __('Show- 10') }}</option>
+                                    <option value="25">{{ __('Show- 25') }}</option>
+                                    <option value="50">{{ __('Show- 50') }}</option>
+                                    <option value="100">{{ __('Show- 100') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select name="sale_type" id="sale_type_filter" class="form-control" data-choices data-choices-search-false>
+                                    <option value="">{{ __('Sale Type') }}</option>
+                                    <option value="" selected>{{ __('All Sales') }}</option>
+                                    <option value="0">{{ __('Physical Sale') }}</option>
+                                    <option value="1">{{ __('E-commerce Sale') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select name="order_source_id" id="order_source_filter" class="form-control" data-choices data-choices-search-false>
+                                    <option value="">{{ __('Order Source') }}</option>
+                                    <option value="" selected>{{ __('All Order Sources') }}</option>
+                                    @foreach($orderSources as $orderSource)
+                                        <option value="{{ $orderSource->id }}">{{ $orderSource->account_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-xxl-1 col-sm-4">
+                            <div>
+                                <button type="button" class="btn btn-primary w-100" onclick="SearchData();">
+                                    <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                                    {{ __('Filters') }}
+                                </button>
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </form>
+            </div>
 
+            <div class="card-body pt-0">
                 <div class="delete-item delete-show d-none">
                     <div class="delete-item-show">
-                        <p class="fw-bold"><span class="selected-count"></span> {{ __('items show') }}</p>
-                        <button data-bs-toggle="modal" class="trigger-modal" data-bs-target="#multi-delete-modal" data-url="{{ route('business.sales.delete-all') }}">{{ __('Delete') }}</button>
+                        <p class="fw-bold"><span class="selected-count"></span> {{ __('items selected') }}</p>
+                        <button data-bs-toggle="modal" class="btn btn-danger trigger-modal" data-bs-target="#multi-delete-modal" data-url="{{ route('business.sales.delete-all') }}">
+                            <i class="ri-delete-bin-2-line me-1"></i>{{ __('Delete Selected') }}
+                        </button>
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table table-striped" id="datatable">
-                        <thead>
-                            <tr>
-                                <th class="w-60">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="checkbox" class="select-all-delete multi-delete ">
+                <div class="table-responsive table-card mb-1">
+                    <table class="table table-nowrap align-middle" id="salesTable">
+                        <thead class="text-muted table-light">
+                            <tr class="text-uppercase">
+                                <th scope="col" style="width: 25px;">
+                                    <div class="form-check">
+                                        <input class="form-check-input select-all-delete multi-delete" type="checkbox" id="checkAll" value="option">
                                     </div>
                                 </th>
-                                <th>{{ __('SL') }}.</th>
-                                <th class="text-start">{{ __('Date') }}</th>
-                                <th class="text-start">{{ __('Tracking') }}</th>
-                                <th class="text-start">{{ __('Party Name') }}</th>
-                                <th class="text-start">{{ __('Total') }}</th>
-                                <th class="text-start">{{ __('Sale Type') }}</th>
-                                @php
-                                    $showPaidColumn = false;
-                                @endphp
-
-                                @foreach($sales as $sale)
-                                    @if($sale->sale_type != 0)
-                                        @php
-                                            $showPaidColumn = true;
-                                            break;
-                                        @endphp
-                                    @endif
-                                @endforeach
-
-                                @if (!$showPaidColumn)
-                                    @foreach($salesWithReturns as $sale)
-                                        @if($sale->sale_type != 0)
-                                            @php
-                                                $showPaidColumn = true;
-                                                break;
-                                            @endphp
-                                        @endif
-                                    @endforeach
-                                @endif
-
-                                <th class="text-start">{{ __('Delivery Type') }}</th>
-                                <th class="text-start">{{ __('Payment') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th>{{ __('Action') }}</th>
+                                <th class="sort" data-sort="sl">{{ __('SL') }}.</th>
+                                <th class="sort" data-sort="date">{{ __('Date') }}</th>
+                                <th class="sort" data-sort="tracking">{{ __('Tracking') }}</th>
+                                <th class="sort" data-sort="party_name">{{ __('Party Name') }}</th>
+                                <th class="sort" data-sort="total">{{ __('Total') }}</th>
+                                <th class="sort" data-sort="sale_type">{{ __('Sale Type') }}</th>
+                                <th class="sort" data-sort="delivery_type">{{ __('Delivery Type') }}</th>
+                                <th class="sort" data-sort="payment">{{ __('Payment') }}</th>
+                                <th class="sort" data-sort="status">{{ __('Status') }}</th>
+                                <th class="sort" data-sort="action">{{ __('Action') }}</th>
                             </tr>
                         </thead>
-                        <tbody id="sales-data">
+                        <tbody class="list form-check-all" id="sales-data">
                             @include('business::sales.datas')
                         </tbody>
                     </table>
+                    <div class="noresult" style="display: none">
+                        <div class="text-center">
+                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px">
+                            </lord-icon>
+                            <h5 class="mt-2">{{ __('Sorry! No Result Found') }}</h5>
+                            <p class="text-muted">{{ __('We\'ve searched through all sales records. We did not find any sales matching your search criteria.') }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="mt-3">
-                    {{ $sales->links('vendor.pagination.bootstrap-5') }}
+                
+                <div class="d-flex justify-content-end">
+                    <div class="pagination-wrap hstack gap-2">
+                        {{ $sales->links('vendor.pagination.bootstrap-5') }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!--end col-->
+</div>
+<!--end row-->
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const saleTypeFilter = document.getElementById("sale_type_filter");
-            const filterForm = document.querySelector(".filter-form");
-            const salesData = document.getElementById("sales-data");
+<script>
+    document.getElementById('import-csv-input').addEventListener('change', function(){
+        const fileName = this.files[0] ? this.files[0].name : '';
+        document.getElementById('csv-file-name').textContent = fileName;
+    });
 
-            saleTypeFilter.addEventListener("change", function () {
-                const formData = new FormData(filterForm);
+    document.addEventListener("DOMContentLoaded", function () {
+        const saleTypeFilter = document.getElementById("sale_type_filter");
+        const filterForm = document.querySelector(".filter-form");
+        const salesData = document.getElementById("sales-data");
 
-                fetch(filterForm.action, {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.html) {
-                        salesData.innerHTML = data.html;
-                    } else {
-                        salesData.innerHTML = "<tr><td colspan='10' class='text-center'>No Sales Found</td></tr>";
-                    }
-                })
-                .catch(error => console.error("Error fetching sales data:", error));
-            });
+        saleTypeFilter.addEventListener("change", function () {
+            const formData = new FormData(filterForm);
+
+            fetch(filterForm.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.html) {
+                    salesData.innerHTML = data.html;
+                } else {
+                    salesData.innerHTML = "<tr><td colspan='11' class='text-center'>{{ __('No Sales Found') }}</td></tr>";
+                }
+            })
+            .catch(error => console.error("Error fetching sales data:", error));
         });
-    </script>
+    });
+
+    function SearchData() {
+        const filterForm = document.querySelector(".filter-form");
+        const salesData = document.getElementById("sales-data");
+        const formData = new FormData(filterForm);
+
+        fetch(filterForm.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.html) {
+                salesData.innerHTML = data.html;
+            } else {
+                salesData.innerHTML = "<tr><td colspan='11' class='text-center'>{{ __('No Sales Found') }}</td></tr>";
+            }
+        })
+        .catch(error => console.error("Error fetching sales data:", error));
+    }
+
+    function deleteMultiple() {
+        const checkedItems = document.querySelectorAll('.multi-delete:checked');
+        if (checkedItems.length > 0) {
+            document.querySelector('.trigger-modal').click();
+        }
+    }
+</script>
+@endsection
+
+@section('script')
+<script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endsection
 
 @push('modal')
