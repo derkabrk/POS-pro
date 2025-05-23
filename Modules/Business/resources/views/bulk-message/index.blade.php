@@ -39,9 +39,27 @@
                         <div class="mb-3" id="email-customize-section" style="display:none;">
                             <label for="email_subject" class="form-label fw-semibold">{{ __('Email Subject') }}</label>
                             <input type="text" name="email_subject" id="email_subject" class="form-control mb-2" placeholder="{{ __('Subject') }}">
-                            <label for="email_body" class="form-label fw-semibold">{{ __('Email Body (HTML allowed)') }}</label>
-                            <textarea name="email_body" id="email_body" class="form-control" rows="6" placeholder="{{ __('Write your email content here...') }}"></textarea>
-                            <div class="form-text">You can use HTML for formatting. The message field will be ignored for email if this is filled.</div>
+                            <label for="email_image" class="form-label fw-semibold">{{ __('Header Image (optional)') }}</label>
+                            <input type="file" name="email_image" id="email_image" class="form-control mb-2" accept="image/*">
+                            <div class="form-text mb-2">{{ __('You can upload a header/banner image for your email.') }}</div>
+                            <label for="email_body" class="form-label fw-semibold">{{ __('Email Body') }}</label>
+                            <textarea name="email_body" id="email_body" class="form-control mb-2" rows="8" placeholder="{{ __('Write your email content here...') }}"></textarea>
+                            <div class="form-text mb-2">{{ __('You can use HTML for formatting. Use <b>, <i>, <u>, <h1>-<h6>, <p>, <ul>, <ol>, <li>, <img>, <a>, etc. for rich content.') }}</div>
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">{{ __('Quick Style') }}</label>
+                                <div class="btn-group mb-2" role="group">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<b></b>')"><b>B</b></button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<i></i>')"><i>I</i></button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<u></u>')"><u>U</u></button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<h2></h2>')">H2</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<p></p>')">P</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<ul><li></li></ul>')">UL</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<ol><li></li></ol>')">OL</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<a href=\"\"></a>')">Link</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="insertAtCursor('email_body', '<img src=\"\" alt=\"\">')">Img</button>
+                                </div>
+                            </div>
+                            <div class="form-text">{{ __('The message field will be ignored for email if this is filled.') }}</div>
                         </div>
                         <div class="mb-4">
                             <label class="form-label fw-semibold">{{ __('Select Users') }}</label>
@@ -99,5 +117,15 @@
             }
         });
     });
+
+    function insertAtCursor(fieldId, value) {
+        var field = document.getElementById(fieldId);
+        if (!field) return;
+        var start = field.selectionStart, end = field.selectionEnd;
+        var before = field.value.substring(0, start), after = field.value.substring(end, field.value.length);
+        field.value = before + value + after;
+        field.selectionStart = field.selectionEnd = start + value.length;
+        field.focus();
+    }
 </script>
 @endsection

@@ -27,6 +27,12 @@ class BulkMessageController extends Controller
         $message = $request->message;
         $subject = $request->input('email_subject') ?: 'Bulk Message';
         $emailBody = $request->input('email_body');
+        $headerImageUrl = null;
+        if ($request->hasFile('email_image')) {
+            $file = $request->file('email_image');
+            $path = $file->store('bulk-email-images', 'public');
+            $headerImageUrl = asset('storage/' . $path);
+        }
         $results = [];
         // Fetch users by email or phone, but only those who are customers of the current business
         $businessId = auth()->user()->business_id;
@@ -44,10 +50,14 @@ class BulkMessageController extends Controller
                     if ($user && $user->email) {
                         try {
                             if ($emailBody) {
-                                Mail::send([], [], function ($mail) use ($user, $subject, $emailBody) {
+                                $finalBody = $emailBody;
+                                if ($headerImageUrl) {
+                                    $finalBody = '<div style="text-align:center;margin-bottom:20px;"><img src="' . $headerImageUrl . '" style="max-width:100%;height:auto;" alt="Header"></div>' . $finalBody;
+                                }
+                                Mail::send([], [], function ($mail) use ($user, $subject, $finalBody) {
                                     $mail->to($user->email)
                                          ->subject($subject)
-                                         ->setBody($emailBody, 'text/html');
+                                         ->setBody($finalBody, 'text/html');
                                 });
                             } else {
                                 Mail::raw($message, function ($mail) use ($user, $subject) {

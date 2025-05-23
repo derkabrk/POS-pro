@@ -131,6 +131,28 @@
                     </a>
                 </li>
 
+                @if (auth()->user()->role != 'staff' || visible_permission('orderSourcePermission'))
+                    <li class="nav-item">
+                        <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'active' : '' }}" href="#sidebarOrderSources" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'true' : 'false' }}" aria-controls="sidebarOrderSources">
+                            <i class="ri-source-line"></i>
+                            <span>{{ __('Order Sources') }}</span>
+                        </a>
+                        <div class="collapse menu-dropdown {{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'show' : '' }}" id="sidebarOrderSources">
+                            <ul class="nav nav-sm flex-column">
+                                <li><a class="nav-link menu-link {{ Request::routeIs('business.orderSource.index') ? 'active' : '' }}" href="{{ route('business.orderSource.index') }}">{{ __('All Order Sources') }}</a></li>
+                                <li><a class="nav-link menu-link {{ Request::routeIs('business.orderSource.create') ? 'active' : '' }}" href="{{ route('business.orderSource.create') }}">{{ __('Add Order Source') }}</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.index') ? 'active' : '' }}" href="{{ route('business.bulk-message.index') }}">
+                        <i class="fas fa-broadcast-tower me-2"></i>
+                        <span>{{ __('Bulk Messaging') }}</span>
+                    </a>
+                </li>
+
                 @if (auth()->user()->role != 'staff' || visible_permission('addIncomePermission'))
                     <li class="nav-item">
                         <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.incomes.index', 'business.income-categories.index') ? 'active' : '' }}" href="#sidebarIncomes" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.incomes.index', 'business.income-categories.index') ? 'true' : 'false' }}" aria-controls="sidebarIncomes">
@@ -289,13 +311,6 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('business.bulk-message.index') }}">
-                        <i class="fas fa-broadcast-tower me-2"></i>
-                        <span>{{ __('Bulk Messaging') }}</span>
-                    </a>
-                </li>
-
                 <li class="nav-item">
                     <div id="sidebar_plan" class="d-block sidebar-free-plan d-flex align-items-center justify-content-between p-3 flex-column">
                         <div class="text-center">
@@ -318,4 +333,3 @@
 <!-- Left Sidebar End -->
 <!-- Vertical Overlay-->
 <div class="vertical-overlay"></div>
-```
