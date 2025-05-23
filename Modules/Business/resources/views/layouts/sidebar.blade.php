@@ -77,7 +77,7 @@
                 @if (auth()->user()->role != 'staff' || visible_permission('productPermission'))
                     <li class="nav-item">
                         <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.products.index', 'business.products.create', 'business.products.edit', 'business.categories.index', 'business.brands.index', 'business.units.index', 'business.barcodes.index') ? 'active' : '' }}" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.products.index', 'business.products.create', 'business.products.edit', 'business.categories.index', 'business.brands.index', 'business.units.index', 'business.barcodes.index') ? 'true' : 'false' }}" aria-controls="sidebarProducts">
-                            <i class="ri-box-line"></i>
+                            <i class="ri-box-3-line"></i>
                             <span>{{ __('Products') }}</span>
                         </a>
                         <div class="collapse menu-dropdown {{ Request::routeIs('business.products.index', 'business.products.create', 'business.products.edit', 'business.categories.index', 'business.brands.index', 'business.units.index', 'business.barcodes.index') ? 'show' : '' }}" id="sidebarProducts">
@@ -134,7 +134,7 @@
                 @if (auth()->user()->role != 'staff' || visible_permission('orderSourcePermission'))
                     <li class="nav-item">
                         <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'active' : '' }}" href="#sidebarOrderSources" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'true' : 'false' }}" aria-controls="sidebarOrderSources">
-                            <i class="bi bi-diagram-3-fill"></i>
+                            <i class="ri-flow-chart"></i>
                             <span>{{ __('Order Sources') }}</span>
                         </a>
                         <div class="collapse menu-dropdown {{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'show' : '' }}" id="sidebarOrderSources">
@@ -150,13 +150,13 @@
                 @if (auth()->user()->role != 'staff' || visible_permission('bulk_message'))
                     <li class="nav-item">
                         <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.create') ? 'active' : '' }}" href="{{ route('business.bulk-message.create') }}">
-                            <i class="bi bi-envelope-paper-fill me-2"></i>
-                            <span>{{ __('Email Bulking') }}</span>
+                            <i class="ri-mail-send-line me-2"></i>
+                            <span>{{ __('Bulk Messaging') }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.index') ? 'active' : '' }}" href="{{ route('business.bulk-message.index') }}">
-                            <i class="bi bi-envelope-paper-fill me-2"></i>
+                            <i class="ri-mail-check-line me-2"></i>
                             <span>{{ __('Sent Bulk Messages') }}</span>
                         </a>
                     </li>
