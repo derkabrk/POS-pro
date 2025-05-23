@@ -154,7 +154,7 @@ class AcnooBusinessController extends Controller
                 "status" => 1,
             ]);
 
-            User::create([
+            $newUserData = [
                 'business_id'=>$business->id,
                 'name' => $request->companyName,
                 'email' =>  $request->email,
@@ -163,7 +163,11 @@ class AcnooBusinessController extends Controller
                 'password' => Hash::make($request->password),
                 'user_id' => $user->id,
                 'lang' => 'en',
-            ]);
+            ];
+            if ($request->plan_subscribe_id) {
+                $newUserData['plan_id'] = $request->plan_subscribe_id;
+            }
+            User::create($newUserData);
 
             if ($request->plan_subscribe_id) {
                 $plan = Plan::findOrFail($request->plan_subscribe_id);
@@ -249,13 +253,19 @@ class AcnooBusinessController extends Controller
             ]);
 
             $user = User::where('business_id', $business->id)->firstOrFail();
-            $user->update([
+            $userUpdateData = [
                 'name' => $request->companyName,
                 'email' => $request->email,
                 'phone' => $request->phoneNumber,
                 'image' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : $user->image,
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
-            ]);
+            ];
+            if ($request->plan_subscribe_id) {
+                $userUpdateData['plan_id'] = $request->plan_subscribe_id;
+                $plan = \App\Models\Plan::find($request->plan_subscribe_id);
+                $userUpdateData['plan_permissions'] = $plan ? $plan->permissions : [];
+            }
+            $user->update($userUpdateData);
 
             if ($request->plan_subscribe_id) {
                 $plan = Plan::findOrFail($request->plan_subscribe_id);
