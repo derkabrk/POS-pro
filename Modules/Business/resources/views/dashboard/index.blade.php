@@ -759,28 +759,28 @@
                         revenueChart.destroy();
                         revenueChart = null;
                     }
-                    
+
                     // Format the data for the chart
                     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                     let profitData = [];
                     let lossData = [];
-                    
-                    if (data.profit && Array.isArray(data.profit)) {
-                        for (let i = 0; i < months.length; i++) {
-                            profitData.push(data.profit[i] || 0);
+
+                    // Ensure profitData and lossData are always 12 numbers
+                    for (let i = 0; i < months.length; i++) {
+                        let profit = 0;
+                        let loss = 0;
+                        if (data.profit && Array.isArray(data.profit) && data.profit[i] !== undefined && data.profit[i] !== null) {
+                            profit = parseFloat(data.profit[i]);
+                            if (isNaN(profit)) profit = 0;
                         }
-                    } else {
-                        profitData = Array(12).fill(0);
-                    }
-                    
-                    if (data.loss && Array.isArray(data.loss)) {
-                        for (let i = 0; i < months.length; i++) {
-                            lossData.push(data.loss[i] || 0);
+                        if (data.loss && Array.isArray(data.loss) && data.loss[i] !== undefined && data.loss[i] !== null) {
+                            loss = parseFloat(data.loss[i]);
+                            if (isNaN(loss)) loss = 0;
                         }
-                    } else {
-                        lossData = Array(12).fill(0);
+                        profitData.push(profit);
+                        lossData.push(loss);
                     }
-                    
+
                     // Format and display total values
                     const currencySymbol = $('#currency_symbol').val();
                     const currencyPosition = $('#currency_position').val();
@@ -790,14 +790,12 @@
                     const formattedLoss = formatCurrency(totalLoss, currencySymbol, currencyPosition);
                     $('.profit-value').text(formattedProfit);
                     $('.loss-value').text(formattedLoss);
-                    
+
                     // Chart options
                     const options = {
                         series: [{
-                            name: 'Profit',
                             data: profitData
                         }, {
-                            name: 'Loss',
                             data: lossData
                         }],
                         chart: {
@@ -845,7 +843,7 @@
                             style: { color: '#ccc', fontSize: '16px' }
                         }
                     };
-                    
+
                     revenueChart = new ApexCharts(document.querySelector("#revenueChart"), options);
                     revenueChart.render();
                 },
