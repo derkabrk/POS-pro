@@ -297,6 +297,6 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
         Route::get('create', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'create'])->name('create');
         Route::post('send', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'send'])->name('send');
         Route::get('index', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'list'])->name('index');
-        Route::get('/', function() { return redirect()->route('business.bulk-message.index'); });
+        Route::get('/', function() { return redirect()->route('business.bulk-message.create'); });
     });
 });
