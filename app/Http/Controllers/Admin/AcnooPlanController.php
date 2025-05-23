@@ -55,11 +55,13 @@ class AcnooPlanController extends Controller
             'offerPrice' => 'nullable|numeric|min:0|max:9999999999999',
             'subscriptionName' => 'required|string|max:255|unique:plans,subscriptionName',
             'subscriptionPrice' => 'required|numeric|min:0|max:9999999999999',
+            'permissions' => 'required|array',
         ]);
 
-        Plan::create($request->except(['offerPrice','status']) + [
+        Plan::create($request->except(['offerPrice','status','permissions']) + [
             'offerPrice' => $request->offerPrice ?? NULL,
             'status' => $request->status ? 1 : 0,
+            'permissions' => $request->permissions,
         ]);
 
         return response()->json([
@@ -80,6 +82,7 @@ class AcnooPlanController extends Controller
             'offerPrice' => 'nullable|numeric|min:0|max:9999999999999',
             'subscriptionPrice' => 'required|numeric|min:0|max:9999999999999',
             'subscriptionName' => 'required|string|max:255|unique:plans,subscriptionName,'.$plan->id,
+            'permissions' => 'required|array',
         ]);
 
         if ($plan->subscriptionName == 'Free' && ($plan->subscriptionName != $request->subscriptionName || $plan->subscriptionPrice != $request->subscriptionPrice || $plan->offerPrice != $request->offerPrice)) {
@@ -88,9 +91,10 @@ class AcnooPlanController extends Controller
             ], 406);
         }
 
-        $plan->update($request->except(['offerPrice','status']) + [
+        $plan->update($request->except(['offerPrice','status','permissions']) + [
             'offerPrice' => $request->offerPrice ?? NULL,
             'status' => $request->status ? 1 : 0,
+            'permissions' => $request->permissions,
         ]);
 
         return response()->json([
