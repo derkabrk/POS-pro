@@ -146,7 +146,7 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->role != 'staff' || visible_permission('bulk_message'))
+                @if (auth()->user()->role != 'staff' || visible_permission('bulk_messagePermission'))
                     <li class="nav-item">
                         <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.bulk-message.create', 'business.bulk-message.index') ? 'active' : '' }}" href="#sidebarBulkMessaging" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.bulk-message.create', 'business.bulk-message.index') ? 'true' : 'false' }}" aria-controls="sidebarBulkMessaging">
                             <i class="ri-mail-send-line me-2"></i>
