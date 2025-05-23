@@ -32,15 +32,24 @@ class Business extends Model
     ];
 
     public function getTypeTextAttribute()
-{
-    $types = [
-        0 => 'Physical',
-        1 => 'E-commerce',
-        2 => 'Both',
-    ];
+    {
+        $types = [
+            0 => 'Physical',
+            1 => 'E-commerce',
+            2 => 'Both',
+        ];
 
-    return $types[$this->type] ?? 'Unknown';
-}
+        return $types[$this->type] ?? 'Unknown';
+    }
+
+    /**
+     * Get the current (active) plan subscription for the business.
+     */
+    public function getCurrentPackage()
+    {
+        return $this->enrolled_plan();
+    }
+
     public function enrolled_plan()
     {
         return $this->belongsTo(PlanSubscribe::class, 'plan_subscribe_id');
