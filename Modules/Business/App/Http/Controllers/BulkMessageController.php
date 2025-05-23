@@ -13,7 +13,8 @@ class BulkMessageController extends Controller
 {
     public function index()
     {
-        return view('business::bulk-message.index');
+        $messages = SentBulkMessage::orderByDesc('created_at')->paginate(15);
+        return view('business::bulk-message.index', compact('messages'));
     }
 
     public function create()

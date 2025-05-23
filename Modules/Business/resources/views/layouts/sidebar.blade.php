@@ -189,21 +189,6 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->role != 'staff' || visible_permission('orderSourcePermission'))
-                    <li class="nav-item">
-                        <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'active' : '' }}" href="#sidebarOrderSources" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'true' : 'false' }}" aria-controls="sidebarOrderSources">
-                            <i class="bi bi-diagram-3-fill"></i>
-                            <span>{{ __('Order Sources') }}</span>
-                        </a>
-                        <div class="collapse menu-dropdown {{ Request::routeIs('business.orderSource.index', 'business.orderSource.create', 'business.orderSource.edit') ? 'show' : '' }}" id="sidebarOrderSources">
-                            <ul class="nav nav-sm flex-column">
-                                <li><a class="nav-link menu-link {{ Request::routeIs('business.orderSource.index') ? 'active' : '' }}" href="{{ route('business.orderSource.index') }}">{{ __('All Order Sources') }}</a></li>
-                                <li><a class="nav-link menu-link {{ Request::routeIs('business.orderSource.create') ? 'active' : '' }}" href="{{ route('business.orderSource.create') }}">{{ __('Add Order Source') }}</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                @endif
-
                 @if (auth()->user()->role != 'staff' || visible_permission('addExpensePermission'))
                     <li class="nav-item">
                         <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.expense-categories.index', 'business.expenses.index') ? 'active' : '' }}" href="#sidebarExpenses" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.expense-categories.index', 'business.expenses.index') ? 'true' : 'false' }}" aria-controls="sidebarExpenses">
