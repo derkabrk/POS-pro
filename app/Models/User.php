@@ -61,10 +61,19 @@ class User extends Authenticatable
         return $this->belongsTo(Business::class);
     }
 
+    public function plan()
+    {
+        return $this->belongsTo(\App\Models\Plan::class, 'plan_id');
+    }
+
     public function hasPlanPermission($permission)
     {
-        if (is_array($this->plan_permissions)) {
-            return in_array($permission, $this->plan_permissions);
+        $permissions = $this->plan_permissions;
+        if (empty($permissions) && $this->plan) {
+            $permissions = $this->plan->permissions;
+        }
+        if (is_array($permissions)) {
+            return in_array($permission, $permissions);
         }
         return false;
     }
