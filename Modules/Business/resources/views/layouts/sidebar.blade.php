@@ -146,19 +146,18 @@
                     </li>
                 @endif
 
-               
                 @if (auth()->user()->role != 'staff' || visible_permission('bulk_message'))
                     <li class="nav-item">
-                        <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.create') ? 'active' : '' }}" href="{{ route('business.bulk-message.create') }}">
+                        <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.bulk-message.create', 'business.bulk-message.index') ? 'active' : '' }}" href="#sidebarBulkMessaging" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.bulk-message.create', 'business.bulk-message.index') ? 'true' : 'false' }}" aria-controls="sidebarBulkMessaging">
                             <i class="ri-mail-send-line me-2"></i>
                             <span>{{ __('Bulk Messaging') }}</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.index') ? 'active' : '' }}" href="{{ route('business.bulk-message.index') }}">
-                            <i class="ri-mail-check-line me-2"></i>
-                            <span>{{ __('Sent Bulk Messages') }}</span>
-                        </a>
+                        <div class="collapse menu-dropdown {{ Request::routeIs('business.bulk-message.create', 'business.bulk-message.index') ? 'show' : '' }}" id="sidebarBulkMessaging">
+                            <ul class="nav nav-sm flex-column">
+                                <li><a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.create') ? 'active' : '' }}" href="{{ route('business.bulk-message.create') }}">{{ __('Send Bulk Message') }}</a></li>
+                                <li><a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.index') ? 'active' : '' }}" href="{{ route('business.bulk-message.index') }}">{{ __('Sent Bulk Messages') }}</a></li>
+                            </ul>
+                        </div>
                     </li>
                 @endif
 
