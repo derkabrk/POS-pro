@@ -126,7 +126,7 @@
                                         </div>
                                     </th>
                                     <td class="id">{{ $loop->iteration }}</td>
-                                    <td class="business_name">{{ $business->business_name }}</td>
+                                    <td class="business_name">{{ $business->business_name ?? 'N/A' }}</td>
                                     <td class="business_category">{{ $business->category->name ?? 'N/A' }}</td>
                                     <td class="business_type">
                                         @if($business->type == 0)
@@ -139,13 +139,13 @@
                                     </td>
                                     <td class="phone">{{ $business->user->phone ?? 'N/A' }}</td>
                                     <td class="package">
-                                        {{ $business->getCurrentPackage->plan->subscriptionName ?? 'N/A' }}
+                                        {{ optional(optional($business->getCurrentPackage)->plan)->subscriptionName ?? 'N/A' }}
                                     </td>
                                     <td class="last_enroll">
-                                        {{ $business->getCurrentPackage && $business->getCurrentPackage->created_at ? $business->getCurrentPackage->created_at->format('d M, Y') : 'N/A' }}
+                                        {{ optional($business->getCurrentPackage)->created_at ? optional($business->getCurrentPackage)->created_at->format('d M, Y') : 'N/A' }}
                                     </td>
                                     <td class="expired_date">
-                                        {{ $business->getCurrentPackage && $business->getCurrentPackage->expieryDate ? $business->getCurrentPackage->expieryDate->format('d M, Y') : 'N/A' }}
+                                        {{ optional($business->getCurrentPackage)->expieryDate ? optional($business->getCurrentPackage)->expieryDate->format('d M, Y') : 'N/A' }}
                                     </td>
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">

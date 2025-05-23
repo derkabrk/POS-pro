@@ -34,7 +34,7 @@ class AcnooBusinessController extends Controller
         $plans = Plan::latest()->get();
         $gateways = Gateway::latest()->get();
          $categories = BusinessCategory::latest()->paginate(20);
-        $businesses = Business::with('enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name')->latest()->paginate(20);
+        $businesses = Business::with(['getCurrentPackage.plan', 'category', 'user'])->paginate(10);
         return view('admin.business.index', compact('businesses', 'gateways', 'plans','categories'));
     }
 
