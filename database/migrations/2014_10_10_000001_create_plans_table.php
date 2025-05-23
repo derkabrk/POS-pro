@@ -19,6 +19,7 @@ return new class extends Migration
             $table->double('subscriptionPrice', 10, 2)->default(0);
             $table->boolean('status')->default(1);
             $table->longText('features')->nullable();
+            $table->json('permissions')->nullable();
             $table->timestamps();
         });
     }

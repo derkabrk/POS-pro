@@ -74,6 +74,7 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'users' =>  \App\Http\Middleware\UserMiddleware::class,
         'expired' => \App\Http\Middleware\ExpiredMiddleware::class,
+        'plan_permission' => \App\Http\Middleware\CheckPlanPermission::class,
     ];
 
 

@@ -71,6 +71,22 @@
                                     </select>
                                 </div>
                                 <div class="mb-4">
+                                    <label for="plan" class="form-label fw-bold fs-5">{{ __('Select Plan') }}</label>
+                                    <select name="plan" id="plan" class="form-select form-select-xl py-3 fs-5" required>
+                                        <option value="">-- {{ __('Choose Plan') }} --</option>
+                                        @php
+                                            $plans = \App\Models\Plan::all();
+                                        @endphp
+                                        @foreach($plans as $plan)
+                                            <option value="{{ $plan->id }}">{{ $plan->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-4" id="plan-permissions-section" style="display:none;">
+                                    <label class="form-label fw-bold fs-5">{{ __('View Permissions for Selected Plan') }}</label>
+                                    <div id="plan-permissions-list" class="list-group list-group-flush rounded shadow-sm bg-light"></div>
+                                </div>
+                                <div class="mb-4">
                                     <label class="form-label fw-bold fs-5">{{ __('Select Users') }}</label>
                                     <div class="list-group list-group-flush rounded shadow-sm bg-light" style="max-height: 340px; overflow-y: auto;">
                                         @php
@@ -131,6 +147,36 @@
                 emailCustomizeSection.style.display = 'none';
             }
         });
+
+        // Plan selection and permissions display
+        const planSelect = document.getElementById('plan');
+        const planPermissionsSection = document.getElementById('plan-permissions-section');
+        const planPermissionsList = document.getElementById('plan-permissions-list');
+        if (planSelect) {
+            planSelect.addEventListener('change', function() {
+                if (this.value) {
+                    fetch(`/api/plan/${this.value}/permissions`)
+                        .then(res => res.json())
+                        .then(data => {
+                            planPermissionsList.innerHTML = '';
+                            if (data.permissions && data.permissions.length) {
+                                data.permissions.forEach(perm => {
+                                    const item = document.createElement('div');
+                                    item.className = 'list-group-item';
+                                    item.textContent = perm;
+                                    planPermissionsList.appendChild(item);
+                                });
+                            } else {
+                                planPermissionsList.innerHTML = '<div class="text-muted">No permissions for this plan.</div>';
+                            }
+                            planPermissionsSection.style.display = '';
+                        });
+                } else {
+                    planPermissionsSection.style.display = 'none';
+                    planPermissionsList.innerHTML = '';
+                }
+            });
+        }
     });
 
     function insertAtCursor(fieldId, value) {

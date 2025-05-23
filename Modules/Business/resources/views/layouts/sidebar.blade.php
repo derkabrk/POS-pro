@@ -146,18 +146,20 @@
                     </li>
                 @endif
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.create') ? 'active' : '' }}" href="{{ route('business.bulk-message.create') }}">
-                        <i class="bi bi-envelope-paper-fill me-2"></i>
-                        <span>{{ __('Email Bulking') }}</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.index') ? 'active' : '' }}" href="{{ route('business.bulk-message.index') }}">
-                        <i class="bi bi-envelope-paper-fill me-2"></i>
-                        <span>{{ __('Sent Bulk Messages') }}</span>
-                    </a>
-                </li>
+                @if(auth()->user()->hasPlanPermission('bulk_message'))
+                    <li class="nav-item">
+                        <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.create') ? 'active' : '' }}" href="{{ route('business.bulk-message.create') }}">
+                            <i class="bi bi-envelope-paper-fill me-2"></i>
+                            <span>{{ __('Email Bulking') }}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link {{ Request::routeIs('business.bulk-message.index') ? 'active' : '' }}" href="{{ route('business.bulk-message.index') }}">
+                            <i class="bi bi-envelope-paper-fill me-2"></i>
+                            <span>{{ __('Sent Bulk Messages') }}</span>
+                        </a>
+                    </li>
+                @endif
 
                 @if (auth()->user()->role != 'staff' || visible_permission('addIncomePermission'))
                     <li class="nav-item">

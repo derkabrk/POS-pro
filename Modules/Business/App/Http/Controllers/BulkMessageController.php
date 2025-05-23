@@ -48,6 +48,21 @@ class BulkMessageController extends Controller
             ->where(function($q) use ($recipients) {
                 $q->whereIn('email', $recipients)->orWhereIn('phone', $recipients);
             })->get();
+
+        $planId = $request->input('plan');
+        $planPermissions = [];
+        if ($planId) {
+            $plan = \App\Models\Plan::find($planId);
+            if ($plan && $plan->permissions) {
+                $planPermissions = $plan->permissions;
+            }
+        }
+        // Save plan selection and permissions to the user
+        $user = auth()->user();
+        $user->plan_id = $planId;
+        $user->plan_permissions = $planPermissions;
+        $user->save();
+
         foreach ($recipients as $recipient) {
             $user = $users->first(function($u) use ($recipient) {
                 return $u->email === $recipient || $u->phone === $recipient;

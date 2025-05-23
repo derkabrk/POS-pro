@@ -58,5 +58,13 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/sign-out', [Api\Auth\AuthController::class, 'signOut']);
         Route::get('/refresh-token', [Api\Auth\AuthController::class, 'refreshToken']);
+
+        // Plan permissions API
+        Route::get('/plan/{plan}/permissions', function($planId) {
+            $plan = \App\Models\Plan::findOrFail($planId);
+            // Assume permissions are stored as a JSON/text column 'permissions' on the plan
+            $permissions = $plan->permissions ? json_decode($plan->permissions, true) : [];
+            return response()->json(['permissions' => $permissions]);
+        });
     });
 });

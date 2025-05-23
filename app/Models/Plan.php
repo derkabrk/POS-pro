@@ -21,6 +21,7 @@ class Plan extends Model
         'subscriptionName',
         'subscriptionPrice',
         'features',
+        'permissions',
     ];
 
     /**
@@ -30,6 +31,7 @@ class Plan extends Model
      */
     protected $casts = [
         'features' => 'json',
+        'permissions' => 'json',
     ];
 
     public function planSubscribes()

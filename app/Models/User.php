@@ -30,6 +30,8 @@ class User extends Authenticatable
         'visibility',
         'remember_token',
         'email_verified_at',
+        'plan_id', // add this line
+        'plan_permissions', // add this line
     ];
 
     /**
@@ -51,10 +53,19 @@ class User extends Authenticatable
         'password' => 'hashed',
         'visibility' => 'json',
         'email_verified_at' => 'datetime',
+        'plan_permissions' => 'json', // add this line
     ];
 
     public function business() : BelongsTo
     {
         return $this->belongsTo(Business::class);
+    }
+
+    public function hasPlanPermission($permission)
+    {
+        if (is_array($this->plan_permissions)) {
+            return in_array($permission, $this->plan_permissions);
+        }
+        return false;
     }
 }
