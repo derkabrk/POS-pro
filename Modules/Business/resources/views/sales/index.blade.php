@@ -216,12 +216,14 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         const saleTypeFilter = document.getElementById("sale_type_filter");
+        const orderSourceFilter = document.getElementById("order_source_filter");
+        const searchInput = document.querySelector(".search-box input[name='search']");
+        const perPageSelect = document.querySelector("select[name='per_page']");
         const filterForm = document.querySelector(".filter-form");
         const salesData = document.getElementById("sales-data");
 
-        saleTypeFilter.addEventListener("change", function () {
+        function fetchFilteredData() {
             const formData = new FormData(filterForm);
-
             fetch(filterForm.action, {
                 method: "POST",
                 body: formData,
@@ -238,14 +240,31 @@
                 }
             })
             .catch(error => console.error("Error fetching sales data:", error));
+        }
+
+        saleTypeFilter.addEventListener("change", fetchFilteredData);
+        orderSourceFilter.addEventListener("change", fetchFilteredData);
+        perPageSelect.addEventListener("change", fetchFilteredData);
+        searchInput.addEventListener("input", function(e) {
+            // Debounce search
+            clearTimeout(window._searchTimeout);
+            window._searchTimeout = setTimeout(fetchFilteredData, 400);
+        });
+
+        // Also trigger on pressing Enter in search
+        searchInput.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                fetchFilteredData();
+            }
         });
     });
 
     function SearchData() {
+        // For the Filters button
         const filterForm = document.querySelector(".filter-form");
         const salesData = document.getElementById("sales-data");
         const formData = new FormData(filterForm);
-
         fetch(filterForm.action, {
             method: "POST",
             body: formData,
