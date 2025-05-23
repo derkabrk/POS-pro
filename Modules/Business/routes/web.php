@@ -292,4 +292,11 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     // Bulk Messaging
     Route::get('bulk-message', [Business\BulkMessageController::class, 'index'])->name('bulk-message.index');
     Route::post('bulk-message/send', [Business\BulkMessageController::class, 'send'])->name('bulk-message.send');
+
+    Route::group(['middleware' => ['auth', 'business'], 'prefix' => 'bulk-message', 'as' => 'business.bulk-message.'], function () {
+        Route::get('create', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'create'])->name('create');
+        Route::post('send', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'send'])->name('send');
+        Route::get('list', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'list'])->name('list');
+        Route::get('/', function() { return redirect()->route('business.bulk-message.create'); });
+    });
 });

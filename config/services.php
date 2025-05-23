@@ -36,9 +36,16 @@ return [
         'api_secret' => env('SHOPIFY_API_SECRET'),
     ],
 
-        'youcan' => [
+    'youcan' => [
         'api_key' => env('YOUCAN_API_KEY'),
         'api_secret' => env('YOUCAN_API_SECRET'),
+    ],
+
+    // Infobip for SMS, WhatsApp, Viber
+    'infobip' => [
+        'base_url' => env('INFOBIP_API_BASE_URL'),
+        'api_key' => env('INFOBIP_API_KEY'),
+        'sender' => env('INFOBIP_SENDER'),
     ],
 
 ];

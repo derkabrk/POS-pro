@@ -7,12 +7,18 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
+use Modules\Business\App\Models\SentBulkMessage;
 
 class BulkMessageController extends Controller
 {
     public function index()
     {
         return view('business::bulk-message.index');
+    }
+
+    public function create()
+    {
+        return view('business::bulk-message.create');
     }
 
     public function send(Request $request)
@@ -74,30 +80,111 @@ class BulkMessageController extends Controller
                     break;
                 case 'sms':
                     if ($user && $user->phone) {
-                        Log::info("SMS sent to {$user->phone}: $message");
-                        $results[] = ['recipient' => $display, 'status' => 'sent (simulated)'];
+                        try {
+                            // Ensure phone is in E.164 format for Infobip
+                            $phone = $user->phone;
+                            if (strpos($phone, '+') !== 0) {
+                                // Optionally, prepend your country code if missing
+                                // $phone = '+1' . preg_replace('/\D/', '', $phone); // Example for US
+                                // For production, use a library like giggsey/libphonenumber-for-php for robust formatting
+                            }
+                            $response = Http::withHeaders([
+                                'Authorization' => 'App ' . config('services.infobip.api_key'),
+                                'Content-Type' => 'application/json',
+                                'Accept' => 'application/json',
+                            ])->post(rtrim(config('services.infobip.base_url'),'/') . '/sms/2/text/advanced', [
+                                'messages' => [[
+                                    'from' => config('services.infobip.sender'),
+                                    'destinations' => [['to' => $phone]],
+                                    'text' => $message,
+                                ]],
+                            ]);
+                            if ($response->successful()) {
+                                $results[] = ['recipient' => $display, 'status' => 'sent'];
+                            } else {
+                                $results[] = ['recipient' => $display, 'status' => 'failed', 'error' => $response->body()];
+                            }
+                        } catch (\Exception $e) {
+                            $results[] = ['recipient' => $display, 'status' => 'failed', 'error' => $e->getMessage()];
+                        }
                     } else {
                         $results[] = ['recipient' => $display, 'status' => 'skipped (no phone)'];
                     }
                     break;
                 case 'whatsapp':
                     if ($user && $user->phone) {
-                        Log::info("WhatsApp sent to {$user->phone}: $message");
-                        $results[] = ['recipient' => $display, 'status' => 'sent (simulated)'];
+                        try {
+                            $response = Http::withHeaders([
+                                'Authorization' => 'App ' . config('services.infobip.api_key'),
+                                'Content-Type' => 'application/json',
+                                'Accept' => 'application/json',
+                            ])->post(rtrim(config('services.infobip.base_url'),'/') . '/whatsapp/1/message/text', [
+                                'from' => config('services.infobip.sender'),
+                                'to' => $user->phone,
+                                'content' => [ 'text' => $message ],
+                            ]);
+                            if ($response->successful()) {
+                                $results[] = ['recipient' => $display, 'status' => 'sent'];
+                            } else {
+                                $results[] = ['recipient' => $display, 'status' => 'failed', 'error' => $response->body()];
+                            }
+                        } catch (\Exception $e) {
+                            $results[] = ['recipient' => $display, 'status' => 'failed', 'error' => $e->getMessage()];
+                        }
                     } else {
                         $results[] = ['recipient' => $display, 'status' => 'skipped (no phone)'];
                     }
                     break;
                 case 'viber':
                     if ($user && $user->phone) {
-                        Log::info("Viber sent to {$user->phone}: $message");
-                        $results[] = ['recipient' => $display, 'status' => 'sent (simulated)'];
+                        try {
+                            $response = Http::withHeaders([
+                                'Authorization' => 'App ' . config('services.infobip.api_key'),
+                                'Content-Type' => 'application/json',
+                                'Accept' => 'application/json',
+                            ])->post(rtrim(config('services.infobip.base_url'),'/') . '/omni/1/advanced', [
+                                'messages' => [[
+                                    'from' => config('services.infobip.sender'),
+                                    'destinations' => [['to' => $user->phone]],
+                                    'viber' => [
+                                        'text' => $message,
+                                    ],
+                                ]],
+                            ]);
+                            if ($response->successful()) {
+                                $results[] = ['recipient' => $display, 'status' => 'sent'];
+                            } else {
+                                $results[] = ['recipient' => $display, 'status' => 'failed', 'error' => $response->body()];
+                            }
+                        } catch (\Exception $e) {
+                            $results[] = ['recipient' => $display, 'status' => 'failed', 'error' => $e->getMessage()];
+                        }
                     } else {
                         $results[] = ['recipient' => $display, 'status' => 'skipped (no phone)'];
                     }
                     break;
             }
         }
+
+        // Save sent message log
+        SentBulkMessage::create([
+            'business_id' => $businessId,
+            'user_id' => auth()->id(),
+            'type' => $type,
+            'recipients' => implode(',', $recipients),
+            'subject' => $subject,
+            'content' => $type === 'email' && $emailBody ? $emailBody : $message,
+            'header_image' => $headerImageUrl,
+            'results' => $results,
+        ]);
+
         return back()->with('results', $results);
+    }
+
+    public function list()
+    {
+        $businessId = auth()->user()->business_id;
+        $messages = SentBulkMessage::where('business_id', $businessId)->latest()->paginate(20);
+        return view('business::bulk-message.list', compact('messages'));
     }
 }
