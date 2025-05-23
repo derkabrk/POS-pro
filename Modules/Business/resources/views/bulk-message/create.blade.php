@@ -74,6 +74,7 @@
                                     <label class="form-label fw-bold fs-5">{{ __('Select Users') }}</label>
                                     <div class="list-group list-group-flush rounded shadow-sm bg-light" style="max-height: 340px; overflow-y: auto;">
                                         @php
+                                            $businessId = auth()->user()->business_id;
                                             $users = \App\Models\User::where('business_id', $businessId)
                                                 ->whereNotNull('email')
                                                 ->get();
