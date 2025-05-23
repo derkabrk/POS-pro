@@ -59,4 +59,12 @@ class Business extends Model
     {
         return $this->belongsTo(BusinessCategory::class, 'business_category_id');
     }
+
+    /**
+     * Get the owner user of the business.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
