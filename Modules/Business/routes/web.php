@@ -293,10 +293,9 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::get('bulk-message', [Business\BulkMessageController::class, 'index'])->name('bulk-message.index');
     Route::post('bulk-message/send', [Business\BulkMessageController::class, 'send'])->name('bulk-message.send');
 
-    Route::group(['middleware' => ['auth', 'business'], 'prefix' => 'bulk-message', 'as' => 'business.bulk-message.'], function () {
-        Route::get('create', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'create'])->name('create');
+    Route::group(['middleware' => ['auth', 'business'], 'prefix' => 'bulk-message', 'as' => 'bulk-message.'], function () {
         Route::post('send', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'send'])->name('send');
         Route::get('index', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'index'])->name('index');
-        Route::get('/', function() { return redirect()->route('business.bulk-message.create'); });
+        Route::get('/', function() { return redirect()->route('bulk-message.create'); });
     });
 });
