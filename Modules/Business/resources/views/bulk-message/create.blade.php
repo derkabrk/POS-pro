@@ -31,13 +31,13 @@
                         <div class="row g-4">
                             <div class="col-md-6 border-end">
                                 <div class="mb-4" id="email-customize-section" style="display:none;">
-                                    <label for="email_subject" class="form-label fw-bold fs-5">{{ __('Email Subject') }}</label>
-                                    <input type="text" name="email_subject" id="email_subject" class="form-control form-control-xl mb-3 py-3 fs-5" placeholder="{{ __('Subject') }}">
-                                    <label for="email_image" class="form-label fw-bold fs-5">{{ __('Header Image (optional)') }}</label>
+                                    <label for="email_subject" class="form-label fw-bold fs-6">{{ __('Email Subject') }}</label>
+                                    <input type="text" name="email_subject" id="email_subject" class="form-control form-control-sm mb-3 py-2 fs-6" placeholder="{{ __('Subject') }}">
+                                    <label for="email_image" class="form-label fw-bold fs-6">{{ __('Header Image (optional)') }}</label>
                                     <input type="file" name="email_image" id="email_image" class="form-control mb-3 py-2 fs-6" accept="image/*">
                                     <div class="form-text mb-3 fs-6">{{ __('You can upload a header/banner image for your email.') }}</div>
-                                    <label for="email_body" class="form-label fw-bold fs-5">{{ __('Email Body') }}</label>
-                                    <textarea name="email_body" id="email_body" class="form-control mb-3 py-3 fs-5" rows="8" placeholder="{{ __('Write your email content here...') }}"></textarea>
+                                    <label for="email_body" class="form-label fw-bold fs-6">{{ __('Email Body') }}</label>
+                                    <textarea name="email_body" id="email_body" class="form-control mb-3 py-2 fs-6" rows="8" placeholder="{{ __('Write your email content here...') }}"></textarea>
                                     <div class="form-text mb-3 fs-6">{{ __('You can use HTML for formatting. Use <b>, <i>, <u>, <h1>-<h6>, <p>, <ul>, <ol>, <li>, <img>, <a>, etc. for rich content.') }}</div>
                                     <div class="mb-3">
                                         <label class="form-label fw-bold fs-6">{{ __('Quick Style') }}</label>
@@ -56,14 +56,14 @@
                                     <div class="form-text fs-6">{{ __('The message field will be ignored for email if this is filled.') }}</div>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="message" class="form-label fw-bold fs-5">{{ __('Message') }}</label>
-                                    <textarea name="message" id="message" class="form-control form-control-xl py-3 fs-5" rows="8" required placeholder="{{ __('Type your message here...') }}"></textarea>
+                                    <label for="message" class="form-label fw-bold fs-6">{{ __('Message') }}</label>
+                                    <textarea name="message" id="message" class="form-control form-control-sm py-2 fs-6" rows="8" required placeholder="{{ __('Type your message here...') }}"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-4">
-                                    <label for="type" class="form-label fw-bold fs-5">{{ __('Message Type') }}</label>
-                                    <select name="type" id="type" class="form-select form-select-xl py-3 fs-5" required>
+                                    <label for="type" class="form-label fw-bold fs-6">{{ __('Message Type') }}</label>
+                                    <select name="type" id="type" class="form-select form-select-sm py-2 fs-6" required>
                                         <option value="email" selected>Email</option>
                                         <option value="sms">SMS</option>
                                         <option value="whatsapp">WhatsApp</option>
@@ -71,8 +71,8 @@
                                     </select>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="plan" class="form-label fw-bold fs-5">{{ __('Select Plan') }}</label>
-                                    <select name="plan" id="plan" class="form-select form-select-xl py-3 fs-5" required>
+                                    <label for="plan" class="form-label fw-bold fs-6">{{ __('Select Plan') }}</label>
+                                    <select name="plan" id="plan" class="form-select form-select-sm py-2 fs-6" required>
                                         <option value="">-- {{ __('Choose Plan') }} --</option>
                                         @php
                                             $plans = \App\Models\Plan::all();
@@ -83,12 +83,16 @@
                                     </select>
                                 </div>
                                 <div class="mb-4" id="plan-permissions-section" style="display:none;">
-                                    <label class="form-label fw-bold fs-5">{{ __('View Permissions for Selected Plan') }}</label>
+                                    <label class="form-label fw-bold fs-6">{{ __('View Permissions for Selected Plan') }}</label>
                                     <div id="plan-permissions-list" class="list-group list-group-flush rounded shadow-sm bg-light"></div>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold fs-5">{{ __('Select Users') }}</label>
-                                    <div class="list-group list-group-flush rounded shadow-sm bg-light" style="max-height: 340px; overflow-y: auto;">
+                                    <label class="form-label fw-bold fs-6">{{ __('Select Users') }}</label>
+                                    <div class="mb-2">
+                                        <input type="checkbox" id="select-all-users" class="form-check-input me-1">
+                                        <label for="select-all-users" class="form-label fw-normal fs-7">{{ __('Select All') }}</label>
+                                    </div>
+                                    <div class="list-group list-group-flush rounded shadow-sm bg-light" style="max-height: 240px; overflow-y: auto;">
                                         @php
                                             $businessId = auth()->user()->business_id;
                                             $users = \App\Models\User::where('business_id', $businessId)
@@ -96,11 +100,11 @@
                                                 ->get();
                                         @endphp
                                         @foreach($users as $user)
-                                            <label class="list-group-item d-flex align-items-center gap-2 py-2 fs-6">
+                                            <label class="list-group-item d-flex align-items-center gap-2 py-1 fs-7">
                                                 <input type="checkbox" class="form-check-input user-recipient-checkbox" value="{{ $user->email }}" data-email="{{ $user->email }}" data-phone="{{ $user->phone }}" data-name="{{ $user->name }}">
-                                                <img src="{{ $user->image ? asset($user->image) : asset('assets/images/default-avatar.png') }}" alt="{{ $user->name }}" class="rounded-circle border border-2" width="32" height="32">
+                                                <img src="{{ $user->image ? asset($user->image) : asset('assets/images/default-avatar.png') }}" alt="{{ $user->name }}" class="rounded-circle border border-2" width="24" height="24">
                                                 <div class="flex-grow-1">
-                                                    <div class="fw-bold text-dark fs-6">{{ $user->name }}</div>
+                                                    <div class="fw-bold text-dark fs-7">{{ $user->name }}</div>
                                                     <div class="small text-muted">{{ $user->email }}</div>
                                                     <div class="small text-muted">{{ $user->phone }}</div>
                                                 </div>
@@ -109,10 +113,10 @@
                                     </div>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="recipients" class="form-label fw-bold fs-5">{{ __('Recipients (comma separated)') }}</label>
-                                    <input type="text" name="recipients" id="recipients" class="form-control form-control-xl py-3 fs-5" placeholder="example@email.com, +123456789, ..." required>
+                                    <label for="recipients" class="form-label fw-bold fs-6">{{ __('Recipients (comma separated)') }}</label>
+                                    <input type="text" name="recipients" id="recipients" class="form-control form-control-sm py-2 fs-6" placeholder="example@email.com, +123456789, ..." required>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-lg w-100 shadow mt-4 py-3 fs-5">{{ __('Send Bulk Message') }}</button>
+                                <button type="submit" class="btn btn-primary btn-sm w-100 shadow mt-4 py-2 fs-6">{{ __('Send Bulk Message') }}</button>
                             </div>
                         </div>
                     </form>
@@ -175,6 +179,17 @@
                     planPermissionsSection.style.display = 'none';
                     planPermissionsList.innerHTML = '';
                 }
+            });
+        }
+
+        // Select All functionality for users
+        const selectAllUsers = document.getElementById('select-all-users');
+        if (selectAllUsers) {
+            selectAllUsers.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.user-recipient-checkbox');
+                checkboxes.forEach(cb => { cb.checked = selectAllUsers.checked; });
+                // Trigger change event to update recipients field
+                checkboxes.forEach(cb => cb.dispatchEvent(new Event('change')));
             });
         }
     });
