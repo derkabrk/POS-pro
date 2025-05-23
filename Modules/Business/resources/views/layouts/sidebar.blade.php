@@ -252,7 +252,6 @@
                                 <li><a class="nav-link menu-link {{ Request::routeIs('business.purchase-return-reports.index') ? 'active' : '' }}" href="{{ route('business.purchase-return-reports.index') }}">{{ __('Purchase Return') }}</a></li>
                                 <li><a class="nav-link menu-link {{ Request::routeIs('business.income-reports.index') ? 'active' : '' }}" href="{{ route('business.income-reports.index') }}">{{ __('All Income') }}</a></li>
                                 <li><a class="nav-link menu-link {{ Request::routeIs('business.expense-reports.index') ? 'active' : '' }}" href="{{ route('business.expense-reports.index') }}">{{ __('All Expense') }}</a></li>
-                                <li><a class="nav-link menu-link {{ Request::routeIs('business.supplier-due-reports.index') ? 'active' : '' }}" href="{{ route('business.supplier-due-reports.index') }}">{{ __('Supplier Due') }}</a></li>
                             </ul>
                         </div>
                     </li>
