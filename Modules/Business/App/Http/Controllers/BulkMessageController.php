@@ -80,7 +80,7 @@ class BulkMessageController extends Controller
                                 Mail::send([], [], function ($mail) use ($user, $subject, $finalBody) {
                                     $mail->to($user->email)
                                          ->subject($subject)
-                                         ->setBody($finalBody, 'text/html');
+                                         ->html($finalBody); // Use ->html() instead of ->setBody()
                                 });
                             } else {
                                 Mail::raw($message, function ($mail) use ($user, $subject) {
