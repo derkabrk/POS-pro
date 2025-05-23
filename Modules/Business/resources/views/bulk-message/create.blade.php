@@ -74,12 +74,14 @@
                                     <label class="form-label fw-bold fs-5">{{ __('Select Users') }}</label>
                                     <div class="list-group list-group-flush rounded shadow-sm bg-light" style="max-height: 340px; overflow-y: auto;">
                                         @php
-                                            $users = \App\Models\User::whereNotNull('email')->orWhereNotNull('phone')->get();
+                                            $users = \App\Models\User::where('business_id', $businessId)
+                                                ->whereNotNull('email')
+                                                ->get();
                                         @endphp
                                         @foreach($users as $user)
-                                            <label class="list-group-item d-flex align-items-center gap-3 py-3 fs-6">
-                                                <input type="checkbox" class="form-check-input user-recipient-checkbox" value="{{ $user->email ?? $user->phone }}" data-email="{{ $user->email }}" data-phone="{{ $user->phone }}" data-name="{{ $user->name }}">
-                                                <img src="{{ $user->image ? asset($user->image) : asset('assets/images/default-avatar.png') }}" alt="{{ $user->name }}" class="rounded-circle border border-2" width="48" height="48">
+                                            <label class="list-group-item d-flex align-items-center gap-2 py-2 fs-6">
+                                                <input type="checkbox" class="form-check-input user-recipient-checkbox" value="{{ $user->email }}" data-email="{{ $user->email }}" data-phone="{{ $user->phone }}" data-name="{{ $user->name }}">
+                                                <img src="{{ $user->image ? asset($user->image) : asset('assets/images/default-avatar.png') }}" alt="{{ $user->name }}" class="rounded-circle border border-2" width="32" height="32">
                                                 <div class="flex-grow-1">
                                                     <div class="fw-bold text-dark fs-6">{{ $user->name }}</div>
                                                     <div class="small text-muted">{{ $user->email }}</div>

@@ -44,6 +44,7 @@ class BulkMessageController extends Controller
         // Fetch users by email or phone, but only those who are customers of the current business
         $businessId = auth()->user()->business_id;
         $users = \App\Models\User::where('business_id', $businessId)
+            ->whereNotNull('email')
             ->where(function($q) use ($recipients) {
                 $q->whereIn('email', $recipients)->orWhereIn('phone', $recipients);
             })->get();
@@ -76,7 +77,8 @@ class BulkMessageController extends Controller
                             $results[] = ['recipient' => $display, 'status' => 'failed', 'error' => $e->getMessage()];
                         }
                     } else {
-                        $results[] = ['recipient' => $display, 'status' => 'skipped (no email)'];
+                        // skip if no valid user or no email
+                        continue;
                     }
                     break;
                 case 'sms':
