@@ -78,6 +78,46 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-xxl-6 col-md-6">
+                                    <div>
+                                        <label class="form-label">{{ __('Plan Permissions') }} <span class="text-danger">*</span></label>
+                                        <div class="row g-2">
+                                            @php
+                                                $permissions = [
+                                                    'business_access' => __('Business Access'),
+                                                    'sales_access' => __('Sales Access'),
+                                                    'purchase_access' => __('Purchase Access'),
+                                                    'products_access' => __('Products Access'),
+                                                    'reports_access' => __('Reports Access'),
+                                                    'bulk_message' => __('Bulk Messaging'),
+                                                    'roles_access' => __('User Roles'),
+                                                    'settings_access' => __('Settings'),
+                                                    'expenses_access' => __('Expenses'),
+                                                    'incomes_access' => __('Incomes'),
+                                                    'parties_access' => __('Parties'),
+                                                    'shipping_access' => __('Shipping'),
+                                                    'subscriptions_access' => __('Subscriptions'),
+                                                    'currencies_access' => __('Currencies'),
+                                                    'vat_access' => __('VAT/Tax'),
+                                                    'notifications_access' => __('Notifications'),
+                                                    'order_source_access' => __('Order Source'),
+                                                    'ticket_system_access' => __('Ticket System'),
+                                                    'chat_access' => __('Chat'),
+                                                ];
+                                                $planPermissions = is_array($plan->permissions) ? $plan->permissions : (json_decode($plan->permissions, true) ?? []);
+                                            @endphp
+                                            @foreach($permissions as $permKey => $permLabel)
+                                                <div class="col-6 col-md-6">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permKey }}" id="perm_{{ $permKey }}" {{ in_array($permKey, $planPermissions) ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="perm_{{ $permKey }}">{{ $permLabel }}</label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <small class="text-muted">{{ __('Select the features this plan will allow access to.') }}</small>
+                                    </div>
+                                </div>
                                 <div class="col-12">
                                     <div class="row feature-list">
                                         @foreach ($plan->features ?? [] as $key => $item)

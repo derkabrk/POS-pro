@@ -66,12 +66,57 @@
                         <th>{{ __('Duration') }}</th>
                         <th>{{ __('Offer Price') }}</th>
                         <th>{{ __('Subscription Price') }}</th>
+                        <th>{{ __('Permissions') }}</th>
                         <th>{{ __('Status') }}</th>
                         <th>{{ __('Action') }}</th>
                     </tr>
                     </thead>
                     <tbody id="plans-data" class="searchResults">
-                        @include('admin.plans.datas')
+                        @foreach($plans as $plan)
+                        <tr>
+                            @can('plans-delete')
+                                <td>
+                                    <label class="table-custom-checkbox">
+                                        <input type="checkbox" class="table-hidden-checkbox selectRowCheckbox" value="{{ $plan->id }}">
+                                        <span class="table-custom-checkmark custom-checkmark"></span>
+                                    </label>
+                                </td>
+                            @endcan
+                            <td>{{ $loop->iteration }}</td>
+                            <td class="text-start">{{ $plan->subscriptionName }}</td>
+                            <td>{{ $plan->duration }}</td>
+                            <td>{{ $plan->offerPrice }}</td>
+                            <td>{{ $plan->subscriptionPrice }}</td>
+                            <td>
+                                <div class="d-flex flex-wrap gap-1">
+                                    @if(!empty($plan->permissions) && is_array($plan->permissions))
+                                        @foreach($plan->permissions as $permission)
+                                            <span class="badge rounded-pill bg-gradient-info text-dark shadow-sm px-3 py-2 mb-1" style="font-size: 0.95em; letter-spacing: 0.02em;">
+                                                <i class="fas fa-check-circle me-1 text-primary"></i>{{ __(ucwords(str_replace('_', ' ', $permission))) }}
+                                            </span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted fst-italic">{{ __('None') }}</span>
+                                    @endif
+                                </div>
+                            </td>
+                            <td>
+                                @if($plan->status == 1)
+                                    <span class="badge bg-success">{{ __('Active') }}</span>
+                                @else
+                                    <span class="badge bg-danger">{{ __('Inactive') }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @can('plans-update')
+                                    <a href="{{ route('admin.plans.edit', $plan->id) }}" class="btn btn-sm btn-primary">{{ __('Edit') }}</a>
+                                @endcan
+                                @can('plans-delete')
+                                    <button type="button" class="btn btn-sm btn-danger delete-plan" data-id="{{ $plan->id }}">{{ __('Delete') }}</button>
+                                @endcan
+                            </td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

@@ -136,6 +136,48 @@
 
 @section('script')
     <script>
-        // Add JS for dynamic features if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            const featureInput = document.getElementById('feature-input');
+            const featureBtn = document.getElementById('feature-btn');
+            const featureList = document.querySelector('.feature-list');
+            const permissionsContainer = document.querySelector('.row.g-2');
+
+            featureBtn.addEventListener('click', function() {
+                const featureName = featureInput.value.trim();
+                if (!featureName) return;
+                // Generate a slug for the permission key
+                const permKey = featureName.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+                // Prevent duplicates
+                if (document.getElementById('perm_' + permKey)) {
+                    featureInput.value = '';
+                    featureInput.focus();
+                    return;
+                }
+                // Create the new permission checkbox
+                const col = document.createElement('div');
+                col.className = 'col-6 col-md-6';
+                col.innerHTML = `
+                    <div class="form-check form-switch align-items-center d-flex">
+                        <input class="form-check-input" type="checkbox" name="permissions[]" value="${permKey}" id="perm_${permKey}" checked>
+                        <label class="form-check-label ms-2" for="perm_${permKey}">${featureName}</label>
+                        <button type="button" class="btn btn-sm btn-link text-danger ms-auto remove-feature" title="Remove"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+                permissionsContainer.appendChild(col);
+                // Remove feature handler
+                col.querySelector('.remove-feature').addEventListener('click', function() {
+                    col.remove();
+                });
+                featureInput.value = '';
+                featureInput.focus();
+            });
+            // Optional: allow Enter key to add feature
+            featureInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    featureBtn.click();
+                }
+            });
+        });
     </script>
 @endsection

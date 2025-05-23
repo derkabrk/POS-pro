@@ -64,10 +64,14 @@ class AcnooPlanController extends Controller
             'permissions' => $request->permissions,
         ]);
 
-        return response()->json([
-            'message' => __('Subscription Plan created successfully'),
-            'redirect' => route('admin.plans.index')
-        ]);
+        if ($request->ajax()) {
+            return response()->json([
+                'message' => __('Subscription Plan created successfully'),
+                'redirect' => route('admin.plans.index')
+            ]);
+        } else {
+            return redirect()->route('admin.plans.index')->with('success', __('Subscription Plan created successfully'));
+        }
     }
 
     public function edit(Plan $plan)
@@ -97,10 +101,14 @@ class AcnooPlanController extends Controller
             'permissions' => $request->permissions,
         ]);
 
-        return response()->json([
-            'message' => __('Subscription Plan updated successfully'),
-            'redirect' => route('admin.plans.index')
-        ]);
+        if ($request->ajax()) {
+            return response()->json([
+                'message' => __('Subscription Plan updated successfully'),
+                'redirect' => route('admin.plans.index')
+            ]);
+        } else {
+            return redirect()->route('admin.plans.index')->with('success', __('Subscription Plan updated successfully'));
+        }
     }
 
     public function status(Request $request, $id)
