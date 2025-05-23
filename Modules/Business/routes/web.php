@@ -288,4 +288,8 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
         return response()->json($users);
     })->name('chat.users.status');
     Route::get('chat/search-users', [Business\ChatController::class, 'searchUsers'])->name('chat.search-users');
+
+    // Bulk Messaging
+    Route::get('bulk-message', [Business\BulkMessageController::class, 'index'])->name('bulk-message.index');
+    Route::post('bulk-message/send', [Business\BulkMessageController::class, 'send'])->name('bulk-message.send');
 });

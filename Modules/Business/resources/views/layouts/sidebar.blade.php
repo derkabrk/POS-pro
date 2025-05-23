@@ -289,6 +289,13 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('business.bulk-message.index') }}">
+                        <i class="fas fa-broadcast-tower me-2"></i>
+                        <span>{{ __('Bulk Messaging') }}</span>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <div id="sidebar_plan" class="d-block sidebar-free-plan d-flex align-items-center justify-content-between p-3 flex-column">
                         <div class="text-center">

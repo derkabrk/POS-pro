@@ -9,42 +9,42 @@
 @endpush
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">{{ __('Quick Action') }}</h4>
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('business.products.index') }}" class="btn btn-primary">
-                                <i class="fas fa-box"></i> {{ __('Product List') }}
+    <div class="container-fluid py-3">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-9">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center border-bottom-0 pb-2">
+                        <h4 class="card-title mb-0 text-primary fw-semibold">{{ __('Quick Action') }}</h4>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{{ route('business.products.index') }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-box me-1"></i> {{ __('Product List') }}
                             </a>
-                            <a href="{{ route('business.sales.index', ['today' => true]) }}" class="btn btn-success">
-                                <i class="fas fa-chart-line"></i> {{ __('Today Sales') }}
+                            <a href="{{ route('business.sales.index', ['today' => true]) }}" class="btn btn-outline-success btn-sm">
+                                <i class="fas fa-chart-line me-1"></i> {{ __('Today Sales') }}
                             </a>
-                            <button data-bs-toggle="modal" data-bs-target="#calculatorModal" class="btn btn-warning">
-                                <i class="fas fa-calculator"></i> {{ __('Calculator') }}
+                            <button data-bs-toggle="modal" data-bs-target="#calculatorModal" class="btn btn-outline-warning btn-sm">
+                                <i class="fas fa-calculator me-1"></i> {{ __('Calculator') }}
                             </button>
-                            <a href="{{ route('business.dashboard.index') }}" class="btn btn-info">
-                                <i class="fas fa-tachometer-alt"></i> {{ __('Dashboard') }}
+                            <a href="{{ route('business.dashboard.index') }}" class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-tachometer-alt me-1"></i> {{ __('Dashboard') }}
                             </a>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <form action="{{ route('business.sales.store') }}" method="post" enctype="multipart/form-data" class="ajaxform">
                             @csrf
-                            <div class="row mb-3">
+                            <div class="row g-3 mb-3">
                                 <div class="col-md-6">
-                                    <label for="invoiceNumber" class="form-label">{{ __('Invoice no') }}</label>
-                                    <input type="text" name="invoiceNumber" value="{{ $invoice_no }}" class="form-control" readonly>
+                                    <label for="invoiceNumber" class="form-label fw-semibold">{{ __('Invoice no') }}</label>
+                                    <input type="text" name="invoiceNumber" value="{{ $invoice_no }}" class="form-control bg-light" readonly>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="saleDate" class="form-label">{{ __('Sale Date') }}</label>
+                                    <label for="saleDate" class="form-label fw-semibold">{{ __('Sale Date') }}</label>
                                     <input type="date" name="saleDate" class="form-control" value="{{ now()->format('Y-m-d') }}">
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="party_id" class="form-label">{{ __('Select Customer') }}</label>
+                                <label for="party_id" class="form-label fw-semibold">{{ __('Select Customer') }}</label>
                                 <div class="input-group">
                                     <select name="party_id" class="form-select customer-select">
                                         <option value="">{{ __('Select Customer') }}</option>
@@ -53,17 +53,17 @@
                                         </option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}" data-type="{{ $customer->type }}" {{ request('customer_id') == $customer->id ? 'selected' : '' }}>
-                                                {{ $customer->name }} ({{ $customer->type }} {{ $customer->due ? ' ' . currency_format($customer->due, currency:business_currency()) : '' }})
+                                                {{ $customer->name }} ({{ $customer->type }}{{ $customer->due ? ' ' . currency_format($customer->due, currency:business_currency()) : '' }})
                                             </option>
                                         @endforeach
                                     </select>
-                                    <a href="#customer-create-modal" data-bs-toggle="modal" class="btn btn-danger">
+                                    <a href="#customer-create-modal" data-bs-toggle="modal" class="btn btn-outline-danger">
                                         <i class="fas fa-plus-square"></i>
                                     </a>
                                 </div>
                             </div>
                             <div class="mb-3" id="shipping-service-container" style="display: none;">
-                                <label for="shipping_service" class="form-label">{{ __('Select Shipping Service') }}</label>
+                                <label for="shipping_service" class="form-label fw-semibold">{{ __('Select Shipping Service') }}</label>
                                 <select name="shipping_service_id" class="form-select shipping-select" id="shipping_service">
                                     <option value="">{{ __('Select Shipping Service') }}</option>
                                     @foreach ($shippings as $shipping)
@@ -74,24 +74,24 @@
                                 </select>
                             </div>
                             <div id="wilaya-container" style="display: none; margin-top: 10px;">
-                                <label for="wilaya-select" class="form-label">{{ __('Select Wilaya') }}</label>
+                                <label for="wilaya-select" class="form-label fw-semibold">{{ __('Select Wilaya') }}</label>
                                 <select name="shipping_wilaya_id" class="form-select" id="wilaya-select">
                                     <option value="">{{ __('Select Wilaya') }}</option>
                                 </select>
                             </div>
                             <div id="commune-container" style="display: none; margin-top: 10px;">
-                                <label for="commune-select" class="form-label">{{ __('Select Commune') }}</label>
+                                <label for="commune-select" class="form-label fw-semibold">{{ __('Select Commune') }}</label>
                                 <select name="commune_id" class="form-select" id="commune-select">
                                     <option value="">{{ __('Select Commune') }}</option>
                                 </select>
                             </div>
                             <div class="mb-3 d-none guest_phone">
-                                <label for="customer_phone" class="form-label">{{ __('Enter Customer Phone Number') }}</label>
+                                <label for="customer_phone" class="form-label fw-semibold">{{ __('Enter Customer Phone Number') }}</label>
                                 <input type="text" name="customer_phone" class="form-control">
                             </div>
                             <div class="table-responsive mb-3">
-                                <table class="table table-bordered text-center">
-                                    <thead>
+                                <table class="table table-bordered table-hover align-middle text-center mb-0">
+                                    <thead class="table-light">
                                         <tr>
                                             <th>{{ __('Image') }}</th>
                                             <th>{{ __('Items') }}</th>
@@ -108,10 +108,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row">
+                            <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="sale_type" class="form-label">{{ __('Sale Type') }}</label>
+                                        <label for="sale_type" class="form-label fw-semibold">{{ __('Sale Type') }}</label>
                                         <select name="sale_type" class="form-select" id="form">
                                             <option value="1">{{ __('E-commerce Sale') }}</option>
                                             <option value="0">{{ __('Physical Sale') }}</option>
@@ -119,19 +119,19 @@
                                     </div>
                                     <div id="amount-info-container" style="display: none;">
                                         <div class="mb-3">
-                                            <label for="receive_amount" class="form-label">{{ __('Receive Amount') }}</label>
+                                            <label for="receive_amount" class="form-label fw-semibold">{{ __('Receive Amount') }}</label>
                                             <input name="receive_amount" type="number" step="any" id="receive_amount" min="0" class="form-control">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="change_amount" class="form-label">{{ __('Change Amount') }}</label>
+                                            <label for="change_amount" class="form-label fw-semibold">{{ __('Change Amount') }}</label>
                                             <input type="number" step="any" id="change_amount" class="form-control" readonly>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="due_amount" class="form-label">{{ __('Due Amount') }}</label>
+                                            <label for="due_amount" class="form-label fw-semibold">{{ __('Due Amount') }}</label>
                                             <input type="number" step="any" id="due_amount" class="form-control" readonly>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="payment_type_id" class="form-label">{{ __('Payment Type') }}</label>
+                                            <label for="payment_type_id" class="form-label fw-semibold">{{ __('Payment Type') }}</label>
                                             <select name="payment_type_id" class="form-select">
                                                 @foreach($payment_types as $type)
                                                     <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -141,46 +141,48 @@
                                     </div>
                                     <div id="shipping-container" style="display: none;">
                                         <div class="mb-3">
-                                            <label for="delivery_type" class="form-label">{{ __('Delivery Type') }}</label>
+                                            <label for="delivery_type" class="form-label fw-semibold">{{ __('Delivery Type') }}</label>
                                             <select name="delivery_type" class="form-select">
                                                 <option value="1">{{ __('StopDesk') }}</option>
                                                 <option value="0">{{ __('Home') }}</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="parcel_type" class="form-label">{{ __('Parcel Type') }}</label>
+                                            <label for="parcel_type" class="form-label fw-semibold">{{ __('Parcel Type') }}</label>
                                             <select name="parcel_type" class="form-select">
                                                 <option value="1">{{ __('New Order') }}</option>
                                                 <option value="0">{{ __('Exchange') }}</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="delivery_address" class="form-label">{{ __('Delivery Address') }}</label>
+                                            <label for="delivery_address" class="form-label fw-semibold">{{ __('Delivery Address') }}</label>
                                             <input type="text" name="delivery_address" class="form-control">
                                         </div>
                                     </div>
-                                    <button class="btn btn-danger" data-route="{{ route('business.carts.remove-all') }}">{{ __('Cancel') }}</button>
+                                    <button type="button" class="btn btn-outline-danger mt-2" data-route="{{ route('business.carts.remove-all') }}">
+                                        <i class="fas fa-times me-1"></i> {{ __('Cancel') }}
+                                    </button>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="card">
+                                    <div class="card border-0 shadow-sm">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between mb-3">
-                                                <span>{{ __('Sub Total') }}</span>
-                                                <span id="sub_total">{{ currency_format(0, 'icon', 2, business_currency()) }}</span>
+                                                <span class="fw-semibold">{{ __('Sub Total') }}</span>
+                                                <span id="sub_total" class="text-primary fw-bold">{{ currency_format(0, 'icon', 2, business_currency()) }}</span>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="vat_id" class="form-label">{{ __('Vat') }}</label>
+                                                <label for="vat_id" class="form-label fw-semibold">{{ __('Vat') }}</label>
                                                 <div class="input-group">
                                                     <select name="vat_id" class="form-select">
                                                         @foreach($vats as $vat)
                                                             <option value="{{ $vat->id }}" data-rate="{{ $vat->rate }}">{{ $vat->name }} ({{ $vat->rate }}%)</option>
                                                         @endforeach
                                                     </select>
-                                                    <input type="number" step="any" name="vat_amount" id="vat_amount" min="0" class="form-control" readonly>
+                                                    <input type="number" step="any" name="vat_amount" id="vat_amount" min="0" class="form-control bg-light" readonly>
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="discount_type" class="form-label">{{ __('Discount') }}</label>
+                                                <label for="discount_type" class="form-label fw-semibold">{{ __('Discount') }}</label>
                                                 <div class="input-group">
                                                     <select name="discount_type" class="form-select">
                                                         <option value="flat">{{ __('Flat') }} ({{ business_currency()->symbol }})</option>
@@ -190,16 +192,18 @@
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="shipping_charge" class="form-label">{{ __('Shipping Charge') }}</label>
+                                                <label for="shipping_charge" class="form-label fw-semibold">{{ __('Shipping Charge') }}</label>
                                                 <input type="number" step="any" name="shipping_charge" id="shipping_charge" class="form-control">
                                             </div>
-                                            <div class="d-flex justify-content-between fw-bold">
+                                            <div class="d-flex justify-content-between fw-bold fs-5 border-top pt-3">
                                                 <span>{{ __('Total Amount') }}</span>
-                                                <span id="total_amount">{{ currency_format(0, 'icon', 2, business_currency()) }}</span>
+                                                <span id="total_amount" class="text-success">{{ currency_format(0, 'icon', 2, business_currency()) }}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary mt-3">{{ __('Save') }}</button>
+                                    <button class="btn btn-primary w-100 mt-3 py-2 fs-6 fw-semibold">
+                                        <i class="fas fa-save me-1"></i> {{ __('Save') }}
+                                    </button>
                                 </div>
                             </div>
                         </form>
