@@ -6,11 +6,11 @@
 
 @section('content')
     <section class="home-banner-section bg-custom-primary bg-opacity-10 py-5">
-        <div class="container">
-            <div class="row align-items-center pb-5 py-lg-5">
-                <div class="col-lg-6 order-2 order-lg-1 mt-5 mt-lg-0">
+        <div class="container py-5">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
                     <div class="banner-content">
-                        <h1 class="fw-bold display-3 custom-clr-dark mb-4 lh-sm">
+                        <h1 class="fw-bold display-2 custom-clr-dark mb-4 lh-sm">
                             {{ $page_data['headings']['slider_title'] ?? '' }}
                             <span class="d-block mt-3 fs-2 fw-medium text-primary"
                                 data-typer-targets='{"targets": [
@@ -19,7 +19,7 @@
                             ]}'>
                             </span>
                         </h1>
-                        <p class="lead custom-clr-secondary mb-4 fs-5">
+                        <p class="lead custom-clr-secondary mb-4 fs-4">
                             {{ $page_data['headings']['slider_description'] ?? '' }}
                         </p>
                         <div class="demo-btn-group mb-4 d-flex gap-3 flex-wrap">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 order-1 order-lg-2">
+                <div class="col-lg-6 order-1 order-lg-2 d-flex align-items-center justify-content-center">
                     <div class="banner-img text-center">
                         <img src="{{ asset($page_data['slider_image'] ?? 'assets/images/icons/img-upload.png') }}"
                             alt="banner-img" class="move-image rounded-4 shadow bg-white p-3" style="max-width: 480px;" />
