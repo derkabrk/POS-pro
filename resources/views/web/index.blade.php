@@ -10,28 +10,27 @@
             <div class="row align-items-center pb-5 py-lg-5">
                 <div class="col-lg-6 order-2 order-lg-1 mt-5 mt-lg-0">
                     <div class="banner-content">
-                        <h1 class="fw-bold display-4 custom-clr-dark mb-3">
+                        <h1 class="fw-bold display-3 custom-clr-dark mb-4 lh-sm">
                             {{ $page_data['headings']['slider_title'] ?? '' }}
-                            <span class="d-block mt-2"
+                            <span class="d-block mt-3 fs-2 fw-medium text-primary"
                                 data-typer-targets='{"targets": [
                                 @foreach ($page_data['headings']['silder_shop_text'] ?? [] as $key => $shop)
                                     "{{ $shop }}"@if (!$loop->last),@endif @endforeach
                             ]}'>
                             </span>
                         </h1>
-                        <p class="lead custom-clr-secondary mb-4">
+                        <p class="lead custom-clr-secondary mb-4 fs-5">
                             {{ $page_data['headings']['slider_description'] ?? '' }}
                         </p>
                         <div class="demo-btn-group mb-4 d-flex gap-3 flex-wrap">
                             <a href="{{ url($page_data['headings']['slider_btn1_link'] ?? '') }}"
-                                class="btn btn-lg btn-primary custom-primary-btn px-5 py-2 fw-semibold shadow">
+                                class="btn btn-lg btn-primary custom-primary-btn px-5 py-2 fw-semibold shadow rounded-pill">
                                 {{ $page_data['headings']['slider_btn1'] ?? '' }}<i class="ri-arrow-right-line ms-2"></i>
                             </a>
-                            <a href="#" class="btn btn-lg btn-outline-light d-flex align-items-center gap-2 px-4 py-2"
+                            <a href="#" class="btn btn-lg btn-outline-light d-flex align-items-center gap-2 px-4 py-2 rounded-pill border-2"
                                 data-bs-toggle="modal" data-bs-target="#watch-video-modal">
-                                <span class="play-button bg-primary rounded-circle d-inline-flex align-items-center justify-content-center"
-                                    style="width: 36px; height: 36px;"><i class="ri-play-fill text-white fs-5"></i></span>
-                                <span class="custom-clr-light ms-2">{{ $page_data['headings']['slider_btn2'] ?? '' }}</span>
+                                <span class="play-button bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="ri-play-fill text-white fs-5"></i></span>
+                                <span class="custom-clr-light ms-2 fs-6">{{ $page_data['headings']['slider_btn2'] ?? '' }}</span>
                             </a>
                         </div>
                         <div class="banner-scan mt-4">
