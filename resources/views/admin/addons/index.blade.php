@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <div class="responsive-table mt-3">
+                <div class="table-responsive table-card mt-4">
                     <table class="table" id="datatable">
                         <thead>
                             <tr>
