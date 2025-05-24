@@ -24,7 +24,7 @@
                         </p>
                         <div class="demo-btn-group mb-3 d-flex gap-2 flex-wrap">
                             <a href="{{ url($page_data['headings']['slider_btn1_link'] ?? '') }}"
-                                class="btn btn-primary custom-primary-btn px-4 fw-semibold shadow-sm">
+                                class="btn custom-btn-primary px-4 fw-semibold shadow-sm">
                                 {{ $page_data['headings']['slider_btn1'] ?? '' }}<i class="ri-arrow-right-line ms-1"></i>
                             </a>
                             <a href="" class="mt-1 video-button d-flex align-items-center gap-2"
@@ -173,7 +173,7 @@
             <div class="section-title d-flex align-items-center justify-content-between flex-wrap mb-4">
                 <h2 class="fw-bold custom-clr-dark mb-0">{{ $page_data['headings']['blog_title'] ?? '' }}</h2>
                 <a href="{{ url($page_data['headings']['blog_view_all_btn_link'] ?? '') }}"
-                    class="btn btn-outline-primary custom-outline-btn bg-white px-4 fw-semibold shadow-sm">
+                    class="btn custom-btn-outline bg-white px-4 fw-semibold shadow-sm">
                     {{ $page_data['headings']['blog_view_all_btn_text'] ?? '' }}<i class="ri-arrow-right-line ms-1"></i>
                 </a>
             </div>
