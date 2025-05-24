@@ -5,49 +5,50 @@
 @endsection
 
 @section('content')
-    <section class="home-banner-section bg-custom-primary bg-opacity-10">
+    <section class="home-banner-section bg-custom-primary bg-opacity-10 py-5">
         <div class="container">
             <div class="row align-items-center pb-5 py-lg-5">
                 <div class="col-lg-6 order-2 order-lg-1 mt-5 mt-lg-0">
                     <div class="banner-content">
-                        <h1 class="fw-bold custom-clr-dark">
+                        <h1 class="fw-bold display-4 custom-clr-dark mb-3">
                             {{ $page_data['headings']['slider_title'] ?? '' }}
-                            <span
+                            <span class="d-block mt-2"
                                 data-typer-targets='{"targets": [
                                 @foreach ($page_data['headings']['silder_shop_text'] ?? [] as $key => $shop)
                                     "{{ $shop }}"@if (!$loop->last),@endif @endforeach
                             ]}'>
                             </span>
                         </h1>
-                        <p class="lead custom-clr-secondary">
+                        <p class="lead custom-clr-secondary mb-4">
                             {{ $page_data['headings']['slider_description'] ?? '' }}
                         </p>
-                        <div class="demo-btn-group mb-3 d-flex gap-2 flex-wrap">
+                        <div class="demo-btn-group mb-4 d-flex gap-3 flex-wrap">
                             <a href="{{ url($page_data['headings']['slider_btn1_link'] ?? '') }}"
-                                class="btn btn-primary custom-primary-btn px-4 fw-semibold">
-                                {{ $page_data['headings']['slider_btn1'] ?? '' }}<i class="ri-arrow-right-line ms-1"></i>
+                                class="btn btn-lg btn-primary custom-primary-btn px-5 py-2 fw-semibold shadow">
+                                {{ $page_data['headings']['slider_btn1'] ?? '' }}<i class="ri-arrow-right-line ms-2"></i>
                             </a>
-                            <a href="" class="mt-1 video-button d-flex align-items-center gap-2"
+                            <a href="#" class="btn btn-lg btn-outline-light d-flex align-items-center gap-2 px-4 py-2"
                                 data-bs-toggle="modal" data-bs-target="#watch-video-modal">
-                                <span class="play-button"></span>
-                                <span class="custom-clr-light ms-3">{{ $page_data['headings']['slider_btn2'] ?? '' }}</span>
+                                <span class="play-button bg-primary rounded-circle d-inline-flex align-items-center justify-content-center"
+                                    style="width: 36px; height: 36px;"><i class="ri-play-fill text-white fs-5"></i></span>
+                                <span class="custom-clr-light ms-2">{{ $page_data['headings']['slider_btn2'] ?? '' }}</span>
                             </a>
                         </div>
-                        <div class="banner-scan mt-3">
+                        <div class="banner-scan mt-4">
                             <img src="{{ asset($page_data['scanner_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                alt="" class="rounded-4 shadow-sm bg-white p-2" style="max-width: 120px;" />
-                            <p class="mt-2 custom-clr-secondary small">
+                                alt="" class="rounded-4 shadow-sm bg-white p-2 mb-2" style="max-width: 120px;" />
+                            <p class="mt-2 custom-clr-secondary small fw-medium">
                                 {{ $page_data['headings']['slider_scanner_text'] ?? '' }}
                             </p>
                         </div>
-                        <div class="play-store mt-3 d-flex gap-2">
+                        <div class="play-store mt-4 d-flex gap-3">
                             <a href="{{ $page_data['headings']['footer_apple_app_link'] ?? '' }}" target="_blank">
                                 <img src="{{ asset($page_data['footer_apple_app_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                    alt="image" class="rounded-2 shadow-sm" style="max-width: 120px;" />
+                                    alt="Apple App" class="rounded-2 shadow-sm bg-white p-2" style="max-width: 120px;" />
                             </a>
                             <a href="{{ $page_data['headings']['footer_google_play_app_link'] ?? '' }}" target="_blank">
                                 <img src="{{ asset($page_data['footer_google_app_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                    alt="image" class="rounded-2 shadow-sm" style="max-width: 120px;" />
+                                    alt="Google Play" class="rounded-2 shadow-sm bg-white p-2" style="max-width: 120px;" />
                             </a>
                         </div>
                     </div>
@@ -55,7 +56,7 @@
                 <div class="col-lg-6 order-1 order-lg-2">
                     <div class="banner-img text-center">
                         <img src="{{ asset($page_data['slider_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                            alt="banner-img" class="move-image rounded-4 shadow-sm bg-white p-2" style="max-width: 480px;" />
+                            alt="banner-img" class="move-image rounded-4 shadow bg-white p-3" style="max-width: 480px;" />
                     </div>
                 </div>
             </div>
