@@ -133,7 +133,7 @@ class AcnooBusinessController extends Controller
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'user_id' => $user->id,
                 'type'=>  $request->type,
-            ]);
+            });
 
             $vat = Vat::create([
                 'name' => "Inital",
@@ -163,10 +163,9 @@ class AcnooBusinessController extends Controller
                 'password' => Hash::make($request->password),
                 'user_id' => $user->id,
                 'lang' => 'en',
+                // Always set plan_id from request (plan_id or plan_subscribe_id)
+                'plan_id' => $request->plan_id ?? $request->plan_subscribe_id,
             ];
-            if ($request->plan_subscribe_id) {
-                $newUserData['plan_id'] = $request->plan_subscribe_id;
-            }
             User::create($newUserData);
 
             if ($request->plan_subscribe_id) {
@@ -259,9 +258,10 @@ class AcnooBusinessController extends Controller
                 'phone' => $request->phoneNumber,
                 'image' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : $user->image,
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
+                // Always update plan_id from request (plan_id or plan_subscribe_id)
+                'plan_id' => $request->plan_id ?? $request->plan_subscribe_id,
             ];
             if ($request->plan_subscribe_id) {
-                $userUpdateData['plan_id'] = $request->plan_subscribe_id;
                 $plan = \App\Models\Plan::find($request->plan_subscribe_id);
                 $userUpdateData['plan_permissions'] = $plan ? $plan->permissions : [];
             }
