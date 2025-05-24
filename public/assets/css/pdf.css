@@ -51,7 +51,7 @@
     text-align: center;
 }
 .in-table-header .head-red {
-    background-color: #c52127 !important;
+    background-color: #405189 !important;
     color: white;
     padding: 12px;
     font-weight: 800;
@@ -125,12 +125,12 @@
     padding: 0px;
 }
 .in-table-row-bottom .total-amound {
-    background-color: #c52127;
+    background-color: #405189;
     color: white;
     padding: 3px;
 }
 .in-table-header .head-red {
-    background-color: #c52127 !important;
+    background-color: #405189 !important;
     color: white;
     padding: 12px;
     font-weight: 800;
@@ -168,7 +168,7 @@
     position: absolute;
     bottom: 0px;
     left: 0;
-    background-color: #c52127;
+    background-color: #405189;
     width: 100%;
     display: flex;
     align-items: center;

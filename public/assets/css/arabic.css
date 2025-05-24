@@ -13,16 +13,16 @@
 [dir="rtl"] .nav-pills .nav-link.active,
 [dir="rtl"] .nav-pills .show > .nav-link,
 [dir="rtl"] .btn-primary {
-    background-color: #c52127 !important;
+    background-color: #405189 !important;
 }
 [dir="rtl"] .btn-primary {
-    border-color: #c52127 !important;
+    border-color: #405189 !important;
 }
 
 [dir="rtl"] .text-primary,
 [dir="rtl"] .arabic-primary-clr,
 [dir="rtl"] .nav-link {
-    color: #c52127 !important;
+    color: #405189 !important;
 }
 
 [dir="rtl"] p {
@@ -40,15 +40,15 @@
 }
 
 [dir="rtl"] .btn-custom-warning {
-    background-color: #c52127 !important;
+    background-color: #405189 !important;
     color: #fff;
     border: none !important;
 }
 
 [dir="rtl"] .role-reset-btn {
     font-weight: bold;
-    color: #c52127;
-    border: 1px solid #c52127;
+    color: #405189;
+    border: 1px solid #405189;
     padding: 0.2rem 0.5rem !important;
 }
 
@@ -197,7 +197,7 @@
     background-color: green !important;
 }
 [dir="rtl"] .toast.toast-error {
-    background-color: #c52127 !important;
+    background-color: #405189 !important;
 }
 /* notification style css end */
 

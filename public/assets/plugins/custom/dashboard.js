@@ -124,7 +124,7 @@ function bestPlanSubscribes(year = new Date().getFullYear()) {
                             backgroundColor: [
                                 "#2CE78D",
                                 "#0a7cc2",
-                                "#C52127",
+                                "#405189",
                                 "#2DB0F6",
                             ],
                             borderColor: [
@@ -334,7 +334,7 @@ function subscriptionChart(subscriptions) {
                     label: "Total Subscription Amount: " + totals,
                     fill: true,
                     borderWidth: 1,
-                    borderColor: "#C52127",
+                    borderColor: "#405189",
                     data: subscriptions,
                 },
             ],

@@ -6,7 +6,7 @@
     height: 18px;
     border-radius: 6px;
     border: 1px solid #d0d5dd !important;
-    background: #c52127 !important;
+    background: #405189 !important;
     margin-right: 5px;
     margin-top: -1px;
 }
@@ -53,7 +53,7 @@ body::before {
         
 .text-custom-primary,
 .text-custom-primary:hover {
-    color: #c52127;
+    color: #405189;
     font-weight: bold;
 }
 
@@ -70,24 +70,24 @@ body::before {
 
 .indicate-text {
     font-size: 12px;
-    color: red;
+    color: #405189;
 }
 
 .form-control.error {
-    border-color: red;
+    border-color: #405189;
     padding: 0.375rem 0.75rem;
 }
 .image-wrapper.error {
-    border-color: red;
+    border-color: #405189;
     padding: 0.375rem 0.75rem;
 }
 .error-alert {
     font-size: 11px;
-    color: red;
+    color: #405189;
 }
 
 .error {
-    color: red !important;
+    color: #405189 !important;
 }
 
 .payment-section .form-control[readonly] {
@@ -98,7 +98,7 @@ body::before {
 }
 
 .avatar {
-    background: #c52127;
+    background: #405189;
     border-radius: 50%;
     color: #e3eaef;
     display: inline-block;
@@ -127,7 +127,7 @@ body::before {
 }
 
 .btn-custom-warning {
-    background-color: #c52127 !important;
+    background-color: #405189 !important;
     color: #fff;
     border: none !important;
 }
@@ -136,7 +136,7 @@ body::before {
 }
 
 .custom-warning-color {
-    color: #c52127;
+    color: #405189;
 }
 
 .roles-permissions table td {
@@ -209,7 +209,7 @@ body::before {
     min-height: 900px !important;
 }
 
-/* dropdown font size reduce */
+/* dropdown font size #405189uce */
 .form-select {
     font-size: 1rem;
 }
@@ -298,7 +298,7 @@ body::before {
 .add-feature-btn {
     min-height: 30px;
     padding: 4px 20px;
-    background: #c52127 !important;
+    background: #405189 !important;
     border: none !important;
     color: #ffffff !important;
     border-radius: 5px;
@@ -309,7 +309,7 @@ body::before {
 }
 .remove-list .remove-one {
     background: transparent !important;
-    /* background: linear-gradient(90deg, #C52127 0%, #C52127 100%) !important; */
+    /* background: linear-gradient(90deg, #405189 0%, #405189 100%) !important; */
     color: #fff !important;
     height: 50px;
     width: 50px;
@@ -385,7 +385,7 @@ table th, table td {
 }
 
 .custom-primary {
-    color: #c52127;
+    color: #405189;
 }
 
 .table-hidden-checkbox {
@@ -418,8 +418,8 @@ table th, table td {
 
 /* Style the checkmark when checked */
 .table-hidden-checkbox:checked + .table-custom-checkmark {
-    background-color: #c52127;
-    border-color: #c52127;
+    background-color: #405189;
+    border-color: #405189;
 }
 
 /* Add the tick mark inside the checkbox */
@@ -490,7 +490,7 @@ table th, table td {
 }
 
 .verify-modal-body .des .reset {
-    color: #c52127;
+    color: #405189;
 }
 
 .verify-modal-body .code-input {
@@ -510,11 +510,11 @@ table th, table td {
 }
 
 .verify-modal-body .code-input input:focus {
-    border: 1px solid #c52127 !important;
+    border: 1px solid #405189 !important;
 }
 
 .verify-modal-body .code-input input:focus-visible {
-    border: 1px solid #c52127 !important;
+    border: 1px solid #405189 !important;
 }
 
 .verify-modal-body .des span {
@@ -544,7 +544,7 @@ table th, table td {
 }
 
 .verify-btn {
-    background-color: #c52127;
+    background-color: #405189;
     color: white;
     width: 100%;
     padding: 10px 0px;
@@ -634,8 +634,8 @@ table th, table td {
 }
 .incre-decre:hover {
     background-color: #fef0f1 !important;
-    border-color: #c52127 !important;
-    color: #c52127 !important;
+    border-color: #405189 !important;
+    color: #405189 !important;
 }
 .num-input {
     border-radius: 5px;
@@ -650,7 +650,7 @@ table th, table td {
     margin-top: 50px;
 }
 .hr-container hr {
-    border: 1px solid #c521274d;
+    border: 1px solid #4051894d;
 }
 .payment-title {
     font-size: 14px;
@@ -675,7 +675,7 @@ table th, table td {
     border-radius: 6px;
 }
 .payment-btn {
-    background-color: #c52127;
+    background-color: #405189;
     color: white;
     width: 100%;
     border: none;
@@ -696,8 +696,8 @@ table th, table td {
     background-color: rgba(245, 243, 243, 0.5);
 }
 .discount-btn {
-    color: #c52127;
-    border: 1px solid #c52127;
+    color: #405189;
+    border: 1px solid #405189;
     border-radius: 5px;
     background-color: transparent;
 }
@@ -801,7 +801,7 @@ table th, table td {
     cursor: pointer;
 }
 .products .single-product:hover {
-    border: 1px solid #c52127;
+    border: 1px solid #405189;
 }
 .products .single-product .product-con {
     padding: 12px;
