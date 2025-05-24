@@ -399,7 +399,7 @@
     <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
     <!-- Other required scripts -->
     <script src="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}" rel="stylesheet" type="text/css"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
     
     <script>
