@@ -1,14 +1,20 @@
 @extends('layouts.web.blank')
 
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card card bg-transparent">
-                <div class="text-center">
-                    <img src="{{ asset($gateway->logo) }}" alt="" height="100">
-                </div>
-                <div class="card-footer bg-white">
-                    <button class="btn btn-primary mt-4 col-12 btn-lg w-100" id="rzp-button1">{{ __('Pay Now') }}</button>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-6">
+                <div class="card shadow-sm border-0 bg-white rounded-4">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <img src="{{ asset($gateway->logo) }}" alt="Razorpay" style="height: 60px;">
+                        </div>
+                        <h4 class="mb-3 fw-bold custom-clr-dark">{{ __('Pay with Razorpay') }}</h4>
+                        <p class="text-muted mb-4">{{ __('You will be redirected to Razorpay to complete your payment securely.') }}</p>
+                        <button class="btn btn-primary btn-lg w-100 mt-2" id="rzp-button1">
+                            <i class="ri-bank-card-line me-2"></i>{{ __('Pay Now') }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

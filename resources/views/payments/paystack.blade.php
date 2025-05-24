@@ -1,12 +1,19 @@
 @extends('layouts.web.blank')
 
 @section('content')
-    <div class="container mt-5">
+    <div class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card card bg-transparent">
+            <div class="col-md-7 col-lg-6">
+                <div class="card shadow-sm border-0 bg-white rounded-4">
                     <div class="card-body text-center">
-                        <a class="theme-btn d-block" href="{{ route('business.subscriptions.index') }}"><i class="fas fa-arrow-left"></i> {{ __('Go Back') }}</a>
+                        <a class="btn btn-outline-primary d-inline-flex align-items-center mb-3" href="{{ route('business.subscriptions.index') }}">
+                            <i class="ri-arrow-left-line me-2"></i> {{ __('Go Back') }}
+                        </a>
+                        <h4 class="mb-3 fw-bold custom-clr-dark">{{ __('Pay with Paystack') }}</h4>
+                        <p class="text-muted mb-4">{{ __('You will be redirected to Paystack to complete your payment securely.') }}</p>
+                        <div class="d-flex justify-content-center align-items-center mb-3">
+                            <img src="https://assets.paystack.com/assets/img/logos/paystack-logo-primary.svg" alt="Paystack" style="height: 32px;">
+                        </div>
                     </div>
                 </div>
             </div>
