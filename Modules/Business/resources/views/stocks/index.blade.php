@@ -25,10 +25,16 @@
                     <h5 class="card-title mb-0">{{ __('Stock List') }}</h5>
                 </div>
                 <div class="col-sm-auto">
-                    <div class="d-flex gap-1 flex-wrap">
-                        <a href="{{ route('business.stocks.excel') }}" class="btn btn-outline-success btn-sm rounded-pill"><i class="ri-file-excel-2-line me-1"></i>Excel</a>
-                        <a href="{{ route('business.stocks.csv') }}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="ri-file-list-2-line me-1"></i>CSV</a>
-                        <a onclick="window.print()" class="btn btn-outline-primary btn-sm rounded-pill print-window"><i class="ri-printer-line me-1"></i>{{ __('Print') }}</a>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{{ route('business.stocks.excel') }}" class="btn btn-success btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm">
+                            <i class="ri-file-excel-2-line me-1"></i> <span>{{ __('Export Excel') }}</span>
+                        </a>
+                        <a href="{{ route('business.stocks.csv') }}" class="btn btn-secondary btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm">
+                            <i class="ri-file-list-2-line me-1"></i> <span>{{ __('Export CSV') }}</span>
+                        </a>
+                        <a onclick="window.print()" class="btn btn-primary btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm print-window">
+                            <i class="ri-printer-line me-1"></i> <span>{{ __('Print') }}</span>
+                        </a>
                     </div>
                 </div>
             </div>
