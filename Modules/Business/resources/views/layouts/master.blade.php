@@ -40,9 +40,7 @@
 
     <!-- JAVASCRIPT -->
     @include('business::layouts.vendor-scripts')
-    <?php
-@stack('modal')
-?>
+    @stack('modal')
 </body>
 
 </html>
