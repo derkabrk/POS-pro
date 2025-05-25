@@ -1,4 +1,4 @@
-<div class="modal fade" id="brand-create-modal" tabindex="-1" aria-labelledby="brandCreateModalLabel" aria-hidden="true">
+<div class="modal fade" id="brand-create-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center mt-4 gap-2">
-                        <button type="reset" class="btn btn-outline-secondary">{{ __('Reset') }}</button>
+                        <button
                         <button type="submit" class="btn btn-primary submit-btn">{{ __('Save') }}</button>
                     </div>
                 </form>
