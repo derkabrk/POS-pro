@@ -139,7 +139,7 @@ $(document).ready(function() {
             }
         });
     }
-    $('#brand-search-input').on('input', function() {
+    $('#brand-search-input').on('change input', function() {
         fetchBrands();
     });
     $('#per_page').on('change', function() {
