@@ -15,14 +15,14 @@
                     </div>
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
-                            <a type="button" href="{{ route('business.brands.create') }}" class="btn btn-primary add-btn"><i class="ri-add-line align-bottom me-1"></i> {{ __('Add new Brand') }}</a>
+                            <a type="button" href="#brand-create-modal" data-bs-toggle="modal" class="btn btn-primary add-btn"><i class="ri-add-line align-bottom me-1"></i> {{ __('Add new Brand') }}</a>
                             <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('business.brands.index') }}" method="get" class="filter-form" table="#business-brand-data">
+                <form action="{{ route('business.brands.acnooFilter') }}" method="post" class="filter-form" table="#business-brand-data">
                     @csrf
                     <div class="row g-3">
                         <div class="col-xxl-3 col-sm-6">
