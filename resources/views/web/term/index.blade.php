@@ -5,15 +5,13 @@
 @endsection
 
 @section('content')
-<section class="banner-bg p-4 bg-primary bg-opacity-10 border-bottom mb-4">
+<section class="banner-bg p-4">
     <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 bg-transparent p-0">
-                <li class="breadcrumb-item"><a href="/" class="text-decoration-none custom-clr-primary">{{ __('Home') }}</a></li>
-                <li class="breadcrumb-item active custom-clr-dark" aria-current="page">{{ __('Terms And Conditions') }}</li>
-            </ol>
-        </nav>
+      <p class="mb-0 fw-bolder custom-clr-dark">
+        {{ __('Home') }} <span class="font-monospace">></span> {{ __('Terms And Conditions') }}
+      </p>
     </div>
-</section>
-@include('web.components.term')
+  </section>
+  @include('web.components.term')
+
 @endsection
