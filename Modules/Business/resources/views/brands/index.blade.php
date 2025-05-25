@@ -21,8 +21,7 @@
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('business.brands.filter') }}" method="post" class="filter-form" table="#business-brand-data" id="brand-search-form">
-                    @csrf
+                <form action="{{ route('business.brands.index') }}" method="get" class="filter-form" table="#business-brand-data" id="brand-search-form">
                     <div class="row g-3">
                         <div class="col-xxl-3 col-sm-6">
                             <div class="search-box">
@@ -42,8 +41,8 @@
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
-                                <button type="button" class="btn btn-primary w-100" id="brand-search-btn"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
-                                    {{ __('Filters') }}
+                                <button type="submit" class="btn btn-primary w-100" id="brand-search-btn"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                                    {{ __('Search') }}
                                 </button>
                             </div>
                         </div>
@@ -84,45 +83,45 @@
 
 @push('modal')
     @include('business::component.delete-modal')
-    @include('business::brands.create')
+    {{-- Moved modal markup from create.blade.php --}}
+    <div class="modal fade" id="brand-create-modal" tabindex="-1" aria-labelledby="brandCreateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brandCreateModalLabel">{{ __('Add New Brand') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('business.brands.store') }}" method="POST" enctype="multipart/form-data" id="brand-create-form">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="brandName" class="form-label">{{ __('Brand Name') }}</label>
+                            <input type="text" class="form-control" id="brandName" name="brandName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="brandDescription" class="form-label">{{ __('Description') }}</label>
+                            <textarea class="form-control" id="brandDescription" name="description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="brandIcon" class="form-label">{{ __('Icon') }}</label>
+                            <input type="file" class="form-control" id="brandIcon" name="icon" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     @include('business::brands.edit')
 @endpush
 
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // AJAX Brand Search (already present)
-    function fetchBrands() {
-        var form = $('#brand-search-form');
-        $.ajax({
-            url: form.attr('action'),
-            method: 'POST',
-            data: form.serialize(),
-            headers: {'X-CSRF-TOKEN': form.find('input[name="_token"]').val()},
-            success: function(response) {
-                if(response.data) {
-                    $('#business-brand-data').html(response.data);
-                } else {
-                    $('#business-brand-data').html('<tr><td colspan="7" class="text-center">No data found</td></tr>');
-                }
-            },
-            error: function(xhr) {
-                $('#business-brand-data').html('<tr><td colspan="7" class="text-center text-danger">Error loading data</td></tr>');
-            }
-        });
-    }
-    $('#brand-search-btn').on('click', function(e) {
-        e.preventDefault();
-        fetchBrands();
-    });
-    $('#brand-search-input').on('keyup', function(e) {
-        if(e.keyCode === 13) {
-            fetchBrands();
-        }
-    });
-    $('#per_page').on('change', function() {
-        fetchBrands();
-    });
+    // Remove AJAX, use default form submit for search
 });
 </script>
 @endpush
