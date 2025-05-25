@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('business.brands.acnooFilter') }}" method="post" class="filter-form" table="#business-brand-data">
+                <form action="{{ route('business.brands.filter') }}" method="post" class="filter-form" table="#business-brand-data">
                     @csrf
                     <div class="row g-3">
                         <div class="col-xxl-3 col-sm-6">
