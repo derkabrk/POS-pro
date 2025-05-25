@@ -42,9 +42,7 @@
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
-                                <button type="button" class="btn btn-primary w-100" id="brand-search-btn"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
-                                    {{ __('Search') }}
-                                </button>
+                                <!-- Removed filter/search button for real-time search -->
                             </div>
                         </div>
                     </div>
@@ -141,14 +139,8 @@ $(document).ready(function() {
             }
         });
     }
-    $('#brand-search-btn').on('click', function(e) {
-        e.preventDefault();
+    $('#brand-search-input').on('input', function() {
         fetchBrands();
-    });
-    $('#brand-search-input').on('keyup', function(e) {
-        if(e.keyCode === 13) {
-            fetchBrands();
-        }
     });
     $('#per_page').on('change', function() {
         fetchBrands();
