@@ -52,7 +52,7 @@
                 </form>
             </div>
             <div class="card-body pt-0">
-                <div class="table-responsive table-card">
+                <div class="table-responsive table-card" style="margin-top:20px;">
                     <table class="table table-nowrap mb-0" id="brandTable">
                         <thead class="table-light">
                             <tr class="text-uppercase">

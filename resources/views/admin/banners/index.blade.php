@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive table-card mt-4 pt-3" style="margin-top:20px;">
+                <div class="table-responsive table-card mt-4 pt-3">
                     <table class="table table-nowrap mb-0" id="datatable">
                         <thead class="table-light">
                             <tr>
