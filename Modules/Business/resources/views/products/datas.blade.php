@@ -6,7 +6,7 @@
         <td>{{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}</td>
 
         <td>
-            <img src="{{ asset($product->productPicture ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img">
+            <img src="{{ asset($product->productPicture ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img rounded border shadow-sm" style="width:60px; height:60px; object-fit:cover; transition:transform 0.2s; min-width:60px; min-height:60px; max-width:60px; max-height:60px;">
         </td>
 
         <td>{{ $product->productName }}</td>
@@ -64,3 +64,9 @@
         </td>
     </tr>
 @endforeach
+
+<style>
+    .table-product-img:hover {
+        transform: scale(1.1);
+    }
+</style>
