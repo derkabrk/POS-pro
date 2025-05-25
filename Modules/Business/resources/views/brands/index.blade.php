@@ -22,12 +22,12 @@
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('business.brands.filter') }}" method="post" class="filter-form" table="#business-brand-data">
+                <form action="{{ route('business.brands.filter') }}" method="post" class="filter-form" table="#business-brand-data" id="brand-search-form">
                     @csrf
                     <div class="row g-3">
                         <div class="col-xxl-3 col-sm-6">
                             <div class="search-box">
-                                <input type="text" class="form-control search" name="search" value="{{ request('search') }}" placeholder="{{ __('Search...') }}">
+                                <input type="text" class="form-control search" name="search" value="{{ request('search') }}" placeholder="{{ __('Search...') }}" id="brand-search-input">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
-                                <button type="submit" class="btn btn-primary w-100"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                                <button type="button" class="btn btn-primary w-100" id="brand-search-btn"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
                                     {{ __('Filters') }}
                                 </button>
                             </div>
@@ -87,4 +87,32 @@
     @include('business::component.delete-modal')
     @include('business::brands.create')
     @include('business::brands.edit')
+@endpush
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    function fetchBrands() {
+        var form = $('#brand-search-form');
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            headers: {'X-CSRF-TOKEN': $('input[name="_token"]').val()},
+            success: function(response) {
+                $('#business-brand-data').html(response.data);
+            }
+        });
+    }
+    $('#brand-search-btn').on('click', function(e) {
+        e.preventDefault();
+        fetchBrands();
+    });
+    $('#brand-search-input, #per_page').on('change keyup', function(e) {
+        if(e.type === 'change' || e.keyCode === 13) {
+            fetchBrands();
+        }
+    });
+});
+</script>
 @endpush
