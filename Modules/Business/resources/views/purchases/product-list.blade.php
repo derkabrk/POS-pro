@@ -13,7 +13,7 @@
         data-dealer_price = "{{ $product->productDealerPrice  }}"
     >
         <div class="pro-img">
-            <img class='w-100 rounded' src="{{ asset($product->productPicture ?? 'assets/images/products/box.svg') }}" alt="">
+            <img class='w-100 rounded border shadow-sm' style="width:60px;height:60px;object-fit:cover;min-width:60px;min-height:60px;max-width:60px;max-height:60px;transition:transform 0.2s;" src="{{ asset($product->productPicture ?? 'assets/images/products/box.svg') }}" alt="">
         </div>
         <div class="product-con">
             <h6 class="pro-title product_name">{{ $product->productName }}</h6>
@@ -24,3 +24,9 @@
         </div>
     </div>
 @endforeach
+
+<style>
+    .pro-img img:hover {
+        transform: scale(1.1);
+    }
+</style>
