@@ -5,63 +5,64 @@
 @endsection
 
 @section('content')
-<div class="erp-table-section">
+<div class="admin-table-section">
     <div class="container-fluid">
-        <div class="card card bg-transparent">
-            <div class="card-bodys">
-                <div class="table-header p-16">
-                    <h4>{{ __('Purchase Return List') }}</h4>
+        <div class="card" id="purchaseReturnList">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h5 class="card-title mb-0">{{ __('Purchase Return List') }}</h5>
+                    </div>
+                    <div class="col-sm-auto">
+                        <div class="d-flex gap-1 flex-wrap">
+                            <!-- Add new purchase return button if needed -->
+                        </div>
+                    </div>
                 </div>
-
-                <div class="table-top-form p-16-0">
-                    <form action="{{ route('business.purchase-returns.filter') }}" method="post" class="filter-form" table="#purchase-return-data">
-                        @csrf
-                        <div class="table-top-left d-flex gap-3 margin-l-16">
-                            <div class="gpt-up-down-arrow position-relative">
-                                <select name="per_page" class="form-control">
-                                    <option value="10">{{__('Show- 10')}}</option>
-                                    <option value="25">{{__('Show- 25')}}</option>
-                                    <option value="50">{{__('Show- 50')}}</option>
-                                    <option value="100">{{__('Show- 100')}}</option>
-                                </select>
-                                <span></span>
-                            </div>
-                            <div class="table-search position-relative">
-                                <input type="text" name="search" class="form-control" placeholder="{{ __('Search...') }}">
-                                <span class="position-absolute">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M14.582 14.582L18.332 18.332" stroke="#4D4D4D" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M16.668 9.16797C16.668 5.02584 13.3101 1.66797 9.16797 1.66797C5.02584 1.66797 1.66797 5.02584 1.66797 9.16797C1.66797 13.3101 5.02584 16.668 9.16797 16.668C13.3101 16.668 16.668 13.3101 16.668 9.16797Z" stroke="#4D4D4D" stroke-width="1.25" stroke-linejoin="round"/>
-                                        </svg>
-
-                                </span>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0">
+                <form action="{{ route('business.purchase-returns.filter') }}" method="post" class="filter-form d-flex align-items-center gap-3" table="#purchase-return-data">
+                    @csrf
+                    <div class="row g-3 w-100">
+                        <div class="col-xxl-2 col-sm-6">
+                            <select name="per_page" class="form-control">
+                                <option value="10">{{__('Show- 10')}}</option>
+                                <option value="25">{{__('Show- 25')}}</option>
+                                <option value="50">{{__('Show- 50')}}</option>
+                                <option value="100">{{__('Show- 100')}}</option>
+                            </select>
+                        </div>
+                        <div class="col-xxl-3 col-sm-6">
+                            <div class="search-box">
+                                <input type="text" name="search" class="form-control search" placeholder="{{ __('Search...') }}">
+                                <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
-                    </form>
-
+                    </div>
+                </form>
+            </div>
+            <div class="card-body pt-0">
+                <div class="table-responsive table-card" style="margin-top:20px;">
+                    <table class="table table-nowrap mb-0" id="purchaseReturnTable">
+                        <thead class="table-light">
+                            <tr class="text-uppercase">
+                                <th scope="col">{{ __('SL') }}.</th>
+                                <th scope="col">{{ __('Invoice No') }}</th>
+                                <th scope="col">{{ __('Date') }}</th>
+                                <th scope="col">{{ __('Party') }}</th>
+                                <th scope="col">{{ __('Total Amount') }}</th>
+                                <th scope="col">{{ __('Paid Amount') }}</th>
+                                <th scope="col">{{ __('Return Amount') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchase-return-data">
+                            @include('business::purchase-returns.datas')
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-
-            <div class="responsive-table m-0">
-                <table class="table table-nowrap mb-0" id="datatable">
-                    <thead class="table-light">
-                        <tr class="text-uppercase">
-                            <th scope="col">{{ __('SL') }}.</th>
-                            <th scope="col">{{ __('Invoice No') }}</th>
-                            <th scope="col">{{ __('Date') }}</th>
-                            <th scope="col">{{ __('Party') }}</th>
-                            <th scope="col">{{ __('Total Amount') }}</th>
-                            <th scope="col">{{ __('Paid Amount') }}</th>
-                            <th scope="col">{{ __('Return Amount') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody id="purchase-return-data">
-                        @include('business::purchase-returns.datas')
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-3">
-                {{ $purchases->links('vendor.pagination.bootstrap-5') }}
+                <div class="mt-3">
+                    {{ $purchases->links('vendor.pagination.bootstrap-5') }}
+                </div>
             </div>
         </div>
     </div>
