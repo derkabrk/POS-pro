@@ -21,7 +21,8 @@
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('business.brands.index') }}" method="get" class="filter-form" table="#business-brand-data" id="brand-search-form">
+                <form action="{{ route('business.brands.filter') }}" method="post" class="filter-form" table="#business-brand-data" id="brand-search-form">
+                    @csrf
                     <div class="row g-3">
                         <div class="col-xxl-3 col-sm-6">
                             <div class="search-box">
@@ -41,7 +42,7 @@
                         </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
-                                <button type="submit" class="btn btn-primary w-100" id="brand-search-btn"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                                <button type="button" class="btn btn-primary w-100" id="brand-search-btn"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
                                     {{ __('Search') }}
                                 </button>
                             </div>
@@ -121,7 +122,37 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Remove AJAX, use default form submit for search
+    function fetchBrands() {
+        var form = $('#brand-search-form');
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            headers: {'X-CSRF-TOKEN': form.find('input[name="_token"]').val()},
+            success: function(response) {
+                if(response.data) {
+                    $('#business-brand-data').html(response.data);
+                } else {
+                    $('#business-brand-data').html('<tr><td colspan="7" class="text-center">No data found</td></tr>');
+                }
+            },
+            error: function(xhr) {
+                $('#business-brand-data').html('<tr><td colspan="7" class="text-center text-danger">Error loading data</td></tr>');
+            }
+        });
+    }
+    $('#brand-search-btn').on('click', function(e) {
+        e.preventDefault();
+        fetchBrands();
+    });
+    $('#brand-search-input').on('keyup', function(e) {
+        if(e.keyCode === 13) {
+            fetchBrands();
+        }
+    });
+    $('#per_page').on('change', function() {
+        fetchBrands();
+    });
 });
 </script>
 @endpush
