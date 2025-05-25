@@ -16,7 +16,6 @@
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
                             <a type="button" href="#brand-create-modal" data-bs-toggle="modal" class="btn btn-primary add-btn"><i class="ri-add-line align-bottom me-1"></i> {{ __('Add new Brand') }}</a>
-                            <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                         </div>
                     </div>
                 </div>
@@ -92,15 +91,23 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // AJAX Brand Search (already present)
     function fetchBrands() {
         var form = $('#brand-search-form');
         $.ajax({
             url: form.attr('action'),
             method: 'POST',
             data: form.serialize(),
-            headers: {'X-CSRF-TOKEN': $('input[name="_token"]').val()},
+            headers: {'X-CSRF-TOKEN': form.find('input[name="_token"]').val()},
             success: function(response) {
-                $('#business-brand-data').html(response.data);
+                if(response.data) {
+                    $('#business-brand-data').html(response.data);
+                } else {
+                    $('#business-brand-data').html('<tr><td colspan="7" class="text-center">No data found</td></tr>');
+                }
+            },
+            error: function(xhr) {
+                $('#business-brand-data').html('<tr><td colspan="7" class="text-center text-danger">Error loading data</td></tr>');
             }
         });
     }
@@ -108,10 +115,13 @@ $(document).ready(function() {
         e.preventDefault();
         fetchBrands();
     });
-    $('#brand-search-input, #per_page').on('change keyup', function(e) {
-        if(e.type === 'change' || e.keyCode === 13) {
+    $('#brand-search-input').on('keyup', function(e) {
+        if(e.keyCode === 13) {
             fetchBrands();
         }
+    });
+    $('#per_page').on('change', function() {
+        fetchBrands();
     });
 });
 </script>
