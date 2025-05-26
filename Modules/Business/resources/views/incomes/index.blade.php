@@ -44,17 +44,6 @@
                 </form>
             </div>
             <div class="card-body pt-0">
-                <div class="table-top-btn-group d-flex gap-2 mb-3">
-                    <a href="{{ route('business.incomes.csv') }}" class="btn btn-secondary btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm">
-                        <i class="ri-file-list-2-line me-1"></i> <span>{{ __('Export CSV') }}</span>
-                    </a>
-                    <a href="{{ route('business.incomes.excel') }}" class="btn btn-success btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm">
-                        <i class="ri-file-excel-2-line me-1"></i> <span>{{ __('Export Excel') }}</span>
-                    </a>
-                    <a onclick="window.print()" class="btn btn-primary btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm print-window">
-                        <i class="ri-printer-line me-1"></i> <span>{{ __('Print') }}</span>
-                    </a>
-                </div>
                 <div class="table-responsive table-card m-0">
                     <table class="table table-nowrap mb-0 align-middle table-striped" id="incomesTable">
                         <thead class="table-light">
