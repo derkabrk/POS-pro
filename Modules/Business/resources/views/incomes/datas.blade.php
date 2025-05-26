@@ -1,20 +1,20 @@
 @foreach($incomes as $income)
 <tr>
-    <td class="w-60 checkbox">
+    <td class="w-60 checkbox align-middle">
         <input type="checkbox" name="ids[]" class="form-check-input delete-checkbox-item multi-delete" value="{{ $income->id }}">
     </td>
-    <td>{{ ($incomes->currentPage() - 1) * $incomes->perPage() + $loop->iteration }}</td>
-    <td class="text-start fw-semibold text-primary">{{ currency_format($income->amount, 'icon', 2, business_currency()) }}</td>
-    <td class="text-start">{{ $income->category?->categoryName }}</td>
-    <td class="text-start">{{ $income->incomeFor }}</td>
-    <td class="text-start">
+    <td class="align-middle">{{ ($incomes->currentPage() - 1) * $incomes->perPage() + $loop->iteration }}</td>
+    <td class="text-start fw-semibold text-primary align-middle">{{ currency_format($income->amount, 'icon', 2, business_currency()) }}</td>
+    <td class="text-start align-middle">{{ $income->category?->categoryName }}</td>
+    <td class="text-start align-middle">{{ $income->incomeFor }}</td>
+    <td class="text-start align-middle">
         <span class="badge bg-light text-dark border border-1 border-secondary px-2 py-1">
             {{ $income->payment_type_id != null ? $income->payment_type->name ?? '' : $income->paymentType }}
         </span>
     </td>
-    <td class="text-start text-muted">{{ $income->referenceNo }}</td>
-    <td class="text-start">{{ formatted_date($income->incomeDate) }}</td>
-    <td class="print-d-none">
+    <td class="text-start text-muted align-middle">{{ $income->referenceNo }}</td>
+    <td class="text-start align-middle">{{ formatted_date($income->incomeDate) }}</td>
+    <td class="print-d-none align-middle">
         <div class="dropdown table-action">
             <button type="button" class="btn btn-link p-0 text-secondary" data-bs-toggle="dropdown">
                 <i class="far fa-ellipsis-v"></i>
@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('business.incomes.destroy', $income->id) }}" class="confirm-action dropdown-item" data-method="DELETE">
+                    <a href="{{ route('business.incomes.destroy', $income->id) }}" class="confirm-action dropdown-item text-danger" data-method="DELETE">
                         <i class="fal fa-trash-alt me-1"></i>
                         {{ __('Delete') }}
                     </a>
