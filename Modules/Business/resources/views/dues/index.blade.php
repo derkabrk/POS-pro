@@ -5,8 +5,8 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
+<div class="admin-table-section">
+    <div class="container-fluid">
         <div class="mb-4 d-flex loss-flex gap-3 loss-profit-container d-print-none">
             <div class="d-flex align-items-center justify-content-center gap-3">
                 <div class="profit-card p-3 text-white">
@@ -28,9 +28,9 @@
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('business.dues.filter') }}" method="post" class="filter-form" table="#due-reports-data">
+                <form action="{{ route('business.dues.filter') }}" method="post" class="filter-form d-flex align-items-center gap-3 mb-3" table="#due-reports-data">
                     @csrf
-                    <div class="row g-3">
+                    <div class="row g-3 w-100">
                         <div class="col-xxl-3 col-sm-6">
                             <div class="search-box">
                                 <input type="text" name="search" class="form-control" placeholder="{{ __('Search...') }}">
@@ -51,9 +51,9 @@
                 </form>
             </div>
             <div class="card-body pt-0">
-                <div class="table-responsive table-card">
-                    <table class="table table-nowrap mb-0" id="dueTable">
-                        <thead class="table-light">
+                <div class="table-responsive table-card mb-1">
+                    <table class="table table-nowrap align-middle" id="dueTable">
+                        <thead class="text-muted table-light">
                         <tr class="text-uppercase">
                             <th>{{ __('SL') }}.</th>
                             <th>{{ __('Name') }}</th>
@@ -69,8 +69,10 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-3">
-                    {{ $dues->links('vendor.pagination.bootstrap-5') }}
+                <div class="d-flex justify-content-end">
+                    <div class="pagination-wrap hstack gap-2">
+                        {{ $dues->links('vendor.pagination.bootstrap-5') }}
+                    </div>
                 </div>
             </div>
         </div>

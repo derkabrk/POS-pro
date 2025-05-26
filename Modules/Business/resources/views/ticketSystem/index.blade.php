@@ -81,11 +81,11 @@
                                         @endif
                                     </td>
                                     <td class="align-middle">
-                                        <a href="{{ route('business.ticketSystem.show', $ticket->id) }}" class="btn btn-info btn-sm rounded-pill px-3 py-1">
-                                            <i class="fas fa-eye"></i> {{ __('View') }}
+                                        <a href="{{ route('business.ticketSystem.show', $ticket->id) }}" class="btn btn-info btn-sm rounded-circle d-inline-flex align-items-center justify-content-center me-1" title="{{ __('View') }}">
+                                            <i class="ri-eye-line"></i>
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3 py-1" data-bs-toggle="modal" data-bs-target="#replyModal" data-ticket-id="{{ $ticket->id }}" data-ticket-title="{{ $ticket->title }}">
-                                            <i class="fas fa-reply"></i>
+                                        <button type="button" class="btn btn-secondary btn-sm rounded-circle d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#replyModal" data-ticket-id="{{ $ticket->id }}" data-ticket-title="{{ $ticket->title }}" title="{{ __('Reply') }}">
+                                            <i class="ri-reply-line"></i>
                                         </button>
                                     </td>
                                 </tr>
