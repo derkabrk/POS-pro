@@ -59,7 +59,9 @@
                     </table>
                 </div>
                 <div class="mt-3">
-                    {{ $notifications->links('vendor.pagination.bootstrap-5') }}
+                    @if(isset($notifications) && $notifications instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                        {{ $notifications->links('vendor.pagination.bootstrap-5') }}
+                    @endif
                 </div>
             </div>
         </div>
