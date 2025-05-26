@@ -36,6 +36,7 @@ class SettingController extends Controller
             'login_page_logo' => 'nullable|image',
             'login_page_image' => 'nullable|image',
             'app_link' => 'nullable|url',
+            'points_per_invite' => 'nullable|integer|min:0',
         ]);
 
         $general = Option::findOrFail($id);
@@ -49,6 +50,7 @@ class SettingController extends Controller
                     'admin_logo' => $request->admin_logo ? $this->upload($request, 'admin_logo', $general->admin_logo) : $general->value['admin_logo'],
                     'login_page_logo' => $request->login_page_logo ? $this->upload($request, 'login_page_logo', $general->login_page_logo) : $general->value['login_page_logo'],
                     'login_page_image' => $request->login_page_image ? $this->upload($request, 'login_page_image', $general->login_page_image) : $general->value['login_page_image'],
+                    'points_per_invite' => $request->points_per_invite ?? ($general->value['points_per_invite'] ?? 10),
                 ]
         ]);
 

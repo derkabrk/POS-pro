@@ -333,3 +333,19 @@
 <!-- Left Sidebar End -->
 <!-- Vertical Overlay-->
 <div class="vertical-overlay"></div>
+<style>
+    .app-menu.navbar-menu #scrollbar {
+        max-height: 100vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #adb5bd #f8f9fa;
+    }
+    .app-menu.navbar-menu #scrollbar::-webkit-scrollbar {
+        width: 8px;
+        background: #f8f9fa;
+    }
+    .app-menu.navbar-menu #scrollbar::-webkit-scrollbar-thumb {
+        background: #adb5bd;
+        border-radius: 4px;
+    }
+</style>

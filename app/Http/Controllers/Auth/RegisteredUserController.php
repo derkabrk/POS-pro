@@ -115,8 +115,14 @@ class RegisteredUserController extends Controller
                         'used_by' => $user->id,
                     ]);
                     // Add points to the inviter
-                    if ($invite->created_by && ($inviter = \\App\\Models\\User::find($invite->created_by))) {
-                        $inviter->increment('points', 10); // Add 10 points per invite
+                    if ($invite->created_by && ($inviter = \App\Models\User::find($invite->created_by))) {
+                        // Fetch points_per_invite from general settings
+                        $pointsPerInvite = 10;
+                        $generalOption = \App\Models\Option::where('key', 'general')->first();
+                        if ($generalOption && isset($generalOption->value['points_per_invite'])) {
+                            $pointsPerInvite = (int) $generalOption->value['points_per_invite'];
+                        }
+                        $inviter->increment('points', $pointsPerInvite); // Add dynamic points per invite
                     }
                 }
             }

@@ -88,6 +88,10 @@
                             </div>
                             <input type="file" name="login_page_image" accept="image/*" class="form-control" onchange="document.getElementById('login_page_image').src = window.URL.createObjectURL(this.files[0])">
                         </div>
+                        <div class="col-lg-6 mb-3">
+                            <label>{{ __('Points per Invite') }}</label>
+                            <input type="number" name="points_per_invite" min="0" value="{{ $general->value['points_per_invite'] ?? 10 }}" class="form-control" placeholder="{{ __('Enter points per invite') }}">
+                        </div>
                         @can('settings-update')
                         <div class="col-lg-12 text-center mt-4">
                             <button type="submit" class="btn btn-primary m-2 submit-btn">{{ __('Update') }}</button>
