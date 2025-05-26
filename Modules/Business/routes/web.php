@@ -312,4 +312,10 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
         Route::get('bulk-message/index', [\Modules\Business\App\Http\Controllers\BulkMessageController::class, 'index'])->name('bulk-message.index');
     });
 
+    // Invite Codes
+    Route::get('invite-codes', [\Modules\Business\App\Http\Controllers\InviteCodeController::class, 'index'])->name('invite-codes.index');
+    Route::get('invite-codes/create', [\Modules\Business\App\Http\Controllers\InviteCodeController::class, 'create'])->name('invite-codes.create');
+    Route::post('invite-codes', [\Modules\Business\App\Http\Controllers\InviteCodeController::class, 'store'])->name('invite-codes.store');
+    Route::post('invite-codes/redeem', [\Modules\Business\App\Http\Controllers\InviteCodeController::class, 'redeem'])->name('invite-codes.redeem');
+
 });

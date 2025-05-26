@@ -33,6 +33,7 @@ class RegisteredUserController extends Controller
             'phoneNumber' => 'required|max:15',
             'email' => 'required|email|max:255',
             'password' => 'required|max:25',
+            'invite_code' => 'nullable|string|exists:invite_codes,code',
         ]);
 
         DB::beginTransaction();
@@ -93,6 +94,27 @@ class RegisteredUserController extends Controller
                 $business->update([
                     'plan_subscribe_id' => $subscribe->id,
                 ]);
+            }
+
+            // Invite code logic
+            if ($request->filled('invite_code')) {
+                $invite = \Modules\Business\App\Models\InviteCode::where('code', $request->invite_code)->first();
+                if ($invite) {
+                    if ($invite->used) {
+                        return response()->json([
+                            'message' => 'This invite code has already been used.',
+                        ], 406);
+                    }
+                    if ($invite->expires_at && $invite->expires_at->isPast()) {
+                        return response()->json([
+                            'message' => 'This invite code has expired.',
+                        ], 406);
+                    }
+                    $invite->update([
+                        'used' => true,
+                        'used_by' => null, // Optionally set to $user->id after user creation
+                    ]);
+                }
             }
 
             // Generate OTP

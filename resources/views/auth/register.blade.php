@@ -46,6 +46,11 @@
                             <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}">
                         </div>
 
+                        <div class="input-group">
+                            <span><img src="{{ asset('assets/images/icons/key.png') }}" alt="img"></span>
+                            <input type="text" name="invite_code" class="form-control" placeholder="{{ __('Invite Code (if any)') }}">
+                        </div>
+
                         <button type="submit" class="btn login-btn submit-btn">{{ __('Register') }}</button>
                         <a href="{{ route('login') }}" class="mt-1 d-block">{{ __("Already have an account?") }}</a>
                     </form>
