@@ -8,7 +8,7 @@
 <div class="admin-table-section">
     <div class="container-fluid">
         <div class="card shadow-sm border-0">
-            <div class="card-header border-0 bg-white">
+            <div class="card-header border-0">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
                         <h5 class="card-title mb-0">{{ request('type') !== 'Supplier' ? __('Edit Customer') : __('Edit Supplier') }}</h5>
