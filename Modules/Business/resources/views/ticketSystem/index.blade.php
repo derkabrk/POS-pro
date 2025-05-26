@@ -1,17 +1,37 @@
 @extends('business::layouts.master')
 
-@section('title', 'My Tickets')
+@section('title', __('My Tickets'))
+
+@section('css')
+<link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+@endsection
 
 @section('content')
-<div class="admin-table-section">
-    <div class="container-fluid">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+@component('components.breadcrumb')
+@slot('li_1') Business @endslot
+@slot('title') Tickets @endslot
+@endcomponent
+
+<div class="row">
+    <div class="col-lg-12">
         <div class="card" id="ticketList">
-            <div class="card-header border-0 d-flex align-items-center justify-content-between">
-                <h5 class="card-title mb-0">{{ __('My Tickets') }}</h5>
-                <button type="button" class="btn btn-primary add-btn btn-sm rounded-pill d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#createTicketModal">
-                    <i class="fas fa-plus-circle me-1"></i> {{ __('Create New Ticket') }}
-                </button>
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h5 class="card-title mb-0">{{ __('My Tickets') }}</h5>
+                    </div>
+                    <div class="col-sm-auto">
+                        <div class="d-flex gap-1 flex-wrap">
+                            <button type="button" class="btn btn-primary add-btn" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+                                <i class="fas fa-plus-circle me-1"></i> {{ __('Create New Ticket') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
             <div class="card-body border border-dashed border-end-0 border-start-0">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -20,20 +40,21 @@
                     </div>
                 @endif
             </div>
+
             <div class="card-body pt-0">
-                <div class="table-responsive table-card m-0">
-                    <table class="table table-nowrap mb-0 align-middle table-striped" id="ticketsTable">
-                        <thead class="table-light">
+                <div class="table-responsive table-card mb-1">
+                    <table class="table table-nowrap align-middle" id="ticketsTable">
+                        <thead class="text-muted table-light">
                             <tr class="text-uppercase">
-                                <th scope="col">#</th>
-                                <th scope="col">{{ __('Title') }}</th>
-                                <th scope="col">{{ __('Status') }}</th>
-                                <th scope="col">{{ __('Priority') }}</th>
-                                <th scope="col">{{ __('Category') }}</th>
-                                <th scope="col">{{ __('Actions') }}</th>
+                                <th class="sort" data-sort="id">#</th>
+                                <th class="sort" data-sort="title">{{ __('Title') }}</th>
+                                <th class="sort" data-sort="status">{{ __('Status') }}</th>
+                                <th class="sort" data-sort="priority">{{ __('Priority') }}</th>
+                                <th class="sort" data-sort="category">{{ __('Category') }}</th>
+                                <th class="sort" data-sort="action">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="list form-check-all" id="tickets-data">
                             @foreach ($tickets as $ticket)
                                 <tr>
                                     <td class="align-middle">{{ $ticket->id }}</td>
@@ -71,14 +92,27 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="noresult" style="display: none">
+                        <div class="text-center">
+                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px">
+                            </lord-icon>
+                            <h5 class="mt-2">{{ __('Sorry! No Result Found') }}</h5>
+                            <p class="text-muted">{{ __('We\'ve searched through all ticket records. We did not find any tickets matching your search criteria.') }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="mt-3">
-                    {{ $tickets->links() }}
+                
+                <div class="d-flex justify-content-end">
+                    <div class="pagination-wrap hstack gap-2">
+                        {{ $tickets->links('vendor.pagination.bootstrap-5') }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!--end col-->
 </div>
+<!--end row-->
 
 <!-- Modal for Creating a Ticket -->
 <div class="modal fade" id="createTicketModal" tabindex="-1" aria-labelledby="createTicketModalLabel" aria-hidden="true">
@@ -127,8 +161,6 @@
         </div>
     </div>
 </div>
-@endsection
-
 
 <!-- Reply Modal -->
 <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
@@ -165,3 +197,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+@endsection
+
+@section('script')
+<script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+@endsection
