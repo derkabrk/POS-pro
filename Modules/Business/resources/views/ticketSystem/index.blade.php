@@ -3,79 +3,77 @@
 @section('title', 'My Tickets')
 
 @section('content')
-<div class="erp-table-section">
+<div class="admin-table-section">
     <div class="container-fluid">
-        <div class="card border-0 shadow-sm">
-            <div class="card-bodys">
-                <div class="table-header p-16">
-                    <h4>My Tickets</h4>
-                    <!-- Button to trigger the modal -->
-                    <button type="button" class="btn btn-primary text-white add-order-btn" data-bs-toggle="modal" data-bs-target="#createTicketModal">
-                        <i class="fas fa-plus-circle me-1"></i> Create New Ticket
-                    </button>
-                </div>
+        <div class="card" id="ticketList">
+            <div class="card-header border-0 d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">{{ __('My Tickets') }}</h5>
+                <button type="button" class="btn btn-primary add-btn btn-sm rounded-pill d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+                    <i class="fas fa-plus-circle me-1"></i> {{ __('Create New Ticket') }}
+                </button>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <div class="responsive-table m-0">
-                    <table class="table table-bordered table-striped align-middle shadow-sm">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Title</th>
-                                <th>Status</th>
-                                <th>Priority</th>
-                                <th>Category</th>
-                                <th>Actions</th>
+            </div>
+            <div class="card-body pt-0">
+                <div class="table-responsive table-card m-0">
+                    <table class="table table-nowrap mb-0 align-middle table-striped" id="ticketsTable">
+                        <thead class="table-light">
+                            <tr class="text-uppercase">
+                                <th scope="col">#</th>
+                                <th scope="col">{{ __('Title') }}</th>
+                                <th scope="col">{{ __('Status') }}</th>
+                                <th scope="col">{{ __('Priority') }}</th>
+                                <th scope="col">{{ __('Category') }}</th>
+                                <th scope="col">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($tickets as $ticket)
                                 <tr>
-                                    <td>{{ $ticket->id }}</td>
-                                    <td>{{ $ticket->title }}</td>
-                                    <td>
+                                    <td class="align-middle">{{ $ticket->id }}</td>
+                                    <td class="align-middle fw-semibold">{{ $ticket->title }}</td>
+                                    <td class="align-middle">
                                         @if ($ticket->status)
-                                            <span class="badge rounded-pill" style="background-color: {{ $ticket->status->color }}; color: #fff;">
+                                            <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background-color: {{ $ticket->status->color }}; color: #fff; min-width: 90px; display: inline-block;">
                                                 {{ $ticket->status->name }}
                                             </span>
                                         @else
                                             <span class="text-muted">No Status</span>
                                         @endif
                                     </td>
-                                    <td>{{ $ticket->priority }}</td>
-                                    <td>
+                                    <td class="align-middle">
+                                        <span class="badge bg-light text-dark border border-1 border-secondary px-2 py-1">{{ $ticket->priority }}</span>
+                                    </td>
+                                    <td class="align-middle">
                                         @if ($ticket->category)
-                                            <span class="badge rounded-pill" style="background-color: {{ $ticket->category->color }}; color: #fff;">
+                                            <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background-color: {{ $ticket->category->color }}; color: #fff; min-width: 90px; display: inline-block;">
                                                 {{ $ticket->category->name }}
                                             </span>
                                         @else
                                             <span class="text-muted">No Category</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <a href="{{ route('business.ticketSystem.show', $ticket->id) }}" class="btn btn-info btn-sm">
-                                            <i class="fas fa-eye"></i> View
+                                    <td class="align-middle">
+                                        <a href="{{ route('business.ticketSystem.show', $ticket->id) }}" class="btn btn-info btn-sm rounded-pill px-3 py-1">
+                                            <i class="fas fa-eye"></i> {{ __('View') }}
                                         </a>
-                                            <button type="button"
-                                            class="btn btn-sm btn-secondary"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#replyModal"
-                                            data-ticket-id="{{ $ticket->id }}"
-                                            data-ticket-title="{{ $ticket->title }}">
-                                        <i class="fas fa-reply"></i>
-                                    </button>
+                                        <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3 py-1" data-bs-toggle="modal" data-bs-target="#replyModal" data-ticket-id="{{ $ticket->id }}" data-ticket-title="{{ $ticket->title }}">
+                                            <i class="fas fa-reply"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="mt-3">
-                        {{ $tickets->links() }}
-                    </div>
+                </div>
+                <div class="mt-3">
+                    {{ $tickets->links() }}
                 </div>
             </div>
         </div>
