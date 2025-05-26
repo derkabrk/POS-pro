@@ -1,3 +1,13 @@
+// Add color helper functions for SCSS builds
+@function tint-color($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+@function shade-color($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+
 // Variables
 
 @import url('https://fonts.googleapis.com/css2?family=Saira:wght@300;400;500;600;700&display=swap');
@@ -1157,7 +1167,7 @@ $form-validation-states: (
     "icon": $form-feedback-icon-invalid,
     "tooltip-color": #fff,
     "tooltip-bg-color": var(--#{$prefix}danger),
-    "focus-box-shadow": 0 0 $input-btn-focus-blur $input-focus-width rgba(var(--#{$prefix}danger-rgb), $input-btn-focus-color-opacity),
+    "focus-box-shadow": 0 0 $input-btn-focus-blur $input-focus-width rgba(var(--#{$prefix}danger-rgb), $input-btn-focus_color-opacity),
     "border-color": var(--#{$prefix}form-invalid-border-color),
   )
 );
@@ -1261,20 +1271,11 @@ $navbar-dark-color:                 rgba($white, .55);
 $navbar-dark-hover-color:           rgba($white, .75);
 $navbar-dark-active-color:          $white;
 $navbar-dark-disabled-color:        rgba($white, .25);
-$navbar-dark-icon-color:            $navbar-dark-color;
-$navbar-dark-toggler-icon-bg:       url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{$navbar-dark-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
-$navbar-dark-toggler-border-color:  rgba($white, .1);
-$navbar-dark-brand-color:           $navbar-dark-active-color;
-$navbar-dark-brand-hover-color:     $navbar-dark-active-color;
-// scss-docs-end navbar-dark-variables
-
-
-// Dropdowns
-//
+$navbar-dark-icon-color:            $navbar-dark
 // Dropdown menu container and contents.
 
 // scss-docs-start dropdown-variables
-$dropdown-min-width:                10rem;
+$dropdown-min-width:               10rem;
 $dropdown-padding-x:                0;
 $dropdown-padding-y:                .5rem;
 $dropdown-spacer:                   .125rem;
@@ -1431,7 +1432,7 @@ $accordion-icon-active-color:             var(--#{$prefix}primary-text-emphasis)
 $accordion-icon-transition:               transform .2s ease-in-out;
 $accordion-icon-transform:                rotate(-180deg);
 
-$accordion-button-icon:         url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+$accordion-button-icon:         url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/></svg>");
 $accordion-button-active-icon:  url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-active-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
 // scss-docs-end accordion-variables
 
@@ -1604,7 +1605,7 @@ $progress-height:                   0.625rem;
 $progress-font-size:                $font-size-base * .75;
 $progress-bg:                       var(--#{$prefix}tertiary-bg);
 $progress-border-radius:            var(--#{$prefix}border-radius);
-$progress-box-shadow:               var(--#{$prefix}box-shadow-inset);
+$progress-box-shadow:               var(--#{$prefix}
 $progress-bar-color:                $white;
 $progress-bar-bg:                   var(--#{$prefix}primary);
 $progress-bar-animation-timing:     1s linear infinite;

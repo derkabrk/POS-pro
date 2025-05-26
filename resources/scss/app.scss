@@ -121,3 +121,22 @@ File: Main Css File
 @import "pages/galaxy";
 @import "pages/jobs";
 @import "pages/job-landing";
+
+/* Sticky footer styles for always at the bottom */
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+#layout-wrapper, .main-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}

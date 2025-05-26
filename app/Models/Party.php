@@ -20,4 +20,14 @@ class Party extends Model
         'address',
         'business_id',
     ];
+
+    public function sales_dues()
+    {
+        return $this->hasMany(\App\Models\Sale::class, 'party_id')->where('dueAmount', '>', 0);
+    }
+
+    public function purchases_dues()
+    {
+        return $this->hasMany(\App\Models\Purchase::class, 'party_id')->where('dueAmount', '>', 0);
+    }
 }

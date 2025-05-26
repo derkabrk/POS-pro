@@ -15,14 +15,14 @@
     </td>
     <td class="print-d-none">
         <div class="d-flex gap-2">
-            <a href="{{ route('business.shipping.edit', $shipping->id) }}" class="btn btn-sm btn-icon btn-outline-primary" title="Edit">
-                <i class="fal fa-pencil-alt"></i>
+            <a href="{{ route('business.shipping.edit', $shipping->id) }}" class="btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-sm" title="Edit">
+                <i class="ri-pencil-line"></i>
             </a>
             <form action="{{ route('business.shipping.destroy', $shipping) }}" method="POST" class="d-inline confirm-action">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-icon btn-outline-danger" title="Delete">
-                    <i class="fal fa-trash-alt"></i>
+                <button type="submit" class="btn btn-sm btn-icon btn-outline-danger rounded-circle shadow-sm" title="Delete">
+                    <i class="ri-delete-bin-line"></i>
                 </button>
             </form>
         </div>

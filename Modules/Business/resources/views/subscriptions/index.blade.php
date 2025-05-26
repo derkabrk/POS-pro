@@ -7,15 +7,14 @@
 @section('content')
     <div class="erp-table-section">
         <div class="container-fluid">
-            <div class="card card bg-transparent">
-                <div class="card-bodys">
-                    <div class="subscription-header">
-                        <h4>{{ __('Purchase Plan') }}</h4>
+            <div class="card shadow-lg rounded-4 border-0 bg-light-subtle">
+                <div class="card-body p-4">
+                    <div class="subscription-header mb-4 text-center">
+                        <h3 class="fw-bold text-primary">{{ __('Purchase Plan') }}</h3>
                     </div>
-
-                    <div class="premium-plan-container ">
-                        <div class="premium-plan-content">
-                        @foreach ($plans as $plan)
+                    <div class="premium-plan-container">
+                        <div class="row g-4 premium-plan-content justify-content-center">
+                            @foreach ($plans as $plan)
                                 @php
                                     $activePlan = plan_data();
                                     $isFreePlan = $plan->subscriptionPrice == 0;
@@ -24,50 +23,59 @@
                                     $notPurchaseAble = ($activePlan && $activePlan->plan_id == $plan->id && ($business && $business->will_expire > now()->addDays(7)))
                                         || ($business && $business->will_expire >= now()->addDays($plan->duration));
                                 @endphp
-
-                                <div class="plan-single-content">
-                                    @if ((plan_data() ?? false) && plan_data()->plan_id == $plan->id)
-                                    <div class="recommended-banner-container ">
-                                        <div class="recommended-banner">
-                                            <span>{{ __('Current Plan') }}</span>
-                                          </div>
-                                    </div>
-                                    @endif
-                                    @if ($plan->offerPrice)
-                                    <div class="discount-badge-content">
-                                        <div class="discount-badge">
-                                            <img src="{{ asset('assets/images/icons/discount.svg') }}" >
-                                            <span class="discount-text"><del>{{ currency_format($plan->subscriptionPrice) }}</del></span>
-                                            <img class="discount-arrow" src="{{ asset('assets/images/icons/discount-arrow.svg') }}" >
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="plan-single-content card h-100 shadow rounded-4 border-0 p-4 position-relative">
+                                        @if ((plan_data() ?? false) && plan_data()->plan_id == $plan->id)
+                                            <div class="recommended-banner-container position-absolute top-0 end-0 m-3">
+                                                <span class="badge bg-success px-3 py-2 fs-6">{{ __('Current Plan') }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($plan->offerPrice)
+                                            <div class="discount-badge-content mb-2">
+                                                <span class="badge bg-warning text-dark fs-6">
+                                                    <del>{{ currency_format($plan->subscriptionPrice) }}</del>
+                                                    <img class="discount-arrow ms-2" src="{{ asset('assets/images/icons/discount-arrow.svg') }}" >
+                                                </span>
+                                            </div>
+                                        @endif
+                                        <div class="d-flex align-items-center justify-content-center flex-column gap-2 mb-3">
+                                            <h4 class="fw-bold text-primary">{{ $plan->subscriptionName }}</h4>
+                                            <h6 class="text-muted">{{ $plan->duration }} {{ __('Days') }}</h6>
+                                            <h2 class="fw-bold text-success">{{ currency_format(convert_money($plan->offerPrice ?? $plan->subscriptionPrice, business_currency()), currency : business_currency()) }}</h2>
                                         </div>
-                                    </div>
-                                    @endif
-                                    <div class="d-flex align-items-center justify-content-center flex-column gap-3">
-                                        <h3 class="pb-2">{{ $plan->subscriptionName }}</h3>
-                                        <h6 class="pb-2">{{ $plan->duration }} {{ __('Days') }}</h6>
-                                        <h1 class="pb-2">{{ currency_format(convert_money($plan->offerPrice ?? $plan->subscriptionPrice, business_currency()), currency : business_currency()) }}</h1>
-
                                         @if ($isFreePlan && $isPlanActivated || $notPurchaseAble)
-                                            <button class="btn w-100 plan-buy-btn" disabled>
+                                            <button class="btn btn-secondary w-100 plan-buy-btn rounded-pill" disabled>
                                                 {{ __('Buy Now')  }}
                                             </button>
                                         @else
-                                            <a href="{{ route('payments-gateways.index', ['plan_id' => $plan->id, 'business_id' => auth()->user()->business_id]) }}" class="btn w-100 plan-buy-btn">
+                                            <a href="{{ route('payments-gateways.index', ['plan_id' => $plan->id, 'business_id' => auth()->user()->business_id]) }}" class="btn btn-primary w-100 plan-buy-btn rounded-pill">
                                                 {{ __('Buy Now') }}
                                             </a>
                                         @endif
-                                    </div>
-
-                                    @foreach ($plan['features'] ?? [] as $key => $item)
-                                        <div class="d-flex align-items-center justify-content-between plans">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <p>
-                                                    <i class="fas {{ isset($item[1]) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }} me-1"></i>
-                                                    {{ $item[0] ?? '' }}
-                                                </p>
-                                            </div>
+                                        <div class="mt-4">
+                                            <h6 class="fw-semibold mb-2 text-dark">{{ __('Features') }}</h6>
+                                            <ul class="list-group list-group-flush mb-3">
+                                                @foreach ($plan['features'] ?? [] as $key => $item)
+                                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-transparent border-0 px-0 py-1">
+                                                        <span>
+                                                            <i class="fas {{ isset($item[1]) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }} me-1"></i>
+                                                            {{ $item[0] ?? '' }}
+                                                        </span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            <h6 class="fw-semibold mb-2 text-dark">{{ __('Permissions') }}</h6>
+                                            <ul class="list-group list-group-flush">
+                                                @foreach ($plan['permissions'] ?? [] as $perm)
+                                                    <li class="list-group-item bg-transparent border-0 px-0 py-1">
+                                                        <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill">
+                                                            <i class="ri-shield-check-line me-1"></i> {{ __(Str::headline($perm)) }}
+                                                        </span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
                                         </div>
-                                    @endforeach
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
