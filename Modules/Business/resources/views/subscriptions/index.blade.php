@@ -26,12 +26,12 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="plan-single-content card h-100 shadow rounded-4 border-0 p-4 position-relative">
                                         @if ((plan_data() ?? false) && plan_data()->plan_id == $plan->id)
-                                            <div class="recommended-banner-container position-absolute top-0 end-0 m-3">
-                                                <span class="badge bg-gradient bg-primary text-white px-4 py-2 fs-6 rounded-pill d-flex align-items-center shadow">
-                                                    <i class="ri-vip-crown-2-line me-2 text-warning fs-5"></i>
-                                                    {{ __('Current Plan') }}
-                                                </span>
-                                            </div>
+                                            <div class="recommended-banner-container position-absolute top-0 end-0 m-2">
+    <span class="badge bg-gradient bg-primary text-white px-2 py-1 fs-7 rounded-pill d-flex align-items-center shadow-sm" style="font-size: 0.95rem;">
+        <i class="ri-vip-crown-2-line me-1 text-warning" style="font-size:1.1rem;"></i>
+        {{ __('Current Plan') }}
+    </span>
+</div>
                                         @endif
                                         @if ($plan->offerPrice)
                                             <div class="discount-badge-content mb-2">
@@ -42,7 +42,7 @@
                                             </div>
                                         @endif
                                         <div class="d-flex align-items-center justify-content-center flex-column gap-2 mb-3">
-                                            <h4 class="fw-bold text-primary">{{ $plan->subscriptionName }}</h4>
+                                            <h4 class="fw-bold text-white">{{ $plan->subscriptionName }}</h4>
                                             <h6 class="text-muted">{{ $plan->duration }} {{ __('Days') }}</h6>
                                             <h2 class="fw-bold text-success">{{ currency_format(convert_money($plan->offerPrice ?? $plan->subscriptionPrice, business_currency()), currency : business_currency()) }}</h2>
                                         </div>
@@ -71,7 +71,7 @@
                                             <ul class="list-group list-group-flush">
                                                 @foreach ($plan['permissions'] ?? [] as $perm)
                                                     <li class="list-group-item bg-transparent border-0 px-0 py-1">
-                                                        <span class="badge bg-white text-primary fw-semibold px-3 py-2 rounded-pill border border-primary">
+                                                        <span class="badge bg-white text-white fw-semibold px-3 py-2 rounded-pill border border-white">
                                                             <i class="ri-shield-check-line me-1"></i> {{ __(Str::headline($perm)) }}
                                                         </span>
                                                     </li>
