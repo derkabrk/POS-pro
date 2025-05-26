@@ -3,20 +3,26 @@
 @section('title', 'Order Sources')
 
 @section('content')
-<div class="erp-table-section">
+<div class="admin-table-section">
     <div class="container-fluid">
-        <div class="card border-0">
-            <div class="card-bodys">
-                <div class="table-header p-16 d-flex justify-content-between align-items-center">
-                    <h4>Order Sources List</h4>
-                    <a href="{{ route('business.orderSource.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle me-1"></i> Add New Order Source
-                    </a>
+        <div class="card shadow-sm border-0">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h5 class="card-title mb-0">Order Sources List</h5>
+                    </div>
+                    <div class="col-sm-auto">
+                        <a href="{{ route('business.orderSource.create') }}" class="btn btn-outline-primary btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm">
+                            <i class="ri-add-line me-1"></i> Add New Order Source
+                        </a>
+                    </div>
                 </div>
-                <div class="responsive-table m-0">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive table-card" style="margin-top:20px;">
+                    <table class="table table-nowrap mb-0" id="orderSourceTable">
+                        <thead class="table-light">
+                            <tr class="text-uppercase">
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>API Key</th>
@@ -36,14 +42,14 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('business.orderSource.edit', $orderSource->id) }}" class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i> Edit
+                                    <a href="{{ route('business.orderSource.edit', $orderSource->id) }}" class="btn btn-sm btn-warning rounded-pill px-3 me-1">
+                                        <i class="ri-edit-line"></i> Edit
                                     </a>
                                     <form action="{{ route('business.orderSource.destroy', $orderSource->id) }}" method="POST" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this order source?')">
-                                            <i class="fas fa-trash"></i> Delete
+                                        <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3" onclick="return confirm('Are you sure you want to delete this order source?')">
+                                            <i class="ri-delete-bin-line"></i> Delete
                                         </button>
                                     </form>
                                 </td>
