@@ -133,7 +133,7 @@ class AcnooBusinessController extends Controller
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'user_id' => $user->id,
                 'type'=>  $request->type,
-            });
+            ]);
 
             $vat = Vat::create([
                 'name' => "Inital",
@@ -157,7 +157,7 @@ class AcnooBusinessController extends Controller
             $newUserData = [
                 'business_id'=>$business->id,
                 'name' => $request->companyName,
-                'email' =>  $request->email,
+                'email' =>  $request->email
                 'phone' => $request->phoneNumber,
                 'image' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'password' => Hash::make($request->password),
