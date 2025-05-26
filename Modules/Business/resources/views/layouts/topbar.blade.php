@@ -486,16 +486,6 @@
                                             All ({{ $unreadCount ?? 0 }})
                                         </a>
                                     </li>
-                                    <li class="nav-item waves-effect waves-light">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false">
-                                            Messages
-                                        </a>
-                                    </li>
-                                    <li class="nav-item waves-effect waves-light">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab" aria-selected="false">
-                                            Alerts
-                                        </a>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -539,55 +529,6 @@
                                             <a href="{{ route('admin.notifications.index') }}" class="btn btn-soft-success waves-effect waves-light">{{ __('View All') }} <i class="ri-arrow-right-line align-middle"></i></a>
                                         @endif
                                     </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade py-2 ps-2" id="messages-tab" role="tabpanel" aria-labelledby="messages-tab">
-                                <div data-simplebar style="max-height: 300px;" class="pe-2">
-                                    @php
-                                        $messages = auth()->check() && method_exists(auth()->user(), 'notifications') ? auth()->user()->notifications->where('type', 'App\\Notifications\\MessageNotification') : collect();
-                                    @endphp
-                                    @if($messages->count() > 0)
-                                        @foreach($messages as $notification)
-                                            <div class="text-reset notification-item d-block dropdown-item">
-                                                <div class="d-flex">
-                                                    <img src="{{URL::asset('build/images/users/avatar-3.jpg')}}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                                    <div class="flex-grow-1">
-                                                        <a href="{{ route('admin.notifications.mtView', $notification->id) }}" class="stretched-link">
-                                                            <h6 class="mt-0 mb-1 fs-13 fw-semibold">{{ $notification->data['sender'] ?? 'Message' }}</h6>
-                                                        </a>
-                                                        <div class="fs-13 text-muted">
-                                                            <p class="mb-1">{{ $notification->data['body'] ?? '' }}</p>
-                                                        </div>
-                                                        <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                            <span><i class="mdi mdi-clock-outline"></i> {{ $notification->created_at->diffForHumans() }}</span>
-                                                        </p>
-                                                    </div>
-                                                    <div class="px-2 fs-15">
-                                                        <div class="form-check notification-check">
-                                                            <input class="form-check-input" type="checkbox" value="" id="messages-notification-check{{ $loop->index }}">
-                                                            <label class="form-check-label" for="messages-notification-check{{ $loop->index }}"></label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <div class="text-center text-muted py-4">
-                                            <i class="bx bx-message-square-dots display-4 mb-2"></i>
-                                            <div>{{ __('No messages found.') }}</div>
-                                        </div>
-                                    @endif
-                                    <div class="my-3 text-center view-all">
-                                        @if($messages->count() > 0)
-                                            <a href="{{ route('admin.notifications.index') }}" class="btn btn-soft-success waves-effect waves-light">{{ __('View All Messages') }} <i class="ri-arrow-right-line align-middle"></i></a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade p-4" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
-                                <div class="text-center text-muted py-4">
-                                    <i class="bx bx-error display-4 mb-2"></i>
-                                    <div>{{ __('No alerts found.') }}</div>
                                 </div>
                             </div>
                             <div class="notification-actions" id="notification-actions">
