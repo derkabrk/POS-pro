@@ -5,89 +5,80 @@
 @endsection
 
 @section('content')
-<div class="erp-table-section">
+<div class="admin-table-section">
     <div class="container-fluid">
-        <div class="card border-0">
-            <div class="card-bodys">
-                <div class="table-header p-16">
-                    <h4>Add New Order Source</h4>
-                 
-                    <a href="{{ route('business.orderSource.index') }}" class="add-order-btn rounded-2 {{ Route::is('business.orderSource.create') ? 'active' : '' }}">
-                        <i class="far fa-list me-1" aria-hidden="true"></i> {{ __('View List') }}
-                    </a>
+        <div class="card shadow-sm border-0">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h5 class="card-title mb-0">Add New Order Source</h5>
+                    </div>
+                    <div class="col-sm-auto">
+                        <a href="{{ route('business.orderSource.index') }}" class="btn btn-outline-primary btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm">
+                            <i class="ri-list-unordered me-1"></i> {{ __('View List') }}
+                        </a>
+                    </div>
                 </div>
-                <div class="order-form-section p-16">
-                    <form method="POST" action="{{ route('business.orderSource.store') }}">
-
-                        @csrf
-                        <div class="add-suplier-modal-wrapper d-block">
-                            <div class="row">
-                                  <div class="col-lg-6 mb-2">
-                                    <label>Account Name</label>
-                                    <input type="text" name="account_name" required class="form-control" placeholder="Enter Account Name">
-                                </div>
-                                <div class="col-lg-6 mb-2">
-                                    <label>API Key</label>
-                                    <input type="text" name="api_key" required class="form-control" placeholder="Enter API Key">
-                                </div>
-                                <div class="col-lg-6 mb-2">
-                                    <label>API Secret</label>
-                                    <input type="text" name="api_secret" required class="form-control" placeholder="Enter API Secret">
-                                </div>
-                              
-                                <div class="col-lg-6 mb-2">
-                                    <label>Platform</label>
-                                    <select name="name" id="platform" class="form-control" required>
-                                        <option value="" disabled selected>Select Platform</option>
-                                        <option value="Shopify">Shopify</option>
-                                        <option value="YouCan">YouCan</option>
-                                        <option value="WooCommerce">WooCommerce</option>
-                                    </select>
-                                </div>
-                               
-                                <!-- Shopify Settings -->
-                                <div id="shopify-settings" class="platform-settings d-none">
-                                    <div class="col-lg-12 mb-2">
-                                        <label>Shopify Store URL</label>
-                                        <input type="text" name="shopify_store_url" class="form-control" placeholder="Enter your Shopify store URL">
-                                    </div>
-                                </div>
-
-                                <!-- WooCommerce Settings -->
-                                <div id="woocommerce-settings" class="platform-settings d-none">
-                                    <div class="col-lg-12 mb-2">
-                                        <label>WooCommerce Store URL</label>
-                                        <input type="text" name="woocommerce_store_url" class="form-control" placeholder="Enter your WooCommerce store URL">
-                                    </div>
-                                </div>
-
-                                <!-- YouCan Settings -->
-                                <div id="youcan-settings" class="platform-settings d-none">
-                                    <div class="col-lg-12 mb-2">
-                                        <label>YouCan Store URL</label>
-                                        <input type="text" name="youcan_store_url" class="form-control" placeholder="Enter your YouCan store URL">
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 mb-2">
-                                    <label>Status</label>
-                                    <select name="status" class="form-control">
-                                        <option value="1">Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-                                </div>
-                             
-
-                                <div class="col-lg-12">
-                                    <div class="button-group text-center mt-5">
-                                        <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
-                                        <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>
-                                    </div>
-                                </div>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('business.orderSource.store') }}">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-lg-6">
+                            <label class="form-label">Account Name</label>
+                            <input type="text" name="account_name" required class="form-control" placeholder="Enter Account Name">
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label">API Key</label>
+                            <input type="text" name="api_key" required class="form-control" placeholder="Enter API Key">
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label">API Secret</label>
+                            <input type="text" name="api_secret" required class="form-control" placeholder="Enter API Secret">
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label">Platform</label>
+                            <select name="name" id="platform" class="form-select" required>
+                                <option value="" disabled selected>Select Platform</option>
+                                <option value="Shopify">Shopify</option>
+                                <option value="YouCan">YouCan</option>
+                                <option value="WooCommerce">WooCommerce</option>
+                            </select>
+                        </div>
+                        <!-- Shopify Settings -->
+                        <div id="shopify-settings" class="platform-settings d-none">
+                            <div class="col-lg-12 mb-2">
+                                <label class="form-label">Shopify Store URL</label>
+                                <input type="text" name="shopify_store_url" class="form-control" placeholder="Enter your Shopify store URL">
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <!-- WooCommerce Settings -->
+                        <div id="woocommerce-settings" class="platform-settings d-none">
+                            <div class="col-lg-12 mb-2">
+                                <label class="form-label">WooCommerce Store URL</label>
+                                <input type="text" name="woocommerce_store_url" class="form-control" placeholder="Enter your WooCommerce store URL">
+                            </div>
+                        </div>
+                        <!-- YouCan Settings -->
+                        <div id="youcan-settings" class="platform-settings d-none">
+                            <div class="col-lg-12 mb-2">
+                                <label class="form-label">YouCan Store URL</label>
+                                <input type="text" name="youcan_store_url" class="form-control" placeholder="Enter your YouCan store URL">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-12 text-center mt-4">
+                            <button type="reset" class="btn btn-outline-secondary me-2">{{ __('Cancel') }}</button>
+                            <button class="btn btn-primary px-4">{{ __('Save') }}</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
