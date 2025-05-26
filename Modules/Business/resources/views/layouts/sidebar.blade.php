@@ -4,7 +4,7 @@
         <!-- Dark Logo-->
         <a href="{{ route('business.dashboard.index') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:40px;width:auto;max-width:120px;" height="40">
+                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:40px;width:auto;max-width:120px;" height="37">
             </span>
             <span class="logo-lg">
                 <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:32px;width:auto;max-width:160px;" height="32">
@@ -16,7 +16,7 @@
                 <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:40px;width:auto;max-width:120px;" height="40">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:32px;width:auto;max-width:160px;" height="32">
+                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:32px;width:auto;max-width:160px;" height="37">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
