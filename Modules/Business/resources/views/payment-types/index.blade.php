@@ -26,13 +26,6 @@
                                     <option value="100">{{ __('Show- 100') }}</option>
                                 </select>
                             </div>
-                            <div class="col-xxl-3 col-sm-6">
-                                <div class="search-box">
-                                    <input type="text" name="search" class="form-control searchInput"
-                                        placeholder="{{ __('Search...') }}">
-                                    <i class="ri-search-line search-icon"></i>
-                                </div>
-                            </div>
                         </div>
                     </form>
                 </div>
