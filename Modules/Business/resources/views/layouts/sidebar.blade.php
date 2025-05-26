@@ -4,19 +4,19 @@
         <!-- Dark Logo-->
         <a href="{{ route('business.dashboard.index') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" height="22">
+                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:40px;width:auto;max-width:120px;" height="40">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" height="17">
+                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:32px;width:auto;max-width:160px;" height="32">
             </span>
         </a>
         <!-- Light Logo-->
         <a href="{{ route('business.dashboard.index') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" height="22">
+                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:40px;width:auto;max-width:120px;" height="40">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" height="17">
+                <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" style="height:32px;width:auto;max-width:160px;" height="32">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -298,17 +298,31 @@
                 </li>
 
                 <li class="nav-item">
-                    <div id="sidebar_plan" class="d-block sidebar-free-plan d-flex align-items-center justify-content-between p-3 flex-column">
-                        <div class="text-center">
+                    <div id="sidebar_plan" class="d-block sidebar-free-plan d-flex align-items-center justify-content-between p-3 flex-column bg-gradient bg-primary bg-opacity-10 rounded-4 shadow-sm mt-3">
+                        <div class="text-center w-100">
                             @if (plan_data() ?? false)
-                                <h3>{{ plan_data()['plan']['subscriptionName'] ?? '' }}</h3>
-                                <h5>{{ __('Expired') }}: {{ formatted_date(plan_data()['will_expire'] ?? '') }}</h5>
+                                <h4 class="fw-bold text-primary mb-1">
+                                    <i class="ri-vip-crown-2-line me-1 text-warning"></i>
+                                    {{ plan_data()['plan']['subscriptionName'] ?? '' }}
+                                </h4>
+                                <div class="badge bg-success bg-opacity-75 text-white mb-2 px-3 py-2 rounded-pill fs-6">
+                                    {{ __('Active') }}
+                                </div>
+                                <div class="small text-muted mb-2">
+                                    <i class="ri-calendar-check-line me-1"></i>
+                                    {{ __('Expires') }}: <span class="fw-semibold">{{ formatted_date(plan_data()['will_expire'] ?? '') }}</span>
+                                </div>
                             @else
-                                <h3>{{ __('No Active Plan') }}</h3>
-                                <h5>{{ __('Please subscribe to a plan') }}</h5>
+                                <h4 class="fw-bold text-danger mb-1">
+                                    <i class="ri-alert-line me-1"></i>
+                                    {{ __('No Active Plan') }}
+                                </h4>
+                                <div class="small text-muted mb-2">{{ __('Please subscribe to a plan') }}</div>
                             @endif
                         </div>
-                        <a href="{{ route('business.subscriptions.index') }}" class="btn upgrate-btn fw-bold">{{ __('Upgrade Now') }}</a>
+                        <a href="{{ route('business.subscriptions.index') }}" class="btn btn-primary btn-sm rounded-pill fw-bold w-100 mt-2">
+                            <i class="ri-arrow-up-double-line me-1"></i> {{ __('Upgrade Now') }}
+                        </a>
                     </div>
                 </li>
             </ul>
