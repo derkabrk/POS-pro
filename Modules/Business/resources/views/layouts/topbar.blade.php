@@ -489,6 +489,9 @@
                                     <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false">
                                             Messages
+                                            @php
+                                                $unreadMessagesCount = $unreadMessagesCount ?? (auth()->check() && method_exists(auth()->user(), 'unreadMessagesCount') ? auth()->user()->unreadMessagesCount() : 0);
+                                            @endphp
                                             @if($unreadMessagesCount > 0)
                                                 <span class="badge bg-danger ms-1">{{ $unreadMessagesCount }}</span>
                                             @endif

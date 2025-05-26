@@ -13,7 +13,11 @@ class InviteCodeController extends Controller
     public function index()
     {
         $codes = InviteCode::latest()->paginate(20);
-        return view('business::invite-codes.index', compact('codes'));
+        $unreadMessagesCount = 0;
+        if (auth()->check() && method_exists(auth()->user(), 'unreadMessagesCount')) {
+            $unreadMessagesCount = auth()->user()->unreadMessagesCount();
+        }
+        return view('business::invite-codes.index', compact('codes', 'unreadMessagesCount'));
     }
 
     public function create()

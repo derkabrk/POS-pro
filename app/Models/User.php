@@ -78,4 +78,12 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function unreadMessagesCount()
+    {
+        // Count unread messages for the current user
+        return \App\Models\Chat::where('receiver_id', $this->id)
+            ->whereNull('read_at')
+            ->count();
+    }
 }
