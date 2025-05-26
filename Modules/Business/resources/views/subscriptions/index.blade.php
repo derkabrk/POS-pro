@@ -27,7 +27,10 @@
                                     <div class="plan-single-content card h-100 shadow rounded-4 border-0 p-4 position-relative">
                                         @if ((plan_data() ?? false) && plan_data()->plan_id == $plan->id)
                                             <div class="recommended-banner-container position-absolute top-0 end-0 m-3">
-                                                <span class="badge bg-success px-3 py-2 fs-6">{{ __('Current Plan') }}</span>
+                                                <span class="badge bg-gradient bg-primary text-white px-4 py-2 fs-6 rounded-pill d-flex align-items-center shadow">
+                                                    <i class="ri-vip-crown-2-line me-2 text-warning fs-5"></i>
+                                                    {{ __('Current Plan') }}
+                                                </span>
                                             </div>
                                         @endif
                                         @if ($plan->offerPrice)
@@ -68,7 +71,7 @@
                                             <ul class="list-group list-group-flush">
                                                 @foreach ($plan['permissions'] ?? [] as $perm)
                                                     <li class="list-group-item bg-transparent border-0 px-0 py-1">
-                                                        <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill">
+                                                        <span class="badge bg-white text-primary fw-semibold px-3 py-2 rounded-pill border border-primary">
                                                             <i class="ri-shield-check-line me-1"></i> {{ __(Str::headline($perm)) }}
                                                         </span>
                                                     </li>
