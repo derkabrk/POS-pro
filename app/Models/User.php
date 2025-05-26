@@ -32,6 +32,7 @@ class User extends Authenticatable
         'email_verified_at',
         'plan_id', // add this line
         'plan_permissions', // add this line
+        'points', // add this line for invite/referral points
     ];
 
     /**

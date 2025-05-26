@@ -12,6 +12,7 @@ class InviteCode extends Model
         'used',
         'used_by',
         'expires_at',
+        'created_by', // add this for tracking inviter
     ];
 
     protected $casts = [

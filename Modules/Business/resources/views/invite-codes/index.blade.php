@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container-fluid py-4">
+    <div class="alert alert-info d-flex align-items-center gap-2 mb-4" role="alert">
+        <i class="ri-star-smile-line fs-4 text-warning"></i>
+        <div>
+            <strong>Your Points:</strong> <span class="fw-bold">{{ auth()->user()->points ?? 0 }}</span>
+        </div>
+    </div>
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Invite Codes</h5>

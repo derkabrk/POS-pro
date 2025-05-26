@@ -71,7 +71,7 @@
                                             <ul class="list-group list-group-flush">
                                                 @foreach ($plan['permissions'] ?? [] as $perm)
                                                     <li class="list-group-item bg-transparent border-0 px-0 py-1">
-                                                        <span class="badge bg-white text-white fw-semibold px-3 py-2 rounded-pill border border-white">
+                                                        <span class="badge bg-transparent text-white fw-semibold px-3 py-2 rounded-pill border border-white">
                                                             <i class="ri-shield-check-line me-1"></i> {{ __(Str::headline($perm)) }}
                                                         </span>
                                                     </li>

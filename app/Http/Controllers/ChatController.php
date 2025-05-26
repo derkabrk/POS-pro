@@ -62,6 +62,16 @@ class ChatController extends Controller
             'message' => $request->message,
         ]);
 
+        // Send message notification to receiver
+        $receiver = User::find($request->receiver_id);
+        if ($receiver) {
+            $receiver->notify(new \App\Notifications\MessageNotification([
+                'sender_id' => Auth::id(),
+                'sender' => Auth::user()->name,
+                'body' => $request->message,
+            ]));
+        }
+
         broadcast(new ChatMessageSent($chat))->toOthers();
 
         return response()->json($chat);

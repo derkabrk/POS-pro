@@ -112,8 +112,12 @@ class RegisteredUserController extends Controller
                     }
                     $invite->update([
                         'used' => true,
-                        'used_by' => null, // Optionally set to $user->id after user creation
+                        'used_by' => $user->id,
                     ]);
+                    // Add points to the inviter
+                    if ($invite->created_by && ($inviter = \\App\\Models\\User::find($invite->created_by))) {
+                        $inviter->increment('points', 10); // Add 10 points per invite
+                    }
                 }
             }
 

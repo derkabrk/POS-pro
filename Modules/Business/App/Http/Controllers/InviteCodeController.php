@@ -30,6 +30,7 @@ class InviteCodeController extends Controller
         InviteCode::create([
             'code' => $code,
             'expires_at' => $request->expires_at,
+            'created_by' => Auth::id(), // track who created the code
         ]);
         return redirect()->route('business.invite-codes.index')->with('success', 'Invite code created!');
     }
