@@ -41,7 +41,7 @@ class AcnooBusinessController extends Controller
     public function acnooFilter(Request $request)
     {
         $search = $request->input('search'); // Get search term
-        $businesses = Business::query(); // Initialize query builder
+        $businesses = Business::with('user'); // Initialize query builder with eager loading
     
         // Check if type is set and not empty, and it's not "all"
         if ($request->has('type') && $request->type !== '' && $request->type !== 'all') {
@@ -80,7 +80,7 @@ class AcnooBusinessController extends Controller
         $gateways = Gateway::latest()->get();
         $categories = BusinessCategory::latest()->paginate(20);
 
-        $query = Business::with('enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name');
+        $query = Business::with(['enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name', 'user']);
 
         // If 'type' is set and not 'all', filter; otherwise, return all
         if ($request->has('type') && $request->type !== '' && $request->type !== 'all') {

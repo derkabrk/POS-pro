@@ -1,6 +1,6 @@
-<footer class="container-fluid d-flex align-items-center justify-content-center justify-content-sm-between flex-wrap py-4 px-3 bg-light border-top shadow-sm position-fixed bottom-0 start-0 w-100 z-3" style="min-height:64px;">
+<footer class="container-fluid d-flex align-items-center justify-content-center justify-content-sm-between flex-wrap py-4 px-3 bg-light border-top shadow-sm">
     <div class="d-flex align-items-center mb-2 mb-sm-0">
-        <img src="{{ get_option('general')['footer_logo'] ?? asset('assets/images/logo/backend_logo.png') }}" alt="Logo" height="28" class="me-2 rounded-circle bg-white border">
+        <img src="{{ asset('assets/images/logo/backend_logo.png') }}" alt="Logo" height="28" class="me-2 rounded-circle bg-white border">
         <span class="text-muted small">&copy; {{ date('Y') }} {{ get_option('general')['copy_right'] ?? '' }}</span>
     </div>
     <div class="d-flex align-items-center">

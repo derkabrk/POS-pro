@@ -114,6 +114,7 @@
                                     <th class="sort" data-sort="package">{{ __('Package') }}</th>
                                     <th class="sort" data-sort="last_enroll">{{ __('Last Enroll') }}</th>
                                     <th class="sort" data-sort="expired_date">{{ __('Expired Date') }}</th>
+                                    <th class="sort" data-sort="user_points">{{ __('User Points') }}</th>
                                     <th class="sort" data-sort="action">{{ __('Action') }}</th>
                                 </tr>
                             </thead>
@@ -146,6 +147,9 @@
                                     </td>
                                     <td class="expired_date">
                                         {{ $business->will_expire ? \Carbon\Carbon::parse($business->will_expire)->format('d M, Y') : 'N/A' }}
+                                    </td>
+                                    <td class="user_points">
+                                        {{ $business->user->points ?? '0' }}
                                     </td>
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">
