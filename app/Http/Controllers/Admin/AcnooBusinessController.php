@@ -335,23 +335,35 @@ class AcnooBusinessController extends Controller
             'notes' => 'required|string',
             'plan_id' => 'required|exists:plans,id',
             'business_id' => 'required|exists:businesses,id',
-            "expieryDate"=> 'required|date',
+            'expieryDate'=> 'required|date',
+            'use_points' => 'nullable|boolean', // new field for using points
         ]);
 
         DB::beginTransaction();
         try {
-
             $plan = Plan::findOrFail($request->plan_id);
             $business = Business::findOrFail($request->business_id);
+            $user = $business->user;
+
+            $price = $request->price ?? $plan->subscriptionPrice;
+            $usedPoints = false;
+
+            // If use_points is checked and user has enough points
+            if ($request->has('use_points') && $request->use_points && $user && $user->points >= $price) {
+                $user->points -= $price;
+                $user->save();
+                $price = 0; // Plan is paid by points
+                $usedPoints = true;
+            }
 
             $subscribe = PlanSubscribe::create([
                 'plan_id' => $plan->id,
-                'payment_status' => 'paid',
+                'payment_status' => $usedPoints ? 'paid_by_points' : 'paid',
                 'notes' => $request->notes,
                 'duration' => $plan->duration,
                 'business_id' => $business->id,
-                'price' => $plan->subscriptionPrice,
-                'gateway_id' => $request->gateway_id,
+                'price' => $price,
+                'gateway_id' => $request->gateway_id ?? null,
             ]);
 
             $business->update([
@@ -364,7 +376,7 @@ class AcnooBusinessController extends Controller
 
             DB::commit();
             return response()->json([
-                'message' => __('Subscription enrolled successfully.'),
+                'message' => $usedPoints ? __('Subscription enrolled using points.') : __('Subscription enrolled successfully.'),
                 'redirect' => route('admin.subscription-reports.index'),
             ]);
         } catch (\Throwable $th) {
