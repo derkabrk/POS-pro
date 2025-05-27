@@ -315,7 +315,7 @@
 
                                     <div class="mb-3">
                                         <label>{{ __('Business Name') }}</label>
-                                        <input class="form-control" id="business_name" readonly>
+                                        <input class="form-control" id="business_name" name="business_name" readonly>
                                         <input name="business_id" id="business_id" type="hidden">
                                     </div>
 
@@ -342,6 +342,19 @@
                                     <div class="mb-3">
                                         <label>{{ __('Notes') }}</label>
                                         <textarea name="notes" id="notes" class="form-control" placeholder="{{ __('Enter notes') }}">{{ 'Plan subscribed by '. auth()->user()->name }}</textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label>{{ __('User Points') }}</label>
+                                        <div class="input-group">
+                                            <input class="form-control" id="user_points" name="user_points" type="number" readonly>
+                                            <button type="button" class="btn btn-outline-primary" id="use_points_btn">{{ __('Use Points') }}</button>
+                                        </div>
+                                        <div id="points_to_use_group" class="mt-2" style="display:none;">
+                                            <label for="points_to_use">{{ __('Points to Use') }}</label>
+                                            <input class="form-control" id="points_to_use" name="points_to_use" type="number" min="1" step="1" placeholder="{{ __('Enter points to use') }}">
+                                            <div class="form-text text-danger d-none" id="points_error"></div>
+                                        </div>
                                     </div>
 
                                     <div class="modal-footer">
@@ -465,8 +478,7 @@
     // Upgrade plan
     $(document).on('click', '.upgrade-plan-btn', function() {
         var businessId = $(this).data('id');
-        var businessName = $(this).data('business-name');
-        
+        var businessName = $(this).closest('tr').find('.business_name').text().trim();
         $('#business_id').val(businessId);
         $('#business_name').val(businessName);
     });
@@ -529,5 +541,19 @@
     function SearchData() {
         $('#filter-form').submit();
     }
+
+    // Toggle points to use input
+    $(document).on('click', '#use_points_btn', function() {
+        var $pointsToUseGroup = $('#points-to-use-group');
+        if ($pointsToUseGroup.hasClass('d-none')) {
+            $pointsToUseGroup.removeClass('d-none');
+            // Set max attribute to user points
+            var maxPoints = parseInt($('#user_points').val());
+            $('#points_to_use').attr('max', maxPoints);
+        } else {
+            $pointsToUseGroup.addClass('d-none');
+            $('#points_to_use').val('');
+        }
+    });
 </script>
 @endsection

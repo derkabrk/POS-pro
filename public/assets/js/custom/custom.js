@@ -1009,3 +1009,56 @@ $(".payment-types-edit-btn").on("click", function () {
     $(".paymentTypeUpdateForm").attr("action", url);
 });
 // Payment Type Edit End
+
+$(document).on('click', '.upgrade-plan-btn', function() {
+    // ...existing code to populate modal...
+    var businessId = $(this).data('business-id');
+    var businessName = $(this).data('business-name');
+    var userPoints = $(this).data('user-points');
+    $('#upgradeBusinessModalLabel').text('Upgrade Plan for ' + businessName);
+    $('#user_points').val(userPoints);
+    $('#points_to_use_group').hide();
+    $('#points_to_use').val('');
+    $('#points_error').addClass('d-none').text('');
+    $('#use_points_btn').prop('disabled', userPoints <= 0);
+    // ...existing code...
+});
+
+$('#use_points_btn').on('click', function() {
+    var userPoints = parseInt($('#user_points').val(), 10) || 0;
+    var planPrice = parseFloat($('#plan_price').val()) || 0;
+    $('#points_to_use_group').show();
+    $('#points_to_use').attr('max', Math.min(userPoints, planPrice)).focus();
+});
+
+$('#points_to_use').on('input', function() {
+    var userPoints = parseInt($('#user_points').val(), 10) || 0;
+    var planPrice = parseFloat($('#plan_price').val()) || 0;
+    var pointsToUse = parseInt($(this).val(), 10) || 0;
+    if (pointsToUse > userPoints) {
+        $('#points_error').removeClass('d-none').text('You do not have enough points.');
+        $('#upgrade_plan_submit').prop('disabled', true);
+    } else if (pointsToUse > planPrice) {
+        $('#points_error').removeClass('d-none').text('You cannot use more points than the plan price.');
+        $('#upgrade_plan_submit').prop('disabled', true);
+    } else {
+        $('#points_error').addClass('d-none').text('');
+        $('#upgrade_plan_submit').prop('disabled', false);
+        // Optionally update price field to show 0 if all points used
+        if (pointsToUse === planPrice) {
+            $('#plan_price').val(0);
+        } else {
+            $('#plan_price').val(planPrice - pointsToUse);
+        }
+    }
+});
+
+// Hide points input and reset price if modal closed or reset
+$('#upgradeBusinessModal').on('hidden.bs.modal', function () {
+    $('#points_to_use_group').hide();
+    $('#points_to_use').val('');
+    $('#points_error').addClass('d-none').text('');
+    // Optionally reset price field
+    var originalPrice = $('#plan_price').data('original');
+    if (originalPrice) $('#plan_price').val(originalPrice);
+});

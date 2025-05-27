@@ -336,7 +336,7 @@ class AcnooBusinessController extends Controller
             'plan_id' => 'required|exists:plans,id',
             'business_id' => 'required|exists:businesses,id',
             'expieryDate'=> 'required|date',
-            'use_points' => 'nullable|boolean', // new field for using points
+            'points_to_use' => 'nullable|integer|min:0', // allow points_to_use
         ]);
 
         DB::beginTransaction();
@@ -347,13 +347,20 @@ class AcnooBusinessController extends Controller
 
             $price = $request->price ?? $plan->subscriptionPrice;
             $usedPoints = false;
+            $pointsToUse = $request->points_to_use ? intval($request->points_to_use) : 0;
 
-            // If use_points is checked and user has enough points
-            if ($request->has('use_points') && $request->use_points && $user && $user->points >= $price) {
-                $user->points -= $price;
+            // If points_to_use is provided and user has enough points
+            if ($pointsToUse > 0 && $user && $user->points >= $pointsToUse) {
+                if ($pointsToUse > $price) {
+                    $pointsToUse = $price;
+                }
+                $user->points -= $pointsToUse;
                 $user->save();
-                $price = 0; // Plan is paid by points
-                $usedPoints = true;
+                $price = $price - $pointsToUse;
+                if ($price <= 0) {
+                    $price = 0;
+                    $usedPoints = true;
+                }
             }
 
             $subscribe = PlanSubscribe::create([
