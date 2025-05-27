@@ -489,12 +489,12 @@
     });
     // AJAX Search and Filter
     function updateBusinessTable(html) {
-        // Replace only tbody (business-data) with new rows
-        $('#business-data').html($(html).find('#business-data').html());
-        // Optionally update pagination if needed
-        var pagination = $(html).find('.d-flex.justify-content-end.mt-3').html();
-        if (pagination) {
-            $('.d-flex.justify-content-end.mt-3').html(pagination);
+        // Replace the entire tbody
+        $('#business-data').replaceWith($(html).filter('#business-data'));
+        // Replace the pagination
+        var newPagination = $(html).filter('.d-flex.justify-content-end.mt-3');
+        if (newPagination.length) {
+            $('.d-flex.justify-content-end.mt-3').replaceWith(newPagination);
         }
     }
     $(document).on('submit', '#filter-form', function(e) {
