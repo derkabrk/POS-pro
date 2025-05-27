@@ -265,11 +265,11 @@ class AcnooBusinessController extends Controller
                 'image' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : $user->image,
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
                 // Always update plan_id from request (plan_id or plan_subscribe_id)
-                'plan_id' => $request->plan_id ?? $request->plan_subscribe_id,
+                'plan_id' => $request->plan_subscribe_id,
             ];
             if ($request->plan_subscribe_id) {
                 $plan = \App\Models\Plan::find($request->plan_subscribe_id);
-                $userUpdateData['plan_permissions'] = $plan ? $plan->permissions : [];
+                $userUpdateData['plan_permissions'] = ($plan && isset($plan->permissions)) ? $plan->permissions : [];
             }
             $user->update($userUpdateData);
 
