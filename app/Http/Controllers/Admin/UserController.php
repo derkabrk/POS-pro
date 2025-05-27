@@ -124,15 +124,13 @@ class UserController extends Controller
         if ($user->role == 'superadmin') {
             return response()->json(__('You can not delete a superadmin.'), 400);
         }
-
         if (file_exists($user->image)) {
             Storage::delete($user->image);
         }
-
         $user->delete();
         return response()->json([
             'message' => __('Staff deleted successfully'),
-            'redirect' => route('admin.users.index')
+            'redirect' => route('admin.users.index', [], false)
         ]);
     }
 
@@ -141,7 +139,7 @@ class UserController extends Controller
         User::whereIn('id', $request->ids)->delete();
         return response()->json([
             'message' => __('Selected Staff deleted successfully'),
-            'redirect' => route('admin.users.index')
+            'redirect' => route('admin.users.index', [], false)
         ]);
     }
 }

@@ -131,12 +131,10 @@ class AcnooPlanController extends Controller
                 'message' => __('You can not delete free plan.'),
             ], 406);
         }
-
         $plan->delete();
-
         return response()->json([
             'message'   => __('Subscription Plan deleted successfully'),
-            'redirect'  => route('admin.plans.index')
+            'redirect'  => route('admin.plans.index', [], false)
         ]);
     }
 
@@ -145,7 +143,7 @@ class AcnooPlanController extends Controller
         Plan::whereIn('id', $request->ids)->where('subscriptionName', '!=', 'Free')->delete();
         return response()->json([
             'message' => __('Subscription plan deleted successfully'),
-            'redirect' => route('admin.plans.index')
+            'redirect' => route('admin.plans.index', [], false)
         ]);
     }
 }

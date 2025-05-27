@@ -111,17 +111,16 @@ class AcnooShippingCompaniesController extends Controller
         $category->delete();
         return response()->json([
             'message'   => __('Category deleted successfully'),
-            'redirect'  => route('admin.shipping-companies.index')
+            'redirect'  => route('admin.shipping-companies.index', [], false)
         ]);
     }
 
     public function deleteAll(Request $request)
     {
         ShippingCompanies::whereIn('id', $request->ids)->delete();
-
         return response()->json([
             'message'   => __('Category deleted successfully'),
-            'redirect'  => route('admin.shipping-companies.index')
+            'redirect'  => route('admin.shipping-companies.index', [], false)
         ]);
     }
 

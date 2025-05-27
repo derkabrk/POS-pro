@@ -84,10 +84,9 @@ class AcnooLanguageController extends Controller
             Storage::delete($language->icon);
         }
         $language->delete();
-
         return response()->json([
             'message'   => __('Language deleted successfully'),
-            'redirect'  => route('admin.languages.index')
+            'redirect'  => route('admin.languages.index', [], false)
         ]);
     }
 
@@ -107,12 +106,10 @@ class AcnooLanguageController extends Controller
                 Storage::delete($language->icon);
             }
         }
-
         $languages->each->delete();
-
         return response()->json([
             'message' => __('Selected Language deleted successfully'),
-            'redirect' => route('admin.languages.index')
+            'redirect' => route('admin.languages.index', [], false)
         ]);
     }
 }

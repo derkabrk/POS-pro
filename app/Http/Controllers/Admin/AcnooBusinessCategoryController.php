@@ -91,7 +91,7 @@ class AcnooBusinessCategoryController extends Controller
         $category->delete();
         return response()->json([
             'message'   => __('Category deleted successfully'),
-            'redirect'  => route('admin.business-categories.index')
+            'redirect'  => route('admin.business-categories.index', [], false)
         ]);
     }
 
@@ -101,7 +101,7 @@ class AcnooBusinessCategoryController extends Controller
 
         return response()->json([
             'message'   => __('Category deleted successfully'),
-            'redirect'  => route('admin.business-categories.index')
+            'redirect'  => route('admin.business-categories.index', [], false)
         ]);
     }
 

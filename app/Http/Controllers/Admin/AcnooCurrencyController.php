@@ -120,15 +120,13 @@ class AcnooCurrencyController extends Controller
         if ($currency->is_default) {
             return response()->json([
                 'message' => __('You cannot delete it because it is default currency'),
-                'redirect' => route('admin.currencies.index')
+                'redirect' => route('admin.currencies.index', [], false)
             ], 400);
         }
-
         $currency->delete();
-
         return response()->json([
             'message' => __('Currency deleted successfully'),
-            'redirect' => route('admin.currencies.index')
+            'redirect' => route('admin.currencies.index', [], false)
         ], 200);
     }
 
@@ -136,23 +134,19 @@ class AcnooCurrencyController extends Controller
     public function deleteAll(Request $request)
     {
         $default_currency_id = Currency::where('is_default', 1)->value('id');
-
         if (count($request->ids) === 1 && in_array($default_currency_id, $request->ids)) {
             return response()->json([
                 'message' => __('You cannot delete the default currency.'),
-                'redirect' => route('admin.currencies.index')
+                'redirect' => route('admin.currencies.index', [], false)
             ], 400);
         }
-
         $idsToDelete = array_filter($request->ids, function ($id) use ($default_currency_id) {
             return $id != $default_currency_id;
         });
-
         Currency::whereIn('id', $idsToDelete)->delete();
-
         return response()->json([
-            'message' => __('Selected currencies deleted successfully.'),
-            'redirect' => route('admin.currencies.index')
+            'message' => __('Selected currency deleted successfully.'),
+            'redirect' => route('admin.currencies.index', [], false)
         ]);
     }
 }

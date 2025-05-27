@@ -312,7 +312,7 @@ class AcnooBusinessController extends Controller
         $business->delete();
         return response()->json([
             'message'   => __('Business deleted successfully'),
-            'redirect'  => route('admin.business.index')
+            'redirect'  => route('admin.business.index', [], false) // Use relative URL
         ]);
     }
 
