@@ -90,8 +90,8 @@ class AcnooBusinessController extends Controller
         $businesses = $query->latest()->paginate($request->per_page ?? 20);
 
         if ($request->ajax()) {
-            // Render only the table body and pagination for AJAX
-            $table = view('admin.business.index', compact('businesses', 'gateways', 'plans', 'categories'))->render();
+            // Render only the table body and pagination for AJAX (use a partial view)
+            $table = view('admin.business.table', compact('businesses'))->render();
             return response()->json(['data' => $table]);
         }
 

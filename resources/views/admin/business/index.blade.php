@@ -473,6 +473,16 @@
         $('.plan-price').val(price);
     });
     
+    // Initialize flatpickr for date input
+    $(document).ready(function() {
+        if (typeof flatpickr !== 'undefined') {
+            flatpickr('[data-provider="flatpickr"]', {
+                dateFormat: 'd M, Y',
+                mode: 'range',
+                allowInput: true
+            });
+        }
+    });
     // AJAX Search and Filter
     function updateBusinessTable(html) {
         // Replace only tbody (business-data) with new rows
