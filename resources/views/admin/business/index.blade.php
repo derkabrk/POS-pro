@@ -37,11 +37,6 @@
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
-                        <div class="col-xxl-2 col-sm-6">
-                            <div>
-                                <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" placeholder="Select date">
-                            </div>
-                        </div>
                         <div class="col-xxl-2 col-sm-4">
                             <div>
                                 <select class="form-control" name="per_page" id="per_page">
@@ -489,12 +484,12 @@
         $('.plan-price').val(price);
     });
     
-    // Initialize flatpickr for date input
+    // Initialize flatpickr for date input (filter)
     $(document).ready(function() {
         if (typeof flatpickr !== 'undefined') {
-            flatpickr('[data-provider="flatpickr"]', {
-                dateFormat: 'd M, Y',
-                mode: 'range',
+            flatpickr('#datepicker', {
+                enableTime: true,
+                dateFormat: 'Y-m-d H:i',
                 allowInput: true
             });
         }
