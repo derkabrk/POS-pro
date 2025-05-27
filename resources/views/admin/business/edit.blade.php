@@ -101,9 +101,9 @@
                                 </div>
                                 <div class="col-xxl-6 col-md-6">
                                     <div>
-                                        <label for="shopOpeningBalance" class="form-label">{{ __('Shop Opening Balance') }} <span class="text-danger">*</span></label>
-                                        <input type="number" name="shopOpeningBalance" id="shopOpeningBalance" value="{{ $business->shopOpeningBalance }}" required class="form-control" placeholder="{{ __('Enter Balance') }}" step="0.01">
-                                        @error('shopOpeningBalance')
+                                        <label for="points" class="form-label">{{ __('User Points') }} <span class="text-danger">*</span></label>
+                                        <input type="number" name="points" id="points" value="{{ $user->points }}" required class="form-control" placeholder="{{ __('Enter Points') }}" step="1">
+                                        @error('points')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
