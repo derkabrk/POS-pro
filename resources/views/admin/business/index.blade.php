@@ -118,8 +118,8 @@
                                     <th class="sort" data-sort="action">{{ __('Action') }}</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all" id="business-data">
-                                @foreach($businesses as $key => $business)
+                            <tbody id="business-data">
+                                @forelse($businesses as $key => $business)
                                 <tr>
                                     <th scope="row">
                                         <div class="form-check">
@@ -197,7 +197,11 @@
                                         </ul>
                                     </td>
                                 </tr>
-                                @endforeach
+                                @empty
+                                <tr>
+                                    <td colspan="11" class="text-center">{{ __('No results found.') }}</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                         <div class="noresult" style="display: none">

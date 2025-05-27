@@ -1,4 +1,5 @@
-@foreach($businesses as $key => $business)
+<tbody id="business-data">
+@forelse($businesses as $key => $business)
 <tr>
     <th scope="row">
         <div class="form-check">
@@ -76,11 +77,12 @@
         </ul>
     </td>
 </tr>
-@endforeach
+@empty
 <tr>
-    <td colspan="100%">
-        <div class="d-flex justify-content-end mt-3">
-            {{ $businesses->links('vendor.pagination.bootstrap-5') }}
-        </div>
-    </td>
+    <td colspan="11" class="text-center">{{ __('No results found.') }}</td>
 </tr>
+@endforelse
+</tbody>
+<div class="d-flex justify-content-end mt-3">
+    {{ $businesses->links('vendor.pagination.bootstrap-5') }}
+</div>
