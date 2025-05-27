@@ -424,7 +424,6 @@
 <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
 <script>
     // View business details
     $(document).on('click', '.view-btn', function() {
@@ -472,7 +471,45 @@
         $('.plan-price').val(price);
     });
     
-    // Search functionality
+    // AJAX Search and Filter
+    function updateBusinessTable(html) {
+        // Replace only tbody (business-data) with new rows
+        $('#business-data').html($(html).find('#business-data').html());
+        // Optionally update pagination if needed
+        var pagination = $(html).find('.d-flex.justify-content-end.mt-3').html();
+        if (pagination) {
+            $('.d-flex.justify-content-end.mt-3').html(pagination);
+        }
+    }
+    $(document).on('submit', '#filter-form', function(e) {
+        e.preventDefault();
+        var $form = $(this);
+        var formData = $form.serialize();
+        $.ajax({
+            url: $form.attr('action'),
+            method: 'POST',
+            data: formData,
+            beforeSend: function() {
+                $('#business-data').html('<tr><td colspan="100%" class="text-center p-5"><span class="spinner-border spinner-border-sm"></span> {{ __('Loading...') }}</td></tr>');
+            },
+            success: function(response) {
+                if (response.data) {
+                    updateBusinessTable(response.data);
+                }
+            },
+            error: function(xhr) {
+                $('#business-data').html('<tr><td colspan="100%" class="text-center text-danger p-5">{{ __('Failed to load data.') }}</td></tr>');
+            }
+        });
+    });
+    // Trigger AJAX on filter changes and search
+    $(document).on('input', '.search', function() {
+        $('#filter-form').submit();
+    });
+    $(document).on('change', '#per_page, #sale_type_filter', function() {
+        $('#filter-form').submit();
+    });
+    // Search button
     function SearchData() {
         $('#filter-form').submit();
     }
