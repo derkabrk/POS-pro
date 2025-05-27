@@ -1,9 +1,9 @@
-<footer class="container-fluid d-flex align-items-center justify-content-center justify-content-sm-between flex-wrap py-4 px-3 bg-light border-top shadow-sm">
-    <div class="d-flex align-items-center mb-2 mb-sm-0">
-        <img src="{{ asset('assets/images/logo/backend_logo.png') }}" alt="Logo" height="28" class="me-2 rounded-circle bg-white border">
+<footer class="container-fluid d-flex flex-column flex-sm-row align-items-center justify-content-center flex-wrap py-4 px-3 bg-light border-top shadow-sm">
+    <div class="d-flex align-items-center justify-content-center mb-2 mb-sm-0 w-100 w-sm-auto">
+        <img src="{{ get_option('general')['admin_footer_logo'] ?? asset('assets/images/logo/backend_logo.png') }}" alt="Logo" height="28" class="me-2 rounded-circle bg-white border">
         <span class="text-muted small">&copy; {{ date('Y') }} {{ get_option('general')['copy_right'] ?? '' }}</span>
     </div>
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-center w-100 w-sm-auto mt-2 mt-sm-0">
         <span class="text-muted small me-2">{{ get_option('general')['admin_footer_text'] ?? '' }}</span>
         <span class="mx-1">|</span>
         <a class="footer-acn text-decoration-none fw-semibold" href="{{ get_option('general')['admin_footer_link'] ?? '' }}" target="_blank">
