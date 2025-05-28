@@ -138,6 +138,18 @@
                                         <img src="{{ asset('assets/images/icons/upload.png') }}" id="image" class="img-thumbnail mt-2">
                                     @endif
                                 </div>
+                                <div class="col-xxl-6 col-md-6">
+                                    <label for="variant_id" class="form-label">{{ __('Product Variant') }}</label>
+                                    <select name="variant_ids[]" id="variant_id" class="form-select" multiple>
+                                        @foreach ($variants as $variant)
+                                            <option value="{{ $variant->id }}"
+                                                @if(isset($product) && $product->variants->contains($variant->id)) selected @endif>
+                                                {{ $variant->variantName }} ({{ $variant->variantCode }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted">{{ __('Hold Ctrl (Windows) or Command (Mac) to select multiple') }}</small>
+                                </div>
                                 <div class="col-12 text-center mt-4">
                                     <button type="reset" class="btn btn-light me-3">{{ __('Cancel') }}</button>
                                     <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>

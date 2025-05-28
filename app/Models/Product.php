@@ -74,4 +74,9 @@ class Product extends Model
     protected $casts = [
         'meta' => 'json',
     ];
+
+    public function variants()
+    {
+        return $this->belongsToMany(ProductVariant::class, 'product_product_variant');
+    }
 }

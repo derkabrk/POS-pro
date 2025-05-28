@@ -126,7 +126,7 @@ class AcnooProductController extends Controller
             $purchase_price = $request->exclusive_price + $vat_amount;
         }
 
-        Product::create($request->except(['productPicture', 'productDealerPrice', 'productWholeSalePrice', 'productStock', 'alert_qty', 'vat_amount']) + [
+        $product = Product::create($request->except(['productPicture', 'productDealerPrice', 'productWholeSalePrice', 'productStock', 'alert_qty', 'vat_amount']) + [
             'productPicture' => $request->productPicture ? $this->upload($request, 'productPicture') : NULL,
             'productPurchasePrice' => $purchase_price,
             'productSalePrice' => $request->productSalePrice,
@@ -138,6 +138,9 @@ class AcnooProductController extends Controller
             'supplier_id' => $request->supplier_id,
             'business_id' => auth()->user()->business_id,
         ]);
+
+        // After saving the product
+        $product->variants()->sync($request->input('variant_ids', []));
 
         return response()->json([
             'message' => __('Product saved successfully.'),
@@ -153,8 +156,9 @@ class AcnooProductController extends Controller
         $units = Unit::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $vats = Vat::where('business_id', auth()->user()->business_id)->latest()->get();
         $suppliers = Party::where('type', 'Supplier')->get();
+        $productVariants = \App\Models\ProductVariant::where('business_id', auth()->user()->business_id)->where('status', 1)->get();
 
-        return view('business::products.edit', compact('categories', 'suppliers','brands', 'units', 'product', 'vats'));
+        return view('business::products.edit', compact('categories', 'suppliers','brands', 'units', 'product', 'vats', 'productVariants'));
     }
 
     public function update(Request $request, $id)
@@ -214,6 +218,9 @@ class AcnooProductController extends Controller
             'supplier_id' => $request->supplier_id, // Update supplier_id
             'business_id' => auth()->user()->business_id,
         ]);
+
+        // After updating the product
+        $product->variants()->sync($request->input('variant_ids', []));
 
         return response()->json([
             'message' => __('Product updated successfully.'),

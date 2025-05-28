@@ -67,6 +67,18 @@
                                     </select>
                                 </div>
                                 <div class="col-xxl-6 col-md-6">
+                                    <label for="variant_id" class="form-label">{{ __('Product Variant') }}</label>
+                                    <select name="variant_ids[]" id="variant_id" class="form-select" multiple>
+                                        @foreach ($variants as $variant)
+                                            <option value="{{ $variant->id }}"
+                                                @if(old('variant_ids') && in_array($variant->id, old('variant_ids', []))) selected @endif>
+                                                {{ $variant->variantName }} ({{ $variant->variantCode }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted">{{ __('Hold Ctrl (Windows) or Command (Mac) to select multiple') }}</small>
+                                </div>
+                                <div class="col-xxl-6 col-md-6">
                                     <label for="productCode" class="form-label">{{ __('Product Code') }}</label>
                                     <input type="text" id="productCode" value="{{ $code }}" name="productCode" class="form-control" placeholder="{{ __('Enter Product Code') }}">
                                 </div>
