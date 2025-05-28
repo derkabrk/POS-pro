@@ -40,9 +40,17 @@
                                         <tbody>
                                             @php $statuses = \App\Models\Sale::STATUS; @endphp
                                             @foreach($statuses as $statusId => $statusArr)
+                                                @php
+                                                    // Extract the color from the btn btn-outline-* class and convert to bg-* for solid color
+                                                    $colorClass = str_replace('btn btn-outline-', 'bg-', $statusArr['color']);
+                                                    // Add opacity utility if using Bootstrap 5+ (e.g., bg-primary bg-opacity-25)
+                                                    $opacityClass = 'bg-opacity-25';
+                                                    // Remove 'update-status-btn' if present
+                                                    $colorClass = str_replace('update-status-btn', '', $colorClass);
+                                                @endphp
                                                 <tr>
                                                     <td>
-                                                        <span class="badge {{ $statusArr['color'] }} text-dark">
+                                                        <span class="badge {{ trim($colorClass) }} {{ $opacityClass }} text-dark">
                                                             {{ $statusArr['name'] }}
                                                         </span>
                                                     </td>
