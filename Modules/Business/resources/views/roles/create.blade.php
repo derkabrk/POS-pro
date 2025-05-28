@@ -48,8 +48,91 @@
                                             <tr>
                                                 <td>
                                                     <div class="row g-3">
-                                                        {{-- Permission checkboxes here (same as before) --}}
-                                                        @include('business::roles.partials.permissions')
+                                                        {{-- Permission checkboxes here (inline, since partial is missing) --}}
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="profileEditPermission" class="custom-control-input user-check-box" id="profile_edit">
+                                                                <label class="custom-control-label fw-bold" for="profile_edit">{{ __('Profile Edit') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="salePermission" class="custom-control-input user-check-box" id="sale">
+                                                                <label class="custom-control-label fw-bold" for="sale">{{ __('Sales') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="salesListPermission" class="custom-control-input user-check-box" id="sales_list">
+                                                                <label class="custom-control-label fw-bold" for="sales_list">{{ __('Sales List') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="purchasePermission" class="custom-control-input user-check-box" id="purchase">
+                                                                <label class="custom-control-label fw-bold" for="purchase">{{ __('Purchase') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="purchaseListPermission" class="custom-control-input user-check-box" id="purchase_list">
+                                                                <label class="custom-control-label fw-bold" for="purchase_list">{{ __('Purchase List') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="productPermission" class="custom-control-input user-check-box" id="product">
+                                                                <label class="custom-control-label fw-bold" for="product">{{ __('Products') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="stockPermission" class="custom-control-input user-check-box" id="stock">
+                                                                <label class="custom-control-label fw-bold" for="stock">{{ __('Stock') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="partiesPermission" class="custom-control-input user-check-box" id="party">
+                                                                <label class="custom-control-label fw-bold" for="party">{{ __('Parties') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="addIncomePermission" class="custom-control-input user-check-box" id="income">
+                                                                <label class="custom-control-label fw-bold" for="income">{{ __('Income') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="addExpensePermission" class="custom-control-input user-check-box" id="expense">
+                                                                <label class="custom-control-label fw-bold" for="expense">{{ __('Expense') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="dueListPermission" class="custom-control-input user-check-box" id="due_list">
+                                                                <label class="custom-control-label fw-bold" for="due_list">{{ __('Due List') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="shippingPermission" class="custom-control-input user-check-box" id="shipping">
+                                                                <label class="custom-control-label fw-bold" for="shipping">{{ __('Shipping') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="lossProfitPermission" class="custom-control-input user-check-box" id="loss_profit">
+                                                                <label class="custom-control-label fw-bold" for="loss_profit">{{ __('Loss Profit') }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex col-lg-4 mb-2">
+                                                            <div class="custom-control custom-checkbox d-flex align-items-center gap-2">
+                                                                <input type="checkbox" name="reportsPermission" class="custom-control-input user-check-box" id="reports">
+                                                                <label class="custom-control-label fw-bold" for="reports">{{ __('Reports') }}</label>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>

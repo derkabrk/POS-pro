@@ -30,15 +30,23 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->role->name ?? '-' }}</td>
                                 <td>
-                                    @php $statuses = \App\Models\Sale::STATUS; @endphp
-                                    <ul class="list-unstyled mb-0">
-                                        @foreach($statuses as $statusId => $statusArr)
-                                            <li>
-                                                <span class="badge bg-info text-dark">{{ $statusArr['name'] }}</span>:
-                                                {{ $user->orderStatusUpdates->where('new_status', $statusId)->count() }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                                    <table class="table table-sm table-bordered mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>{{ __('Status') }}</th>
+                                                <th>{{ __('Count') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php $statuses = \App\Models\Sale::STATUS; @endphp
+                                            @foreach($statuses as $statusId => $statusArr)
+                                                <tr>
+                                                    <td><span class="badge bg-info text-dark">{{ $statusArr['name'] }}</span></td>
+                                                    <td>{{ $user->orderStatusUpdates->where('new_status', $statusId)->count() }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </td>
                                 <td>
                                     <a href="{{ route('business.roles.edit', $user->id) }}" class="btn btn-sm btn-primary">{{ __('Edit') }}</a>
