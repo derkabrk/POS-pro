@@ -1,6 +1,6 @@
 @extends('business::layouts.master')
 
-@section('title', 'View Ticket')
+@section('title', __('View Ticket'))
 
 @section('content')
 <div class="erp-table-section">
@@ -8,7 +8,7 @@
         <div class="card border-0 shadow-sm">
             <div class="card-bodys">
                 <div class="table-header p-16">
-                    <h4>Ticket Details</h4>
+                    <h4>{{ __('Ticket Details') }}</h4>
                     <button 
                         type="button" 
                         class="btn btn-primary text-white add-order-btn" 
@@ -16,69 +16,69 @@
                         data-bs-target="#replyModal"
                         data-ticket-id="{{ $ticket->id }}"
                     >
-                        <i class="fas fa-reply me-1"></i> Reply
+                        <i class="fas fa-reply me-1"></i> {{ __('Reply') }}
                     </button>
                 </div>
                 <div class="p-16">
                     <div class="row g-4">
                         <!-- Ticket Title -->
                         <div class="col-lg-6">
-                            <h6 class="fw-bold">Title:</h6>
+                            <h6 class="fw-bold">{{ __('Title:') }}</h6>
                             <p>{{ $ticket->title }}</p>
                         </div>
 
                         <!-- Ticket Description -->
                         <div class="col-lg-12">
-                            <h6 class="fw-bold">Description:</h6>
+                            <h6 class="fw-bold">{{ __('Description:') }}</h6>
                             <p>{{ $ticket->description }}</p>
                         </div>
 
                         <!-- Ticket Category -->
                         <div class="col-lg-6">
-                            <h6 class="fw-bold">Category:</h6>
+                            <h6 class="fw-bold">{{ __('Category:') }}</h6>
                             @if ($ticket->category)
                                 <span class="badge rounded-pill" style="background-color: {{ $ticket->category->color }}; color: #fff;">
                                     {{ $ticket->category->name }}
                                 </span>
                             @else
-                                <span class="text-muted">No Category</span>
+                                <span class="text-muted">{{ __('No Category') }}</span>
                             @endif
                         </div>
 
                         <!-- Ticket Status -->
                         <div class="col-lg-6">
-                            <h6 class="fw-bold">Status:</h6>
+                            <h6 class="fw-bold">{{ __('Status:') }}</h6>
                             @if ($ticket->status)
                                 <span class="badge rounded-pill" style="background-color: {{ $ticket->status->color }}; color: #fff;">
                                     {{ $ticket->status->name }}
                                 </span>
                             @else
-                                <span class="text-muted">No Status</span>
+                                <span class="text-muted">{{ __('No Status') }}</span>
                             @endif
                         </div>
 
                         <!-- Ticket Priority -->
                         <div class="col-lg-6">
-                            <h6 class="fw-bold">Priority:</h6>
-                            <p>{{ $ticket->priority ?? 'No Priority' }}</p>
+                            <h6 class="fw-bold">{{ __('Priority:') }}</h6>
+                            <p>{{ $ticket->priority ?? __('No Priority') }}</p>
                         </div>
 
                         <!-- Created At -->
                         <div class="col-lg-6">
-                            <h6 class="fw-bold">Created At:</h6>
+                            <h6 class="fw-bold">{{ __('Created At:') }}</h6>
                             <p>{{ $ticket->created_at->format('d M Y, h:i A') }}</p>
                         </div>
 
                         <!-- Updated At -->
                         <div class="col-lg-6">
-                            <h6 class="fw-bold">Last Updated:</h6>
+                            <h6 class="fw-bold">{{ __('Last Updated:') }}</h6>
                             <p>{{ $ticket->updated_at->format('d M Y, h:i A') }}</p>
                         </div>
                     </div>
 
                     {{-- Replies Section --}}
                     <div class="mt-4">
-                        <h5 class="fw-bold">Replies</h5>
+                        <h5 class="fw-bold">{{ __('Replies') }}</h5>
                         @if($replies && $replies->count())
                             <div class="d-flex flex-column gap-2">
                                 @foreach($replies as $reply)
@@ -100,7 +100,7 @@
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-muted">No replies yet.</p>
+                            <p class="text-muted">{{ __('No replies yet.') }}</p>
                         @endif
                     </div>
                 </div>
@@ -120,17 +120,17 @@
       <input type="hidden" name="ticket_id" id="replyTicketId">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="replyModalLabel">Reply to Ticket</h5>
+          <h5 class="modal-title" id="replyModalLabel">{{ __('Reply to Ticket') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label for="replyMessage" class="form-label">Message</label>
+            <label for="replyMessage" class="form-label">{{ __('Message') }}</label>
             <textarea class="form-control" id="replyMessage" name="message" rows="4" required></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Send Reply</button>
+          <button type="submit" class="btn btn-primary">{{ __('Send Reply') }}</button>
         </div>
       </div>
     </form>

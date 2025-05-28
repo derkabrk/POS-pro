@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>Promo Codes</h4>
-    <a href="{{ route('admin.promo-codes.create') }}" class="btn btn-primary">Create Promo Code</a>
+    <h4>{{ __('Promo Codes') }}</h4>
+    <a href="{{ route('admin.promo-codes.create') }}" class="btn btn-primary">{{ __('Create Promo Code') }}</a>
 </div>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
@@ -11,13 +11,13 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Code</th>
-            <th>Percentage</th>
-            <th>Valid From</th>
-            <th>Valid To</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>{{ __('ID') }}</th>
+            <th>{{ __('Code') }}</th>
+            <th>{{ __('Percentage') }}</th>
+            <th>{{ __('Valid From') }}</th>
+            <th>{{ __('Valid To') }}</th>
+            <th>{{ __('Status') }}</th>
+            <th>{{ __('Actions') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -30,17 +30,17 @@
                 <td>{{ $promoCode->valid_to }}</td>
                 <td>
                     @if($promoCode->active)
-                        <span class="badge bg-success">Active</span>
+                        <span class="badge bg-success">{{ __('Active') }}</span>
                     @else
-                        <span class="badge bg-secondary">Inactive</span>
+                        <span class="badge bg-secondary">{{ __('Inactive') }}</span>
                     @endif
                 </td>
                 <td>
-                    <a href="{{ route('admin.promo-codes.edit', $promoCode) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{{ route('admin.promo-codes.edit', $promoCode) }}" class="btn btn-sm btn-warning">{{ __('Edit') }}</a>
                     <form action="{{ route('admin.promo-codes.destroy', $promoCode) }}" method="POST" style="display:inline-block">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this promo code?')">Delete</button>
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('{{ __('Delete this promo code?') }}')">{{ __('Delete') }}</button>
                     </form>
                 </td>
             </tr>

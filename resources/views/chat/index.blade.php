@@ -128,10 +128,10 @@
         <div class="px-4 pt-4 mb-3">
             <div class="d-flex align-items-start">
                 <div class="flex-grow-1">
-                    <h5 class="mb-4">Chats</h5>
+                    <h5 class="mb-4">{{ __('Chats') }}</h5>
                 </div>
                 <div class="flex-shrink-0">
-                    <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="Add Contact">
+                    <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="{{ __('Add Contact') }}">
                         <button type="button" class="btn btn-soft-success btn-sm">
                             <i class="ri-add-line align-bottom"></i>
                         </button>
@@ -139,7 +139,7 @@
                 </div>
             </div>
             <div class="search-box">
-                <input type="text" class="form-control bg-light border-light" placeholder="Search here..." id="user-search">
+                <input type="text" class="form-control bg-light border-light" placeholder="{{ __('Search here...') }}" id="user-search">
                 <i class="ri-search-2-line search-icon"></i>
             </div>
         </div> <!-- .p-4 -->
@@ -147,12 +147,12 @@
         <ul class="nav nav-tabs nav-tabs-custom nav-success nav-justified" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#chats" role="tab">
-                    Chats
+                    {{ __('Chats') }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#contacts" role="tab">
-                    Contacts
+                    {{ __('Contacts') }}
                 </a>
             </li>
         </ul>
@@ -162,10 +162,10 @@
                 <div class="chat-room-list pt-3" data-simplebar>
                     <div class="d-flex align-items-center px-4 mb-2">
                         <div class="flex-grow-1">
-                            <h4 class="mb-0 fs-11 text-muted text-uppercase">Direct Messages</h4>
+                            <h4 class="mb-0 fs-11 text-muted text-uppercase">{{ __('Direct Messages') }}</h4>
                         </div>
                         <div class="flex-shrink-0">
-                            <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="New Message">
+                            <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="{{ __('New Message') }}">
                                 <button type="button" class="btn btn-soft-success btn-sm shadow-none">
                                     <i class="ri-add-line align-bottom"></i>
                                 </button>
@@ -190,7 +190,7 @@
                                         data-user-name="{{ $user->name }}"
                                         data-user-email="{{ $user->email }}"
                                         data-user-avatar="{{ $user->profile_photo_url && filter_var($user->profile_photo_url, FILTER_VALIDATE_URL) ? $user->profile_photo_url : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}"
-                                        data-user-status="{{ $user->is_online ? 'Online' : 'Offline' }}"
+                                        data-user-status="{{ $user->is_online ? __('Online') : __('Offline') }}"
                                         data-is-online="{{ $user->is_online ? '1' : '0' }}"
                                         style="cursor: pointer;">
                                         <div class="d-flex align-items-center">
@@ -205,12 +205,12 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <h6 class="mb-0 text-truncate fs-14 fw-medium">{{ $user->name }}</h6>
                                                     <span class="badge bg-{{ $user->is_online ? 'success' : 'secondary' }}-subtle text-{{ $user->is_online ? 'success' : 'secondary' }} fs-11">
-                                                        {{ $user->is_online ? 'Online' : 'Offline' }}
+                                                        {{ $user->is_online ? __('Online') : __('Offline') }}
                                                     </span>
                                                 </div>
                                                 <div class="text-truncate small mt-1" style="max-width: 90%;">
                                                     @if($user->latest_message->sender_id == auth()->id())
-                                                        <span class="fw-semibold text-white">You: </span>
+                                                        <span class="fw-semibold text-white">{{ __('You:') }} </span>
                                                         <span class="text-white">{{ \Illuminate\Support\Str::limit($user->latest_message->content ?? $user->latest_message->message, 40) }}</span>
                                                     @else
                                                         <span class="fw-bold text-white">{{ \Illuminate\Support\Str::limit($user->latest_message->content ?? $user->latest_message->message, 40) }}</span>
@@ -223,7 +223,7 @@
                                 @endforeach
                             @else
                                 <li class="text-center py-4">
-                                    <p class="text-muted">No users with chat history</p>
+                                    <p class="text-muted">{{ __('No users with chat history') }}</p>
                                 </li>
                             @endif
                         </ul>
@@ -235,7 +235,7 @@
                     <div class="sort-contact">
                         <!-- Contacts content can be added here -->
                         <div class="text-center py-4">
-                            <p class="text-muted">Contacts feature coming soon</p>
+                            <p class="text-muted">{{ __('Contacts feature coming soon') }}</p>
                         </div>
                     </div>
                 </div>
@@ -272,10 +272,10 @@
                                                 </div>
                                                 <div class="flex-grow-1 overflow-hidden">
                                                     <h5 class="text-truncate mb-0 fs-16">
-                                                        <span class="text-reset username" id="selected-user-name">Select a user to chat</span>
+                                                        <span class="text-reset username" id="selected-user-name">{{ __('Select a user to chat') }}</span>
                                                     </h5>
                                                     <p class="text-truncate text-muted fs-14 mb-0">
-                                                        <small id="selected-user-status">Choose someone to start chatting</small>
+                                                        <small id="selected-user-status">{{ __('Choose someone to start chatting') }}</small>
                                                     </p>
                                                 </div>
                                             </div>
@@ -290,7 +290,7 @@
                             <div id="elmLoader" style="display: none;">
                                 <div class="d-flex justify-content-center">
                                     <div class="spinner-border text-primary avatar-sm" role="status">
-                                        <span class="visually-hidden">Loading...</span>
+                                        <span class="visually-hidden">{{ __('Loading...') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -306,8 +306,8 @@
                                                             <i class="ri-message-3-line display-4"></i>
                                                         </div>
                                                     </div>
-                                                    <h5 class="mb-2">Welcome to Chat!</h5>
-                                                    <p class="text-muted mb-0">Select a user from the sidebar to start chatting</p>
+                                                    <h5 class="mb-2">{{ __('Welcome to Chat!') }}</h5>
+                                                    <p class="text-muted mb-0">{{ __('Select a user from the sidebar to start chatting') }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -317,7 +317,7 @@
                         </div>
 
                         <div class="alert alert-warning alert-dismissible copyclipboard-alert px-4 fade show" id="copyClipBoard" role="alert" style="display: none;">
-                            Message copied
+                            {{ __('Message copied') }}
                         </div>
                     </div>
                 </div>
@@ -344,7 +344,7 @@
                                        class="form-control chat-input bg-light border-light" 
                                        id="chat-input" 
                                        name="message"
-                                       placeholder="Type your message..." 
+                                       placeholder="{{ __('Type your message...') }}" 
                                        autocomplete="off"
                                        maxlength="1000">
                             </div>

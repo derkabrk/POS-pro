@@ -1,7 +1,7 @@
 @extends('business::layouts.master')
 
 @section('title')
-    Order Sources
+    {{ __('Order Sources') }}
 @endsection
 
 @section('content')
@@ -11,7 +11,7 @@
             <div class="card-header border-0">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
-                        <h5 class="card-title mb-0">Add New Order Source</h5>
+                        <h5 class="card-title mb-0">{{ __('Add New Order Source') }}</h5>
                     </div>
                     <div class="col-sm-auto">
                         <a href="{{ route('business.orderSource.index') }}" class="btn btn-outline-primary btn-sm rounded-pill d-flex align-items-center px-3 py-2 shadow-sm">
@@ -25,52 +25,52 @@
                     @csrf
                     <div class="row g-3">
                         <div class="col-lg-6">
-                            <label class="form-label">Account Name</label>
-                            <input type="text" name="account_name" required class="form-control" placeholder="Enter Account Name">
+                            <label class="form-label">{{ __('Account Name') }}</label>
+                            <input type="text" name="account_name" required class="form-control" placeholder="{{ __('Enter Account Name') }}">
                         </div>
                         <div class="col-lg-6">
-                            <label class="form-label">API Key</label>
-                            <input type="text" name="api_key" required class="form-control" placeholder="Enter API Key">
+                            <label class="form-label">{{ __('API Key') }}</label>
+                            <input type="text" name="api_key" required class="form-control" placeholder="{{ __('Enter API Key') }}">
                         </div>
                         <div class="col-lg-6">
-                            <label class="form-label">API Secret</label>
-                            <input type="text" name="api_secret" required class="form-control" placeholder="Enter API Secret">
+                            <label class="form-label">{{ __('API Secret') }}</label>
+                            <input type="text" name="api_secret" required class="form-control" placeholder="{{ __('Enter API Secret') }}">
                         </div>
                         <div class="col-lg-6">
-                            <label class="form-label">Platform</label>
+                            <label class="form-label">{{ __('Platform') }}</label>
                             <select name="name" id="platform" class="form-select" required>
-                                <option value="" disabled selected>Select Platform</option>
-                                <option value="Shopify">Shopify</option>
-                                <option value="YouCan">YouCan</option>
-                                <option value="WooCommerce">WooCommerce</option>
+                                <option value="" disabled selected>{{ __('Select Platform') }}</option>
+                                <option value="Shopify">{{ __('Shopify') }}</option>
+                                <option value="YouCan">{{ __('YouCan') }}</option>
+                                <option value="WooCommerce">{{ __('WooCommerce') }}</option>
                             </select>
                         </div>
                         <!-- Shopify Settings -->
                         <div id="shopify-settings" class="platform-settings d-none">
                             <div class="col-lg-12 mb-2">
-                                <label class="form-label">Shopify Store URL</label>
-                                <input type="text" name="shopify_store_url" class="form-control" placeholder="Enter your Shopify store URL">
+                                <label class="form-label">{{ __('Shopify Store URL') }}</label>
+                                <input type="text" name="shopify_store_url" class="form-control" placeholder="{{ __('Enter your Shopify store URL') }}">
                             </div>
                         </div>
                         <!-- WooCommerce Settings -->
                         <div id="woocommerce-settings" class="platform-settings d-none">
                             <div class="col-lg-12 mb-2">
-                                <label class="form-label">WooCommerce Store URL</label>
-                                <input type="text" name="woocommerce_store_url" class="form-control" placeholder="Enter your WooCommerce store URL">
+                                <label class="form-label">{{ __('WooCommerce Store URL') }}</label>
+                                <input type="text" name="woocommerce_store_url" class="form-control" placeholder="{{ __('Enter your WooCommerce store URL') }}">
                             </div>
                         </div>
                         <!-- YouCan Settings -->
                         <div id="youcan-settings" class="platform-settings d-none">
                             <div class="col-lg-12 mb-2">
-                                <label class="form-label">YouCan Store URL</label>
-                                <input type="text" name="youcan_store_url" class="form-control" placeholder="Enter your YouCan store URL">
+                                <label class="form-label">{{ __('YouCan Store URL') }}</label>
+                                <input type="text" name="youcan_store_url" class="form-control" placeholder="{{ __('Enter your YouCan store URL') }}">
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <label class="form-label">Status</label>
+                            <label class="form-label">{{ __('Status') }}</label>
                             <select name="status" class="form-select">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
+                                <option value="1">{{ __('Active') }}</option>
+                                <option value="0">{{ __('Inactive') }}</option>
                             </select>
                         </div>
                         <div class="col-12 text-center mt-4">

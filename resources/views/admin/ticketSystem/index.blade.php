@@ -13,9 +13,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <p class="fw-medium text-muted mb-0">Total Tickets</p>
+                        <p class="fw-medium text-muted mb-0">{{ __('Total Tickets') }}</p>
                         <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="{{ $tickets->total() }}">0</span></h2>
-                        <p class="mb-0 text-muted"><span class="badge bg-success-subtle text-success mb-0"> <i class="ri-arrow-up-line align-middle"></i> 17.32 % </span> vs. previous month</p>
+                        <p class="mb-0 text-muted"><span class="badge bg-success-subtle text-success mb-0"> <i class="ri-arrow-up-line align-middle"></i> 17.32 % </span> {{ __('vs. previous month') }}</p>
                     </div>
                     <div>
                         <div class="avatar-sm flex-shrink-0">
@@ -34,9 +34,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <p class="fw-medium text-muted mb-0">Pending Tickets</p>
+                        <p class="fw-medium text-muted mb-0">{{ __('Pending Tickets') }}</p>
                         <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="{{ $tickets->where('status.name', 'Pending')->count() }}">0</span></h2>
-                        <p class="mb-0 text-muted"><span class="badge bg-danger-subtle text-danger mb-0"> <i class="ri-arrow-down-line align-middle"></i> 0.96 % </span> vs. previous month</p>
+                        <p class="mb-0 text-muted"><span class="badge bg-danger-subtle text-danger mb-0"> <i class="ri-arrow-down-line align-middle"></i> 0.96 % </span> {{ __('vs. previous month') }}</p>
                     </div>
                     <div>
                         <div class="avatar-sm flex-shrink-0">
@@ -55,9 +55,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <p class="fw-medium text-muted mb-0">Closed Tickets</p>
+                        <p class="fw-medium text-muted mb-0">{{ __('Closed Tickets') }}</p>
                         <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="{{ $tickets->where('status.name', 'Closed')->count() }}">0</span></h2>
-                        <p class="mb-0 text-muted"><span class="badge bg-danger-subtle text-danger mb-0"> <i class="ri-arrow-down-line align-middle"></i> 3.87 % </span> vs. previous month</p>
+                        <p class="mb-0 text-muted"><span class="badge bg-danger-subtle text-danger mb-0"> <i class="ri-arrow-down-line align-middle"></i> 3.87 % </span> {{ __('vs. previous month') }}</p>
                     </div>
                     <div>
                         <div class="avatar-sm flex-shrink-0">
@@ -76,9 +76,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <p class="fw-medium text-muted mb-0">High Priority</p>
+                        <p class="fw-medium text-muted mb-0">{{ __('High Priority') }}</p>
                         <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="{{ $tickets->where('priority', 'High')->count() }}">0</span></h2>
-                        <p class="mb-0 text-muted"><span class="badge bg-success-subtle text-success mb-0"> <i class="ri-arrow-up-line align-middle"></i> 1.09 % </span> vs. previous month</p>
+                        <p class="mb-0 text-muted"><span class="badge bg-success-subtle text-success mb-0"> <i class="ri-arrow-up-line align-middle"></i> 1.09 % </span> {{ __('vs. previous month') }}</p>
                     </div>
                     <div>
                         <div class="avatar-sm flex-shrink-0">
@@ -100,17 +100,17 @@
         <div class="card" id="ticketsList">
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Tickets List</h5>
+                    <h5 class="card-title mb-0 flex-grow-1">{{ __('Tickets List') }}</h5>
                     <div class="flex-shrink-0">
                         <div class="d-flex flex-wrap gap-2">
                             <a href="{{ route('admin.ticketSystem.create') }}" class="btn btn-primary add-btn">
-                                <i class="ri-add-line align-bottom me-1"></i> New Ticket
+                                <i class="ri-add-line align-bottom me-1"></i> {{ __('New Ticket') }}
                             </a>
                             <button type="button" class="btn btn-soft-info" data-bs-toggle="modal" data-bs-target="#ticketCategoriesModal">
-                                <i class="ri-folder-line align-bottom me-1"></i> Manage Categories
+                                <i class="ri-folder-line align-bottom me-1"></i> {{ __('Manage Categories') }}
                             </button>
                             <button type="button" class="btn btn-soft-warning" data-bs-toggle="modal" data-bs-target="#ticketStatusesModal">
-                                <i class="ri-list-check align-bottom me-1"></i> Manage Statuses
+                                <i class="ri-list-check align-bottom me-1"></i> {{ __('Manage Statuses') }}
                             </button>
                         </div>
                     </div>
@@ -122,22 +122,22 @@
                     <div class="row g-3">
                         <div class="col-xxl-5 col-sm-12">
                             <div class="search-box">
-                                <input type="text" class="form-control search bg-light border-light" placeholder="Search for ticket details or something...">
+                                <input type="text" class="form-control search bg-light border-light" placeholder="{{ __('Search for ticket details or something...') }}">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
                         <!--end col-->
 
                         <div class="col-xxl-3 col-sm-4">
-                            <input type="text" class="form-control bg-light border-light" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" placeholder="Select date range">
+                            <input type="text" class="form-control bg-light border-light" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" placeholder="{{ __('Select date range') }}">
                         </div>
                         <!--end col-->
 
                         <div class="col-xxl-3 col-sm-4">
                             <div class="input-light">
                                 <select class="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
-                                    <option value="">Status</option>
-                                    <option value="all" selected>All</option>
+                                    <option value="">{{ __('Status') }}</option>
+                                    <option value="all" selected>{{ __('All') }}</option>
                                     @foreach ($statuses as $status)
                                         <option value="{{ $status->id }}">{{ $status->name }}</option>
                                     @endforeach
@@ -148,7 +148,7 @@
                         <div class="col-xxl-1 col-sm-4">
                             <button type="button" class="btn btn-primary w-100"> 
                                 <i class="ri-equalizer-fill me-1 align-bottom"></i>
-                                Filters
+                                {{ __('Filters') }}
                             </button>
                         </div>
                         <!--end col-->
@@ -175,13 +175,13 @@
                                         <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                     </div>
                                 </th>
-                                <th class="sort" data-sort="id">ID</th>
-                                <th class="sort" data-sort="tasks_name">Title</th>
-                                <th class="sort" data-sort="status">Status</th>
-                                <th class="sort" data-sort="priority">Priority</th>
-                                <th class="sort" data-sort="category">Category</th>
-                                <th class="sort" data-sort="assigned">Assigned User</th>
-                                <th class="sort" data-sort="action">Action</th>
+                                <th class="sort" data-sort="id">{{ __('ID') }}</th>
+                                <th class="sort" data-sort="tasks_name">{{ __('Title') }}</th>
+                                <th class="sort" data-sort="status">{{ __('Status') }}</th>
+                                <th class="sort" data-sort="priority">{{ __('Priority') }}</th>
+                                <th class="sort" data-sort="category">{{ __('Category') }}</th>
+                                <th class="sort" data-sort="assigned">{{ __('Assigned User') }}</th>
+                                <th class="sort" data-sort="action">{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="list form-check-all">
@@ -209,11 +209,11 @@
                                     </td>
                                     <td class="priority">
                                         @if($ticket->priority == 'High')
-                                            <span class="badge bg-danger text-uppercase">High</span>
+                                            <span class="badge bg-danger text-uppercase">{{ __('High') }}</span>
                                         @elseif($ticket->priority == 'Medium')
-                                            <span class="badge bg-warning text-uppercase">Medium</span>
+                                            <span class="badge bg-warning text-uppercase">{{ __('Medium') }}</span>
                                         @else
-                                            <span class="badge bg-success text-uppercase">Low</span>
+                                            <span class="badge bg-success text-uppercase">{{ __('Low') }}</span>
                                         @endif
                                     </td>
                                     <td class="category">
@@ -222,7 +222,7 @@
                                                 {{ $ticket->category->name }}
                                             </span>
                                         @else
-                                            <span class="text-muted">No Category</span>
+                                            <span class="text-muted">{{ __('No Category') }}</span>
                                         @endif
                                     </td>
                                     <td class="assigned">
@@ -240,7 +240,7 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="text-muted">Unassigned</span>
+                                            <span class="text-muted">{{ __('Unassigned') }}</span>
                                         @endif
                                     </td>
                                     <td class="action">
@@ -251,17 +251,17 @@
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
                                                     <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#replyModal" data-ticket-id="{{ $ticket->id }}" data-ticket-title="{{ $ticket->title }}">
-                                                        <i class="ri-reply-fill align-bottom me-2 text-muted"></i> Reply
+                                                        <i class="ri-reply-fill align-bottom me-2 text-muted"></i> {{ __('Reply') }}
                                                     </button>
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('admin.ticketSystem.show', $ticket->id) }}">
-    <i class="ri-eye-fill align-bottom me-2 text-muted"></i> View
+    <i class="ri-eye-fill align-bottom me-2 text-muted"></i> {{ __('View') }}
 </a>
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item" href="#">
-                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
+                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> {{ __('Edit') }}
                                                     </a>
                                                 </li>
                                                 <li class="dropdown-divider"></li>
@@ -269,8 +269,8 @@
                                                     <form action="{{ route('admin.ticketSystem.destroy', $ticket->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this ticket?')">
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-danger"></i> Delete
+                                                        <button type="submit" class="dropdown-item text-danger" onclick="return confirm('{{ __('Are you sure you want to delete this ticket?') }}')">
+                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-danger"></i> {{ __('Delete') }}
                                                         </button>
                                                     </form>
                                                 </li>
@@ -286,8 +286,8 @@
                     <div class="noresult" style="display: block;">
                         <div class="text-center">
                             <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#8c68cd,secondary:#4788ff" style="width:75px;height:75px"></lord-icon>
-                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                            <p class="text-muted mb-0">We've searched more than 150+ Tickets We did not find any Tickets for you search.</p>
+                            <h5 class="mt-2">{{ __('Sorry! No Result Found') }}</h5>
+                            <p class="text-muted mb-0">{{ __('We\'ve searched more than 150+ Tickets We did not find any Tickets for you search.') }}</p>
                         </div>
                     </div>
                     @endif
@@ -312,7 +312,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-primary-subtle">
-                <h5 class="modal-title" id="ticketCategoriesModalLabel">Manage Ticket Categories</h5>
+                <h5 class="modal-title" id="ticketCategoriesModalLabel">{{ __('Manage Ticket Categories') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
             </div>
             <div class="modal-body">
@@ -322,22 +322,22 @@
                     <div class="row g-3">
                         <div class="col-lg-6">
                             <div>
-                                <label for="category-name" class="form-label">Category Name</label>
-                                <input type="text" name="name" id="category-name" class="form-control" placeholder="Enter category name" required>
+                                <label for="category-name" class="form-label">{{ __('Category Name') }}</label>
+                                <input type="text" name="name" id="category-name" class="form-control" placeholder="{{ __('Enter category name') }}" required>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div>
-                                <label for="category-color" class="form-label">Category Color</label>
-                                <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#3577f1" title="Choose your color">
+                                <label for="category-color" class="form-label">{{ __('Category Color') }}</label>
+                                <input type="color" name="color" id="category-color" class="form-control form-control-color" value="#3577f1" title="{{ __('Choose your color') }}">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('Close') }}</button>
                             <button type="submit" class="btn btn-success" id="add-btn">
-                                <i class="ri-add-line align-bottom me-1"></i> Add Category
+                                <i class="ri-add-line align-bottom me-1"></i> {{ __('Add Category') }}
                             </button>
                         </div>
                     </div>
@@ -353,9 +353,9 @@
                                         <input class="form-check-input" type="checkbox" id="checkAllCategories" value="option">
                                     </div>
                                 </th>
-                                <th class="sort" data-sort="category_name">Category Name</th>
-                                <th class="sort" data-sort="category_color">Color</th>
-                                <th class="sort" data-sort="action">Action</th>
+                                <th class="sort" data-sort="category_name">{{ __('Category Name') }}</th>
+                                <th class="sort" data-sort="category_color">{{ __('Color') }}</th>
+                                <th class="sort" data-sort="action">{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="list form-check-all">
@@ -423,7 +423,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-primary-subtle">
-                <h5 class="modal-title" id="ticketStatusesModalLabel">Manage Ticket Statuses</h5>
+                <h5 class="modal-title" id="ticketStatusesModalLabel">{{ __('Manage Ticket Statuses') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-status-modal"></button>
             </div>
             <div class="modal-body">
@@ -433,22 +433,22 @@
                     <div class="row g-3">
                         <div class="col-lg-6">
                             <div>
-                                <label for="status-name" class="form-label">Status Name</label>
-                                <input type="text" name="name" id="status-name" class="form-control" placeholder="Enter status name" required>
+                                <label for="status-name" class="form-label">{{ __('Status Name') }}</label>
+                                <input type="text" name="name" id="status-name" class="form-control" placeholder="{{ __('Enter status name') }}" required>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div>
-                                <label for="status-color" class="form-label">Status Color</label>
-                                <input type="color" name="color" id="status-color" class="form-control form-control-color" value="#3577f1" title="Choose your color">
+                                <label for="status-color" class="form-label">{{ __('Status Color') }}</label>
+                                <input type="color" name="color" id="status-color" class="form-control form-control-color" value="#3577f1" title="{{ __('Choose your color') }}">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('Close') }}</button>
                             <button type="submit" class="btn btn-success" id="add-status-btn">
-                                <i class="ri-add-line align-bottom me-1"></i> Add Status
+                                <i class="ri-add-line align-bottom me-1"></i> {{ __('Add Status') }}
                             </button>
                         </div>
                     </div>
@@ -464,9 +464,9 @@
                                         <input class="form-check-input" type="checkbox" id="checkAllStatuses" value="option">
                                     </div>
                                 </th>
-                                <th class="sort" data-sort="status_name">Status Name</th>
-                                <th class="sort" data-sort="status_color">Color</th>
-                                <th class="sort" data-sort="action">Action</th>
+                                <th class="sort" data-sort="status_name">{{ __('Status Name') }}</th>
+                                <th class="sort" data-sort="status_color">{{ __('Color') }}</th>
+                                <th class="sort" data-sort="action">{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="list form-check-all">
@@ -534,7 +534,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
             <div class="modal-header p-3 bg-primary-subtle">
-                <h5 class="modal-title" id="replyModalLabel">Reply to Ticket</h5>
+                <h5 class="modal-title" id="replyModalLabel">{{ __('Reply to Ticket') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST" action="{{ route('admin.ticketSystem.reply') }}" class="tablelist-form" autocomplete="off">
@@ -542,15 +542,15 @@
                 <input type="hidden" name="ticket_id" id="replyTicketId">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="replyMessage" class="form-label">Message</label>
+                        <label for="replyMessage" class="form-label">{{ __('Message') }}</label>
                         <textarea class="form-control" id="replyMessage" name="message" rows="4" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="hstack gap-2 justify-content-end">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
                         <button type="submit" class="btn btn-success">
-                            <i class="ri-send-plane-fill align-bottom me-1"></i> Send Reply
+                            <i class="ri-send-plane-fill align-bottom me-1"></i> {{ __('Send Reply') }}
                         </button>
                     </div>
                 </div>
@@ -636,11 +636,11 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             $('#categoryForm input[name="_method"]').val('PUT');
         }
-        $('#add-btn').html('<i class="ri-save-line align-bottom me-1"></i> Update Category');
+        $('#add-btn').html('<i class="ri-save-line align-bottom me-1"></i> {{ __('Update Category') }}');
     });
     $(document).on('click', '#categoryTable .remove-item-btn', function() {
         var id = $(this).data('id');
-        if (confirm('Are you sure you want to delete this category?')) {
+        if (confirm('{{ __('Are you sure you want to delete this category?') }}')) {
             $('#delete-category-' + id).submit();
         }
     });
@@ -648,7 +648,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#categoryForm').trigger('reset');
         $('#categoryForm').attr('action', '{{ route('admin.ticketCategories.store') }}');
         $('#categoryForm input[name="_method"]').remove();
-        $('#add-btn').html('<i class="ri-add-line align-bottom me-1"></i> Add Category');
+        $('#add-btn').html('<i class="ri-add-line align-bottom me-1"></i> {{ __('Add Category') }}');
     });
 
     // Status Edit/Delete
@@ -664,11 +664,11 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             $('#statusForm input[name="_method"]').val('PUT');
         }
-        $('#add-status-btn').html('<i class="ri-save-line align-bottom me-1"></i> Update Status');
+        $('#add-status-btn').html('<i class="ri-save-line align-bottom me-1"></i> {{ __('Update Status') }}');
     });
     $(document).on('click', '#statusTable .remove-item-btn', function() {
         var id = $(this).data('id');
-        if (confirm('Are you sure you want to delete this status?')) {
+        if (confirm('{{ __('Are you sure you want to delete this status?') }}')) {
             $('#delete-status-' + id).submit();
         }
     });
@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#statusForm').trigger('reset');
         $('#statusForm').attr('action', '{{ route('admin.ticketStatus.store') }}');
         $('#statusForm input[name="_method"]').remove();
-        $('#add-status-btn').html('<i class="ri-add-line align-bottom me-1"></i> Add Status');
+        $('#add-status-btn').html('<i class="ri-add-line align-bottom me-1"></i> {{ __('Add Status') }}');
     });
 });
 </script>

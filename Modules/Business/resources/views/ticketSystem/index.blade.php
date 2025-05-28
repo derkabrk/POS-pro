@@ -10,8 +10,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 @component('components.breadcrumb')
-@slot('li_1') Business @endslot
-@slot('title') Tickets @endslot
+@slot('li_1') {{ __('Business') }} @endslot
+@slot('title') {{ __('Tickets') }} @endslot
 @endcomponent
 
 <div class="row">
@@ -65,7 +65,7 @@
                                                 {{ $ticket->status->name }}
                                             </span>
                                         @else
-                                            <span class="text-muted">No Status</span>
+                                            <span class="text-muted">{{ __('No Status') }}</span>
                                         @endif
                                     </td>
                                     <td class="align-middle">
@@ -77,7 +77,7 @@
                                                 {{ $ticket->category->name }}
                                             </span>
                                         @else
-                                            <span class="text-muted">No Category</span>
+                                            <span class="text-muted">{{ __('No Category') }}</span>
                                         @endif
                                     </td>
                                     <td class="align-middle">
@@ -119,7 +119,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createTicketModalLabel">Create New Ticket</h5>
+                <h5 class="modal-title" id="createTicketModalLabel">{{ __('Create New Ticket') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -128,21 +128,21 @@
                     <div class="row g-4">
                         <!-- Title -->
                         <div class="col-lg-6 mb-2">
-                            <label for="title" class="form-label fw-bold">Title</label>
-                            <input type="text" name="title" id="title" class="form-control shadow-sm" placeholder="Enter ticket title" required>
+                            <label for="title" class="form-label fw-bold">{{ __('Title') }}</label>
+                            <input type="text" name="title" id="title" class="form-control shadow-sm" placeholder="{{ __('Enter ticket title') }}" required>
                         </div>
 
                         <!-- Description -->
                         <div class="col-lg-12 mb-2">
-                            <label for="description" class="form-label fw-bold">Description</label>
-                            <textarea name="description" id="description" class="form-control shadow-sm" placeholder="Enter ticket description" rows="4" required></textarea>
+                            <label for="description" class="form-label fw-bold">{{ __('Description') }}</label>
+                            <textarea name="description" id="description" class="form-control shadow-sm" placeholder="{{ __('Enter ticket description') }}" rows="4" required></textarea>
                         </div>
 
                         <!-- Category -->
                         <div class="col-lg-6 mb-2">
-                            <label for="category_id" class="form-label fw-bold">Category</label>
+                            <label for="category_id" class="form-label fw-bold">{{ __('Category') }}</label>
                             <select name="category_id" id="category_id" class="form-control shadow-sm">
-                                <option value="">Select a Category</option>
+                                <option value="">{{ __('Select a Category') }}</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
@@ -151,9 +151,9 @@
                     </div>
 
                     <div class="text-end mt-4">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-plus-circle me-1"></i> Create Ticket
+                            <i class="fas fa-plus-circle me-1"></i> {{ __('Create Ticket') }}
                         </button>
                     </div>
                 </form>
@@ -170,17 +170,17 @@
       <input type="hidden" name="ticket_id" id="replyTicketId">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="replyModalLabel">Reply to Ticket</h5>
+          <h5 class="modal-title" id="replyModalLabel">{{ __('Reply to Ticket') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label for="replyMessage" class="form-label">Message</label>
+            <label for="replyMessage" class="form-label">{{ __('Message') }}</label>
             <textarea class="form-control" id="replyMessage" name="message" rows="4" required></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Send Reply</button>
+          <button type="submit" class="btn btn-primary">{{ __('Send Reply') }}</button>
         </div>
       </div>
     </form>

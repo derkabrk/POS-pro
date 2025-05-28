@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'API Headers')
+@section('title', __('API Headers'))
 
 @section('content')
     @component('components.breadcrumb')
@@ -43,7 +43,7 @@
                                         <td>{{ $header->api_key }}</td>
                                         <td class="text-center">
                                             <span class="badge bg-{{ $header->status ? 'success' : 'danger' }} px-2 py-1">
-                                                {{ $header->status ? 'Active' : 'Inactive' }}
+                                                {{ $header->status ? __('Active') : __('Inactive') }}
                                             </span>
                                         </td>
                                         <td>{{ $header->description }}</td>
@@ -54,7 +54,7 @@
                                             <form action="{{ route('admin.dynamicApiHeader.destroy', $header->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-icon btn-light confirm-action" onclick="return confirm('Are you sure you want to delete this API Header?')">
+                                                <button type="submit" class="btn btn-sm btn-icon btn-light confirm-action" onclick="return confirm('{{ __('Are you sure you want to delete this API Header?') }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -91,28 +91,28 @@
                         <div class="row gy-4">
                             <div class="col-xxl-6 col-md-6">
                                 <div>
-                                    <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter API Header Name" required>
+                                    <label for="name" class="form-label">{{ __('Name') }} <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="{{ __('Enter API Header Name') }}" required>
                                 </div>
                             </div>
                             <div class="col-xxl-6 col-md-6">
                                 <div>
-                                    <label for="api_key" class="form-label">API Key <span class="text-danger">*</span></label>
-                                    <input type="text" name="api_key" id="api_key" class="form-control" placeholder="Enter API Key" required>
+                                    <label for="api_key" class="form-label">{{ __('API Key') }} <span class="text-danger">*</span></label>
+                                    <input type="text" name="api_key" id="api_key" class="form-control" placeholder="{{ __('Enter API Key') }}" required>
                                 </div>
                             </div>
                             <div class="col-xxl-6 col-md-6">
                                 <div>
-                                    <label for="status" class="form-label">Status</label>
+                                    <label for="status" class="form-label">{{ __('Status') }}</label>
                                     <select name="status" id="status" class="form-control">
-                                        <option value="1">Active</option>
-                                        <option value="0">Inactive</option>
+                                        <option value="1">{{ __('Active') }}</option>
+                                        <option value="0">{{ __('Inactive') }}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div>
-                                    <label for="description" class="form-label">Description</label>
+                                    <label for="description" class="form-label">{{ __('Description') }}</label>
                                     <textarea name="description" id="description" class="form-control" rows="4"></textarea>
                                 </div>
                             </div>
