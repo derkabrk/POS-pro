@@ -97,4 +97,9 @@ Route::get('/update', function () {
     return redirect('/')->with('message', __('System updated successfully.'));
 });
 
+// Fallback route for undefined URLs
+Route::fallback(function () {
+    return redirect('/')->with('error', __('Page not found.'));
+});
+
 require __DIR__.'/auth.php';
