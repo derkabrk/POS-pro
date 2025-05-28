@@ -12,7 +12,7 @@
         @slot('title')
             {{ __('Add Subscription Plan') }}
         @endslot
-    @endcomponent
+    @component
 
     <div class="row">
         <div class="col-lg-12">
