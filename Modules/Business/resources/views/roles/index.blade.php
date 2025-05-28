@@ -30,18 +30,15 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->role->name ?? '-' }}</td>
                                 <td>
-                                    @if($user->orderStatusUpdates && $user->orderStatusUpdates->count())
-                                        <ul class="list-unstyled mb-0">
-                                            @foreach($user->orderStatusUpdates->groupBy('new_status') as $status => $updates)
-                                                <li>
-                                                    <span class="badge bg-info text-dark">{{ $status }}</span>:
-                                                    {{ $updates->count() }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        0
-                                    @endif
+                                    @php $statuses = \App\Models\Sale::STATUS; @endphp
+                                    <ul class="list-unstyled mb-0">
+                                        @foreach($statuses as $statusId => $statusArr)
+                                            <li>
+                                                <span class="badge bg-info text-dark">{{ $statusArr['name'] }}</span>:
+                                                {{ $user->orderStatusUpdates->where('new_status', $statusId)->count() }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </td>
                                 <td>
                                     <a href="{{ route('business.roles.edit', $user->id) }}" class="btn btn-sm btn-primary">{{ __('Edit') }}</a>
