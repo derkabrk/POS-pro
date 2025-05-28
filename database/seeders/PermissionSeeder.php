@@ -41,6 +41,7 @@ class PermissionSeeder extends Seeder
                 'roles' => 'r,c,u,d',
                 'permissions' => 'r,c',
                 'notifications' => 'r,u',
+                'chat' => 'r,c,u,d',
             ],
 
             'Admin' => [
@@ -61,6 +62,7 @@ class PermissionSeeder extends Seeder
                 'messages' => 'r,c,u,d',
                 'terms' => 'r,u',
                 'currencies' => 'r,c,u,d',
+                'chat' => 'r,c,u,d',
             ],
 
             'Manager' => [
@@ -75,6 +77,7 @@ class PermissionSeeder extends Seeder
                 'blogs' => 'r,c,u,d',
                 'messages' => 'r,c,u,d',
                 'terms' => 'r,u',
+                'chat' => 'r,c,u,d',
                 
             ]
         ];
