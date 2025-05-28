@@ -73,6 +73,12 @@
                                                 </td>
                                             </tr>
                                             @endif
+                                            <tr>
+                                                <th class="bg-light custom-clr-light">{{ __('Promo Code') }}</th>
+                                                <td>
+                                                    <input type="text" name="promo_code" class="form-control" placeholder="{{ __('Enter promo code') }}">
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                     @if ($gateway->instructions)
@@ -116,4 +122,8 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/css/payments.css') }}">
+@endpush
+
+@push('js')
+    <script src="{{ asset('assets/js/promo.js') }}"></script>
 @endpush

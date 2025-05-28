@@ -66,5 +66,35 @@ Route::prefix('v1')->group(function () {
             $permissions = $plan->permissions ? json_decode($plan->permissions, true) : [];
             return response()->json(['permissions' => $permissions]);
         });
+
+        // Promo code validation endpoint for AJAX
+        Route::post('/promo/validate', function (\Illuminate\Http\Request $request) {
+            $request->validate([
+                'code' => 'required|string',
+                'plan_id' => 'required|integer|exists:plans,id',
+            ]);
+            $promo = \App\Models\PromoCode::where('code', $request->code)
+                ->where('is_active', true)
+                ->where(function($q) {
+                    $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+                })
+                ->first();
+            if (!$promo) {
+                return response()->json(['valid' => false, 'message' => 'Invalid or expired promo code.']);
+            }
+            $plan = \App\Models\Plan::find($request->plan_id);
+            $amount = $plan->offerPrice ?? $plan->subscriptionPrice;
+            $discount = $promo->discount_type === 'percent'
+                ? ($amount * $promo->discount / 100)
+                : $promo->discount;
+            $newAmount = max(0, $amount - $discount);
+            return response()->json([
+                'valid' => true,
+                'discount' => $discount,
+                'discount_display' => ($promo->discount_type === 'percent' ? $promo->discount.'%' : currency_format($discount)),
+                'new_amount' => $newAmount,
+                'new_amount_display' => currency_format($newAmount),
+            ]);
+        });
     });
 });

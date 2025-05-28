@@ -103,13 +103,30 @@ class PaymentController extends Controller
 
                 $attachment = $request->attachment ? $this->upload($request, 'attachment') : NULL;
 
+                // Promo code logic
+                $discount = 0;
+                $appliedPromo = null;
+                if ($request->filled('promo_code')) {
+                    $promo = \App\Models\PromoCode::where('code', $request->promo_code)
+                        ->where('active', 1)
+                        ->where('valid_from', '<=', now())
+                        ->where('valid_to', '>=', now())
+                        ->first();
+                    if ($promo) {
+                        $discount = ($plan->offerPrice ?? $plan->subscriptionPrice) * ($promo->percentage / 100);
+                        $appliedPromo = $promo->code;
+                    }
+                }
+                $amount = ($plan->offerPrice ?? $plan->subscriptionPrice) - $discount;
+
                 $subscribe = PlanSubscribe::create([
                     'plan_id' => $plan->id,
                     'duration' => $plan->duration,
                     'business_id' => $business->id,
-                    'price' => $plan->subscriptionPrice,
+                    'price' => $amount,
                     'gateway_id' => $gateway_id,
                     'payment_status' => 'unpaid',
+                    'promo_code' => $appliedPromo,
                     'notes' => [
                         'manual_data' => $request->manual_data,
                         'attachment' => $attachment
@@ -127,7 +144,21 @@ class PaymentController extends Controller
             }
         }
 
-        $amount = $plan->offerPrice ?? $plan->subscriptionPrice;
+        // Promo code logic
+        $discount = 0;
+        $appliedPromo = null;
+        if ($request->filled('promo_code')) {
+            $promo = \App\Models\PromoCode::where('code', $request->promo_code)
+                ->where('active', 1)
+                ->where('valid_from', '<=', now())
+                ->where('valid_to', '>=', now())
+                ->first();
+            if ($promo) {
+                $discount = ($plan->offerPrice ?? $plan->subscriptionPrice) * ($promo->percentage / 100);
+                $appliedPromo = $promo->code;
+            }
+        }
+        $amount = ($plan->offerPrice ?? $plan->subscriptionPrice) - $discount;
 
         if ($gateway->namespace == 'App\Library\SslCommerz') {
             Session::put('fund_callback.success_url', '/ssl-commerz//payment/success');

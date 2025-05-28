@@ -86,4 +86,9 @@ class User extends Authenticatable
             ->whereNull('read_at')
             ->count();
     }
+
+    public function orderStatusUpdates()
+    {
+        return $this->hasMany(\App\Models\OrderStatusUpdate::class);
+    }
 }

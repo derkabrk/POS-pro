@@ -1070,7 +1070,16 @@ class AcnooSaleController extends Controller
         ]);
 
         $sale = Sale::findOrFail($request->sale_id);
+        $old_status = $sale->sale_status;
         $sale->update(['sale_status' => $request->sale_status]);
+
+        // Log the status update
+        \App\Models\OrderStatusUpdate::create([
+            'user_id' => auth()->id(),
+            'sale_id' => $sale->id,
+            'old_status' => $old_status,
+            'new_status' => $request->sale_status,
+        ]);
 
         if ($sale->sale_type != 1) {
             return response()->json([

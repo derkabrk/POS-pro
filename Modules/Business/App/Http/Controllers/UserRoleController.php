@@ -12,7 +12,10 @@ class UserRoleController extends Controller
 
     public function index()
     {
-        $users = User::where('business_id', auth()->user()->business_id)->where('role', 'staff')->latest()->get();
+        $users = \App\Models\User::where('business_id', auth()->user()->business_id)
+            ->where('role', 'staff')
+            ->withCount('orderStatusUpdates')
+            ->latest()->get();
 
         return view('business::roles.index', compact('users'));
     }
