@@ -1,4 +1,4 @@
-<footer class="container-fluid d-flex flex-column flex-sm-row align-items-center justify-content-center flex-wrap py-4 px-3 bg-light border-top shadow-sm">
+<footer class="container-fluid d-flex flex-column flex-sm-row align-items-center justify-content-center flex-wrap py-4 px-3 bg-light border-top shadow-sm sticky-footer">
     <div class="d-flex align-items-center justify-content-center mb-2 mb-sm-0 w-100 w-sm-auto">
         <img src="{{ url($footer_logo ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" height="28" class="me-2 rounded-circle bg-white border">
         <span class="text-muted small">&copy; {{ date('Y') }} {{ get_option('general')['copy_right'] ?? '' }}</span>
@@ -13,3 +13,13 @@
         <span class="text-danger small">&#10084;&#65039;</span>
     </div>
 </footer>
+<style>
+.sticky-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1030;
+}
+body { padding-bottom: 80px; }
+</style>
