@@ -55,6 +55,39 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div class="col-lg-6">
+                                    <label class="form-label fw-semibold">Shipping Wilayas</label>
+                                    <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th style="width: 40%">Wilaya</th>
+                                                    <th style="width: 30%">
+                                                        Stepdesk <br>
+                                                        <input type="checkbox" id="selectAllStepdesk">
+                                                    </th>
+                                                    <th style="width: 30%">
+                                                        Delivery Home <br>
+                                                        <input type="checkbox" id="selectAllDeliveryHome">
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($wilayas as $wilaya)
+                                                    <tr>
+                                                        <td>{{ $wilaya['name'] }}</td>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="stepdesk[]" class="stepdesk-checkbox" value="{{ $wilaya['id'] }}" {{ in_array($wilaya['id'], $shipping->stepdesk ?? []) ? 'checked' : '' }}>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="delivery_home[]" class="delivery-checkbox" value="{{ $wilaya['id'] }}" {{ in_array($wilaya['id'], $shipping->delivery_home ?? []) ? 'checked' : '' }}>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                                 <div class="col-12 text-center mt-4">
                                     <button type="reset" class="btn btn-light me-3">{{ __('Cancel') }}</button>
                                     <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
@@ -67,3 +100,22 @@
         </div>
     </div>
 @endsection
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAllStepdesk = document.getElementById("selectAllStepdesk");
+        const selectAllDeliveryHome = document.getElementById("selectAllDeliveryHome");
+
+        selectAllStepdesk.addEventListener("change", function () {
+            document.querySelectorAll(".stepdesk-checkbox").forEach(checkbox => {
+                checkbox.checked = selectAllStepdesk.checked;
+            });
+        });
+
+        selectAllDeliveryHome.addEventListener("change", function () {
+            document.querySelectorAll(".delivery-checkbox").forEach(checkbox => {
+                checkbox.checked = selectAllDeliveryHome.checked;
+            });
+        });
+    });
+</script>
