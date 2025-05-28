@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="vertical" data-layout-style="detached" data-layout-position="fixed" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-body-image="img-1" data-preloader="disable" data-layout-width="fluid">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="galaxy" data-layout="vertical" data-layout-style="detached" data-layout-position="fixed" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-body-image="img-1" data-preloader="disable" data-layout-width="fluid">
 
 <head>
     <meta charset="utf-8" />

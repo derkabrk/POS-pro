@@ -317,6 +317,12 @@
                 </li>
                 @endcanany
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::routeIs('admin.promo-codes.index','admin.promo-codes.create','admin.promo-codes.edit') ? 'active' : '' }}" href="{{ route('admin.promo-codes.index') }}">
+                        <i class="ri-gift-line"></i> <span>{{ __('Promo Codes') }}</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>
