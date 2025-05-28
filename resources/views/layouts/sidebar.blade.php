@@ -323,6 +323,12 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::routeIs('admin.subscriptions.index') ? 'active' : '' }}" href="{{ route('admin.subscriptions.index') }}">
+                        <i class="ri-vip-crown-2-line"></i> <span>{{ __('Subscriptions') }}</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>
