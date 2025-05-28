@@ -1,6 +1,5 @@
 <footer class="container-fluid d-flex flex-column flex-sm-row align-items-center justify-content-center flex-wrap py-2 px-2 bg-light border-top shadow-sm sticky-footer">
     <div class="d-flex align-items-center justify-content-center mb-2 mb-sm-0 w-100 w-sm-auto">
-        <img src="{{ url($footer_logo ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" height="28" class="me-2 rounded-circle bg-white border">
         <span class="text-muted small">&copy; {{ date('Y') }} {{ get_option('general')['copy_right'] ?? '' }}</span>
     </div>
     <div class="d-flex align-items-center justify-content-center w-100 w-sm-auto mt-2 mt-sm-0">
