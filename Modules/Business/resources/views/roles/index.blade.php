@@ -41,7 +41,11 @@
                                             @php $statuses = \App\Models\Sale::STATUS; @endphp
                                             @foreach($statuses as $statusId => $statusArr)
                                                 <tr>
-                                                    <td><span class="badge bg-info text-dark">{{ $statusArr['name'] }}</span></td>
+                                                    <td>
+                                                        <span class="badge {{ $statusArr['color'] }} text-dark">
+                                                            {{ $statusArr['name'] }}
+                                                        </span>
+                                                    </td>
                                                     <td>{{ $user->orderStatusUpdates->where('new_status', $statusId)->count() }}</td>
                                                 </tr>
                                             @endforeach
