@@ -146,6 +146,12 @@
                     </li>
                 @endif
 
+                  <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::routeIs('chat.index') ? 'active' : '' }}" href="{{ route('chat.index') }}">
+                        <i class="ri-chat-1-line"></i> <span>{{ __('Chat') }}</span>
+                    </a>
+                </li>
+
                 @if (auth()->user()->role != 'staff' || visible_permission('bulk_messagePermission'))
                     <li class="nav-item">
                         <a class="nav-link menu-link menu-dropdown {{ Request::routeIs('business.bulk-message.create', 'business.bulk-message.index') ? 'active' : '' }}" href="#sidebarBulkMessaging" data-bs-toggle="collapse" role="button" aria-expanded="{{ Request::routeIs('business.bulk-message.create', 'business.bulk-message.index') ? 'true' : 'false' }}" aria-controls="sidebarBulkMessaging">
