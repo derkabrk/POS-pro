@@ -1,4 +1,8 @@
 @yield('css')
+<!-- Set theme attribute for galaxy -->
+<script>
+  document.documentElement.setAttribute('data-theme', 'galaxy');
+</script>
 <!-- Layout config Js -->
 <script src="{{ URL::asset('build/js/layout.js') }}"></script>
 <!-- Bootstrap Css -->
