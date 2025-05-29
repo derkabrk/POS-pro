@@ -268,25 +268,61 @@
     text-align: center;
     color: #6c757d;
 }
+
+.debug-info {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 0.8rem;
+}
 </style>
 
 <script>
 $(document).ready(function() {
+    // Debug: Log the variants data
+    console.log('All Variants Data:', @json($variants));
+    
     // Variant data from backend
     let allVariants = @json($variants);
     let subVariantMap = {};
     
-    // Build sub-variant mapping
+    // Debug: Build sub-variant mapping with logging
     allVariants.forEach(function(variant) {
-        subVariantMap[variant.id] = variant.sub_variants || [];
+        console.log(`Processing variant ${variant.id}:`, variant);
+        
+        // Try different possible property names for sub-variants
+        let subVariants = variant.sub_variants || 
+                         variant.subVariants || 
+                         variant.SubVariants || 
+                         variant.subvariants || 
+                         variant.children || 
+                         [];
+        
+        subVariantMap[variant.id] = subVariants;
+        console.log(`Sub-variants for variant ${variant.id}:`, subVariants);
     });
+    
+    console.log('Sub-variant mapping:', subVariantMap);
     
     function updateSubVariantOptions() {
         let selectedVariants = $('#variant_id').val() || [];
         let container = $('#sub_variant_container');
         
+        console.log('Selected variants:', selectedVariants);
+        
         // Clear existing content
         container.empty();
+        
+        // Add debug info
+        container.append(`
+            <div class="debug-info">
+                <strong>Debug Info:</strong><br>
+                Selected Variants: ${selectedVariants.join(', ')}<br>
+                Total Variants Available: ${allVariants.length}
+            </div>
+        `);
         
         if (selectedVariants.length === 0) {
             // Show "no variants selected" message
@@ -303,8 +339,27 @@ $(document).ready(function() {
         let totalSubVariants = 0;
         
         selectedVariants.forEach(function(variantId) {
+            console.log(`Processing selected variant ID: ${variantId}`);
+            
             let variant = allVariants.find(v => v.id == variantId);
+            console.log('Found variant:', variant);
+            
+            if (!variant) {
+                console.error(`Variant with ID ${variantId} not found!`);
+                return;
+            }
+            
             let subs = subVariantMap[variantId] || [];
+            console.log(`Sub-variants for variant ${variantId}:`, subs);
+            
+            // Add debug info for this variant
+            container.append(`
+                <div class="debug-info">
+                    <strong>Variant ${variant.variantName} (ID: ${variantId}):</strong><br>
+                    Sub-variants found: ${subs.length}<br>
+                    Sub-variants: ${JSON.stringify(subs, null, 2)}
+                </div>
+            `);
             
             if (subs.length > 0) {
                 hasSubVariants = true;
@@ -326,17 +381,22 @@ $(document).ready(function() {
                 
                 // Add sub-variants for this variant
                 subs.forEach(function(sub) {
+                    console.log('Creating checkbox for sub-variant:', sub);
+                    
+                    // Handle different possible property names
+                    let subName = sub.name || sub.subVariantName || sub.title || `Sub-variant ${sub.id}`;
+                    let subSku = sub.sku || sub.code || sub.subVariantCode || '';
+                    
                     let subVariantItem = $(`
                         <div class="form-check">
                             <input class="form-check-input sub-variant-checkbox" 
                                    type="checkbox" 
                                    name="sub_variant_ids[]" 
                                    value="${sub.id}" 
-                                   id="sub_variant_${sub.id}"
-                                   ${old('sub_variant_ids') && @json(old('sub_variant_ids', [])).includes(sub.id.toString()) ? 'checked' : ''}>
+                                   id="sub_variant_${sub.id}">
                             <label class="form-check-label" for="sub_variant_${sub.id}">
-                                <strong>${sub.name}</strong>
-                                <small class="text-muted d-block">${sub.sku ? 'SKU: ' + sub.sku : 'No SKU'}</small>
+                                <strong>${subName}</strong>
+                                <small class="text-muted d-block">${subSku ? 'SKU: ' + subSku : 'No SKU'}</small>
                             </label>
                         </div>
                     `);
@@ -344,17 +404,24 @@ $(document).ready(function() {
                 });
                 
                 container.append(variantGroup);
+            } else {
+                // Show message for this specific variant with no sub-variants
+                container.append(`
+                    <div class="alert alert-info">
+                        <strong>${variant.variantName}</strong> has no sub-variants available.
+                    </div>
+                `);
             }
         });
         
-        if (!hasSubVariants) {
+        if (!hasSubVariants && selectedVariants.length > 0) {
             container.append(`
                 <div class="no-sub-variants-message">
                     <i class="fas fa-exclamation-triangle mb-2" style="font-size: 2rem; color: #ffc107;"></i>
                     <p class="mb-0">${'{{ __("Selected variants have no sub-variants available") }}'}</p>
                 </div>
             `);
-        } else {
+        } else if (hasSubVariants) {
             // Add action buttons
             let actionButtons = $(`
                 <div class="action-buttons text-center">
@@ -405,6 +472,7 @@ $(document).ready(function() {
     
     // Handle variant selection change
     $('#variant_id').on('change', function() {
+        console.log('Variant selection changed:', $(this).val());
         updateSubVariantOptions();
         
         // Show selected variants count in label
@@ -431,14 +499,7 @@ $(document).ready(function() {
         let selectedVariants = $('#variant_id').val() || [];
         let selectedSubVariants = $('input[name="sub_variant_ids[]"]:checked').length;
         
-        // Optional validation - uncomment if you want to enforce sub-variant selection
-        /*
-        if (selectedVariants.length > 0 && selectedSubVariants === 0) {
-            e.preventDefault();
-            alert('{{ __("Please select at least one sub-variant for the selected variants") }}');
-            return false;
-        }
-        */
+        console.log('Form submission - Variants:', selectedVariants, 'Sub-variants:', selectedSubVariants);
         
         // Show loading state
         $(this).find('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>{{ __("Saving...") }}');
@@ -450,9 +511,6 @@ $(document).ready(function() {
             $('#variant_id').trigger('change');
         }, 100);
     });
-    
-    // Add tooltips for better UX
-    $('[data-bs-toggle="tooltip"]').tooltip();
 });
 </script>
 @endpush
