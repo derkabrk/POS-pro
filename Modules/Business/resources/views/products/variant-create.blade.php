@@ -11,13 +11,13 @@
             <div class="card-header align-items-center d-flex">
                 <h4 class="card-title mb-0 flex-grow-1">{{ __('Add Product Variant') }}</h4>
                 <div class="flex-shrink-0">
-                    <a href="{{ route('business.variants.index') }}" class="btn btn-primary">
+                    <a href="{{ route('business.product-variants.index') }}" class="btn btn-primary">
                         <i class="far fa-list" aria-hidden="true"></i> {{ __('Product Variants') }}
                     </a>
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ route('business.variants.store') }}" method="POST" class="ajaxform_instant_reload">
+                <form action="{{ route('business.product-variants.store') }}" method="POST" class="ajaxform_instant_reload">
                     @csrf
                     <div class="row gy-4">
                         <div class="col-xxl-6 col-md-6">
