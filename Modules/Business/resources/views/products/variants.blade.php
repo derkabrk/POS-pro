@@ -56,7 +56,7 @@
                             </tr>
                         </thead>
                         <tbody id="variant-data">
-                            {{-- @include('business::variants.datas') --}}
+                            @include('business::products.partials.variant-datas')
                         </tbody>
                     </table>
                 </div>
