@@ -67,15 +67,15 @@
 <script>
 $(document).ready(function() {
     $(document).on('click', '.add-sub-variant', function() {
-        let newRow = `<div class=\"row g-2 sub-variant-row mb-2\">
-            <div class=\"col-md-5\">
-                <input type=\"text\" name=\"sub_variants[]\" class=\"form-control\" placeholder=\"{{ __('Sub Variant Name') }}\">
+        let newRow = `<div class='row g-2 sub-variant-row mb-2'>
+            <div class='col-md-5'>
+                <input type='text' name='sub_variants[]' class='form-control' placeholder='{{ __('Sub Variant Name') }}'>
             </div>
-            <div class=\"col-md-5\">
-                <input type=\"text\" name=\"sub_variant_skus[]\" class=\"form-control\" placeholder=\"{{ __('SKU') }}\">
+            <div class='col-md-5'>
+                <input type='text' name='sub_variant_skus[]' class='form-control' placeholder='{{ __('SKU') }}'>
             </div>
-            <div class=\"col-md-2\">
-                <button type=\"button\" class=\"btn btn-danger remove-sub-variant\">-</button>
+            <div class='col-md-2'>
+                <button type='button' class='btn btn-danger remove-sub-variant'>-</button>
             </div>
         </div>`;
         $('#sub-variants-list').append(newRow);
