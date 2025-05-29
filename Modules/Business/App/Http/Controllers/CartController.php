@@ -63,6 +63,9 @@ class CartController extends Controller
                 $mainItemData['options']['sales_price'] = $request->sales_price;
                 $mainItemData['options']['whole_sale_price'] = $request->whole_sale_price;
                 $mainItemData['options']['dealer_price'] = $request->dealer_price;
+                // Add sub-variant info if provided
+                $mainItemData['options']['sub_variants'] = $request->sub_variants ?? [];
+                $mainItemData['options']['sub_variant_skus'] = $request->sub_variant_skus ?? [];
             }
 
             Cart::add($mainItemData);

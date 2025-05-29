@@ -215,6 +215,19 @@ $('#purchase_modal').on('submit', function (e) {
         a = t.html();
     let url = $(this).data('route');
     let quantity = parseInt($('#product_qty').val());
+
+    // Collect sub-variant data
+    let subVariants = [];
+    let subVariantSkus = [];
+    $('#sub-variants-list .sub-variant-row').each(function() {
+        let name = $(this).find("input[name='sub_variants[]']").val();
+        let sku = $(this).find("input[name='sub_variant_skus[]']").val();
+        if (name || sku) {
+            subVariants.push(name);
+            subVariantSkus.push(sku);
+        }
+    });
+
     $purchase_modal_reload.valid() &&
         $.ajax({
         url: url,
@@ -232,6 +245,8 @@ $('#purchase_modal').on('submit', function (e) {
             product_unit_id: selectedProduct.product_unit_id,
             product_unit_name: selectedProduct.product_unit_name,
             product_image: selectedProduct.product_image,
+            sub_variants: subVariants,
+            sub_variant_skus: subVariantSkus
         },
             beforeSend: function () {
                 t.html(savingLoader).attr("disabled", !0);

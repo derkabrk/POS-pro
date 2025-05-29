@@ -33,16 +33,18 @@ class AcnooProductVariantController extends Controller
             'business_id' => auth()->user()->business_id,
         ]);
 
-        // Save sub-variants if provided
+        // Save sub-variants if provided (UI sends arrays)
         $subVariants = $request->input('sub_variants', []);
         $subVariantSkus = $request->input('sub_variant_skus', []);
-        foreach ($subVariants as $i => $subName) {
+        $count = max(count($subVariants), count($subVariantSkus));
+        for ($i = 0; $i < $count; $i++) {
+            $name = $subVariants[$i] ?? null;
             $sku = $subVariantSkus[$i] ?? null;
-            if ($subName || $sku) {
+            if ($name || $sku) {
                 \App\Models\SubVariant::create([
                     'product_variant_id' => $variant->id,
                     'business_id' => $variant->business_id,
-                    'name' => $subName,
+                    'name' => $name,
                     'sku' => $sku,
                     'status' => 1,
                 ]);
