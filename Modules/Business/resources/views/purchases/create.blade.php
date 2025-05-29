@@ -267,4 +267,20 @@
     <script src="{{ asset('assets/js/custom/purchase.js') }}"></script>
     <script src="{{ asset('assets/js/custom/math.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
+    <script>
+        const allVariants = @json($variants);
+        $(document).ready(function() {
+            $('#variant_id').on('change', function() {
+                let variantId = $(this).val();
+                let subOptions = '<option value="">{{ __('Select Sub Variant') }}</option>';
+                let variant = allVariants.find(v => v.id == variantId);
+                if (variant && variant.sub_variants) {
+                    variant.sub_variants.forEach(function(sub) {
+                        subOptions += `<option value="${sub.id}">${sub.name} (${sub.sku})</option>`;
+                    });
+                }
+                $('#sub_variant_id').html(subOptions);
+            });
+        });
+    </script>
 @endpush
