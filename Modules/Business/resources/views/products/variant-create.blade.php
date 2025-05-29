@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ isset($variant) ? route('business.product-variants.update', $variant->id) : route('business.product-variants.store') }}" method="POST" class="ajaxform_instant_reload">
+                <form action="{{ isset($variant) ? route('business.product-variants.update', $variant->id) : route('business.product-variants.store') }}" method="POST">
                     @csrf
                     @if(isset($variant))
                         @method('PUT')
@@ -41,7 +41,7 @@
                         <div class="col-12">
                             <label class="form-label">{{ __('Sub Variants (with SKU)') }}</label>
                             <div id="sub-variants-list">
-                                @if(isset($variant) && $variant->subVariants)
+                                @if(isset($variant) && $variant->subVariants && count($variant->subVariants))
                                     @foreach($variant->subVariants as $sub)
                                         <div class='row g-2 sub-variant-row mb-2'>
                                             <div class='col-md-5'>
