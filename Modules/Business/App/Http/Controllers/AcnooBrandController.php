@@ -52,7 +52,10 @@ class AcnooBrandController extends Controller
             'icon' => $request->icon ? $this->upload($request, 'icon') : NULL,
         ]);
 
-        return redirect()->route('business.brands.index')->with('success', __('Brand created successfully'));
+        return response()->json([
+            'message' => __('Brand created successfully'),
+            'redirect' => route('business.brands.index')
+        ]);
     }
 
     public function update(Request $request, $id)

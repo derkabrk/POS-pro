@@ -29,6 +29,11 @@
                                 <h4 class="fs-16 mb-1">{{ __('Welcome to Your Business Dashboard') }}</h4>
                                 <p class="text-muted mb-0">{{ __("Here's what's happening with your business today.") }}</p>
                             </div>
+                            <div class="col-auto">
+                                            <a href="{{ url('business/marketplace/' . (isset($businesses[0]) ? $businesses[0]->id : 1)) }}" class="btn btn-primary">
+                                                <i class="ri-store-2-line align-middle me-1"></i> {{ __('Go to Marketplace') }}
+                                            </a>
+                                        </div>
                             <div class="mt-3 mt-lg-0">
                                 <form action="javascript:void(0);">
                                     <div class="row g-3 mb-0 align-items-center">

@@ -78,10 +78,15 @@ class AcnooCurrencyController extends Controller
 
             DB::commit();
 
-            return redirect()->route('business.currencies.index')->with('message', __('Default currency activated successfully'));
+            return response()->json([
+                'message' => __('Default currency activated successfully'),
+                'redirect' => route('business.currencies.index')
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('business.currencies.index')->with('error', __('Failed to set default currency. Please try again.'));
+            return response()->json([
+                'error' => __('Failed to set default currency. Please try again.')
+            ], 500);
         }
     }
 }

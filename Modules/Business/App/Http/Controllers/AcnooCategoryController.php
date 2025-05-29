@@ -129,7 +129,7 @@ class AcnooCategoryController extends Controller
 
             return response()->json([
                 'message' => __('Selected Category deleted successfully'),
-                'redirect' => route('admin.categories.index')
+                'redirect' => route('business.categories.index')
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

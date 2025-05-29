@@ -46,6 +46,12 @@
                                         </div>
                                         <!--end col-->
                                         <div class="col-auto">
+                                            <a href="{{ url('business/marketplace/' . (isset($businesses[0]) ? $businesses[0]->id : 1)) }}" class="btn btn-primary">
+                                                <i class="ri-store-2-line align-middle me-1"></i> {{ __('Go to Marketplace') }}
+                                            </a>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-auto">
                                             <button type="button"
                                                 class="btn btn-soft-primary btn-icon waves-effect waves-light layout-rightside-btn"><i
                                                     class="ri-pulse-line"></i></button>
