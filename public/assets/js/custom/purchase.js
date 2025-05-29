@@ -216,7 +216,11 @@ $('#purchase_modal').on('submit', function (e) {
     let url = $(this).data('route');
     let quantity = parseInt($('#product_qty').val());
 
-    // Collect sub-variant data
+    // Get selected variant and sub-variant
+    let selectedVariantId = $('#variant_select').val();
+    let selectedSubVariantId = $('#sub_variant_select').val();
+
+    // Collect sub-variant data (manual entry, fallback)
     let subVariants = [];
     let subVariantSkus = [];
     $('#sub-variants-list .sub-variant-row').each(function() {
@@ -245,6 +249,8 @@ $('#purchase_modal').on('submit', function (e) {
             product_unit_id: selectedProduct.product_unit_id,
             product_unit_name: selectedProduct.product_unit_name,
             product_image: selectedProduct.product_image,
+            variant_id: selectedVariantId,
+            sub_variant_id: selectedSubVariantId,
             sub_variants: subVariants,
             sub_variant_skus: subVariantSkus
         },

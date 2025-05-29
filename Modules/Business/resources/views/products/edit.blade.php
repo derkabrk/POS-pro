@@ -150,6 +150,13 @@
                                     </select>
                                     <small class="text-muted">{{ __('Hold Ctrl (Windows) or Command (Mac) to select multiple') }}</small>
                                 </div>
+                                <div class="col-xxl-6 col-md-6">
+                                    <label for="sub_variant_id" class="form-label">{{ __('Sub Variant (per Variant)') }}</label>
+                                    <select name="sub_variant_ids[]" id="sub_variant_id" class="form-select" multiple>
+                                        <!-- Options will be loaded dynamically via JS -->
+                                    </select>
+                                    <small class="text-muted">{{ __('Select sub-variants for the selected variants') }}</small>
+                                </div>
                                 <div class="col-12 text-center mt-4">
                                     <button type="reset" class="btn btn-light me-3">{{ __('Cancel') }}</button>
                                     <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
@@ -169,4 +176,34 @@
     <input type="hidden" id="type-value" value="{{ $product->type }}">
     <input type="hidden" id="weight-value" value="{{ $product->weight }}">
 @endsection
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    let allVariants = @json($variants);
+    let subVariantMap = {};
+    allVariants.forEach(function(variant) {
+        subVariantMap[variant.id] = variant.sub_variants || [];
+    });
+    function updateSubVariantOptions() {
+        let selectedVariants = $('#variant_id').val() || [];
+        let subOptions = '';
+        selectedVariants.forEach(function(variantId) {
+            let subs = subVariantMap[variantId] || [];
+            subs.forEach(function(sub) {
+                let selected = '';
+                if (@json(isset($product) ? $product->sub_variant_ids ?? [] : []) && @json(isset($product) ? $product->sub_variant_ids ?? [] : []).includes(sub.id)) {
+                    selected = 'selected';
+                }
+                subOptions += `<option value="${sub.id}" ${selected}>${sub.name} (${sub.sku}) [${allVariants.find(v => v.id == variantId).variantName}]</option>`;
+            });
+        });
+        $('#sub_variant_id').html(subOptions);
+    }
+    $('#variant_id').on('change', updateSubVariantOptions);
+    // On page load, pre-select sub-variants if editing
+    updateSubVariantOptions();
+});
+</script>
+@endpush
 

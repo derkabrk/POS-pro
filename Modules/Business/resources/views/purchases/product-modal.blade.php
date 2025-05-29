@@ -45,6 +45,18 @@
                                 <label>{{ __('Dealer Price') }}</label>
                                 <input type="number" step="any" name="amount" id="dealer_price" required class="form-control" placeholder="{{ __('Enter Dealer Price') }}">
                             </div>
+                            <div class="col-lg-6 mb-2">
+                                <label>{{ __('Variant') }}</label>
+                                <select id="variant_select" class="form-select">
+                                    <option value="">{{ __('Select Variant') }}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-6 mb-2">
+                                <label>{{ __('Sub Variant') }}</label>
+                                <select id="sub_variant_select" class="form-select">
+                                    <option value="">{{ __('Select Sub Variant') }}</option>
+                                </select>
+                            </div>
 
                             <div class="col-12">
                                 <label class="form-label">{{ __('Sub Variants (with SKU)') }}</label>
@@ -96,6 +108,40 @@ $(document).ready(function() {
     });
     $(document).on('click', '.remove-sub-variant', function() {
         $(this).closest('.sub-variant-row').remove();
+    });
+
+    function loadVariants(productId) {
+        $('#variant_select').html('<option value="">{{ __('Loading...') }}</option>');
+        $('#sub_variant_select').html('<option value="">{{ __('Select Sub Variant') }}</option>');
+        $.get('/api/product/' + productId + '/variants', function(data) {
+            let options = '<option value="">{{ __('Select Variant') }}</option>';
+            data.forEach(function(variant) {
+                options += `<option value="${variant.id}">${variant.variantName}</option>`;
+            });
+            $('#variant_select').html(options);
+        });
+    }
+    function loadSubVariants(variantId, variants) {
+        let subOptions = '<option value="">{{ __('Select Sub Variant') }}</option>';
+        let variant = variants.find(v => v.id == variantId);
+        if (variant && variant.sub_variants) {
+            variant.sub_variants.forEach(function(sub) {
+                subOptions += `<option value="${sub.id}">${sub.name} (${sub.sku})</option>`;
+            });
+        }
+        $('#sub_variant_select').html(subOptions);
+    }
+    let loadedVariants = [];
+    $(document).on('click', '#single-product', function () {
+        let productId = $(this).data('product_id');
+        loadVariants(productId);
+        $.get('/api/product/' + productId + '/variants', function(data) {
+            loadedVariants = data;
+        });
+    });
+    $(document).on('change', '#variant_select', function() {
+        let variantId = $(this).val();
+        loadSubVariants(variantId, loadedVariants);
     });
 });
 </script>
