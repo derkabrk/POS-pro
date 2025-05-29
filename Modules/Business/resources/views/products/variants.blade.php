@@ -77,6 +77,9 @@ $(document).ready(function() {
         var btn = $(this);
         var id = btn.data('id');
         if(confirm('Are you sure you want to delete this variant?')) {
+            btn.prop('disabled', true);
+            var originalHtml = btn.html();
+            btn.html('<span class="spinner-border spinner-border-sm"></span>');
             $.ajax({
                 url: '/business/product-variants/' + id,
                 type: 'DELETE',
@@ -84,15 +87,37 @@ $(document).ready(function() {
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
+                    btn.html(originalHtml);
+                    btn.prop('disabled', false);
                     if(response.message) {
-                        btn.closest('tr').remove();
-                        alert(response.message);
+                        // Try to remove the row, fallback to reload if not found
+                        var row = btn.closest('tr');
+                        if(row.length) {
+                            row.remove();
+                        } else {
+                            location.reload();
+                        }
+                        if(window.Swal) {
+                            Swal.fire('Success', response.message, 'success');
+                        } else {
+                            alert(response.message);
+                        }
                     } else {
                         alert('Deleted, but no message returned.');
                     }
                 },
                 error: function(xhr) {
-                    alert('Delete failed!');
+                    btn.html(originalHtml);
+                    btn.prop('disabled', false);
+                    let msg = 'Delete failed!';
+                    if(xhr.responseJSON && xhr.responseJSON.message) {
+                        msg = xhr.responseJSON.message;
+                    }
+                    if(window.Swal) {
+                        Swal.fire('Error', msg, 'error');
+                    } else {
+                        alert(msg);
+                    }
                 }
             });
         }
