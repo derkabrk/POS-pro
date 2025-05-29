@@ -69,10 +69,7 @@ class AcnooProductVariantController extends Controller
             'status' => 'required|boolean',
         ]);
         $variant->update($request->all());
-        return response()->json([
-            'message' => __('Product Variant updated successfully'),
-            'redirect' => route('business.product-variants.index'),
-        ]);
+        return redirect()->route('business.product-variants.index')->with('success', __('Product Variant updated successfully'));
     }
 
     public function destroy($id)
