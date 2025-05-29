@@ -20,4 +20,9 @@ class ProductVariant extends Model
     {
         return $this->belongsToMany(\App\Models\Product::class, 'product_product_variant');
     }
+
+    public function subVariants()
+    {
+        return $this->hasMany(SubVariant::class, 'product_variant_id');
+    }
 }

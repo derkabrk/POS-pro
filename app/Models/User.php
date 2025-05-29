@@ -57,6 +57,9 @@ class User extends Authenticatable
         'plan_permissions' => 'json', // add this line
     ];
 
+    /**
+     * User roles: admin, shop-owner, staff, dropshipper
+     */
     public function business() : BelongsTo
     {
         return $this->belongsTo(Business::class);

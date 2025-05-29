@@ -35,6 +35,22 @@
                                 <option value="0">{{ __('Inactive') }}</option>
                             </select>
                         </div>
+                        <div class="col-12">
+                            <label class="form-label">{{ __('Sub Variants (with SKU)') }}</label>
+                            <div id="sub-variants-list">
+                                <div class="row g-2 sub-variant-row mb-2">
+                                    <div class="col-md-5">
+                                        <input type="text" name="sub_variants[]" class="form-control" placeholder="{{ __('Sub Variant Name') }}">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="text" name="sub_variant_skus[]" class="form-control" placeholder="{{ __('SKU') }}">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-success add-sub-variant">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-12 text-center mt-4">
                             <button type="reset" class="btn btn-light me-3">{{ __('Cancel') }}</button>
                             <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
@@ -46,3 +62,27 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    $(document).on('click', '.add-sub-variant', function() {
+        let newRow = `<div class=\"row g-2 sub-variant-row mb-2\">
+            <div class=\"col-md-5\">
+                <input type=\"text\" name=\"sub_variants[]\" class=\"form-control\" placeholder=\"{{ __('Sub Variant Name') }}\">
+            </div>
+            <div class=\"col-md-5\">
+                <input type=\"text\" name=\"sub_variant_skus[]\" class=\"form-control\" placeholder=\"{{ __('SKU') }}\">
+            </div>
+            <div class=\"col-md-2\">
+                <button type=\"button\" class=\"btn btn-danger remove-sub-variant\">-</button>
+            </div>
+        </div>`;
+        $('#sub-variants-list').append(newRow);
+    });
+    $(document).on('click', '.remove-sub-variant', function() {
+        $(this).closest('.sub-variant-row').remove();
+    });
+});
+</script>
+@endpush

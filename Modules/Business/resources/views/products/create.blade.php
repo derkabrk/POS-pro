@@ -137,6 +137,10 @@
                                     <input type="number" id="productDealerPrice" name="productDealerPrice" class="form-control" placeholder="{{ __('Enter dealer price') }}">
                                 </div>
                                 <div class="col-xxl-6 col-md-6">
+                                    <label for="dropshipperPrice" class="form-label">{{ __('Dropshipper Price') }}</label>
+                                    <input type="number" id="dropshipperPrice" name="dropshipperPrice" class="form-control" placeholder="{{ __('Enter dropshipper price') }}">
+                                </div>
+                                <div class="col-xxl-6 col-md-6">
                                     <label for="productManufacturer" class="form-label">{{ __('Manufacturer') }}</label>
                                     <input type="text" id="productManufacturer" name="productManufacturer" class="form-control" placeholder="{{ __('Enter manufacturer name') }}">
                                 </div>

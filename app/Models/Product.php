@@ -43,6 +43,7 @@ class Product extends Model
         'capacity',
         'productManufacturer',
         'supplier_id', // New field
+        'dropshipperPrice', // Added for dropshipper selling price
     ];
 
     public function unit() : BelongsTo

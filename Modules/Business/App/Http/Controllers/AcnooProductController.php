@@ -133,6 +133,7 @@ class AcnooProductController extends Controller
             'productSalePrice' => $request->productSalePrice,
             'productDealerPrice' => $request->productDealerPrice ?? $request->productSalePrice,
             'productWholeSalePrice' => $request->productWholeSalePrice ?? $request->productSalePrice,
+            'dropshipperPrice' => $request->dropshipperPrice ?? null,
             'productStock' => $request->productStock ?? 0,
             'alert_qty' => $request->alert_qty ?? 0,
             'vat_amount' => $vat_amount,
@@ -208,12 +209,13 @@ class AcnooProductController extends Controller
         }
 
         // Update the product
-        $product->update($request->except(['productPicture', 'productDealerPrice', 'productWholeSalePrice', 'productStock', 'alert_qty']) + [
+        $product->update($request->except(['productPicture', 'productDealerPrice', 'productWholeSalePrice', 'productStock', 'alert_qty', 'vat_amount']) + [
             'productPicture' => $request->productPicture ? $this->upload($request, 'productPicture', $product->productPicture) : $product->productPicture,
             'productPurchasePrice' => $purchase_price,
             'productSalePrice' => $request->productSalePrice,
             'productDealerPrice' => $request->productDealerPrice ?? $request->productSalePrice,
             'productWholeSalePrice' => $request->productWholeSalePrice ?? $request->productSalePrice,
+            'dropshipperPrice' => $request->dropshipperPrice ?? null,
             'productStock' => $request->productStock ?? 0,
             'alert_qty' => $request->alert_qty ?? 0,
             'supplier_id' => $request->supplier_id, // Update supplier_id
