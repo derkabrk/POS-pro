@@ -79,10 +79,13 @@ class AcnooProductVariantController extends Controller
     {
         $variant = ProductVariant::findOrFail($id);
         $variant->delete();
-        return response()->json([
-            'message' => __('Product Variant deleted successfully'),
-            'redirect' => route('business.product-variants.index')
-        ]);
+        if(request()->ajax()) {
+            return response()->json([
+                'message' => __('Product Variant deleted successfully'),
+                'redirect' => route('business.product-variants.index')
+            ]);
+        }
+        return redirect()->route('business.product-variants.index')->with('success', __('Product Variant deleted successfully'));
     }
 
     public function status(Request $request, $id)

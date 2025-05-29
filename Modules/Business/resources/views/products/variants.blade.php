@@ -56,7 +56,26 @@
                             </tr>
                         </thead>
                         <tbody id="variant-data">
-                            @include('business::products.partials.variant-datas')
+                            @foreach($variants as $variant)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $variant->variantName }}</td>
+                                <td>{{ $variant->variantCode }}</td>
+                                <td>
+                                    <span class="badge {{ $variant->status ? 'bg-success' : 'bg-danger' }}">
+                                        {{ $variant->status ? __('Active') : __('Inactive') }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('business.product-variants.edit', $variant->id) }}" class="btn btn-sm btn-primary">{{ __('Edit') }}</a>
+                                    <form action="{{ route('business.product-variants.destroy', $variant->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this variant?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">{{ __('Delete') }}</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -70,58 +89,5 @@
 @endsection
 
 @push('scripts')
-<script>
-$(document).ready(function() {
-    // Delete Variant
-    $(document).on('click', '.delete-variant', function() {
-        var btn = $(this);
-        var id = btn.data('id');
-        if(confirm('Are you sure you want to delete this variant?')) {
-            btn.prop('disabled', true);
-            var originalHtml = btn.html();
-            btn.html('<span class="spinner-border spinner-border-sm"></span>');
-            $.ajax({
-                url: '/business/product-variants/' + id,
-                type: 'DELETE',
-                data: {
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    btn.html(originalHtml);
-                    btn.prop('disabled', false);
-                    if(response.message) {
-                        // Try to remove the row, fallback to reload if not found
-                        var row = btn.closest('tr');
-                        if(row.length) {
-                            row.remove();
-                        } else {
-                            location.reload();
-                        }
-                        if(window.Swal) {
-                            Swal.fire('Success', response.message, 'success');
-                        } else {
-                            alert(response.message);
-                        }
-                    } else {
-                        alert('Deleted, but no message returned.');
-                    }
-                },
-                error: function(xhr) {
-                    btn.html(originalHtml);
-                    btn.prop('disabled', false);
-                    let msg = 'Delete failed!';
-                    if(xhr.responseJSON && xhr.responseJSON.message) {
-                        msg = xhr.responseJSON.message;
-                    }
-                    if(window.Swal) {
-                        Swal.fire('Error', msg, 'error');
-                    } else {
-                        alert(msg);
-                    }
-                }
-            });
-        }
-    });
-});
-</script>
+<!-- No JS needed for delete, handled by form submit -->
 @endpush
