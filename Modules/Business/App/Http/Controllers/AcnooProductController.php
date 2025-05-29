@@ -160,7 +160,7 @@ class AcnooProductController extends Controller
         $units = Unit::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $vats = Vat::where('business_id', auth()->user()->business_id)->latest()->get();
         $suppliers = Party::where('type', 'Supplier')->get();
-        $variants = \App\Models\ProductVariant::where('business_id', auth()->user()->business_id)->where('status', 1)->get();
+        $variants = \App\Models\ProductVariant::with('subVariants')->get();
 
         return view('business::products.edit', compact('categories', 'suppliers','brands', 'units', 'product', 'vats', 'variants'));
     }
