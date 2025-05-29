@@ -34,47 +34,52 @@
                         <div class="col-xxl-6 col-md-6">
                             <label for="status" class="form-label">{{ __('Status') }}</label>
                             <select name="status" id="status" class="form-select">
-                                <option value="1" {{ isset($variant) && $variant->status ? 'selected' : '' }}>{{ __('Active') }}</option>
-                                <option value="0" {{ isset($variant) && !$variant->status ? 'selected' : '' }}>{{ __('Inactive') }}</option>
+                                <option value="1" {{ isset($variant) && $variant->status == 1 ? 'selected' : '' }}>{{ __('Active') }}</option>
+                                <option value="0" {{ isset($variant) && $variant->status == 0 ? 'selected' : '' }}>{{ __('Inactive') }}</option>
                             </select>
                         </div>
                         <div class="col-12">
-                            <label class="form-label">{{ __('Sub Variants (with SKU)') }}</label>
-                            <div id="sub-variants-list">
-                                @if(isset($variant) && $variant->subVariants && count($variant->subVariants))
-                                    @foreach($variant->subVariants as $sub)
-                                        <div class='row g-2 sub-variant-row mb-2'>
-                                            <div class='col-md-5'>
-                                                <input type='text' name='sub_variants[]' class='form-control' placeholder='{{ __('Sub Variant Name') }}' value='{{ $sub->name }}'>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <label class="form-label mb-0">{{ __('Sub Variants (with SKU)') }}</label>
+                                <button type="button" id="addSubVariantBtn" class="btn btn-success btn-sm">
+                                    <i class="fas fa-plus"></i> {{ __('Add Sub Variant') }}
+                                </button>
+                            </div>
+                            <div id="subVariantsList">
+                                @if(isset($variant) && $variant->subVariants && count($variant->subVariants) > 0)
+                                    @foreach($variant->subVariants as $index => $sub)
+                                        <div class="row g-2 sub-variant-item mb-2" data-index="{{ $index }}">
+                                            <div class="col-md-5">
+                                                <input type="text" name="sub_variants[]" class="form-control" placeholder="{{ __('Sub Variant Name') }}" value="{{ $sub->name }}" required>
                                             </div>
-                                            <div class='col-md-5'>
-                                                <input type='text' name='sub_variant_skus[]' class='form-control' placeholder='{{ __('SKU') }}' value='{{ $sub->sku }}'>
+                                            <div class="col-md-5">
+                                                <input type="text" name="sub_variant_skus[]" class="form-control" placeholder="{{ __('SKU') }}" value="{{ $sub->sku }}">
                                             </div>
-                                            <div class='col-md-2'>
-                                                <button type='button' class='btn btn-danger remove-sub-variant'>-</button>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-danger btn-sm remove-sub-variant" onclick="removeSubVariant(this)">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
-                                    <div class='row g-2 sub-variant-row mb-2'>
-                                        <div class='col-md-5'>
-                                            <input type='text' name='sub_variants[]' class='form-control' placeholder='{{ __('Sub Variant Name') }}'>
+                                    <div class="row g-2 sub-variant-item mb-2" data-index="0">
+                                        <div class="col-md-5">
+                                            <input type="text" name="sub_variants[]" class="form-control" placeholder="{{ __('Sub Variant Name') }}" required>
                                         </div>
-                                        <div class='col-md-5'>
-                                            <input type='text' name='sub_variant_skus[]' class='form-control' placeholder='{{ __('SKU') }}'>
+                                        <div class="col-md-5">
+                                            <input type="text" name="sub_variant_skus[]" class="form-control" placeholder="{{ __('SKU') }}">
                                         </div>
-                                        <div class='col-md-2'>
-                                            <button type='button' class='btn btn-danger remove-sub-variant'>-</button>
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-danger btn-sm remove-sub-variant" onclick="removeSubVariant(this)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 @endif
                             </div>
-                            <div class="row mt-2">
-                                <div class="col-12">
-                                    <button type='button' class='btn btn-success add-sub-variant'>
-                                        <i class="fas fa-plus"></i> {{ __('Add Sub Variant') }}
-                                    </button>
-                                </div>
+                            <div id="noSubVariants" class="text-muted text-center py-3" style="display: none;">
+                                <em>{{ __('No sub variants added yet. Click "Add Sub Variant" to add one.') }}</em>
                             </div>
                         </div>
                         <div class="col-12 text-center mt-4">
@@ -87,101 +92,141 @@
         </div>
     </div>
 </div>
-@endsection
 
-@push('scripts')
 <script>
-// Wait for document ready and use vanilla JS as fallback
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded');
+// Global variables for sub variants management
+let subVariantCounter = {{ isset($variant) && $variant->subVariants ? count($variant->subVariants) : 1 }};
+
+// Add sub variant function
+function addSubVariant() {
+    const container = document.getElementById('subVariantsList');
+    const noVariantsMsg = document.getElementById('noSubVariants');
     
-    function addSubVariant() {
-        console.log('Adding sub variant...');
-        
-        const subVariantsList = document.getElementById('sub-variants-list');
-        if (!subVariantsList) {
-            console.error('sub-variants-list not found');
-            return;
-        }
-        
-        const newRow = document.createElement('div');
-        newRow.className = 'row g-2 sub-variant-row mb-2';
-        newRow.innerHTML = `
-            <div class="col-md-5">
-                <input type="text" name="sub_variants[]" class="form-control" placeholder="{{ __('Sub Variant Name') }}">
-            </div>
-            <div class="col-md-5">
-                <input type="text" name="sub_variant_skus[]" class="form-control" placeholder="{{ __('SKU') }}">
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-danger remove-sub-variant">-</button>
-            </div>
-        `;
-        
-        subVariantsList.appendChild(newRow);
-        console.log('Row added successfully');
-        
-        // Add event listener to the new remove button
-        const removeBtn = newRow.querySelector('.remove-sub-variant');
-        removeBtn.addEventListener('click', function() {
-            newRow.remove();
-            console.log('Row removed');
-        });
+    // Hide "no variants" message if visible
+    if (noVariantsMsg) {
+        noVariantsMsg.style.display = 'none';
     }
     
-    // Add event listener to add button
-    const addButton = document.querySelector('.add-sub-variant');
+    // Create new sub variant row
+    const newRow = document.createElement('div');
+    newRow.className = 'row g-2 sub-variant-item mb-2';
+    newRow.setAttribute('data-index', subVariantCounter);
+    
+    newRow.innerHTML = `
+        <div class="col-md-5">
+            <input type="text" name="sub_variants[]" class="form-control" placeholder="{{ __('Sub Variant Name') }}" required>
+        </div>
+        <div class="col-md-5">
+            <input type="text" name="sub_variant_skus[]" class="form-control" placeholder="{{ __('SKU') }}">
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-danger btn-sm remove-sub-variant" onclick="removeSubVariant(this)">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    `;
+    
+    container.appendChild(newRow);
+    subVariantCounter++;
+    
+    // Focus on the new name input
+    const nameInput = newRow.querySelector('input[name="sub_variants[]"]');
+    if (nameInput) {
+        nameInput.focus();
+    }
+}
+
+// Remove sub variant function
+function removeSubVariant(button) {
+    const row = button.closest('.sub-variant-item');
+    const container = document.getElementById('subVariantsList');
+    const noVariantsMsg = document.getElementById('noSubVariants');
+    
+    if (row) {
+        row.remove();
+        
+        // Check if no sub variants remain
+        const remainingRows = container.querySelectorAll('.sub-variant-item');
+        if (remainingRows.length === 0 && noVariantsMsg) {
+            noVariantsMsg.style.display = 'block';
+        }
+    }
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener to the add button
+    const addButton = document.getElementById('addSubVariantBtn');
     if (addButton) {
         addButton.addEventListener('click', function(e) {
             e.preventDefault();
             addSubVariant();
         });
-        console.log('Add button listener attached');
-    } else {
-        console.error('Add button not found');
     }
     
-    // Add event listeners to existing remove buttons
-    document.querySelectorAll('.remove-sub-variant').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            btn.closest('.sub-variant-row').remove();
-            console.log('Existing row removed');
+    // Check if we should show the "no variants" message
+    const container = document.getElementById('subVariantsList');
+    const noVariantsMsg = document.getElementById('noSubVariants');
+    const existingRows = container.querySelectorAll('.sub-variant-item');
+    
+    if (existingRows.length === 0 && noVariantsMsg) {
+        noVariantsMsg.style.display = 'block';
+    }
+    
+    // Add validation to form
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const subVariantInputs = document.querySelectorAll('input[name="sub_variants[]"]');
+            let hasValidSubVariant = false;
+            
+            subVariantInputs.forEach(function(input) {
+                if (input.value.trim() !== '') {
+                    hasValidSubVariant = true;
+                }
+            });
+            
+            if (!hasValidSubVariant) {
+                e.preventDefault();
+                alert('{{ __("Please add at least one sub variant.") }}');
+                return false;
+            }
         });
-    });
+    }
 });
 
-// jQuery fallback if available
-if (typeof jQuery !== 'undefined') {
-    $(document).ready(function() {
-        console.log('jQuery ready');
-        
-        $(document).on('click', '.add-sub-variant', function(e) {
-            e.preventDefault();
-            console.log('jQuery: Add button clicked');
-            
-            const newRow = `
-                <div class="row g-2 sub-variant-row mb-2">
-                    <div class="col-md-5">
-                        <input type="text" name="sub_variants[]" class="form-control" placeholder="{{ __('Sub Variant Name') }}">
-                    </div>
-                    <div class="col-md-5">
-                        <input type="text" name="sub_variant_skus[]" class="form-control" placeholder="{{ __('SKU') }}">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger remove-sub-variant">-</button>
-                    </div>
-                </div>
-            `;
-            
-            $('#sub-variants-list').append(newRow);
-            console.log('jQuery: Row added');
-        });
-        
-        $(document).on('click', '.remove-sub-variant', function() {
-            $(this).closest('.sub-variant-row').remove();
-            console.log('jQuery: Row removed');
-        });
-    });
+// Reset form function
+function resetForm() {
+    const container = document.getElementById('subVariantsList');
+    const noVariantsMsg = document.getElementById('noSubVariants');
+    
+    // Clear all sub variants
+    container.innerHTML = '';
+    
+    // Add one empty row
+    addSubVariant();
+    
+    // Hide no variants message
+    if (noVariantsMsg) {
+        noVariantsMsg.style.display = 'none';
+    }
+    
+    // Reset counter
+    subVariantCounter = 1;
 }
+
+// Handle reset button
+document.addEventListener('DOMContentLoaded', function() {
+    const resetButton = document.querySelector('button[type="reset"]');
+    if (resetButton) {
+        resetButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('{{ __("Are you sure you want to reset the form?") }}')) {
+                document.querySelector('form').reset();
+                resetForm();
+            }
+        });
+    }
+});
 </script>
-@endpush
+@endsection
