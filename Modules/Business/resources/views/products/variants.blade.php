@@ -15,13 +15,13 @@
                     </div>
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
-                            <a href="{{ route('business.variants.create') }}" class="btn btn-primary add-btn"><i class="ri-add-line align-bottom me-1"></i> {{ __('Add new Variant') }}</a>
+                            <a href="{{ route('business.product-variants.create') }}" class="btn btn-primary add-btn"><i class="ri-add-line align-bottom me-1"></i> {{ __('Add new Variant') }}</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form action="{{ route('business.variants.filter') }}" method="post" class="filter-form d-flex align-items-center gap-3" table="#variant-data" id="variant-search-form">
+                <form action="{{ route('business.product-variants.filter') }}" method="post" class="filter-form d-flex align-items-center gap-3" table="#variant-data" id="variant-search-form">
                     @csrf
                     <div class="row g-3 w-100">
                         <div class="col-xxl-3 col-sm-6">
