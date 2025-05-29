@@ -66,7 +66,8 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    $(document).on('click', '.add-sub-variant', function() {
+    $(document).on('click', '.add-sub-variant', function(e) {
+        e.preventDefault();
         let newRow = `<div class='row g-2 sub-variant-row mb-2'>
             <div class='col-md-5'>
                 <input type='text' name='sub_variants[]' class='form-control' placeholder='{{ __('Sub Variant Name') }}'>
