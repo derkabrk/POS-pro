@@ -349,13 +349,12 @@ $(document).ready(function() {
     let selectedVariants = new Map(); // Use Map to store selected variants with their sub-variants
     
     // Helper function to get sub-variants for a variant
-    function getSubVariants(variantId) {
-        let variant = allVariants.find(v => v.id == variantId);
-        if (!variant) return [];
-        
-        // Try different possible property names for sub-variants
-        return variant.sub_variants || [];
-    }
+function getSubVariants(variantId) {
+    let variant = allVariants.find(v => v.id == variantId);
+    if (!variant) return [];
+    // Always use sub_variants property as provided by Laravel
+    return variant.sub_variants || [];
+}
     
     // Handle variant selection
     $('#variant_select').on('change', function() {
