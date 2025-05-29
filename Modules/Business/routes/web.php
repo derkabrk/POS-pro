@@ -318,4 +318,6 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('invite-codes', [\Modules\Business\App\Http\Controllers\InviteCodeController::class, 'store'])->name('invite-codes.store');
     Route::post('invite-codes/redeem', [\Modules\Business\App\Http\Controllers\InviteCodeController::class, 'redeem'])->name('invite-codes.redeem');
 
+    Route::resource('product-variants', Business\AcnooProductVariantController::class);
+
 });
