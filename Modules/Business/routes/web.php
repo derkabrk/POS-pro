@@ -319,5 +319,6 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('invite-codes/redeem', [\Modules\Business\App\Http\Controllers\InviteCodeController::class, 'redeem'])->name('invite-codes.redeem');
 
     Route::resource('product-variants', Business\AcnooProductVariantController::class);
+    Route::post('product-variants/filter', [Business\AcnooProductVariantController::class, 'acnooFilter'])->name('product-variants.filter');
 
 });
