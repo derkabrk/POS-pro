@@ -13,6 +13,7 @@ class ProductVariant extends Model
         'variantName',
         'variantCode',
         'status',
+        'business_id',
     ];
 
     public function products()
