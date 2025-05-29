@@ -322,3 +322,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('product-variants/filter', [Business\AcnooProductVariantController::class, 'acnooFilter'])->name('product-variants.filter');
 
 });
+
+// Marketplace routes (public, no auth middleware)
+Route::get('marketplace/{business_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
+Route::post('marketplace/order/{product_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'submitOrder'])->name('marketplace.order.submit');
