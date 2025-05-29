@@ -88,6 +88,7 @@
                                 <li><a class="nav-link menu-link {{ Request::routeIs('business.categories.index') ? 'active' : '' }}" href="{{ route('business.categories.index') }}">{{ __('Category') }}</a></li>
                                 <li><a class="nav-link menu-link {{ Request::routeIs('business.brands.index') ? 'active' : '' }}" href="{{ route('business.brands.index') }}">{{ __('Brand') }}</a></li>
                                 <li><a class="nav-link menu-link {{ Request::routeIs('business.units.index') ? 'active' : '' }}" href="{{ route('business.units.index') }}">{{ __('Unit') }}</a></li>
+                                <li><a class="nav-link menu-link {{ Request::routeIs('business.product-variants.index') ? 'active' : '' }}" href="{{ route('business.product-variants.index') }}">{{ __('Product Variants') }}</a></li>
                             </ul>
                         </div>
                     </li>
@@ -229,12 +230,7 @@
                     </li>
                 @endif
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::routeIs('business.subscriptions.index') ? 'active' : '' }}" href="{{ route('business.subscriptions.index') }}">
-                        <i class="ri-subscription-line"></i>
-                        <span>{{ __('Subscriptions') }}</span>
-                    </a>
-                </li>
+              
 
                 @if (auth()->user()->role != 'staff' || visible_permission('lossProfitPermission'))
                     <li class="nav-item">

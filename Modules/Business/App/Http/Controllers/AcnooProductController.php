@@ -75,8 +75,9 @@ class AcnooProductController extends Controller
         $vats = Vat::where('business_id', auth()->user()->business_id)->latest()->get();
         $code = str_pad($product_id , 4, '0', STR_PAD_LEFT);
         $suppliers = Party::where('type', 'Supplier')->get();
+        $variants = \App\Models\ProductVariant::where('business_id', auth()->user()->business_id)->where('status', 1)->get();
 
-        return view('business::products.create', compact('categories', 'brands', 'units', 'code', 'vats', 'suppliers'));
+        return view('business::products.create', compact('categories', 'brands', 'units', 'code', 'vats', 'suppliers', 'variants'));
     }
 
 
@@ -156,9 +157,9 @@ class AcnooProductController extends Controller
         $units = Unit::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $vats = Vat::where('business_id', auth()->user()->business_id)->latest()->get();
         $suppliers = Party::where('type', 'Supplier')->get();
-        $productVariants = \App\Models\ProductVariant::where('business_id', auth()->user()->business_id)->where('status', 1)->get();
+        $variants = \App\Models\ProductVariant::where('business_id', auth()->user()->business_id)->where('status', 1)->get();
 
-        return view('business::products.edit', compact('categories', 'suppliers','brands', 'units', 'product', 'vats', 'productVariants'));
+        return view('business::products.edit', compact('categories', 'suppliers','brands', 'units', 'product', 'vats', 'variants'));
     }
 
     public function update(Request $request, $id)
