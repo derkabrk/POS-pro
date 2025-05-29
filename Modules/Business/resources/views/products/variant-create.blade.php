@@ -92,14 +92,18 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Store translated strings in JavaScript variables
+    const subVariantNamePlaceholder = '{{ __('Sub Variant Name') }}';
+    const skuPlaceholder = '{{ __('SKU') }}';
+    
     $(document).on('click', '.add-sub-variant', function(e) {
         e.preventDefault();
         let newRow = `<div class='row g-2 sub-variant-row mb-2'>
             <div class='col-md-5'>
-                <input type='text' name='sub_variants[]' class='form-control' placeholder='{{ __('Sub Variant Name') }}'>
+                <input type='text' name='sub_variants[]' class='form-control' placeholder='${subVariantNamePlaceholder}'>
             </div>
             <div class='col-md-5'>
-                <input type='text' name='sub_variant_skus[]' class='form-control' placeholder='{{ __('SKU') }}'>
+                <input type='text' name='sub_variant_skus[]' class='form-control' placeholder='${skuPlaceholder}'>
             </div>
             <div class='col-md-2'>
                 <button type='button' class='btn btn-danger remove-sub-variant'>-</button>
