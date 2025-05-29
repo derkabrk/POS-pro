@@ -92,28 +92,45 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Store translated strings in JavaScript variables
-    const subVariantNamePlaceholder = '{{ __('Sub Variant Name') }}';
-    const skuPlaceholder = '{{ __('SKU') }}';
+    console.log('Document ready - script loaded');
     
-    $(document).on('click', '.add-sub-variant', function(e) {
+    // Store translated strings in JavaScript variables
+    const subVariantNamePlaceholder = '{{ __("Sub Variant Name") }}';
+    const skuPlaceholder = '{{ __("SKU") }}';
+    
+    // Test if jQuery is working
+    console.log('jQuery version:', $.fn.jquery);
+    console.log('Add button exists:', $('.add-sub-variant').length);
+    console.log('Sub variants list exists:', $('#sub-variants-list').length);
+    
+    // Use direct click event instead of delegated event for testing
+    $('.add-sub-variant').on('click', function(e) {
         e.preventDefault();
-        let newRow = `<div class='row g-2 sub-variant-row mb-2'>
-            <div class='col-md-5'>
-                <input type='text' name='sub_variants[]' class='form-control' placeholder='${subVariantNamePlaceholder}'>
-            </div>
-            <div class='col-md-5'>
-                <input type='text' name='sub_variant_skus[]' class='form-control' placeholder='${skuPlaceholder}'>
-            </div>
-            <div class='col-md-2'>
-                <button type='button' class='btn btn-danger remove-sub-variant'>-</button>
-            </div>
-        </div>`;
+        console.log('Add button clicked!');
+        
+        let newRow = '<div class="row g-2 sub-variant-row mb-2">' +
+            '<div class="col-md-5">' +
+                '<input type="text" name="sub_variants[]" class="form-control" placeholder="' + subVariantNamePlaceholder + '">' +
+            '</div>' +
+            '<div class="col-md-5">' +
+                '<input type="text" name="sub_variant_skus[]" class="form-control" placeholder="' + skuPlaceholder + '">' +
+            '</div>' +
+            '<div class="col-md-2">' +
+                '<button type="button" class="btn btn-danger remove-sub-variant">-</button>' +
+            '</div>' +
+        '</div>';
+        
+        console.log('New row HTML:', newRow);
         $('#sub-variants-list').append(newRow);
+        console.log('Row added. Total rows now:', $('.sub-variant-row').length);
     });
     
-    $(document).on('click', '.remove-sub-variant', function() {
+    // Use delegated event for remove buttons since they're added dynamically
+    $(document).on('click', '.remove-sub-variant', function(e) {
+        e.preventDefault();
+        console.log('Remove button clicked');
         $(this).closest('.sub-variant-row').remove();
+        console.log('Row removed. Total rows now:', $('.sub-variant-row').length);
     });
 });
 </script>
