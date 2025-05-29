@@ -64,10 +64,17 @@
                                             <input type='text' name='sub_variant_skus[]' class='form-control' placeholder='{{ __('SKU') }}'>
                                         </div>
                                         <div class='col-md-2'>
-                                            <button type='button' class='btn btn-success add-sub-variant'>+</button>
+                                            <button type='button' class='btn btn-danger remove-sub-variant'>-</button>
                                         </div>
                                     </div>
                                 @endif
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <button type='button' class='btn btn-success add-sub-variant'>
+                                        <i class="fas fa-plus"></i> {{ __('Add Sub Variant') }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 text-center mt-4">
@@ -100,6 +107,7 @@ $(document).ready(function() {
         </div>`;
         $('#sub-variants-list').append(newRow);
     });
+    
     $(document).on('click', '.remove-sub-variant', function() {
         $(this).closest('.sub-variant-row').remove();
     });
