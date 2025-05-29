@@ -50,6 +50,7 @@
     </div>
     <div class="row" id="marketplace-products">
         @foreach($products as $product)
+        @if($product->business_id == $business_id)
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <img src="{{ $product->productPicture ? asset('uploads/products/' . $product->productPicture) : asset('assets/images/icons/upload.png') }}" class="card-img-top" alt="{{ $product->productName }}">
@@ -87,6 +88,7 @@
                 </div>
             </div>
         </div>
+        @endif
         @endforeach
     </div>
 </div>
