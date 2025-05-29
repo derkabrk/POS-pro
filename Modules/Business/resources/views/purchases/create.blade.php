@@ -269,18 +269,25 @@
     <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
     <script>
         const allVariants = @json($variants);
-        $(document).ready(function() {
-            $('#variant_id').on('change', function() {
-                let variantId = $(this).val();
-                let subOptions = '<option value="">{{ __('Select Sub Variant') }}</option>';
-                let variant = allVariants.find(v => v.id == variantId);
-                if (variant && variant.sub_variants) {
-                    variant.sub_variants.forEach(function(sub) {
-                        subOptions += `<option value="${sub.id}">${sub.name} (${sub.sku})</option>`;
-                    });
-                }
-                $('#sub_variant_id').html(subOptions);
+        let subVariantMap = {};
+        allVariants.forEach(function(variant) {
+            subVariantMap[variant.id] = variant.sub_variants || [];
+        });
+        function updateSubVariantOptions() {
+            let selectedVariants = $('#variant_id').val() || [];
+            let subOptions = '';
+            selectedVariants.forEach(function(variantId) {
+                let subs = subVariantMap[variantId] || [];
+                subs.forEach(function(sub) {
+                    subOptions += `<option value="${sub.id}">${sub.name} (${sub.sku}) [${allVariants.find(v => v.id == variantId).variantName}]</option>`;
+                });
             });
+            $('#sub_variant_id').html(subOptions);
+        }
+        $(document).ready(function() {
+            $('#variant_id').on('change', updateSubVariantOptions);
+            // On page load, if editing, pre-select sub-variants
+            updateSubVariantOptions();
         });
     </script>
 @endpush
