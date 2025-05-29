@@ -91,47 +91,97 @@
 
 @push('scripts')
 <script>
-$(document).ready(function() {
-    console.log('Document ready - script loaded');
+// Wait for document ready and use vanilla JS as fallback
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded');
     
-    // Store translated strings in JavaScript variables
-    const subVariantNamePlaceholder = '{{ __("Sub Variant Name") }}';
-    const skuPlaceholder = '{{ __("SKU") }}';
-    
-    // Test if jQuery is working
-    console.log('jQuery version:', $.fn.jquery);
-    console.log('Add button exists:', $('.add-sub-variant').length);
-    console.log('Sub variants list exists:', $('#sub-variants-list').length);
-    
-    // Use direct click event instead of delegated event for testing
-    $('.add-sub-variant').on('click', function(e) {
-        e.preventDefault();
-        console.log('Add button clicked!');
+    function addSubVariant() {
+        console.log('Adding sub variant...');
         
-        let newRow = '<div class="row g-2 sub-variant-row mb-2">' +
-            '<div class="col-md-5">' +
-                '<input type="text" name="sub_variants[]" class="form-control" placeholder="' + subVariantNamePlaceholder + '">' +
-            '</div>' +
-            '<div class="col-md-5">' +
-                '<input type="text" name="sub_variant_skus[]" class="form-control" placeholder="' + skuPlaceholder + '">' +
-            '</div>' +
-            '<div class="col-md-2">' +
-                '<button type="button" class="btn btn-danger remove-sub-variant">-</button>' +
-            '</div>' +
-        '</div>';
+        const subVariantsList = document.getElementById('sub-variants-list');
+        if (!subVariantsList) {
+            console.error('sub-variants-list not found');
+            return;
+        }
         
-        console.log('New row HTML:', newRow);
-        $('#sub-variants-list').append(newRow);
-        console.log('Row added. Total rows now:', $('.sub-variant-row').length);
-    });
+        const newRow = document.createElement('div');
+        newRow.className = 'row g-2 sub-variant-row mb-2';
+        newRow.innerHTML = `
+            <div class="col-md-5">
+                <input type="text" name="sub_variants[]" class="form-control" placeholder="{{ __('Sub Variant Name') }}">
+            </div>
+            <div class="col-md-5">
+                <input type="text" name="sub_variant_skus[]" class="form-control" placeholder="{{ __('SKU') }}">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger remove-sub-variant">-</button>
+            </div>
+        `;
+        
+        subVariantsList.appendChild(newRow);
+        console.log('Row added successfully');
+        
+        // Add event listener to the new remove button
+        const removeBtn = newRow.querySelector('.remove-sub-variant');
+        removeBtn.addEventListener('click', function() {
+            newRow.remove();
+            console.log('Row removed');
+        });
+    }
     
-    // Use delegated event for remove buttons since they're added dynamically
-    $(document).on('click', '.remove-sub-variant', function(e) {
-        e.preventDefault();
-        console.log('Remove button clicked');
-        $(this).closest('.sub-variant-row').remove();
-        console.log('Row removed. Total rows now:', $('.sub-variant-row').length);
+    // Add event listener to add button
+    const addButton = document.querySelector('.add-sub-variant');
+    if (addButton) {
+        addButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            addSubVariant();
+        });
+        console.log('Add button listener attached');
+    } else {
+        console.error('Add button not found');
+    }
+    
+    // Add event listeners to existing remove buttons
+    document.querySelectorAll('.remove-sub-variant').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            btn.closest('.sub-variant-row').remove();
+            console.log('Existing row removed');
+        });
     });
 });
+
+// jQuery fallback if available
+if (typeof jQuery !== 'undefined') {
+    $(document).ready(function() {
+        console.log('jQuery ready');
+        
+        $(document).on('click', '.add-sub-variant', function(e) {
+            e.preventDefault();
+            console.log('jQuery: Add button clicked');
+            
+            const newRow = `
+                <div class="row g-2 sub-variant-row mb-2">
+                    <div class="col-md-5">
+                        <input type="text" name="sub_variants[]" class="form-control" placeholder="{{ __('Sub Variant Name') }}">
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" name="sub_variant_skus[]" class="form-control" placeholder="{{ __('SKU') }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger remove-sub-variant">-</button>
+                    </div>
+                </div>
+            `;
+            
+            $('#sub-variants-list').append(newRow);
+            console.log('jQuery: Row added');
+        });
+        
+        $(document).on('click', '.remove-sub-variant', function() {
+            $(this).closest('.sub-variant-row').remove();
+            console.log('jQuery: Row removed');
+        });
+    });
+}
 </script>
 @endpush
