@@ -354,12 +354,7 @@ $(document).ready(function() {
         if (!variant) return [];
         
         // Try different possible property names for sub-variants
-        return variant.sub_variants || 
-               variant.subVariants || 
-               variant.SubVariants || 
-               variant.subvariants || 
-               variant.children || 
-               [];
+        return variant.sub_variants || [];
     }
     
     // Handle variant selection
