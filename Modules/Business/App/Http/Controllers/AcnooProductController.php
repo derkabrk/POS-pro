@@ -16,6 +16,7 @@ use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Modules\Business\App\Exports\ExportProduct;
+use App\Models\Variant; // Add this line
 
 class AcnooProductController extends Controller
 {
@@ -75,7 +76,7 @@ class AcnooProductController extends Controller
         $vats = Vat::where('business_id', auth()->user()->business_id)->latest()->get();
         $code = str_pad($product_id , 4, '0', STR_PAD_LEFT);
         $suppliers = Party::where('type', 'Supplier')->get();
-        $variants = \App\Models\ProductVariant::where('business_id', auth()->user()->business_id)->where('status', 1)->get();
+        $variants = Variant::with('subVariants')->get(); // or whatever relationship name you use
 
         return view('business::products.create', compact('categories', 'brands', 'units', 'code', 'vats', 'suppliers', 'variants'));
     }
