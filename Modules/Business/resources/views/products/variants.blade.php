@@ -68,3 +68,35 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // Delete Variant
+    $(document).on('click', '.delete-variant', function() {
+        var btn = $(this);
+        var id = btn.data('id');
+        if(confirm('Are you sure you want to delete this variant?')) {
+            $.ajax({
+                url: '/business/product-variants/' + id,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if(response.message) {
+                        btn.closest('tr').remove();
+                        alert(response.message);
+                    } else {
+                        alert('Deleted, but no message returned.');
+                    }
+                },
+                error: function(xhr) {
+                    alert('Delete failed!');
+                }
+            });
+        }
+    });
+});
+</script>
+@endpush
