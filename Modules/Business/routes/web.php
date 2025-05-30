@@ -324,7 +324,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
 });
 
 // Marketplace routes (public, no auth middleware)
-Route::domain('{business}.yourdomain.com')->group(function () {
+Route::domain('{business}.shyftcom.com')->group(function () {
     Route::get('/', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'showSubdomain'])
         ->name('marketplace.subdomain');
     Route::get('marketplace/{business_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
