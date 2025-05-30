@@ -105,4 +105,30 @@ class MarketplaceController extends Controller
         ]]);
         return back()->with('success', __('Order submitted!'));
     }
+
+    /**
+     * Get all products for a business by category (for View All logic)
+     */
+    public function getCategoryProducts($business_id, $category_id)
+    {
+        return Product::with(['category', 'brand', 'unit'])
+            ->where('business_id', $business_id)
+            ->where('category_id', $category_id)
+            ->where('productStock', '>', 0)
+            ->get();
+    }
+
+    /**
+     * Show all products for a specific category (View All page/section)
+     */
+    public function viewAllCategory(Request $request, $business_id, $category_id)
+    {
+        $business = Business::findOrFail($business_id);
+        $categories = Category::where('business_id', $business_id)->orderBy('categoryName')->get();
+        $products = $this->getCategoryProducts($business_id, $category_id);
+        $category = $categories->where('id', $category_id)->first();
+        if (!$category) abort(404);
+        // Optionally, you can reuse the same marketplace view and pass a flag for single-category mode
+        return view('business::products.marketplace', compact('products', 'business', 'categories', 'category', 'category_id'));
+    }
 }

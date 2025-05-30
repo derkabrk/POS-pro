@@ -252,7 +252,7 @@
         }
 
         .product-details {
-            background: #f8f9fa;
+            
             padding: 10px;
             border-radius: 10px;
             margin-bottom: 15px;
@@ -285,6 +285,8 @@
         }
 
         .qty-input {
+            background-color : transparent;
+            color :  white;
             border: none;
             text-align: center;
             width: 50px;
@@ -467,6 +469,97 @@
             40% { transform: translateY(-10px); }
             80% { transform: translateY(-5px); }
         }
+
+        /* Enhanced Order Summary Styles */
+        .enhanced-order-summary {
+            background: #2d223f;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .enhanced-order-summary h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .enhanced-order-summary h4::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--main-color);
+            border-radius: 10px;
+        }
+
+        .summary-details {
+            font-size: 0.9rem;
+            color: #f3f3fa;
+        }
+
+        .summary-details span {
+            font-weight: 500;
+        }
+
+        .summary-details .text-muted {
+            color: #b0b0c3;
+        }
+
+        .summary-details .text-info {
+            color: #17a2b8;
+        }
+
+        .summary-details .text-warning {
+            color: #ffc107;
+        }
+
+        .summary-details .text-success {
+            color: #28a745;
+        }
+
+        .place-order-btn {
+            background: var(--success-gradient);
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .place-order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .text-center small {
+            font-size: 0.8rem;
+        }
+
+        /* Custom Scrollbar for Webkit Browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2d223f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8c68cd;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7a57b8;
+        }
     </style>
 </head>
 <body>
@@ -530,14 +623,16 @@
                                                 {{ $products->where('category_id', $category->id)->count() }} items
                                             </span>
                                         </h3>
-                                        <button class="btn btn-outline-primary btn-sm">View All</button>
+                                        <button class="btn btn-outline-primary btn-sm view-all-btn" data-category-id="{{ $category->id }}" data-category-url="{{ route('marketplace.category.viewall', ['business_id' => $business->id, 'category_id' => $category->id]) }}">
+                                            <i class="fas fa-th-large me-1"></i>View All
+                                        </button>
                                     </div>
-                                    <div class="row g-3">
+                                    <div class="row g-3 category-products" data-category-id="{{ $category->id }}">
                                         @foreach($products->where('category_id', $category->id) as $product)
                                             <div class="col-md-6 col-lg-4 fade-in">
                                                 <div class="product-card">
                                                     <div class="product-image">
-                                                        <img src="{{ $product->productPicture ? asset($product->productPicture) : asset('demo_images/default-product.png') }}" alt="{{ $product->productName }}">
+                                                        <img src="{{ $product->productPicture ? asset($product->productPicture) : asset('demo_images/default-product.png') }}" alt="{{ $product->productName }}" onerror="this.onerror=null;this.src='https://placehold.co/400x300/232136/8c68cd?text=No+Image';" style="background: #232136; object-fit: cover; width: 100%; height: 100%; border-radius: 0;">
                                                         @if($product->productStock < 5)
                                                             <div class="product-badge">Low Stock</div>
                                                         @elseif($product->created_at && $product->created_at->gt(now()->subDays(14)))
@@ -634,22 +729,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <div class="form-group">
                                     <label class="form-label">Email Address *</label>
                                     <input type="email" class="form-control" required>
                                 </div>
-
                                 <div class="form-group">
                                     <label class="form-label">Phone Number *</label>
                                     <input type="tel" class="form-control" required>
                                 </div>
-
                                 <div class="form-group">
                                     <label class="form-label">Address *</label>
                                     <input type="text" class="form-control" required>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -670,61 +761,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <h4 class="mt-4 mb-3"><i class="fas fa-credit-card me-2"></i>Payment Information</h4>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">Payment Method</label>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="payment" id="credit-card" checked>
-                                                <label class="form-check-label" for="credit-card">
-                                                    <i class="fas fa-credit-card me-2"></i>Credit Card
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="payment" id="paypal">
-                                                <label class="form-check-label" for="paypal">
-                                                    <i class="fab fa-paypal me-2"></i>PayPal
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="payment" id="cash">
-                                                <label class="form-check-label" for="cash">
-                                                    <i class="fas fa-money-bill me-2"></i>Cash on Delivery
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="card-details">
-                                    <div class="form-group">
-                                        <label class="form-label">Card Number *</label>
-                                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label">Expiry Date *</label>
-                                                <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label">CVV *</label>
-                                                <input type="text" class="form-control" placeholder="123" maxlength="4">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="form-group">
                                     <label class="form-label">Special Instructions</label>
                                     <textarea class="form-control" rows="3" placeholder="Any special delivery instructions..."></textarea>
@@ -732,32 +768,36 @@
                             </form>
                         </div>
                     </div>
-
                     <div class="col-lg-4">
-                        <div class="order-summary">
+                        <div class="order-summary enhanced-order-summary">
                             <h4 class="mb-4"><i class="fas fa-receipt me-2"></i>Order Summary</h4>
-                            <div id="checkout-items"></div>
+                            <div id="checkout-items" class="mb-3"></div>
                             <hr>
-                            <div class="d-flex justify-content-between">
-                                <span>Subtotal:</span>
-                                <span id="checkout-subtotal">$0.00</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>Shipping:</span>
-                                <span>$10.00</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>Tax:</span>
-                                <span id="checkout-tax">$0.00</span>
+                            <div class="summary-details mb-2">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Subtotal</span>
+                                    <span id="checkout-subtotal" class="fw-semibold text-info">$0.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Shipping</span>
+                                    <span class="fw-semibold text-warning">$10.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Tax (8%)</span>
+                                    <span id="checkout-tax" class="fw-semibold text-success">$0.00</span>
+                                </div>
                             </div>
                             <hr>
-                            <div class="d-flex justify-content-between h5">
-                                <strong>Total:</strong>
-                                <strong id="checkout-total">$0.00</strong>
+                            <div class="d-flex justify-content-between align-items-center h4 mb-3">
+                                <strong>Total</strong>
+                                <strong id="checkout-total" class="text-primary">$0.00</strong>
                             </div>
-                            <button class="place-order-btn" onclick="placeOrder()">
+                            <button class="place-order-btn btn btn-lg btn-gradient w-100 mt-2" onclick="placeOrder()">
                                 <i class="fas fa-check me-2"></i>Place Order
                             </button>
+                            <div class="text-center mt-3">
+                                <small class="text-muted">By placing your order, you agree to our <a href="#" class="text-decoration-underline text-info">Terms & Conditions</a>.</small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -827,109 +867,9 @@
             container.innerHTML = generateProductsHTML(filteredProducts);
         }
 
-        // Get all products data
+        // Get all products data dynamically from Blade (PHP to JS)
         function getAllProductsData() {
-            return [
-                {
-                    id: '1',
-                    name: 'Premium Wireless Headphones',
-                    price: '299.99',
-                    stock: '15',
-                    category: 'electronics',
-                    image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400',
-                    description: 'High-quality noise-canceling headphones with premium sound quality.',
-                    brand: 'AudioTech',
-                    badge: 'New'
-                },
-                {
-                    id: '2',
-                    name: 'Latest Smartphone Pro',
-                    price: '899.99',
-                    stock: '8',
-                    category: 'electronics',
-                    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400',
-                    description: 'Cutting-edge smartphone with advanced camera and performance.',
-                    brand: 'TechPro',
-                    badge: 'Hot'
-                },
-                {
-                    id: '6',
-                    name: 'Gaming Laptop Ultra',
-                    price: '1299.99',
-                    stock: '5',
-                    category: 'electronics',
-                    image: 'https://images.unsplash.com/photo-1593642702821-c8da7659772c?w=400',
-                    description: 'High-performance gaming laptop with RTX graphics and fast SSD storage.',
-                    brand: 'GameTech',
-                    badge: 'Sale'
-                },
-                {
-                    id: '3',
-                    name: 'Designer Cotton T-Shirt',
-                    price: '49.99',
-                    stock: '25',
-                    category: 'clothing',
-                    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400',
-                    description: 'Premium cotton t-shirt with modern design and comfortable fit.',
-                    brand: 'FashionCo',
-                    badge: ''
-                },
-                {
-                    id: '7',
-                    name: 'Classic Denim Jacket',
-                    price: '89.99',
-                    stock: '18',
-                    category: 'clothing',
-                    image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400',
-                    description: 'Timeless denim jacket with vintage wash and perfect fit.',
-                    brand: 'DenimCo',
-                    badge: 'Trending'
-                },
-                {
-                    id: '4',
-                    name: 'Advanced JavaScript Guide',
-                    price: '39.99',
-                    stock: '12',
-                    category: 'books',
-                    image: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400',
-                    description: 'Comprehensive guide to modern JavaScript development and best practices.',
-                    brand: 'TechBooks',
-                    badge: ''
-                },
-                {
-                    id: '8',
-                    name: 'UI/UX Design Principles',
-                    price: '45.99',
-                    stock: '20',
-                    category: 'books',
-                    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-                    description: 'Master the art of user interface and experience design with practical examples.',
-                    brand: 'DesignBooks',
-                    badge: 'Bestseller'
-                },
-                {
-                    id: '5',
-                    name: 'Smart Self-Watering Plant Pot',
-                    price: '79.99',
-                    stock: '20',
-                    category: 'home',
-                    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400',
-                    description: 'Intelligent plant pot with automatic watering system and mobile app control.',
-                    brand: 'GreenTech',
-                    badge: ''
-                },
-                {
-                    id: '9',
-                    name: 'Premium Kitchen Utensil Set',
-                    price: '129.99',
-                    stock: '15',
-                    category: 'home',
-                    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400',
-                    description: 'Professional-grade kitchen utensils made from stainless steel with ergonomic design.',
-                    brand: 'KitchenPro',
-                    badge: 'Popular'
-                }
-            ];
+            return window.allProductsData || [];
         }
 
         // Generate HTML for products
@@ -1126,34 +1066,6 @@
             totalEl.textContent = `${total.toFixed(2)}`;
         }
 
-        // Payment Method Toggle
-        document.querySelectorAll('input[name="payment"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const cardDetails = document.getElementById('card-details');
-                if (this.id === 'credit-card') {
-                    cardDetails.style.display = 'block';
-                } else {
-                    cardDetails.style.display = 'none';
-                }
-            });
-        });
-
-        // Format Card Number
-        document.querySelector('input[placeholder="1234 5678 9012 3456"]')?.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
-            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
-            e.target.value = formattedValue;
-        });
-
-        // Format Expiry Date
-        document.querySelector('input[placeholder="MM/YY"]')?.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.substring(0, 2) + '/' + value.substring(2, 4);
-            }
-            e.target.value = value;
-        });
-
         // Place Order
         function placeOrder() {
             const form = document.getElementById('checkout-form');
@@ -1267,8 +1179,65 @@
             });
         }
 
+        // View All logic for category
+        function showCategoryAllProducts(categoryId) {
+            // Hide all category sections
+            document.querySelectorAll('.category-section').forEach(section => section.style.display = 'none');
+            // Hide all-products-view
+            document.getElementById('all-products-view').style.display = 'none';
+            // Show only the selected category section
+            const section = document.querySelector('.category-section .category-products[data-category-id="' + categoryId + '"]').closest('.category-section');
+            if (section) section.style.display = 'block';
+            // Scroll to the section
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Restore all category sections
+        function showAllCategorySections() {
+            document.querySelectorAll('.category-section').forEach(section => section.style.display = '');
+        }
+
+        // Attach event listeners for View All buttons (updated for backend route)
+        function attachViewAllListeners() {
+            document.querySelectorAll('.view-all-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('data-category-url');
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // ...existing code...
+            attachViewAllListeners();
+        });
+
+        // Optionally, add a back button to restore all categories when in View All mode
+        // You can add this button dynamically inside showCategoryAllProducts
+        // ...existing code...
+
         // Initialize search bar
         setTimeout(addSearchBar, 100);
+    </script>
+
+    <!-- Main Content -->
+    <script>
+        window.allProductsData = @json($products->map(function($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->productName,
+                'price' => (float) $product->productSalePrice,
+                'stock' => (int) $product->productStock,
+                'category' => $product->category_id,
+                'image' => $product->productPicture ? asset($product->productPicture) : asset('demo_images/default-product.png'),
+                'description' => $product->meta['description'] ?? '',
+                'brand' => $product->brand->brandName ?? '-',
+                'badge' => ($product->productStock < 5) ? 'Low Stock' : (($product->created_at && $product->created_at->gt(now()->subDays(14))) ? 'New' : ''),
+            ];
+        }));
     </script>
 </body>
 </html>

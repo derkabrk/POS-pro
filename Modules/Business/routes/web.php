@@ -325,4 +325,5 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
 
 // Marketplace routes (public, no auth middleware)
 Route::get('marketplace/{business_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
+Route::get('marketplace/{business_id}/category/{category_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'viewAllCategory'])->name('marketplace.category.viewall');
 Route::post('marketplace/order/{product_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'submitOrder'])->name('marketplace.order.submit');
