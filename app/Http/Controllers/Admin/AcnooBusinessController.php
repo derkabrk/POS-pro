@@ -388,8 +388,7 @@ class AcnooBusinessController extends Controller
             ]);
 
             // Update subdomain if plan is upgraded to a marketplace-enabled plan and subdomain is not set
-            $planIdForSubdomain = [2,3]; // TODO: Replace with actual plan IDs or config
-            if (in_array($request->plan_id, $planIdForSubdomain) && empty($business->subdomain)) {
+            if ($plan->marketplace_feature && empty($business->subdomain)) {
                 $business->subdomain = Business::generateUniqueSubdomain($business->companyName);
                 $business->save();
             }
