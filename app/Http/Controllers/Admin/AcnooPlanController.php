@@ -56,12 +56,14 @@ class AcnooPlanController extends Controller
             'subscriptionName' => 'required|string|max:255|unique:plans,subscriptionName',
             'subscriptionPrice' => 'required|numeric|min:0|max:9999999999999',
             'permissions' => 'required|array',
+            'marketplace_feature' => 'nullable|boolean',
         ]);
 
         Plan::create($request->except(['offerPrice','status','permissions']) + [
             'offerPrice' => $request->offerPrice ?? NULL,
             'status' => $request->status ? 1 : 0,
             'permissions' => $request->permissions,
+            'marketplace_feature' => $request->has('marketplace_feature'),
         ]);
 
         if ($request->ajax()) {
@@ -99,6 +101,7 @@ class AcnooPlanController extends Controller
             'offerPrice' => $request->offerPrice ?? NULL,
             'status' => $request->status ? 1 : 0,
             'permissions' => $request->permissions,
+            'marketplace_feature' => $request->has('marketplace_feature'),
         ]);
 
         if ($request->ajax()) {

@@ -230,4 +230,15 @@ class MarketplaceController extends Controller
 
         return response()->json(['success' => true, 'order_id' => $sale->id]);
     }
+
+    /**
+     * Show the marketplace for a business by subdomain (e.g. {business}.yourdomain.com)
+     */
+    public function showSubdomain(Request $request, $business)
+    {
+        // Find business by subdomain
+        $businessModel = Business::where('subdomain', $business)->firstOrFail();
+        // Reuse the show() logic by business_id
+        return $this->show($businessModel->id);
+    }
 }

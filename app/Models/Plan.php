@@ -22,6 +22,7 @@ class Plan extends Model
         'subscriptionPrice',
         'features',
         'permissions',
+        'marketplace_feature',
     ];
 
     /**
@@ -32,6 +33,7 @@ class Plan extends Model
     protected $casts = [
         'features' => 'json',
         'permissions' => 'json',
+        'marketplace_feature' => 'boolean',
     ];
 
     public function planSubscribes()

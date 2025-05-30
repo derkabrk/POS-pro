@@ -129,6 +129,12 @@ class AcnooBusinessController extends Controller
 
             $user = auth()->user();
 
+            // Assign subdomain if plan requires marketplace (e.g., plan_subscribe_id in [2,3])
+            $planIdForSubdomain = [2,3]; // TODO: Replace with actual plan IDs or config
+            $subdomain = null;
+            if ($request->plan_subscribe_id && in_array($request->plan_subscribe_id, $planIdForSubdomain)) {
+                $subdomain = Business::generateUniqueSubdomain($request->companyName);
+            }
             $business = Business::create([
                 'companyName' => $request->companyName,
                 'address' => $request->address,
@@ -139,7 +145,8 @@ class AcnooBusinessController extends Controller
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'user_id' => $user->id,
                 'type'=>  $request->type,
-            ]);
+                'subdomain' => $subdomain,
+            });
 
             $vat = Vat::create([
                 'name' => "Inital",
@@ -239,6 +246,7 @@ class AcnooBusinessController extends Controller
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
             'type' => 'required|integer|in:0,1,2',
+            'subdomain',
         ]);
 
         DB::beginTransaction();
@@ -378,6 +386,13 @@ class AcnooBusinessController extends Controller
                 'plan_subscribe_id' => $subscribe->id,
                 'will_expire' => $request->expieryDate,
             ]);
+
+            // Update subdomain if plan is upgraded to a marketplace-enabled plan and subdomain is not set
+            $planIdForSubdomain = [2,3]; // TODO: Replace with actual plan IDs or config
+            if (in_array($request->plan_id, $planIdForSubdomain) && empty($business->subdomain)) {
+                $business->subdomain = Business::generateUniqueSubdomain($business->companyName);
+                $business->save();
+            }
 
             sendNotification($subscribe->id, route('admin.subscription-reports.index', ['id' => $subscribe->id]), __('Plan subscribed by ' . auth()->user()->name));
 

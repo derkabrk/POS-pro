@@ -114,6 +114,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-xxl-6 col-md-6">
+                                    <div>
+                                        <label for="marketplace_feature" class="form-label">{{ __('Marketplace Feature') }}</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" name="marketplace_feature" id="marketplace_feature" value="1">
+                                            <label class="form-check-label" for="marketplace_feature">{{ __('Enable Marketplace for this plan') }}</label>
+                                        </div>
+                                        <small class="text-muted">{{ __('If enabled, businesses on this plan will get a marketplace subdomain.') }}</small>
+                                    </div>
+                                </div>
                                 <div class="col-12">
                                     <div class="row feature-list">
                                         {{-- Will be added dynamically. --}}

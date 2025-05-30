@@ -29,6 +29,7 @@ class Business extends Model
         'vat_name',
         'vat_no',
         "type",
+        'subdomain',
     ];
 
     public function getTypeTextAttribute()
@@ -66,5 +67,22 @@ class Business extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Generate a unique, DNS-safe subdomain for a business based on company name or random string.
+     */
+    public static function generateUniqueSubdomain($companyName)
+    {
+        // Convert to slug, allow only a-z, 0-9, hyphens, max 30 chars
+        $base = strtolower(preg_replace('/[^a-z0-9]+/', '-', $companyName));
+        $base = trim($base, '-');
+        $base = substr($base, 0, 30);
+        $subdomain = $base;
+        $i = 1;
+        while (self::where('subdomain', $subdomain)->exists()) {
+            $subdomain = $base . ($i++);
+        }
+        return $subdomain;
     }
 }
