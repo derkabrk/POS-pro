@@ -6,6 +6,7 @@
 
 @section('content')
 <div class="container-fluid">
+    <a href="{{ url('/marketplace/' . $business_id) }}" class="btn btn-primary mb-3">{{ __('Go to Marketplace Home') }}</a>
     <h2 class="mb-4">{{ __('Marketplace for Store') }}: <span id="store-name"></span></h2>
     <div class="row mb-4">
         <div class="col-md-6">
