@@ -150,4 +150,84 @@ class MarketplaceController extends Controller
         // Optionally, you can reuse the same marketplace view and pass a flag for single-category mode
         return view('business::products.marketplace', compact('products', 'business', 'categories', 'category', 'category_id'));
     }
+
+    // Store order from checkout (AJAX endpoint)
+    public function storeCheckoutOrder(Request $request, $business_id)
+    {
+        $request->validate([
+            'cart' => 'required|array|min:1',
+            'customer_name' => 'required|string|max:255',
+            'customer_email' => 'nullable|email',
+            'customer_phone' => 'nullable|string|max:32',
+            'customer_address' => 'nullable|string|max:255',
+            'customer_city' => 'nullable|string|max:100',
+            'customer_state' => 'nullable|string|max:100',
+            'customer_zip' => 'nullable|string|max:20',
+            'customer_instructions' => 'nullable|string|max:500',
+        ]);
+
+        // Store guest customer for this business
+        $customer = Party::firstOrCreate(
+            [
+                'business_id' => $business_id,
+                'phone' => $request->customer_phone,
+                'email' => $request->customer_email,
+                'type' => 'Guest',
+            ],
+            [
+                'name' => $request->customer_name,
+                'address' => $request->customer_address,
+                'city' => $request->customer_city,
+                'state' => $request->customer_state,
+                'zip' => $request->customer_zip,
+                'type' => 'Guest',
+                'status' => 1,
+            ]
+        );
+
+        // Prepare sale data
+        $cart = $request->cart;
+        $subtotal = collect($cart)->sum(function($item) {
+            return $item['price'] * $item['qty'];
+        });
+        $shipping = 10.00;
+        $tax = $subtotal * 0.08;
+        $totalAmount = $subtotal + $shipping + $tax;
+
+        $products = collect($cart)->map(function($item) {
+            return [
+                'product_id' => $item['id'],
+                'productName' => $item['name'],
+                'quantity' => $item['qty'],
+                'price' => $item['price'],
+            ];
+        });
+
+        $sale = Sale::create([
+            'business_id' => $business_id,
+            'party_id' => $customer->id,
+            'user_id' => null, // guest order
+            'source' => 'marketplace',
+            'totalAmount' => $totalAmount,
+            'paidAmount' => 0,
+            'dueAmount' => $totalAmount,
+            'isPaid' => 0,
+            'products' => json_encode($products),
+            'saleDate' => now(),
+            'meta' => json_encode([
+                'shipping' => $shipping,
+                'tax' => $tax,
+                'instructions' => $request->customer_instructions,
+            ]),
+        ]);
+
+        // Optionally, store customer info in session for autofill
+        session(['marketplace_customer_' . $business_id => [
+            'name' => $customer->name,
+            'email' => $customer->email,
+            'phone' => $customer->phone,
+        ]]);
+
+        return response()->json(['success' => true, 'order_id' => $sale->id]);
+    }
 }

@@ -1081,20 +1081,87 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
             btn.disabled = true;
 
-            // Simulate order processing
-            setTimeout(() => {
-                alert('Order placed successfully! Thank you for your purchase.');
-                cart = [];
-                updateCartDisplay();
-                backToMarketplace();
-                
-                // Reset button
+            // Gather form data
+            const formData = new FormData(form);
+            const customer_name = formData.get('first_name') + ' ' + formData.get('last_name');
+            const customer_email = formData.get('email');
+            const customer_phone = formData.get('phone');
+            const customer_address = formData.get('address');
+            const customer_city = formData.get('city');
+            const customer_state = formData.get('state');
+            const customer_zip = formData.get('zip');
+            const customer_instructions = formData.get('special_instructions');
+
+            // Send AJAX request to backend
+            fetch(`/marketplace/${businessId}/checkout-order`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({
+                    cart: cart,
+                    customer_name,
+                    customer_email,
+                    customer_phone,
+                    customer_address,
+                    customer_city,
+                    customer_state,
+                    customer_zip,
+                    customer_instructions
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // On order placed success
+                    if (typeof onOrderPlacedSuccess === 'function') {
+                        onOrderPlacedSuccess(data);
+                    }
+                    alert('Order placed successfully! Thank you for your purchase.');
+                    cart = [];
+                    updateCartDisplay();
+                    backToMarketplace();
+                    form.reset();
+                    localStorage.removeItem('marketplace_cart');
+                } else {
+                    alert('Order failed. Please try again.');
+                }
+            })
+            .catch(() => {
+                alert('Order failed. Please try again.');
+            })
+            .finally(() => {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-                
-                // Reset form
-                form.reset();
-            }, 3000);
+            });
+        }
+
+        // Modern UI for order placed success
+        function onOrderPlacedSuccess(data) {
+            // Remove any existing modal
+            const oldModal = document.getElementById('order-success-modal');
+            if (oldModal) oldModal.remove();
+
+            // Create modal HTML
+            const modal = document.createElement('div');
+            modal.id = 'order-success-modal';
+            modal.innerHTML = `
+                <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(35,33,54,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;">
+                    <div style="background:#232136;border-radius:24px;box-shadow:0 8px 32px rgba(140,104,205,0.25);padding:48px 32px 32px 32px;max-width:400px;width:90%;text-align:center;position:relative;">
+                        <div style="background:linear-gradient(135deg,#8c68cd 0%,#4b3269 100%);width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px auto;">
+                            <i class='fas fa-check fa-2x' style='color:#fff;'></i>
+                        </div>
+                        <h2 style="color:#fff;font-family:'Saira',sans-serif;font-weight:700;font-size:2rem;margin-bottom:12px;">Order Placed!</h2>
+                        <p style="color:#b993d6;font-size:1.1rem;margin-bottom:24px;">Thank you for your purchase.<br>Your order #<b>${data.order_id || ''}</b> has been received.</p>
+                        <button id="close-order-success" style="background:linear-gradient(135deg,#6ee7b7 0%,#3b82f6 100%);color:#fff;border:none;padding:12px 32px;border-radius:50px;font-weight:600;font-size:1rem;box-shadow:0 2px 8px rgba(79,172,254,0.15);transition:all 0.2s;">Continue Shopping</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.getElementById('close-order-success').onclick = function() {
+                modal.remove();
+            };
         }
 
         // Initialize
