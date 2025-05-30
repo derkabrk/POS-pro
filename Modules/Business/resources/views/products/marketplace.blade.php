@@ -1224,7 +1224,7 @@
     </script>
 
     <!-- Main Content -->
-<?php
+
 <script>
 window.allProductsData = @json($productsArray);
 </script>
