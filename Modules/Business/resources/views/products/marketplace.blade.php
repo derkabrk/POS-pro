@@ -13,29 +13,27 @@
                 <div class="col-lg-8">
                     <div class="row g-4" id="marketplace-products">
                         @forelse($products as $product)
-                        @if($product->business_id == $business_id)
                         <div class="col-md-6 col-xl-4 d-flex align-items-stretch">
-                            <div class="card h-100 shadow-sm w-100">
-                                <img src="{{ $product->productPicture ? asset('uploads/products/' . $product->productPicture) : asset('assets/images/icons/upload.png') }}" class="card-img-top" alt="{{ $product->productName }}" style="object-fit:cover; height:180px;">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title mb-1 text-center">{{ $product->productName }}</h5>
+                            <div class="card h-100 shadow border-0 rounded-4 w-100" style="transition: box-shadow 0.2s;">
+                                <img src="{{ $product->productPicture ? asset('uploads/products/' . $product->productPicture) : asset('assets/images/icons/upload.png') }}" class="card-img-top rounded-top-4" alt="{{ $product->productName }}" style="object-fit:cover; height:180px;">
+                                <div class="card-body d-flex flex-column p-4">
+                                    <h5 class="card-title mb-2 text-center fw-bold text-primary">{{ $product->productName }}</h5>
                                     <div class="mb-1 text-muted small text-center">{{ $product->category->categoryName ?? '' }}</div>
-                                    <div class="mb-1 fw-bold text-center">{{ $product->productSalePrice }} {{ business_currency()->symbol }}</div>
-                                    <div class="mb-2 text-center">{{ $product->productDescription ?? '' }}</div>
-                                    <ul class="list-unstyled mb-2 small text-center">
+                                    <div class="mb-2 fw-bold text-center fs-5 text-success">{{ $product->productSalePrice }} {{ business_currency()->symbol }}</div>
+                                    <div class="mb-3 text-center text-secondary small">{{ $product->productDescription ?? '' }}</div>
+                                    <ul class="list-unstyled mb-3 small text-center">
                                         <li><b>{{ __('Brand:') }}</b> {{ $product->brand->brandName ?? '-' }}</li>
                                         <li><b>{{ __('Unit:') }}</b> {{ $product->unit->unitName ?? '-' }}</li>
                                         <li><b>{{ __('Stock:') }}</b> {{ $product->productStock }}</li>
                                     </ul>
-                                    <div class="input-group mb-2 justify-content-center">
-                                        <span class="input-group-text">{{ __('Qty') }}</span>
-                                        <input type="number" min="1" max="{{ $product->productStock }}" value="1" class="form-control cart-qty" id="qty-{{ $product->id }}" style="max-width:80px;">
+                                    <div class="input-group mb-3 justify-content-center">
+                                        <span class="input-group-text bg-light border-0">{{ __('Qty') }}</span>
+                                        <input type="number" min="1" max="{{ $product->productStock }}" value="1" class="form-control cart-qty text-center border-0 bg-light" id="qty-{{ $product->id }}" style="max-width:80px;">
                                     </div>
-                                    <button class="btn btn-primary mt-auto add-to-cart-btn w-100" data-id="{{ $product->id }}" data-name="{{ $product->productName }}" data-price="{{ $product->productSalePrice }}" data-stock="{{ $product->productStock }}">{{ __('Add to Cart') }}</button>
+                                    <button class="btn btn-primary mt-auto add-to-cart-btn w-100 rounded-pill py-2 fw-semibold shadow-sm" data-id="{{ $product->id }}" data-name="{{ $product->productName }}" data-price="{{ $product->productSalePrice }}" data-stock="{{ $product->productStock }}">{{ __('Add to Cart') }}</button>
                                 </div>
                             </div>
                         </div>
-                        @endif
                         @empty
                         <div class="col-12">
                             <div class="alert alert-info text-center">{{ __('No products available for this business.') }}</div>
@@ -44,14 +42,14 @@
                     </div>
                 </div>
                 <div class="col-lg-4 d-flex align-items-start justify-content-center">
-                    <div id="cart-summary" class="card sticky-top w-100" style="top:90px; display:none; max-width:350px;">
-                        <div class="card-header bg-success text-white text-center">{{ __('Your Cart') }}</div>
-                        <div class="card-body">
-                            <ul class="list-group mb-2" id="cart-items"></ul>
-                            <div class="mb-3 text-end">
-                                <b>{{ __('Total:') }}</b> <span id="cart-total">0</span> {{ business_currency()->symbol }}
+                    <div id="cart-summary" class="card sticky-top w-100 shadow border-0 rounded-4" style="top:90px; display:none; max-width:350px;">
+                        <div class="card-header bg-success text-white text-center rounded-top-4 fw-bold fs-5">{{ __('Your Cart') }}</div>
+                        <div class="card-body p-4">
+                            <ul class="list-group mb-3" id="cart-items"></ul>
+                            <div class="mb-4 text-end">
+                                <b class="fs-6">{{ __('Total:') }}</b> <span id="cart-total" class="fs-5 fw-bold">0</span> <span class="text-success fw-bold">{{ business_currency()->symbol }}</span>
                             </div>
-                            <a href="#" id="checkout-btn" class="btn btn-success w-100">{{ __('Checkout') }}</a>
+                            <a href="#" id="checkout-btn" class="btn btn-success w-100 rounded-pill py-2 fw-semibold shadow-sm">{{ __('Checkout') }}</a>
                         </div>
                     </div>
                 </div>
