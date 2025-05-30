@@ -1224,20 +1224,22 @@
     </script>
 
     <!-- Main Content -->
-    <script>
-        window.allProductsData = @json($products->map(function($product) {
-            return [
-                'id' => $product->id,
-                'name' => $product->productName,
-                'price' => (float) $product->productSalePrice,
-                'stock' => (int) $product->productStock,
-                'category' => $product->category_id,
-                'image' => $product->productPicture ? asset($product->productPicture) : asset('demo_images/default-product.png'),
-                'description' => $product->meta['description'] ?? '',
-                'brand' => $product->brand->brandName ?? '-',
-                'badge' => ($product->productStock < 5) ? 'Low Stock' : (($product->created_at && $product->created_at->gt(now()->subDays(14))) ? 'New' : ''),
-            ];
-        })->toArray());
-    </script>
+ <script>
+window.allProductsData = @json(
+    $products->map(function($product) {
+        return [
+            'id' => $product->id,
+            'name' => $product->productName,
+            'price' => (float) $product->productSalePrice,
+            'stock' => (int) $product->productStock,
+            'category' => $product->category_id,
+            'image' => $product->productPicture ? asset($product->productPicture) : asset('demo_images/default-product.png'),
+            'description' => $product->meta['description'] ?? '',
+            'brand' => $product->brand->brandName ?? '-',
+            'badge' => ($product->productStock < 5) ? 'Low Stock' : (($product->created_at && $product->created_at->gt(now()->subDays(14))) ? 'New' : ''),
+        ];
+    })->values()->toArray()
+);
+</script>
 </body>
 </html>
