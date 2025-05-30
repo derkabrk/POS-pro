@@ -1237,7 +1237,7 @@
                 'brand' => $product->brand->brandName ?? '-',
                 'badge' => ($product->productStock < 5) ? 'Low Stock' : (($product->created_at && $product->created_at->gt(now()->subDays(14))) ? 'New' : ''),
             ];
-        }));
+        })->toArray());
     </script>
 </body>
 </html>
