@@ -1032,6 +1032,7 @@
             currentPage = 'marketplace';
             document.getElementById('checkout-page').style.display = 'none';
             document.getElementById('marketplace-page').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Ensure scroll to top for better UX
         }
 
         // Update Checkout Summary
