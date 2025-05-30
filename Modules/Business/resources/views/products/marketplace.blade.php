@@ -1,69 +1,40 @@
-@extends('business::layouts.master')
 
 @section('title')
     {{ __('Marketplace') }}
 @endsection
 
+@section('css')
+@endsection
+
 @section('content')
-<style>
-/* Hide default layout elements for single-page marketplace */
-header, .sidebar, .footer, #footer, .main-footer, .app-sidebar, .app-header, .layout-footer, .layout-header {
-    display: none !important;
-}
-body, html {
-    background: #f7f8fa !important;
-}
-.marketplace-header {
-    background: linear-gradient(90deg, #4f8cff 0%, #38cfa6 100%);
-    color: #fff;
-    border-radius: 0 0 2rem 2rem;
-    box-shadow: 0 4px 24px rgba(79,140,255,0.08);
-    padding: 2.5rem 1rem 2rem 1rem;
-    margin-bottom: 2.5rem;
-    text-align: center;
-    position: relative;
-}
-.marketplace-header .marketplace-title {
-    font-size: 2.1rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
-}
-.marketplace-header .marketplace-business {
-    font-size: 1.2rem;
-    font-weight: 400;
-    opacity: 0.95;
-    margin-bottom: 0;
-}
-</style>
-<div class="marketplace-header">
-    <div class="marketplace-title">{{ __('Marketplace') }}</div>
-    <div class="marketplace-business">{{ $businessName ?? __('Business') }}</div>
+<div class="marketplace-header bg-primary-gradient text-white rounded-bottom-4 shadow-sm mb-4 text-center py-5">
+    <div class="marketplace-title display-5 fw-bold mb-2">{{ __('Marketplace') }}</div>
+    <div class="marketplace-business h5 mb-0 opacity-75">{{ $businessName ?? __('Business') }}</div>
 </div>
-<div class="container-fluid py-4 d-flex flex-column align-items-center justify-content-center" style="min-height:calc(100vh - 80px);">
-    <div class="row w-100 justify-content-center" style="margin-top:40px;">
+<div class="container-fluid py-4 d-flex flex-column align-items-center justify-content-center min-vh-100">
+    <div class="row w-100 justify-content-center mt-4">
         <div class="col-xl-9 col-lg-10 col-md-11">
-            <h2 class="text-center mb-3 fw-bold" style="font-size:1.6rem;">{{ __('Marketplace for Store') }}</h2>
+            <h2 class="text-center mb-3 fw-bold fs-3 text-primary">{{ __('Marketplace for Store') }}</h2>
             <div class="row justify-content-center g-3">
                 <div class="col-lg-8 col-md-7">
                     <div class="row g-3 justify-content-center" id="marketplace-products">
                         @forelse($products as $product)
                         <div class="col-12 col-sm-6 col-lg-4 d-flex align-items-stretch">
-                            <div class="card h-100 shadow border-0 rounded-4 w-100 p-2" style="transition: box-shadow 0.2s; min-width:220px; max-width:320px; margin:auto;">
-                                <img src="{{ $product->productPicture ? asset('uploads/products/' . $product->productPicture) : asset('assets/images/icons/upload.png') }}" class="card-img-top rounded-top-4 mx-auto" alt="{{ $product->productName }}" style="object-fit:cover; height:110px; width:100%; max-width:180px;">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 w-100 p-2 marketplace-product-card">
+                                <img src="{{ $product->productPicture ? asset('uploads/products/' . $product->productPicture) : asset('assets/images/icons/upload.png') }}" class="card-img-top rounded-top-4 mx-auto object-fit-cover" alt="{{ $product->productName }}" style="height:110px; width:100%; max-width:180px;">
                                 <div class="card-body d-flex flex-column p-2">
-                                    <h5 class="card-title mb-1 text-center fw-semibold text-primary" style="font-size:1.1rem;">{{ $product->productName }}</h5>
+                                    <h5 class="card-title mb-1 text-center fw-semibold text-primary fs-6">{{ $product->productName }}</h5>
                                     <div class="mb-1 text-muted small text-center">{{ $product->category->categoryName ?? '' }}</div>
                                     <div class="mb-1 fw-bold text-center fs-6 text-success">{{ $product->productSalePrice }} {{ business_currency()->symbol }}</div>
-                                    <div class="mb-2 text-center text-secondary small" style="font-size:0.9rem;">{{ $product->productDescription ?? '' }}</div>
-                                    <ul class="list-unstyled mb-2 small text-center" style="font-size:0.85rem;">
+                                    <div class="mb-2 text-center text-secondary small">{{ $product->productDescription ?? '' }}</div>
+                                    <ul class="list-unstyled mb-2 small text-center">
                                         <li><b>{{ __('Brand:') }}</b> {{ $product->brand->brandName ?? '-' }}</li>
                                         <li><b>{{ __('Unit:') }}</b> {{ $product->unit->unitName ?? '-' }}</li>
                                         <li><b>{{ __('Stock:') }}</b> {{ $product->productStock }}</li>
                                     </ul>
                                     <div class="input-group mb-2 justify-content-center" style="max-width:120px; margin:auto;">
-                                        <span class="input-group-text bg-light border-0 px-2 py-1" style="font-size:0.9rem;">{{ __('Qty') }}</span>
-                                        <input type="number" min="1" max="{{ $product->productStock }}" value="1" class="form-control cart-qty text-center border-0 bg-light px-2 py-1" id="qty-{{ $product->id }}" style="max-width:50px; font-size:0.9rem;">
+                                        <span class="input-group-text bg-light border-0 px-2 py-1 small">{{ __('Qty') }}</span>
+                                        <input type="number" min="1" max="{{ $product->productStock }}" value="1" class="form-control cart-qty text-center border-0 bg-light px-2 py-1 small" id="qty-{{ $product->id }}" style="max-width:50px;">
                                     </div>
                                     <button class="btn btn-primary mt-auto add-to-cart-btn w-100 rounded-pill py-1 fw-semibold shadow-sm" style="font-size:0.95rem;">{{ __('Add to Cart') }}</button>
                                 </div>
@@ -77,7 +48,7 @@ body, html {
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-5 d-flex align-items-start justify-content-center">
-                    <div id="cart-summary" class="card sticky-top w-100 shadow border-0 rounded-4" style="top:90px; display:none; max-width:320px; min-width:220px;">
+                    <div id="cart-summary" class="card sticky-top w-100 shadow border-0 rounded-4 marketplace-cart-summary" style="top:90px; display:none; max-width:320px; min-width:220px;">
                         <div class="card-header bg-success text-white text-center rounded-top-4 fw-bold fs-6 py-2">{{ __('Your Cart') }}</div>
                         <div class="card-body p-3">
                             <ul class="list-group mb-2" id="cart-items"></ul>
@@ -92,7 +63,6 @@ body, html {
         </div>
     </div>
 </div>
-
 @push('scripts')
 <script>
 let cart = [];
