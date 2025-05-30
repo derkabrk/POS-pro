@@ -11,13 +11,21 @@ use Illuminate\Support\Facades\Session;
 
 class MarketplaceController extends Controller
 {
-    // Show marketplace for a given store (business_id)
-    public function show($business_id)
+    /**
+     * Get all products for a business (with all details)
+     */
+    public function getBusinessProducts($business_id)
     {
-        $products = Product::with(['category', 'brand', 'unit'])
+        return Product::with(['category', 'brand', 'unit'])
             ->where('business_id', $business_id)
             ->where('productStock', '>', 0)
             ->get();
+    }
+
+    // Show marketplace for a given store (business_id)
+    public function show($business_id)
+    {
+        $products = $this->getBusinessProducts($business_id);
         $customer = null;
         $orderHistory = collect();
         // Try to get customer info from session for autofill

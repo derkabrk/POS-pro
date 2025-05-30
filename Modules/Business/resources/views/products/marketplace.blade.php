@@ -6,10 +6,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">{{ __('Marketplace for Store') }}</h2>
-        <a href="{{ route('marketplace.show', $business_id) }}" class="btn btn-outline-primary">{{ __('Marketplace Home') }}</a>
-    </div>
+
     <div class="row">
         <div class="col-lg-8">
             <div class="row" id="marketplace-products">
