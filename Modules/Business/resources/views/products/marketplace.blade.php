@@ -1224,29 +1224,9 @@
     </script>
 
     <!-- Main Content -->
+<?php
 <script>
-window.allProductsData = @json(
-    $products->map(function($product) {
-        $badge = '';
-        if ($product->productStock < 5) {
-            $badge = 'Low Stock';
-        } elseif ($product->created_at && $product->created_at->gt(now()->subDays(14))) {
-            $badge = 'New';
-        }
-        
-        return [
-            'id' => $product->id,
-            'name' => $product->productName,
-            'price' => (float) $product->productSalePrice,
-            'stock' => (int) $product->productStock,
-            'category' => $product->category_id,
-            'image' => $product->productPicture ? asset($product->productPicture) : asset('demo_images/default-product.png'),
-            'description' => $product->meta['description'] ?? '',
-            'brand' => $product->brand->brandName ?? '-',
-            'badge' => $badge,
-        ];
-    })->values()->toArray()
-);
+window.allProductsData = @json($productsArray);
 </script>
 </body>
 </html>
