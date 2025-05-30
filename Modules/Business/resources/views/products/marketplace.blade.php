@@ -810,6 +810,9 @@
         let cart = [];
         let currentPage = 'marketplace';
 
+        // Get businessId from a global JS variable or a data attribute
+        const businessId = window.businessId || {{ $business->id }};
+
         // Loading Screen
         window.addEventListener('load', function() {
             setTimeout(() => {
