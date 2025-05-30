@@ -118,11 +118,14 @@ function updateCartDisplay() {
 }
 document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
     btn.addEventListener('click', function() {
+        const card = this.closest('.card');
         const id = this.dataset.id;
         const name = this.dataset.name;
         const price = parseFloat(this.dataset.price);
         const stock = parseInt(this.dataset.stock);
-        const qty = parseInt(document.getElementById('qty-' + id).value);
+        // Always get the qty input inside the same card
+        const qtyInput = card.querySelector('.cart-qty');
+        const qty = parseInt(qtyInput.value);
         if (qty < 1 || qty > stock) return alert('Invalid quantity');
         const existing = cart.find(item => item.id === id);
         if (existing) {
@@ -137,8 +140,19 @@ document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
 document.getElementById('checkout-btn').addEventListener('click', function(e) {
     e.preventDefault();
     if(cart.length === 0) return alert('Cart is empty!');
+    // Save cart to localStorage and redirect
     localStorage.setItem('marketplace_cart', JSON.stringify(cart));
     window.location.href = '/marketplace/checkout?business_id={{ $business_id }}';
+});
+// On page load, restore cart from localStorage if available
+window.addEventListener('DOMContentLoaded', function() {
+    try {
+        const savedCart = JSON.parse(localStorage.getItem('marketplace_cart') || '[]');
+        if (Array.isArray(savedCart) && savedCart.length > 0) {
+            cart = savedCart;
+            updateCartDisplay();
+        }
+    } catch (e) {}
 });
 </script>
 @endpush
