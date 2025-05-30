@@ -5,6 +5,41 @@
 @endsection
 
 @section('content')
+<style>
+/* Hide default layout elements for single-page marketplace */
+header, .sidebar, .footer, #footer, .main-footer, .app-sidebar, .app-header, .layout-footer, .layout-header {
+    display: none !important;
+}
+body, html {
+    background: #f7f8fa !important;
+}
+.marketplace-header {
+    background: linear-gradient(90deg, #4f8cff 0%, #38cfa6 100%);
+    color: #fff;
+    border-radius: 0 0 2rem 2rem;
+    box-shadow: 0 4px 24px rgba(79,140,255,0.08);
+    padding: 2.5rem 1rem 2rem 1rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    position: relative;
+}
+.marketplace-header .marketplace-title {
+    font-size: 2.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+.marketplace-header .marketplace-business {
+    font-size: 1.2rem;
+    font-weight: 400;
+    opacity: 0.95;
+    margin-bottom: 0;
+}
+</style>
+<div class="marketplace-header">
+    <div class="marketplace-title">{{ __('Marketplace') }}</div>
+    <div class="marketplace-business">{{ $businessName ?? __('Business') }}</div>
+</div>
 <div class="container-fluid py-4 d-flex flex-column align-items-center justify-content-center" style="min-height:calc(100vh - 80px);">
     <div class="row w-100 justify-content-center" style="margin-top:40px;">
         <div class="col-xl-9 col-lg-10 col-md-11">
