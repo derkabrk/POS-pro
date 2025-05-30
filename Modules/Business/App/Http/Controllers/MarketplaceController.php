@@ -5,6 +5,8 @@ namespace Modules\Business\App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Party;
+use App\Models\Business;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
@@ -26,6 +28,8 @@ class MarketplaceController extends Controller
     public function show($business_id)
     {
         $products = $this->getBusinessProducts($business_id);
+        $business = Business::findOrFail($business_id);
+        $categories = Category::where('business_id', $business_id)->orderBy('categoryName')->get();
         $customer = null;
         $orderHistory = collect();
         // Try to get customer info from session for autofill
@@ -45,7 +49,7 @@ class MarketplaceController extends Controller
                     ->get();
             }
         }
-        return view('business::products.marketplace', compact('products', 'orderHistory', 'customer', 'business_id'));
+        return view('business::products.marketplace', compact('products', 'orderHistory', 'customer', 'business_id', 'business', 'categories'));
     }
 
     // Handle order submission for a product
