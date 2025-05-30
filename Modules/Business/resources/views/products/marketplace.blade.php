@@ -1,3 +1,4 @@
+@extends('business::layouts.master1')
 
 @section('title')
     {{ __('Marketplace') }}
