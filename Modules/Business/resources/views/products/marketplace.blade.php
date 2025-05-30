@@ -5,32 +5,32 @@
 @endsection
 
 @section('content')
-<div class="container-fluid py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <h2 class="text-center mb-4 fw-bold">{{ __('Marketplace for Store') }}</h2>
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="row g-4" id="marketplace-products">
+<div class="container-fluid py-4 d-flex flex-column align-items-center justify-content-center" style="min-height:calc(100vh - 80px);">
+    <div class="row w-100 justify-content-center" style="margin-top:40px;">
+        <div class="col-xl-9 col-lg-10 col-md-11">
+            <h2 class="text-center mb-3 fw-bold" style="font-size:1.6rem;">{{ __('Marketplace for Store') }}</h2>
+            <div class="row justify-content-center g-3">
+                <div class="col-lg-8 col-md-7">
+                    <div class="row g-3 justify-content-center" id="marketplace-products">
                         @forelse($products as $product)
-                        <div class="col-md-6 col-xl-4 d-flex align-items-stretch">
-                            <div class="card h-100 shadow border-0 rounded-4 w-100" style="transition: box-shadow 0.2s;">
-                                <img src="{{ $product->productPicture ? asset('uploads/products/' . $product->productPicture) : asset('assets/images/icons/upload.png') }}" class="card-img-top rounded-top-4" alt="{{ $product->productName }}" style="object-fit:cover; height:180px;">
-                                <div class="card-body d-flex flex-column p-4">
-                                    <h5 class="card-title mb-2 text-center fw-bold text-primary">{{ $product->productName }}</h5>
+                        <div class="col-12 col-sm-6 col-lg-4 d-flex align-items-stretch">
+                            <div class="card h-100 shadow border-0 rounded-4 w-100 p-2" style="transition: box-shadow 0.2s; min-width:220px; max-width:320px; margin:auto;">
+                                <img src="{{ $product->productPicture ? asset('uploads/products/' . $product->productPicture) : asset('assets/images/icons/upload.png') }}" class="card-img-top rounded-top-4 mx-auto" alt="{{ $product->productName }}" style="object-fit:cover; height:110px; width:100%; max-width:180px;">
+                                <div class="card-body d-flex flex-column p-2">
+                                    <h5 class="card-title mb-1 text-center fw-semibold text-primary" style="font-size:1.1rem;">{{ $product->productName }}</h5>
                                     <div class="mb-1 text-muted small text-center">{{ $product->category->categoryName ?? '' }}</div>
-                                    <div class="mb-2 fw-bold text-center fs-5 text-success">{{ $product->productSalePrice }} {{ business_currency()->symbol }}</div>
-                                    <div class="mb-3 text-center text-secondary small">{{ $product->productDescription ?? '' }}</div>
-                                    <ul class="list-unstyled mb-3 small text-center">
+                                    <div class="mb-1 fw-bold text-center fs-6 text-success">{{ $product->productSalePrice }} {{ business_currency()->symbol }}</div>
+                                    <div class="mb-2 text-center text-secondary small" style="font-size:0.9rem;">{{ $product->productDescription ?? '' }}</div>
+                                    <ul class="list-unstyled mb-2 small text-center" style="font-size:0.85rem;">
                                         <li><b>{{ __('Brand:') }}</b> {{ $product->brand->brandName ?? '-' }}</li>
                                         <li><b>{{ __('Unit:') }}</b> {{ $product->unit->unitName ?? '-' }}</li>
                                         <li><b>{{ __('Stock:') }}</b> {{ $product->productStock }}</li>
                                     </ul>
-                                    <div class="input-group mb-3 justify-content-center">
-                                        <span class="input-group-text bg-light border-0">{{ __('Qty') }}</span>
-                                        <input type="number" min="1" max="{{ $product->productStock }}" value="1" class="form-control cart-qty text-center border-0 bg-light" id="qty-{{ $product->id }}" style="max-width:80px;">
+                                    <div class="input-group mb-2 justify-content-center" style="max-width:120px; margin:auto;">
+                                        <span class="input-group-text bg-light border-0 px-2 py-1" style="font-size:0.9rem;">{{ __('Qty') }}</span>
+                                        <input type="number" min="1" max="{{ $product->productStock }}" value="1" class="form-control cart-qty text-center border-0 bg-light px-2 py-1" id="qty-{{ $product->id }}" style="max-width:50px; font-size:0.9rem;">
                                     </div>
-                                    <button class="btn btn-primary mt-auto add-to-cart-btn w-100 rounded-pill py-2 fw-semibold shadow-sm" data-id="{{ $product->id }}" data-name="{{ $product->productName }}" data-price="{{ $product->productSalePrice }}" data-stock="{{ $product->productStock }}">{{ __('Add to Cart') }}</button>
+                                    <button class="btn btn-primary mt-auto add-to-cart-btn w-100 rounded-pill py-1 fw-semibold shadow-sm" style="font-size:0.95rem;">{{ __('Add to Cart') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -41,15 +41,15 @@
                         @endforelse
                     </div>
                 </div>
-                <div class="col-lg-4 d-flex align-items-start justify-content-center">
-                    <div id="cart-summary" class="card sticky-top w-100 shadow border-0 rounded-4" style="top:90px; display:none; max-width:350px;">
-                        <div class="card-header bg-success text-white text-center rounded-top-4 fw-bold fs-5">{{ __('Your Cart') }}</div>
-                        <div class="card-body p-4">
-                            <ul class="list-group mb-3" id="cart-items"></ul>
-                            <div class="mb-4 text-end">
-                                <b class="fs-6">{{ __('Total:') }}</b> <span id="cart-total" class="fs-5 fw-bold">0</span> <span class="text-success fw-bold">{{ business_currency()->symbol }}</span>
+                <div class="col-lg-4 col-md-5 d-flex align-items-start justify-content-center">
+                    <div id="cart-summary" class="card sticky-top w-100 shadow border-0 rounded-4" style="top:90px; display:none; max-width:320px; min-width:220px;">
+                        <div class="card-header bg-success text-white text-center rounded-top-4 fw-bold fs-6 py-2">{{ __('Your Cart') }}</div>
+                        <div class="card-body p-3">
+                            <ul class="list-group mb-2" id="cart-items"></ul>
+                            <div class="mb-3 text-end">
+                                <b class="fs-6">{{ __('Total:') }}</b> <span id="cart-total" class="fs-6 fw-bold">0</span> <span class="text-success fw-bold">{{ business_currency()->symbol }}</span>
                             </div>
-                            <a href="#" id="checkout-btn" class="btn btn-success w-100 rounded-pill py-2 fw-semibold shadow-sm">{{ __('Checkout') }}</a>
+                            <a href="#" id="checkout-btn" class="btn btn-success w-100 rounded-pill py-1 fw-semibold shadow-sm" style="font-size:0.95rem;">{{ __('Checkout') }}</a>
                         </div>
                     </div>
                 </div>
