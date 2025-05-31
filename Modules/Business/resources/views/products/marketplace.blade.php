@@ -720,51 +720,51 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label">First Name *</label>
-                                            <input type="text" class="form-control" required>
+                                            <input type="text" class="form-control" name="first_name" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label">Last Name *</label>
-                                            <input type="text" class="form-control" required>
+                                            <input type="text" class="form-control" name="last_name" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Email Address *</label>
-                                    <input type="email" class="form-control" required>
+                                    <input type="email" class="form-control" name="email" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Phone Number *</label>
-                                    <input type="tel" class="form-control" required>
+                                    <input type="tel" class="form-control" name="phone" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Address *</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" class="form-control" name="address" required>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label">City *</label>
-                                            <input type="text" class="form-control" required>
+                                            <input type="text" class="form-control" name="city" required>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="form-label">State *</label>
-                                            <input type="text" class="form-control" required>
+                                            <input type="text" class="form-control" name="state" required>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="form-label">ZIP Code *</label>
-                                            <input type="text" class="form-control" required>
+                                            <input type="text" class="form-control" name="zip" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Special Instructions</label>
-                                    <textarea class="form-control" rows="3" placeholder="Any special delivery instructions..."></textarea>
+                                    <textarea class="form-control" name="special_instructions" rows="3" placeholder="Any special delivery instructions..."></textarea>
                                 </div>
                             </form>
                         </div>
