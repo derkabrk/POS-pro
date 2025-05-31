@@ -15,6 +15,15 @@ Route::get('/youcan/callback', [Business\OrderSourceController::class, 'youcanCa
 
 Route::post('/youcan/webhook/orders', [Business\OrderSourceController::class, 'storeYouCanOrder'])->name('youcan.webhook.orders');
 
+Route::domain('{business}.shyftcom.com')->group(function () {
+    Route::get('/', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'showSubdomain'])
+        ->name('marketplace.subdomain');
+    Route::get('marketplace/{business_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
+    Route::get('marketplace/{business_id}/category/{category_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'viewAllCategory'])->name('marketplace.category.viewall');
+    Route::post('marketplace/order/{product_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'submitOrder'])->name('marketplace.order.submit');
+    // Store new order from checkout (AJAX)
+    Route::post('marketplace/{business_id}/checkout-order', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'storeCheckoutOrder'])->name('marketplace.checkout.order');
+});
 
 Route::get('/', [Web\WebController::class, 'index'])->name('home');
 Route::resource('blogs', Web\BlogController::class)->only('index', 'show', 'store');
