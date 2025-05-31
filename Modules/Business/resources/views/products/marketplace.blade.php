@@ -506,7 +506,7 @@
         }
 
         .summary-details .text-muted {
-            color: #b0b0c3;
+            color: white;
         }
 
         .summary-details .text-info {
