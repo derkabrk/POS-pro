@@ -90,9 +90,9 @@
                             </div>
                         </div>
 
-                        <div class="button-group text-center mt-5">
-                            <button type="reset" class="theme-btn border-btn m-2">{{ __('Cancel') }}</button>
-                            <button type="submit" class="theme-btn m-2 submit-btn">
+                        <div class="col-12 text-center mt-4">
+                            <button type="reset" class="btn btn-light me-3">{{ __('Cancel') }}</button>
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-plus-circle me-1"></i> {{ __('Create Ticket') }}
                             </button>
                         </div>
