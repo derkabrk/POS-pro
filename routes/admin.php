@@ -137,4 +137,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
 
     // Promo Codes
     Route::resource('promo-codes', ADMIN\PromoCodeController::class);
+
+    // Subscriptions Index (for admin menu)
+    Route::get('subscriptions', [ADMIN\DashboardController::class, 'subscriptionsStatistics'])->name('subscriptions.index');
 });
