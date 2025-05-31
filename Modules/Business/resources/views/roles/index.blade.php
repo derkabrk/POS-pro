@@ -12,20 +12,22 @@
                 <div class="table-header p-16">
                     <h4>{{__('User Roles & Statistics')}}</h4>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-xxl-2 col-sm-6">
-                        <div>
-                            <select class="form-control" name="date_filter" id="date_filter">
-                                <option value="">{{ __('All Dates') }}</option>
-                                <option value="today" {{ request('date_filter') == 'today' ? 'selected' : '' }}>{{ __('Today') }}</option>
-                                <option value="yesterday" {{ request('date_filter') == 'yesterday' ? 'selected' : '' }}>{{ __('Yesterday') }}</option>
-                                <option value="last_week" {{ request('date_filter') == 'last_week' ? 'selected' : '' }}>{{ __('Last Week') }}</option>
-                                <option value="last_month" {{ request('date_filter') == 'last_month' ? 'selected' : '' }}>{{ __('Last Month') }}</option>
-                                <option value="last_year" {{ request('date_filter') == 'last_year' ? 'selected' : '' }}>{{ __('Last Year') }}</option>
-                            </select>
+                <form method="GET" action="" id="role-date-filter-form">
+                    <div class="row mb-3">
+                        <div class="col-xxl-2 col-sm-6">
+                            <div>
+                                <select class="form-control" name="date_filter" id="date_filter">
+                                    <option value="">{{ __('All Dates') }}</option>
+                                    <option value="today" {{ request('date_filter') == 'today' ? 'selected' : '' }}>{{ __('Today') }}</option>
+                                    <option value="yesterday" {{ request('date_filter') == 'yesterday' ? 'selected' : '' }}>{{ __('Yesterday') }}</option>
+                                    <option value="last_week" {{ request('date_filter') == 'last_week' ? 'selected' : '' }}>{{ __('Last Week') }}</option>
+                                    <option value="last_month" {{ request('date_filter') == 'last_month' ? 'selected' : '' }}>{{ __('Last Month') }}</option>
+                                    <option value="last_year" {{ request('date_filter') == 'last_year' ? 'selected' : '' }}>{{ __('Last Year') }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped align-middle">
                         <thead>
@@ -90,4 +92,9 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('date_filter').addEventListener('change', function() {
+        document.getElementById('role-date-filter-form').submit();
+    });
+</script>
 @endsection
