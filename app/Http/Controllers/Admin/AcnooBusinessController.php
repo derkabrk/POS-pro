@@ -156,12 +156,6 @@ class AcnooBusinessController extends Controller
             ]);
 
             $payment_type = PaymentType::create([
-                'name' => "COD",
-                'business_id' => $business->id,
-                "status" => 1,
-            ]);
-
-            $payment_type = PaymentType::create([
                 'name' => "Cash",
                 'business_id' => $business->id,
                 "status" => 1,
