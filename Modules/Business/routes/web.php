@@ -321,15 +321,13 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::resource('product-variants', Business\AcnooProductVariantController::class);
     Route::post('product-variants/filter', [Business\AcnooProductVariantController::class, 'acnooFilter'])->name('product-variants.filter');
 
+    // Dropshipper dashboard route
+    Route::middleware(['auth'])->group(function () {
+        Route::get('dropshipper/dashboard', [Business\DropshipperDashboardController::class, 'index'])
+            ->name('dropshipper.dashboard');
+    });
+
 });
 
 // Marketplace routes (public, no auth middleware)
-Route::domain('{business}.shyftcom.com')->group(function () {
-    Route::get('/', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'showSubdomain'])
-        ->name('marketplace.subdomain');
-    Route::get('marketplace/{business_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
-    Route::get('marketplace/{business_id}/category/{category_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'viewAllCategory'])->name('marketplace.category.viewall');
-    Route::post('marketplace/order/{product_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'submitOrder'])->name('marketplace.order.submit');
-    // Store new order from checkout (AJAX)
-    Route::post('marketplace/{business_id}/checkout-order', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'storeCheckoutOrder'])->name('marketplace.checkout.order');
-});
+

@@ -78,10 +78,16 @@ class AcnooShippingController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'message' => __('Shipping service saved successfully.'),
-                'redirect' => route('business.shipping.index'),
-            ]);
+            // Fix: Use redirect()->route() for web requests, JSON for AJAX
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'message' => __('Shipping service saved successfully.'),
+                    'redirect' => route('business.shipping.index'),
+                ]);
+            } else {
+                return redirect()->route('business.shipping.index')
+                    ->with('success', __('Shipping service saved successfully.'));
+            }
         } catch (\Throwable $th) {
             DB::rollback();
             \Log::error("Error in transaction: " . $th->getMessage());
@@ -138,10 +144,16 @@ class AcnooShippingController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'message' => __('Shipping service updated successfully.'),
-                'redirect' => route('business.shipping.index'),
-            ]);
+            // Fix: Use redirect()->route() for web requests, JSON for AJAX
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'message' => __('Shipping service updated successfully.'),
+                    'redirect' => route('business.shipping.index'),
+                ]);
+            } else {
+                return redirect()->route('business.shipping.index')
+                    ->with('success', __('Shipping service updated successfully.'));
+            }
         } catch (\Throwable $th) {
             DB::rollback();
             \Log::error("Error in transaction: " . $th->getMessage());

@@ -24,7 +24,10 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'password' => 'required|min:6|max:100',
             'email' => 'required|email',
+            'role' => 'sometimes|string|in:admin,shop-owner,staff,dropshipper', // allow optional role
         ]);
+
+        $role = $request->input('role', 'dropshipper'); // default to dropshipper if not provided
 
         $code = random_int(100000, 999999);
         $expire = now()->addMinutes(env('OTP_VISIBILITY_TIME') ?? 3);
@@ -52,11 +55,15 @@ class AuthController extends Controller
             ], 406);
         }
 
-        $user = User::updateOrCreate(['email' => $request->email], $request->except('password') + [
-                    'remember_token' => $code,
-                    'email_verified_at' => $expire,
-                    'password' => Hash::make($request->password),
-                ]);
+        $user = User::updateOrCreate(
+            ['email' => $request->email],
+            $request->except('password', 'role') + [
+                'role' => $role,
+                'remember_token' => $code,
+                'email_verified_at' => $expire,
+                'password' => Hash::make($request->password),
+            ]
+        );
 
         return response()->json([
             'message' => 'An otp code has been sent to your email. Please check and confirm.',

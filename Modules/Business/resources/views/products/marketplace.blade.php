@@ -564,6 +564,52 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
+    {{-- Dropshipper Financier Status --}}
+    @isset($financier_status)
+        <div class="container mt-4">
+            <div class="alert alert-info text-center">
+                <strong>Financier Status:</strong> {{ $financier_status ?? 'N/A' }}
+            </div>
+        </div>
+    @endisset
+
+    {{-- Dropshipper Sales/Orders --}}
+    @isset($sales)
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <strong>Your Recent Sales/Orders</strong>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @forelse($sales as $sale)
+                            <tr>
+                                <td>{{ $sale->id }}</td>
+                                <td>{{ $sale->party->name ?? '-' }}</td>
+                                <td>${{ number_format($sale->totalAmount, 2) }}</td>
+                                <td>{{ $sale->created_at->format('Y-m-d') }}</td>
+                                <td>{{ $sale->isPaid ? 'Paid' : 'Unpaid' }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="5" class="text-center">No sales/orders found.</td></tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endisset
+
     <!-- Loading Screen -->
     <div class="loader-container" id="loader">
         <div class="text-center">

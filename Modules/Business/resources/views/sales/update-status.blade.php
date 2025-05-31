@@ -36,7 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let saleStatusSelect = document.getElementById("sale_status"); 
     let saveStatusBtn = document.getElementById("saveStatusBtn"); 
 
-    document.querySelectorAll(".update-status-btn").forEach(button => {
+    // Fix: Use correct selector for status button
+    document.querySelectorAll(".status-btn").forEach(button => {
         button.addEventListener("click", function () {
             let saleId = this.getAttribute("data-sale-id"); 
             let currentStatus = this.getAttribute("data-current-status");
@@ -61,3 +62,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
+<style>
+/* Enhanced Modal Design */
+#updateStatusModal .modal-content {
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(60,60,60,0.15);
+    border: none;
+}
+#updateStatusModal .modal-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 1rem 1rem 0 0;
+}
+#updateStatusModal .modal-title {
+    font-weight: 600;
+    color: #405189;
+}
+#updateStatusModal .modal-body label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+#updateStatusModal .form-control {
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+#updateStatusModal .button-group .theme-btn {
+    min-width: 120px;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+}
+</style>
