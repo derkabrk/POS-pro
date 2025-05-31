@@ -7,7 +7,7 @@
             @foreach($users as $user)
                 <a href="#" class="list-group-item list-group-item-action user-item d-flex align-items-center justify-content-between" data-id="{{ $user->id }}">
                     <div class="d-flex align-items-center">
-                        <img src="{{ $user->profile_photo_url ?? asset('assets/images/default-avatar.png') }}" alt="Profile" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                        <img src="{{ $user->profile_photo_url ?? asset('assets/images/default-avatar.png') }}" alt="Profile" class="me-2" style="width: 40px; height: 40px; object-fit: cover;">
                         <div>
                             <div class="fw-bold">{{ $user->name }}</div>
                             <div class="text-muted small">{{ $user->email }}</div>
