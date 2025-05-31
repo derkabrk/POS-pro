@@ -26,6 +26,9 @@ Route::domain('{business}.shyftcom.com')->group(function () {
     Route::get('/test', function() { return 'Subdomain works!'; });
 });
 
+// Marketplace routes for main domain (no subdomain)
+Route::get('marketplace/{business_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show.main');
+Route::get('marketplace/{business_id}/category/{category_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'viewAllCategory'])->name('marketplace.category.viewall.main');
 
 Route::get('/', [Web\WebController::class, 'index'])->name('home');
 Route::resource('blogs', Web\BlogController::class)->only('index', 'show', 'store');
