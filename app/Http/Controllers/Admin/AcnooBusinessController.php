@@ -425,7 +425,7 @@ class AcnooBusinessController extends Controller
             DB::commit();
             return response()->json([
                 'message' => $usedPoints ? __('Subscription enrolled using points.') : __('Subscription enrolled successfully.'),
-                'redirect' => route('admin.subscription-reports.index'),
+                'redirect' => route('admin.subscription-reports.index', [], false), // Use relative URL
             ]);
         } catch (\Throwable $th) {
             \Log::error('UpgradePlan Exception', [
