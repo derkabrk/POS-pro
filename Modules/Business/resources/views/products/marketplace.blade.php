@@ -1087,9 +1087,9 @@
 
             // Gather form data
             const formData = new FormData(form);
-            const firstName = formData.get('first_name');
-            const lastName = formData.get('last_name');
-            if (!firstName || !lastName || firstName === 'null' || lastName === 'null') {
+            const firstName = formData.get('first_name')?.trim();
+            const lastName = formData.get('last_name')?.trim();
+            if (!firstName || !lastName) {
                 alert('First name and last name are required.');
                 btn.innerHTML = originalText;
                 btn.disabled = false;

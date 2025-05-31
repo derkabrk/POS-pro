@@ -94,12 +94,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(this);
             const data = {
                 cart,
-                customer_name: formData.get('customer_name'),
-                customer_email: formData.get('customer_email'),
-                customer_phone: formData.get('customer_phone'),
+                customer_name: formData.get('customer_name')?.trim(),
+                customer_email: formData.get('customer_email')?.trim(),
+                customer_phone: formData.get('customer_phone')?.trim(),
                 payment_method: formData.get('payment_method'),
                 business_id: '{{ request('business_id') }}'
             };
+            if (!data.customer_name) {
+                alert('Name is required.');
+                return;
+            }
             // Debug: show data in console
             console.log('Order Data:', data);
             alert('Order placed! (Demo)');
