@@ -10,12 +10,55 @@ use Illuminate\Support\Facades\Hash;
 class UserRoleController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = \App\Models\User::where('business_id', auth()->user()->business_id)
-            ->where('role', 'staff')
-            ->withCount('orderStatusUpdates')
-            ->latest()->get();
+        $query = \App\Models\User::where('business_id', auth()->user()->business_id)
+            ->where('role', 'staff');
+
+        // Date filter logic for status counts
+        $dateFilter = $request->input('date_filter');
+        $date = now();
+        $statusDateRange = null;
+        if ($dateFilter) {
+            switch ($dateFilter) {
+                case 'today':
+                    $statusDateRange = [
+                        $date->copy()->startOfDay(),
+                        $date->copy()->endOfDay()
+                    ];
+                    break;
+                case 'yesterday':
+                    $statusDateRange = [
+                        $date->copy()->subDay()->startOfDay(),
+                        $date->copy()->subDay()->endOfDay()
+                    ];
+                    break;
+                case 'last_week':
+                    $statusDateRange = [
+                        $date->copy()->subWeek()->startOfWeek(),
+                        $date->copy()->subWeek()->endOfWeek()
+                    ];
+                    break;
+                case 'last_month':
+                    $statusDateRange = [
+                        $date->copy()->subMonth()->startOfMonth(),
+                        $date->copy()->subMonth()->endOfMonth()
+                    ];
+                    break;
+                case 'last_year':
+                    $statusDateRange = [
+                        $date->copy()->subYear()->startOfYear(),
+                        $date->copy()->subYear()->endOfYear()
+                    ];
+                    break;
+            }
+        }
+
+        $users = $query->with(['orderStatusUpdates' => function ($q) use ($statusDateRange) {
+            if ($statusDateRange) {
+                $q->whereBetween('created_at', $statusDateRange);
+            }
+        }])->latest()->get();
 
         return view('business::roles.index', compact('users'));
     }
