@@ -381,8 +381,8 @@ class AcnooBusinessController extends Controller
                 'will_expire' => $request->expieryDate,
             ]);
 
-            // Update subdomain if plan is upgraded to a marketplace-enabled plan and subdomain is not set
-            if ($plan->marketplace_feature && empty($business->subdomain)) {
+            // Update subdomain if plan is upgraded to a marketplace-enabled plan and subdomain is not set or is empty string
+            if ($plan->marketplace_feature && (!$business->subdomain || trim($business->subdomain) === '')) {
                 $business->subdomain = Business::generateUniqueSubdomain($business->companyName);
                 $business->save();
             }
