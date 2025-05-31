@@ -14,17 +14,26 @@
         </span>
     </td>
     <td class="print-d-none">
-        <div class="d-flex gap-2">
-            <a href="{{ route('business.shipping.edit', $shipping->id) }}" class="btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-sm" title="Edit">
-                <i class="ri-pencil-line"></i>
-            </a>
-            <form action="{{ route('business.shipping.destroy', $shipping) }}" method="POST" class="d-inline confirm-action">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-icon btn-outline-danger rounded-circle shadow-sm" title="Delete">
-                    <i class="ri-delete-bin-line"></i>
-                </button>
-            </form>
+        <div class="dropdown table-action">
+            <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ __('Actions') }}">
+                <i class="ri-more-2-fill"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="{{ route('business.shipping.edit', $shipping->id) }}" class="dropdown-item">
+                        <i class="ri-pencil-fill align-bottom me-2 text-primary"></i>{{__('Edit')}}
+                    </a>
+                </li>
+                <li>
+                    <form action="{{ route('business.shipping.destroy', $shipping) }}" method="POST" class="d-inline confirm-action">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="dropdown-item text-danger">
+                            <i class="ri-delete-bin-5-fill align-bottom me-2"></i>{{ __('Delete') }}
+                        </button>
+                    </form>
+                </li>
+            </ul>
         </div>
     </td>
 </tr>

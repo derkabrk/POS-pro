@@ -12,29 +12,40 @@
     <td class="text-start">{{ $user->email }}</td>
     <td class="text-start">{{ $user->role }}</td>
     <td class="print-d-none">
-        <div class="d-flex gap-2">
-            <a href="#User-view" data-bs-toggle="modal" class="btn btn-sm btn-icon btn-outline-info staff-view-btn"
-                data-staff-view-name="{{ $user->name ?? 'N/A' }}"
-                data-staff-view-phone-number="{{ $user->phone ?? 'N/A' }}"
-                data-staff-view-email-number="{{ $user->email ?? 'N/A' }}"
-                data-staff-view-role="{{ $user->role ?? 'N/A' }}"
-                title="View">
-                <i class="fal fa-eye"></i>
-            </a>
-            @can('users-update')
-                <a href="{{ route('admin.users.edit', [$user->id, 'users' => $user->role]) }}" class="btn btn-sm btn-icon btn-outline-primary" title="Edit">
-                    <i class="fal fa-pencil-alt"></i>
-                </a>
-            @endcan
-            @can('users-delete')
-                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline confirm-action">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-icon btn-outline-danger" title="Delete">
-                        <i class="fal fa-trash-alt"></i>
-                    </button>
-                </form>
-            @endcan
+        <div class="dropdown table-action">
+            <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ __('Actions') }}">
+                <i class="ri-more-2-fill"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#User-view" data-bs-toggle="modal" class="dropdown-item staff-view-btn"
+                        data-staff-view-name="{{ $user->name ?? 'N/A' }}"
+                        data-staff-view-phone-number="{{ $user->phone ?? 'N/A' }}"
+                        data-staff-view-email-number="{{ $user->email ?? 'N/A' }}"
+                        data-staff-view-role="{{ $user->role ?? 'N/A' }}"
+                        title="View">
+                        <i class="ri-eye-fill align-bottom me-2 text-info"></i>{{__('View')}}
+                    </a>
+                </li>
+                @can('users-update')
+                <li>
+                    <a href="{{ route('admin.users.edit', [$user->id, 'users' => $user->role]) }}" class="dropdown-item" title="Edit">
+                        <i class="ri-pencil-fill align-bottom me-2 text-primary"></i>{{__('Edit')}}
+                    </a>
+                </li>
+                @endcan
+                @can('users-delete')
+                <li>
+                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline confirm-action">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="dropdown-item text-danger" title="Delete">
+                            <i class="ri-delete-bin-5-fill align-bottom me-2"></i>{{ __('Delete') }}
+                        </button>
+                    </form>
+                </li>
+                @endcan
+            </ul>
         </div>
     </td>
 </tr>
