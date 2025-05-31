@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="col-md-5 d-flex align-items-start justify-content-center">
-                    <a href="{{ route('marketplace.show', request('business_id')) }}" class="btn btn-secondary mb-3 w-100 rounded-pill py-1 fw-semibold shadow-sm" style="font-size:0.95rem;">{{ __('Back to Marketplace') }}</a>
+                    <a href="/" class="btn btn-secondary mb-3 w-100 rounded-pill py-1 fw-semibold shadow-sm" style="font-size:0.95rem;">{{ __('Back to Marketplace') }}</a>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Order Data:', data);
             alert('Order placed! (Demo)');
             localStorage.removeItem('marketplace_cart');
-            window.location.href = '{{ route('marketplace.show', request('business_id')) }}';
+            window.location.href = '/';
         });
     }
 });
