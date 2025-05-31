@@ -623,7 +623,7 @@
                                                 {{ $products->where('category_id', $category->id)->count() }} items
                                             </span>
                                         </h3>
-                                        <button class="btn btn-outline-primary btn-sm view-all-btn" data-category-id="{{ $category->id }}" data-category-url="{{ route('marketplace.category.viewall', ['business_id' => $business->id, 'category_id' => $category->id]) }}">
+                                        <button class="btn btn-outline-primary btn-sm view-all-btn" data-category-id="{{ $category->id }}" data-category-url="{{ route('marketplace.category.viewall', ['business' => $business->subdomain, 'business_id' => $business->id, 'category_id' => $category->id]) }}">
                                             <i class="fas fa-th-large me-1"></i>View All
                                         </button>
                                     </div>
