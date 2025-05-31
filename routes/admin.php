@@ -71,7 +71,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
 
     // Business
     Route::resource('business',ADMIN\AcnooBusinessController::class);
-    Route::put('business/upgrade-plan/{id}', [ADMIN\AcnooBusinessController::class, 'upgradePlan'])->name('business.upgrade.plan');
+    Route::post('business/upgrade-plan/{id}', [ADMIN\AcnooBusinessController::class, 'upgradePlan'])->name('business.upgrade.plan');
     Route::post('business/filter', [ADMIN\AcnooBusinessController::class, 'acnooFilter'])->name('business.filter');
     Route::post('business/filter_business', [ADMIN\AcnooBusinessController::class, 'filter'])->name('business.filter_business');
 
