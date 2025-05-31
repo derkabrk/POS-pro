@@ -163,18 +163,18 @@ class Sale extends Model
         }, $value));
     }
 public const STATUS = [
-    1  => ['name' => 'Pending',    'color' => 'btn btn-outline-warning update-status-btn', 'text_color' => '#ffca5b'],  
-    2  => ['name' => 'Called 1',   'color' => 'btn btn-outline-info update-status-btn', 'text_color' => '#3fa7d6'],     
-    3  => ['name' => 'Called 2',   'color' => 'btn btn-outline-info update-status-btn','text_color' => '#3fa7d6'],  
-    4  => ['name' => 'Called 3',   'color' => 'btn btn-outline-info update-status-btn','text_color' => '#3fa7d6'],  
-    5  => ['name' => 'Called 4',   'color' => 'btn btn-outline-info update-status-btn','text_color' => '#3fa7d6'],  
-    6  => ['name' => 'Canceled',   'color' => 'btn btn-outline-danger update-status-btn','text_color' => '#ee6352'], 
-    7  => ['name' => 'Confirmed',  'color' => 'btn btn-outline-primary update-status-btn','text_color' => '#8c68cd'], 
-    8  => ['name' => 'Shipping',   'color' => 'btn btn-outline-secondary update-status-btn','text_color' => '#4788ff'],
-    9  => ['name' => 'Returned',   'color' => 'btn btn-outline-dark update-status-btn','text_color' => '#1d2b3a'],
-    10 => ['name' => 'Delivered',  'color' => 'btn btn-outline-success update-status-btn','text_color' => '#40bb82'],  
-    11 => ['name' => 'Paid',       'color' => 'btn btn-outline-success update-status-btn','text_color' => '#40bb82'],
-    12 => ['name' => 'Cash Out',   'color' => 'btn btn-outline-primary update-status-btn','text_color' => '#8c68cd'],
+    1  => ['name' => 'Pending',    'color' => 'btn btn-warning update-status-btn text-white btn-sm me-2 status-update-btn', 'text_color' => '#ffca5b'],  
+    2  => ['name' => 'Called 1',   'color' => 'btn btn-info update-status-btn text-white btn-sm me-2 status-update-btn', 'text_color' => '#3fa7d6'],     
+    3  => ['name' => 'Called 2',   'color' => 'btn btn-info update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#3fa7d6'],  
+    4  => ['name' => 'Called 3',   'color' => 'btn btn-info update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#3fa7d6'],  
+    5  => ['name' => 'Called 4',   'color' => 'btn btn-info update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#3fa7d6'],  
+    6  => ['name' => 'Canceled',   'color' => 'btn btn-danger update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#ee6352'], 
+    7  => ['name' => 'Confirmed',  'color' => 'btn btn-primary update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#8c68cd'], 
+    8  => ['name' => 'Shipping',   'color' => 'btn btn-secondary update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#4788ff'],
+    9  => ['name' => 'Returned',   'color' => 'btn btn-dark update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#1d2b3a'],
+    10 => ['name' => 'Delivered',  'color' => 'btn btn-success update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#40bb82'],  
+    11 => ['name' => 'Paid',       'color' => 'btn btn-success update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#40bb82'],
+    12 => ['name' => 'Cash Out',   'color' => 'btn btn-primary update-status-btn text-white btn-sm me-2 status-update-btn','text_color' => '#8c68cd'],
 ];
 
 
