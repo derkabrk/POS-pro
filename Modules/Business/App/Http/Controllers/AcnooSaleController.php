@@ -1089,10 +1089,15 @@ class AcnooSaleController extends Controller
         }
 
         if ($sale->sale_status != 7) {
-            return response()->json([
-                'message' => __('Sale Status updated Successfully'),
-                'redirect' => route('business.sales.index'),
-            ]);
+            // Fix: If AJAX, return JSON; if not, redirect
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'message' => __('Sale Status updated Successfully'),
+                    'redirect' => route('business.sales.index'),
+                ]);
+            } else {
+                return redirect()->route('business.sales.index')->with('success', __('Sale Status updated successfully.'));
+            }
         }
 
         // Decode the products field to get the array of objects
