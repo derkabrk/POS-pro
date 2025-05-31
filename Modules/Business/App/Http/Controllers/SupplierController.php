@@ -18,39 +18,37 @@ class SupplierController extends Controller
         $suppliersData = $suppliers->map(function ($supplier) {
             $products = Product::where('supplier_id', $supplier->id)->pluck('id'); // Get product IDs for the supplier
 
-            // Use the Sale model to calculate amounts
-            $productsSold = Sale::whereHas('details', function ($query) use ($products) {
-                $query->whereIn('product_id', $products);
-            })->sum('quantity'); // Total products sold
+            // Use the SaleDetails model to calculate amounts correctly
+            $productsSold = \App\Models\SaleDetails::whereIn('product_id', $products)->sum('quantities'); // Total products sold
 
-            $productsDelivered = Sale::whereHas('details', function ($query) use ($products) {
-                $query->whereIn('product_id', $products)->where('sale_status', 9);
-            })->sum('quantity'); // Delivered products
+            $productsDelivered = \App\Models\SaleDetails::whereIn('product_id', $products)
+                ->whereHas('sale', function ($q) { $q->where('sale_status', 9); })
+                ->sum('quantities'); // Delivered products
 
-            $productsPaid = Sale::whereHas('details', function ($query) use ($products) {
-                $query->whereIn('product_id', $products)->where('sale_status', 11);
-            })->sum('quantity'); // Paid products
+            $productsPaid = \App\Models\SaleDetails::whereIn('product_id', $products)
+                ->whereHas('sale', function ($q) { $q->where('sale_status', 11); })
+                ->sum('quantities'); // Paid products
 
-            $productsCheckout = Sale::whereHas('details', function ($query) use ($products) {
-                $query->whereIn('product_id', $products)->where('sale_status', 12);
-            })->sum('quantity'); // Products in checkout
+            $productsCheckout = \App\Models\SaleDetails::whereIn('product_id', $products)
+                ->whereHas('sale', function ($q) { $q->where('sale_status', 12); })
+                ->sum('quantities'); // Products in checkout
 
-            $productsReturned = Sale::whereHas('details', function ($query) use ($products) {
-                $query->whereIn('product_id', $products)->where('sale_status', 10);
-            })->sum('quantity'); // Returned products
+            $productsReturned = \App\Models\SaleDetails::whereIn('product_id', $products)
+                ->whereHas('sale', function ($q) { $q->where('sale_status', 10); })
+                ->sum('quantities'); // Returned products
 
             $totalProducts = $products->count();
             $totalStock = Product::whereIn('id', $products)->sum('productStock'); // Total stock for the supplier
-            $pending = Sale::whereHas('details', function ($query) use ($products) {
-                $query->whereIn('product_id', $products)->where('sale_status', 'pending');
-            })->sum('quantity'); // Pending products
+            $pending = \App\Models\SaleDetails::whereIn('product_id', $products)
+                ->whereHas('sale', function ($q) { $q->where('sale_status', 1); })
+                ->sum('quantities'); // Pending products
             $available = $totalStock - $pending; // Available stock
-            $paid = Sale::whereHas('details', function ($query) use ($products) {
-                $query->whereIn('product_id', $products);
-            })->sum('paid_amount'); // Total paid amount
-            $cashout = Sale::whereHas('details', function ($query) use ($products) {
-                $query->whereIn('product_id', $products);
-            })->sum('cashout_amount'); // Total cashout amount
+            $paid = \App\Models\SaleDetails::whereIn('product_id', $products)
+                ->whereHas('sale', function ($q) { $q->where('sale_status', 11); })
+                ->sum('price'); // Total paid amount (sum of price for paid sales)
+            $cashout = \App\Models\SaleDetails::whereIn('product_id', $products)
+                ->whereHas('sale', function ($q) { $q->where('sale_status', 12); })
+                ->sum('price'); // Total cashout amount (sum of price for cashout sales)
 
             return [
                 'supplier' => $supplier,
