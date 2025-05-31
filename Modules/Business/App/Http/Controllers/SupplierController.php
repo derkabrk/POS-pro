@@ -22,32 +22,32 @@ class SupplierController extends Controller
             $productsSold = \App\Models\SaleDetails::whereIn('product_id', $products)->sum('quantities'); // Total products sold
 
             $productsDelivered = \App\Models\SaleDetails::whereIn('product_id', $products)
-                ->whereHas('sale', function ($q) { $q->where('sale_status', 9); })
+                ->whereHas('saleRelation', function ($q) { $q->where('sale_status', 9); })
                 ->sum('quantities'); // Delivered products
 
             $productsPaid = \App\Models\SaleDetails::whereIn('product_id', $products)
-                ->whereHas('sale', function ($q) { $q->where('sale_status', 11); })
+                ->whereHas('saleRelation', function ($q) { $q->where('sale_status', 11); })
                 ->sum('quantities'); // Paid products
 
             $productsCheckout = \App\Models\SaleDetails::whereIn('product_id', $products)
-                ->whereHas('sale', function ($q) { $q->where('sale_status', 12); })
+                ->whereHas('saleRelation', function ($q) { $q->where('sale_status', 12); })
                 ->sum('quantities'); // Products in checkout
 
             $productsReturned = \App\Models\SaleDetails::whereIn('product_id', $products)
-                ->whereHas('sale', function ($q) { $q->where('sale_status', 10); })
+                ->whereHas('saleRelation', function ($q) { $q->where('sale_status', 10); })
                 ->sum('quantities'); // Returned products
 
             $totalProducts = $products->count();
             $totalStock = Product::whereIn('id', $products)->sum('productStock'); // Total stock for the supplier
             $pending = \App\Models\SaleDetails::whereIn('product_id', $products)
-                ->whereHas('sale', function ($q) { $q->where('sale_status', 1); })
+                ->whereHas('saleRelation', function ($q) { $q->where('sale_status', 1); })
                 ->sum('quantities'); // Pending products
             $available = $totalStock - $pending; // Available stock
             $paid = \App\Models\SaleDetails::whereIn('product_id', $products)
-                ->whereHas('sale', function ($q) { $q->where('sale_status', 11); })
+                ->whereHas('saleRelation', function ($q) { $q->where('sale_status', 11); })
                 ->sum('price'); // Total paid amount (sum of price for paid sales)
             $cashout = \App\Models\SaleDetails::whereIn('product_id', $products)
-                ->whereHas('sale', function ($q) { $q->where('sale_status', 12); })
+                ->whereHas('saleRelation', function ($q) { $q->where('sale_status', 12); })
                 ->sum('price'); // Total cashout amount (sum of price for cashout sales)
 
             return [

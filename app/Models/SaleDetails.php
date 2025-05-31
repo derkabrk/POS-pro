@@ -34,4 +34,9 @@ class SaleDetails extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public function saleRelation(): BelongsTo
+    {
+        return $this->belongsTo(Sale::class, 'sale_id');
+    }
 }
