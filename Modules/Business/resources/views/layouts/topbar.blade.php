@@ -636,8 +636,8 @@
                             <a class="dropdown-item" href="{{ url('cache-clear') }}"><i class="far fa-undo text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('Clear cache') }}</span></a>
                         @endif
                         
-                        <a class="dropdown-item" href="pages-profile-settings"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
-                        <a class="dropdown-item" href="auth-lockscreen-basic"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
+                        <a class="dropdown-item" href="{{ route('business.settings.index') }}"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
+                        
                         
                         <a class="dropdown-item d-flex align-items-center" href="{{ route('business.invite-codes.index') }}">
                             <i class="ri-key-line text-muted fs-16 align-middle me-2"></i>
