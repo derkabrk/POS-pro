@@ -184,11 +184,10 @@ class MarketplaceController extends Controller
             [
                 'business_id' => $business_id,
                 'phone' => $request->customer_phone,
-                'email' => $request->customer_email,
-                'type' => 'Guest',
             ],
             [
                 'name' => $request->customer_name,
+                'email' => $request->customer_email,
                 'address' => $request->customer_address,
                 'city' => $request->customer_city,
                 'state' => $request->customer_state,
