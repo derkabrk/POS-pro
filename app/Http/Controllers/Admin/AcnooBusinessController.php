@@ -405,6 +405,10 @@ class AcnooBusinessController extends Controller
                 'redirect' => route('admin.subscription-reports.index'),
             ]);
         } catch (\Throwable $th) {
+            \Log::error('UpgradePlan Exception', [
+                'message' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
             DB::rollback();
             return response()->json(__('Something was wrong.'), 403);
         }
