@@ -561,6 +561,7 @@
             background: #7a57b8;
         }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
     <!-- Loading Screen -->
