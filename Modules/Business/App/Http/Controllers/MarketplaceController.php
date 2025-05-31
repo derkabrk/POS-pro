@@ -142,6 +142,11 @@ class MarketplaceController extends Controller
      */
     public function viewAllCategory(Request $request, $business_id, $category_id)
     {
+        // Fix: If business_id is not numeric, resolve it from subdomain
+        if (!is_numeric($business_id)) {
+            $businessModel = Business::where('subdomain', $business_id)->firstOrFail();
+            $business_id = $businessModel->id;
+        }
         $business = Business::findOrFail($business_id);
         $categories = Category::where('business_id', $business_id)->orderBy('categoryName')->get();
         $products = $this->getCategoryProducts($business_id, $category_id);

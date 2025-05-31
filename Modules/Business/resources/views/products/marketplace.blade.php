@@ -1087,7 +1087,15 @@
 
             // Gather form data
             const formData = new FormData(form);
-            const customer_name = formData.get('first_name') + ' ' + formData.get('last_name');
+            const firstName = formData.get('first_name');
+            const lastName = formData.get('last_name');
+            if (!firstName || !lastName || firstName === 'null' || lastName === 'null') {
+                alert('First name and last name are required.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
+            }
+            const customer_name = firstName + ' ' + lastName;
             const customer_email = formData.get('email');
             const customer_phone = formData.get('phone');
             const customer_address = formData.get('address');
