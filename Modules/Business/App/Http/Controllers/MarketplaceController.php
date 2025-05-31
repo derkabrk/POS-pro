@@ -154,6 +154,12 @@ class MarketplaceController extends Controller
     // Store order from checkout (AJAX endpoint)
     public function storeCheckoutOrder(Request $request, $business_id)
     {
+        // Fix: If business_id is not numeric, resolve it from subdomain
+        if (!is_numeric($business_id)) {
+            $businessModel = Business::where('subdomain', $business_id)->firstOrFail();
+            $business_id = $businessModel->id;
+        }
+
         $request->validate([
             'cart' => 'required|array|min:1',
             'customer_name' => 'required|string|max:255',
