@@ -30,9 +30,11 @@
                                 <p class="text-muted mb-0">{{ __("Here's what's happening with your business today.") }}</p>
                             </div>
                             <div class="col-auto">
+
                             <a href="{{ isset($businesses[0]) && $businesses[0]->subdomain ? '//' . $businesses[0]->subdomain . '.shyftcom.com/marketplace' : '#' }}" class="btn btn-primary">
                                  <i class="ri-store-2-line align-middle me-1"></i> {{ __('Go to Marketplace') }}
-                            </a>
+                            </a>  
+                            
                                         </div>
                             <div class="mt-3 mt-lg-0">
                                 <form action="javascript:void(0);">
