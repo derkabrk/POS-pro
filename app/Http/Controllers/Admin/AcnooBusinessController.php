@@ -146,7 +146,7 @@ class AcnooBusinessController extends Controller
                 'user_id' => $user->id,
                 'type'=>  $request->type,
                 'subdomain' => $subdomain,
-            });
+            ]);
 
             $vat = Vat::create([
                 'name' => "Inital",
