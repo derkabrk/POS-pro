@@ -177,7 +177,7 @@
                 @endcanany
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::routeIs('chat.index') ? 'active' : '' }}" href="{{ route('chat.index') }}" id="sidebarChatMenu">
+                    <a class="nav-link menu-link {{ Request::routeIs('chat.index') || request()->has('open_chat') ? 'active' : '' }}" href="{{ route('chat.index') }}{{ request()->has('open_chat') ? '?open_chat=1' : '' }}" id="sidebarChatMenu">
                         <i class="ri-chat-1-line"></i> <span>{{ __('Chat') }}</span>
                     </a>
                 </li>
@@ -338,13 +338,11 @@
 <!-- Vertical Overlay-->
 <div class="vertical-overlay"></div>
 <script>
-// Highlight Chat menu on chat notification redirect
-if (window.location.hash === '#open-chat') {
+// Highlight Chat menu on chat notification redirect (supports ?open_chat=1)
+if (window.location.search.includes('open_chat=1')) {
     const chatMenu = document.getElementById('sidebarChatMenu');
     if (chatMenu) {
         chatMenu.classList.add('active');
-        // Optionally, expand parent menus if needed
-        // You can also scroll into view if sidebar is long
         chatMenu.scrollIntoView({behavior: 'smooth', block: 'center'});
     }
 }
