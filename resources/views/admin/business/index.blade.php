@@ -306,7 +306,7 @@
                             <div class="modal-body">
                                 <form action="" method="post" enctype="multipart/form-data" class="ajaxform_instant_reload upgradePlan">
                                     @csrf
-                                    @method('put')
+                                    @method('post')
 
                                     <div class="mb-3">
                                         <label>{{ __('Business Name') }}</label>
