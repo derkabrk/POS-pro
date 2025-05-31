@@ -77,17 +77,6 @@
                                     @endforeach
                                 </select>
                             </div>
-
-                            <!-- Assign To -->
-                            <div class="col-lg-6 mb-2">
-                                <label for="assign_to" class="form-label fw-bold">{{ __('Assign To') }}</label>
-                                <select name="assign_to" id="assign_to" class="form-control shadow-sm">
-                                    <option value="">{{ __('Select a User') }}</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                         </div>
 
                         <div class="col-12 text-center mt-4">
