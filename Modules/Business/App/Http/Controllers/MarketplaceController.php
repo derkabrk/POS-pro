@@ -166,6 +166,8 @@ class MarketplaceController extends Controller
             'customer_instructions' => 'nullable|string|max:500',
         ]);
 
+        \Log::info('storeCheckoutOrder request', $request->all());
+
         // Store guest customer for this business
         $customer = Party::firstOrCreate(
             [
@@ -184,6 +186,8 @@ class MarketplaceController extends Controller
                 'status' => 1,
             ]
         );
+
+        \Log::info('storeCheckoutOrder customer', ['customer' => $customer]);
 
         // Prepare sale data
         $cart = $request->cart;
@@ -220,6 +224,8 @@ class MarketplaceController extends Controller
                 'instructions' => $request->customer_instructions,
             ]),
         ]);
+
+        \Log::info('storeCheckoutOrder sale', ['sale' => $sale]);
 
         // Optionally, store customer info in session for autofill
         session(['marketplace_customer_' . $business_id => [
