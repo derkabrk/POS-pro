@@ -382,9 +382,19 @@ class AcnooBusinessController extends Controller
             ]);
 
             // Update subdomain if plan is upgraded to a marketplace-enabled plan and subdomain is not set or is empty string
+            \Log::info('UpgradePlan Debug', [
+                'plan_id' => $plan->id,
+                'marketplace_feature' => $plan->marketplace_feature,
+                'business_id' => $business->id,
+                'current_subdomain' => $business->subdomain,
+            ]);
             if ($plan->marketplace_feature && (!$business->subdomain || trim($business->subdomain) === '')) {
                 $business->subdomain = Business::generateUniqueSubdomain($business->companyName);
                 $business->save();
+                \Log::info('Subdomain generated', [
+                    'business_id' => $business->id,
+                    'new_subdomain' => $business->subdomain,
+                ]);
             }
 
             sendNotification($subscribe->id, route('admin.subscription-reports.index', ['id' => $subscribe->id]), __('Plan subscribed by ' . auth()->user()->name));
