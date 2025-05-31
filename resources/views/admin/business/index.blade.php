@@ -304,7 +304,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="post" enctype="multipart/form-data" class="ajaxform_instant_reload upgradePlan">
+                                <form id="upgradePlanForm" data-action="{{ route('admin.business.upgrade.plan', ['id' => 'BUSINESS_ID']) }}" action="" method="post" enctype="multipart/form-data" class="ajaxform_instant_reload upgradePlan">
                                     @csrf
                                     @method('post')
 
@@ -476,6 +476,9 @@
         var businessName = $(this).closest('tr').find('.business_name').text().trim();
         $('#business_id').val(businessId);
         $('#business_name').val(businessName);
+        var form = $('#upgradePlanForm');
+        var action = form.data('action').replace('BUSINESS_ID', businessId);
+        form.attr('action', action);
     });
     
     // Plan price update

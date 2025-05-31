@@ -247,6 +247,10 @@ class AcnooBusinessController extends Controller
 
         try {
             
+            \Log::info('BusinessUpdate Debug', [
+                'business_id' => $id,
+                'request' => $request->all(),
+            ]);
             $business = Business::findOrFail($id);
 
             $business->update([
@@ -275,8 +279,18 @@ class AcnooBusinessController extends Controller
             }
             $user->update($userUpdateData);
 
+            \Log::info('BusinessUpdate User Updated', [
+                'user_id' => $user->id,
+                'userUpdateData' => $userUpdateData,
+            ]);
+
             if ($request->plan_subscribe_id) {
                 $plan = Plan::findOrFail($request->plan_subscribe_id);
+
+                \Log::info('BusinessUpdate Plan Subscribe', [
+                    'plan_id' => $plan->id,
+                    'plan' => $plan,
+                ]);
 
                 $subscribe = PlanSubscribe::create([
                     'plan_id' => $plan->id,
@@ -293,6 +307,11 @@ class AcnooBusinessController extends Controller
                     'will_expire' => now()->addDays($plan->duration),
                 ]);
 
+                \Log::info('BusinessUpdate Plan Subscribed', [
+                    'business_id' => $business->id,
+                    'plan_subscribe_id' => $subscribe->id,
+                ]);
+
                 sendNotification($subscribe->id, route('admin.subscription-reports.index', ['id' => $subscribe->id]), __('Plan subscribed by ' . auth()->user()->name));
             }
 
@@ -303,6 +322,10 @@ class AcnooBusinessController extends Controller
                 'redirect' => route('admin.business.index'),
             ]);
         } catch (\Throwable $th) {
+            \Log::error('BusinessUpdate Exception', [
+                'message' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
             DB::rollback();
             return response()->json(__('Something went wrong.'), 403);
         }
