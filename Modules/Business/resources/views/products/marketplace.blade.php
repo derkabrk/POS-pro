@@ -705,6 +705,7 @@
                                         @foreach($products->where('category_id', $category->id) as $product)
                                             <div class="col-md-6 col-lg-4 fade-in product-item" data-category="{{ $category->id }}">
                                                 <div class="product-card">
+                                                    <a href="{{ route('marketplace.product.details', ['business' => $business->subdomain, 'business_id' => $business->id, 'product_id' => $product->id]) }}" class="stretched-link" style="z-index:2;position:absolute;inset:0;"></a>
                                                     <div class="product-image">
                                                         <img src="{{ $product->productPicture ? asset($product->productPicture) : asset('demo_images/default-product.png') }}" 
                                                              alt="{{ $product->productName }}" 
