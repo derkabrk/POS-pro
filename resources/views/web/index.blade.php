@@ -36,7 +36,7 @@
 
                         <div class="mt-4 d-flex align-items-center justify-content-center gap-3 flex-wrap">
                             <img src="{{ asset($page_data['scanner_image'] ?? 'assets/images/icons/img-upload.png') }}" 
-                                 alt="" width="24" height="24" class="flex-shrink-0" />
+                                 alt="" width="18" height="18" class="flex-shrink-0" />
                             <p class="text-muted mb-0 text-center">
                                 {{ $page_data['headings']['slider_scanner_text'] ?? '' }}
                             </p>
@@ -45,11 +45,11 @@
                         <div class="mt-4 d-flex gap-3 justify-content-center flex-wrap">
                             <a href="{{ $page_data['headings']['footer_apple_app_link'] ?? '' }}" target="_blank" class="d-inline-block">
                                 <img src="{{ asset($page_data['footer_apple_app_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                     alt="App Store" class="img-fluid" style="height:35px; width:auto; max-width:140px;" />
+                                     alt="App Store" class="img-fluid" style="height:30px; width:auto; max-width:120px;" />
                             </a>
                             <a href="{{ $page_data['headings']['footer_google_play_app_link'] ?? '' }}" target="_blank" class="d-inline-block">
                                 <img src="{{ asset($page_data['footer_google_app_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                     alt="Google Play" class="img-fluid" style="height:35px; width:auto; max-width:140px;" />
+                                     alt="Google Play" class="img-fluid" style="height:30px; width:auto; max-width:120px;" />
                             </a>
                         </div>
                     </div>
@@ -194,55 +194,44 @@
         <div class="bg-overlay bg-overlay-pattern"></div>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="text-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-5">
                         <div>
                             <i class="ri-double-quotes-l text-success display-3"></i>
                         </div>
-                        <h4 class="text-white mb-5">{{ $page_data['headings']['testimonial_title'] ?? '' }}</h4>
-                        
-                        <!-- Swiper -->
-                        <div class="swiper client-review-swiper rounded" dir="ltr">
-                            <div class="swiper-wrapper">
-                                @foreach ($testimonials as $testimonial)
-                                    <div class="swiper-slide">
-                                        <div class="row justify-content-center">
-                                            <div class="col-12">
-                                                <div class="text-white-50 text-center p-4">
-                                                    <div class="avatar-lg mx-auto mb-4">
-                                                        <img src="{{ asset($testimonial->client_image) }}" 
-                                                             alt="{{ $testimonial->client_name }}" 
-                                                             class="img-fluid rounded-circle" 
-                                                             style="width: 80px; height: 80px; object-fit: cover;" />
-                                                    </div>
-                                                    <p class="fs-18 ff-secondary mb-4 text-white-75" style="line-height: 1.6; max-width: 500px; margin: 0 auto 1.5rem;">
-                                                        "{{ $testimonial->text }}"
-                                                    </p>
-                                                    <div>
-                                                        <h5 class="text-white mb-1">{{ $testimonial->client_name }}</h5>
-                                                        <p class="text-white-50 mb-3">{{ $testimonial->work_at }}</p>
-                                                        <div class="d-flex align-items-center justify-content-center gap-1">
-                                                            @for ($i = 0; $i < 5; $i++)
-                                                                <i class="ri-star-fill text-warning fs-14"></i>
-                                                            @endfor
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-pagination"></div>
-                        </div>
-                        <!-- end slider -->
+                        <h4 class="text-white mb-4">{{ $page_data['headings']['testimonial_title'] ?? '' }}</h4>
                     </div>
                 </div>
-                <!-- end col -->
             </div>
-            <!-- end row -->
+            
+            <div class="row g-4 justify-content-center">
+                @foreach ($testimonials as $testimonial)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 border-0 shadow-sm bg-white bg-opacity-10 backdrop-blur">
+                            <div class="card-body text-center p-4">
+                                <div class="avatar-lg mx-auto mb-3">
+                                    <img src="{{ asset($testimonial->client_image) }}" 
+                                         alt="{{ $testimonial->client_name }}" 
+                                         class="img-fluid rounded-circle" 
+                                         style="width: 70px; height: 70px; object-fit: cover;" />
+                                </div>
+                                <p class="text-white-50 mb-3 fs-14" style="line-height: 1.6;">
+                                    "{{ Str::limit($testimonial->text, 120) }}"
+                                </p>
+                                <div>
+                                    <h6 class="text-white mb-1">{{ $testimonial->client_name }}</h6>
+                                    <p class="text-white-50 mb-2 fs-13">{{ $testimonial->work_at }}</p>
+                                    <div class="d-flex align-items-center justify-content-center gap-1">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <i class="ri-star-fill text-warning fs-12"></i>
+                                        @endfor
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
         <!-- end container -->
     </section>
@@ -273,91 +262,20 @@
 @push('js')
     <script src="{{ asset('assets/js/auth.js') }}"></script>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Swiper for testimonials
-            var testimonialsSwiper = new Swiper('.client-review-swiper', {
-                loop: true,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    dynamicBullets: true,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                slidesPerView: 1,
-                spaceBetween: 30,
-                speed: 800,
-                centeredSlides: true,
-                effect: 'slide',
-                breakpoints: {
-                    768: {
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                    },
-                    1024: {
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                    }
-                }
-            });
-        });
-    </script>
-
     <style>
-        /* Custom Swiper Styles */
-        .client-review-swiper {
-            padding-bottom: 50px !important;
+        /* Custom card styles for testimonials */
+        .bg-opacity-10 {
+            background-color: rgba(255, 255, 255, 0.1) !important;
         }
         
-        .client-review-swiper .swiper-button-next,
-        .client-review-swiper .swiper-button-prev {
-            background: rgba(255, 255, 255, 0.9);
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            color: #405189;
-            font-weight: bold;
-            margin-top: -22px;
-            transition: all 0.3s ease;
-        }
-        
-        .client-review-swiper .swiper-button-next:hover,
-        .client-review-swiper .swiper-button-prev:hover {
-            background: white;
-            transform: scale(1.1);
-        }
-        
-        .client-review-swiper .swiper-button-next:after,
-        .client-review-swiper .swiper-button-prev:after {
-            font-size: 16px;
-            font-weight: bold;
-        }
-        
-        .client-review-swiper .swiper-pagination {
-            bottom: 0 !important;
-        }
-        
-        .client-review-swiper .swiper-pagination-bullet {
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 1;
-            transition: all 0.3s ease;
-        }
-        
-        .client-review-swiper .swiper-pagination-bullet-active {
-            background: white;
-            transform: scale(1.2);
+        .backdrop-blur {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         /* Text color improvements */
-        .text-white-75 {
-            color: rgba(255, 255, 255, 0.85) !important;
+        .text-white-50 {
+            color: rgba(255, 255, 255, 0.7) !important;
         }
         
         /* Responsive adjustments */
@@ -384,6 +302,10 @@
             
             .hero-section .lead {
                 font-size: 1rem;
+            }
+            
+            #reviews .col-lg-4 {
+                margin-bottom: 1rem;
             }
         }
     </style>
