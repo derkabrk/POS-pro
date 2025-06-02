@@ -2,10 +2,12 @@ window.addEventListener("scroll", function () {
     var header = document.querySelector(".header-section.home-header");
     var scrollPosition = window.scrollY;
 
-    if (scrollPosition > 5) {
-        header.classList.add("bg-0d0d16");
-    } else {
-        header.classList.remove("bg-0d0d16");
+    if (header) {
+        if (scrollPosition > 5) {
+            header.classList.add("bg-0d0d16");
+        } else {
+            header.classList.remove("bg-0d0d16");
+        }
     }
 });
 

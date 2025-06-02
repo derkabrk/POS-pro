@@ -36,7 +36,7 @@
 
                         <div class="mt-4 d-flex align-items-center justify-content-center gap-3">
                             <img src="{{ asset($page_data['scanner_image'] ?? 'assets/images/icons/img-upload.png') }}" 
-                                 alt="" class="avatar-sm" />
+                                 alt="" width="32" height="32" />
                             <p class="text-muted mb-0">
                                 {{ $page_data['headings']['slider_scanner_text'] ?? '' }}
                             </p>
@@ -45,11 +45,11 @@
                         <div class="mt-4 d-flex gap-3 justify-content-center">
                             <a href="{{ $page_data['headings']['footer_apple_app_link'] ?? '' }}" target="_blank">
                                 <img src="{{ asset($page_data['footer_apple_app_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                     alt="App Store" height="40" />
+                                     alt="App Store" height="35" />
                             </a>
                             <a href="{{ $page_data['headings']['footer_google_play_app_link'] ?? '' }}" target="_blank">
                                 <img src="{{ asset($page_data['footer_google_app_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                     alt="Google Play" height="40" />
+                                     alt="Google Play" height="35" />
                             </a>
                         </div>
                     </div>
@@ -201,7 +201,7 @@
                         <h4 class="text-white mb-5">{{ $page_data['headings']['testimonial_title'] ?? '' }}</h4>
 
                         <!-- Swiper -->
-                        <div class="swiper client-review-swiper rounded customer-slider-section" dir="ltr">
+                        <div class="swiper client-review-swiper rounded" dir="ltr">
                             <div class="swiper-wrapper">
                                 @foreach ($testimonials as $testimonial)
                                     <div class="swiper-slide">
@@ -242,6 +242,30 @@
         </div>
         <!-- end container -->
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Swiper for testimonials with auto-scroll
+            var testimonialsSwiper = new Swiper('.client-review-swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                slidesPerView: 1,
+                spaceBetween: 30,
+                speed: 800,
+            });
+        });
+    </script>
 
     {{-- Blogs Section Code Start --}}
     <section class="section">
