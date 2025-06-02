@@ -163,6 +163,12 @@
                         aria-expanded="{{ Request::routeIs('admin.messages.index', 'admin.messages.create', 'admin.messages.edit') ? 'true' : 'false' }}" 
                         aria-controls="sidebarMessages">
                         <i class="ri-message-2-line"></i> <span>{{ __('Messages') }}</span>
+                        @php
+                            $unreadMessagesCount = auth()->check() && method_exists(auth()->user(), 'unreadMessagesCount') ? auth()->user()->unreadMessagesCount() : 0;
+                        @endphp
+                        @if($unreadMessagesCount > 0)
+                            <span class="badge bg-danger ms-1">{{ $unreadMessagesCount }}</span>
+                        @endif
                     </a>
                     <div class="collapse menu-dropdown {{ Request::routeIs('admin.messages.index', 'admin.messages.create', 'admin.messages.edit') ? 'show' : '' }}" id="sidebarMessages">
                         <ul class="nav nav-sm flex-column">
