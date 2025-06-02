@@ -1,50 +1,101 @@
-<section class="pricing-plan-section plans-list py-5 bg-light bg-opacity-50">
+<!-- start plan -->
+<section class="section bg-light" id="plans">
+    <div class="bg-overlay bg-overlay-pattern"></div>
     <div class="container">
-        <div class="section-title text-center mb-5">
-            <h2 class="fw-bold custom-clr-dark">{{ $page_data['headings']['pricing_title'] ?? '' }}</h2>
-            <p class="section-description text-secondary mb-4">
-                {{ $page_data['headings']['pricing_description'] ?? '' }}
-            </p>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h3 class="mb-3 fw-semibold">{{ $page_data['headings']['pricing_title'] ?? '' }}</h3>
+                    <p class="text-muted mb-4 ff-secondary">{{ $page_data['headings']['pricing_description'] ?? '' }}</p>
+                </div>
+            </div>
+            <!-- end col -->
         </div>
-        <div class="row g-4 justify-content-center">
-            @foreach ($plans as $plan)
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card border-0 shadow-sm h-100 rounded-4 bg-white">
-                        <div class="card-header py-4 border-0 text-center bg-transparent">
-                            <p class="mb-1 fw-semibold custom-clr-primary">{{ $plan['subscriptionName'] ?? '' }}</p>
-                            <h4 class="fw-bold mb-0 custom-clr-dark">
-                                @if (($plan['offerPrice'] && $plan['subscriptionPrice'] !== null) || $plan['offerPrice'] || $plan['subscriptionPrice'])
-                                    @if ($plan['offerPrice'])
-                                        {{ currency_format($plan['offerPrice']) }}
+        <!-- end row -->
+
+        <div class="row gy-4 justify-content-center">
+            @foreach ($plans as $index => $plan)
+                <div class="col-lg-4">
+                    <div class="card plan-box mb-0 {{ $index == 1 ? 'ribbon-box right' : '' }}">
+                        <div class="card-body p-4 m-2">
+                            @if($index == 1)
+                                <div class="ribbon-two ribbon-two-danger"><span>Popular</span></div>
+                            @endif
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-1 fw-semibold">{{ $plan['subscriptionName'] ?? 'Plan Name' }}</h5>
+                                    <p class="text-muted mb-0">{{ $plan['duration'] . ' Days' ?? 'Plan Duration' }}</p>
+                                </div>
+                                <div class="avatar-sm">
+                                    <div class="avatar-title bg-light rounded-circle text-primary">
+                                        @if($index == 0)
+                                            <i class="ri-book-mark-line fs-20"></i>
+                                        @elseif($index == 1)
+                                            <i class="ri-medal-fill fs-20"></i>
+                                        @else
+                                            <i class="ri-stack-fill fs-20"></i>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-4 text-center">
+                                <h1>
+                                    @if (($plan['offerPrice'] && $plan['subscriptionPrice'] !== null) || $plan['offerPrice'] || $plan['subscriptionPrice'])
+                                        @if ($plan['offerPrice'])
+                                            <span class="ff-secondary fw-bold fs-1">{{ currency_format($plan['offerPrice']) }}</span>
+                                        @else
+                                            <span class="ff-secondary fw-bold fs-1">{{ currency_format($plan['subscriptionPrice']) }}</span>
+                                        @endif
                                     @else
-                                        {{ currency_format($plan['subscriptionPrice']) }}
+                                        @if ($plan['offerPrice'] || $plan['subscriptionPrice'])
+                                            <span class="ff-secondary fw-bold fs-1">{{ currency_format($plan['offerPrice'] ?? $plan['subscriptionPrice']) }}</span>
+                                        @else
+                                            <span class="ff-secondary fw-bold fs-1">{{ __('Free') }}</span>
+                                        @endif
                                     @endif
-                                @else
-                                    @if ($plan['offerPrice'] || $plan['subscriptionPrice'])
-                                        {{ currency_format($plan['offerPrice'] ?? $plan['subscriptionPrice']) }}
-                                    @else
-                                        {{ __('Free') }}
-                                    @endif
-                                @endif
-                                <span class="price-span fs-6 text-muted">/{{ $plan['duration'] . ' Days' }}</span>
-                            </h4>
-                        </div>
-                        <div class="card-body text-start">
-                            <p class="fw-semibold mb-2">{{ __('Features Of Free Plan') }} 👇</p>
-                            <ul class="list-group list-group-flush mb-4">
-                                @foreach ($plan['features'] ?? [] as $key => $item)
-                                    <li class="list-group-item bg-transparent ps-0 border-0 d-flex align-items-center">
-                                        <i class="fas {{ isset($item[1]) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }} me-2"></i>
-                                        <span class="fw-medium custom-clr-dark">{{ $item[0] ?? '' }}</span>
-                                    </li>
-                                @endforeach
-                            </ul>
-                            <a class="btn subscribe-plan d-block mt-2 fw-bold" data-bs-target="#registration-modal" data-bs-toggle="modal">{{ __("Buy Now") }}</a>
+                                    <span class="fs-13 text-muted">/{{ $plan['duration'] . ' Days' }}</span>
+                                </h1>
+                            </div>
+
+                            <div>
+                                <p class="fw-semibold mb-3 text-center">{{ __('Features Of Plan') }}</p>
+                                <ul class="list-unstyled text-muted vstack gap-3 ff-secondary">
+                                    @foreach ($plan['features'] ?? [] as $key => $item)
+                                        <li>
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-1">
+                                                    @if(isset($item[1]))
+                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle text-success"></i>
+                                                    @else
+                                                        <i class="ri-close-circle-fill fs-15 align-middle text-danger"></i>
+                                                    @endif
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    {{ $item[0] ?? '' }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <div class="mt-4">
+                                    <a href="javascript:void(0);" 
+                                       class="btn btn-soft-primary w-100 subscribe-plan" 
+                                       data-bs-target="#registration-modal" 
+                                       data-bs-toggle="modal">
+                                        {{ __("Buy Now") }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!--end col-->
             @endforeach
         </div>
+        <!--end row-->
     </div>
+    <!-- end container -->
 </section>
+<!-- end plan -->
+
 <input type="hidden" value="{{ route('get-business-categories') }}" id="get-business-categories">

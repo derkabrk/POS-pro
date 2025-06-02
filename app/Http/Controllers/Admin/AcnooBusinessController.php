@@ -356,12 +356,12 @@ class AcnooBusinessController extends Controller
     public function upgradePlan(Request $request)
     {
         $request->validate([
-            'price' => 'required|string',
-            'notes' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'notes' => 'required|string|max:1000',
             'plan_id' => 'required|exists:plans,id',
             'business_id' => 'required|exists:businesses,id',
-            'expieryDate'=> 'required|date',
-            'points_to_use' => 'nullable|integer|min:0', // allow points_to_use
+            'expieryDate'=> 'required|date|after:today',
+            'points_to_use' => 'nullable|integer|min:0',
         ]);
 
         DB::beginTransaction();
@@ -370,12 +370,21 @@ class AcnooBusinessController extends Controller
             $business = Business::findOrFail($request->business_id);
             $user = $business->user;
 
+            if (!$user) {
+                DB::rollBack();
+                return redirect()->back()->withErrors(__('Business user not found.'));
+            }
+
             $price = $request->price ?? $plan->subscriptionPrice;
             $usedPoints = false;
             $pointsToUse = $request->points_to_use ? intval($request->points_to_use) : 0;
 
-            // If points_to_use is provided and user has enough points
-            if ($pointsToUse > 0 && $user && $user->points >= $pointsToUse) {
+            // Validate points usage
+            if ($pointsToUse > 0) {
+                if ($user->points < $pointsToUse) {
+                    DB::rollBack();
+                    return redirect()->back()->withErrors(__('Insufficient points for this transaction.'));
+                }
                 if ($pointsToUse > $price) {
                     $pointsToUse = $price;
                 }
@@ -423,17 +432,19 @@ class AcnooBusinessController extends Controller
             sendNotification($subscribe->id, route('admin.subscription-reports.index', ['id' => $subscribe->id]), __('Plan subscribed by ' . auth()->user()->name));
 
             DB::commit();
-            return response()->json([
-                'message' => $usedPoints ? __('Subscription enrolled using points.') : __('Subscription enrolled successfully.'),
-                'redirect' => route('admin.subscription-reports.index', [], false), // Use relative URL
-            ]);
+            // Instead of returning JSON, redirect to the intended page
+            return redirect()->route('admin.subscription-reports.index')
+                ->with('success', $usedPoints ? __('Subscription enrolled using points.') : __('Subscription enrolled successfully.'));
+        } catch (\Illuminate\Validation\ValidationException $ve) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($ve->validator->errors())->withInput();
         } catch (\Throwable $th) {
             \Log::error('UpgradePlan Exception', [
                 'message' => $th->getMessage(),
                 'trace' => $th->getTraceAsString(),
             ]);
-            DB::rollback();
-            return response()->json(__('Something was wrong.'), 403);
+            DB::rollBack();
+            return redirect()->back()->withErrors(__('Something went wrong. Please try again.'))->withInput();
         }
     }
 }
