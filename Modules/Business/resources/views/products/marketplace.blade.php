@@ -16,9 +16,6 @@
             --secondary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --success-gradient: linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
             --danger-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --card-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            --hover-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            --border-radius: 16px;
             --bg-light: #f8f9fa;
             --bg-dark: #212529;
             --text-muted: #6c757d;
@@ -107,16 +104,13 @@
 
         /* Card Components */
         .card {
-            border: none;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
             transition: all 0.3s ease;
             overflow: hidden;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
+            transform: translateY(-2px);
         }
 
         .card-body {
@@ -125,7 +119,6 @@
 
         /* Button Styles */
         .btn {
-            border-radius: 50px;
             padding: 12px 24px;
             font-weight: 500;
             transition: all 0.3s ease;
@@ -141,7 +134,6 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(64, 92, 245, 0.3);
             color: white;
         }
 
@@ -188,7 +180,6 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            border-radius: 50%;
         }
 
         .icon-effect {
@@ -201,7 +192,6 @@
 
         /* Badge Styles */
         .badge {
-            border-radius: 50px;
             padding: 0.5rem 1rem;
             font-weight: 500;
         }
@@ -246,11 +236,10 @@
         /* Filter Section */
         .filter-section {
             background: white;
-            border-radius: var(--border-radius);
             padding: 2rem;
             margin: -3rem auto 3rem;
             max-width: 1000px;
-            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
             position: relative;
             z-index: 10;
         }
@@ -259,7 +248,6 @@
             border: 2px solid var(--primary-color);
             background: white;
             color: var(--primary-color);
-            border-radius: 50px;
             padding: 0.75rem 1.5rem;
             margin: 0.25rem;
             transition: all 0.3s ease;
@@ -271,24 +259,20 @@
             background: var(--primary-color);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(64, 92, 245, 0.3);
         }
 
         /* Product Cards */
         .product-card {
             background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
             transition: all 0.3s ease;
             overflow: hidden;
             height: 100%;
             position: relative;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--hover-shadow);
+            transform: translateY(-5px);
         }
 
         .product-image {
@@ -316,7 +300,6 @@
             background: var(--success-gradient);
             color: white;
             padding: 0.5rem 1rem;
-            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
         }
@@ -351,11 +334,10 @@
         /* Category Sections */
         .category-section {
             background: white;
-            border-radius: var(--border-radius);
             padding: 2rem;
-            box-shadow: var(--card-shadow);
             margin-bottom: 2rem;
             border-left: 4px solid var(--primary-color);
+            border: 1px solid #e2e8f0;
             transition: all 0.3s ease;
         }
 
@@ -383,7 +365,6 @@
         .qty-selector {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 50px;
             display: flex;
             align-items: center;
             margin-bottom: 1rem;
@@ -419,8 +400,7 @@
         /* Cart Sidebar */
         .cart-sidebar {
             background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
             position: sticky;
             top: 2rem;
             max-height: calc(100vh - 4rem);
@@ -431,7 +411,6 @@
             background: var(--primary-color);
             color: white;
             padding: 1.5rem;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
             text-align: center;
             font-weight: 600;
         }
@@ -447,12 +426,10 @@
         .cart-total {
             padding: 1.5rem;
             background: #f8fafc;
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
         }
 
         /* Form Styles */
         .form-control {
-            border-radius: 12px;
             border: 1px solid #e2e8f0;
             padding: 0.75rem 1rem;
             transition: all 0.3s ease;
@@ -461,7 +438,8 @@
 
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(64, 92, 245, 0.1);
+            box-shadow: none;
+            outline: 2px solid rgba(64, 92, 245, 0.1);
         }
 
         .form-label {
@@ -474,8 +452,7 @@
         .enhanced-order-summary {
             background: white;
             padding: 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
         }
 
         /* Animation Classes */
@@ -537,9 +514,7 @@
 
         /* Status alerts */
         .alert {
-            border-radius: var(--border-radius);
-            border: none;
-            box-shadow: var(--card-shadow);
+            border: 1px solid;
         }
 
         .alert-info {
@@ -549,17 +524,14 @@
 
         /* Table styling */
         .table {
-            border-radius: var(--border-radius);
             overflow: hidden;
         }
 
         .card-header {
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         /* Search input styling */
         .search-input {
-            border-radius: 50px;
             border: 1px solid #e2e8f0;
             padding: 0.75rem 1.5rem 0.75rem 3rem;
             background: white;
@@ -576,7 +548,6 @@
 
         /* View All Button */
         .view-all-btn {
-            border-radius: 50px;
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
         }
@@ -1297,13 +1268,13 @@
             modal.id = 'order-success-modal';
             modal.innerHTML = `
                 <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.8);z-index:99999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);">
-                    <div style="background:white;border-radius:24px;box-shadow:0 25px 50px rgba(0,0,0,0.25);padding:3rem 2rem;max-width:400px;width:90%;text-align:center;position:relative;animation:modalFadeIn 0.5s ease;">
-                        <div style="background:var(--success-gradient);width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem auto;box-shadow:0 10px 25px rgba(110,231,183,0.4);">
+                    <div style="background:white;padding:3rem 2rem;max-width:400px;width:90%;text-align:center;position:relative;animation:modalFadeIn 0.5s ease;border:1px solid #e2e8f0;">
+                        <div style="background:var(--success-gradient);width:80px;height:80px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem auto;">
                             <i class='ri-check-line' style='color:#fff;font-size:2.5rem;'></i>
                         </div>
                         <h2 style="color:#1e293b;font-family:'Inter',sans-serif;font-weight:700;font-size:2rem;margin-bottom:0.75rem;">Order Placed!</h2>
                         <p style="color:#64748b;font-size:1.1rem;margin-bottom:1.5rem;line-height:1.6;">Thank you for your purchase.<br>Your order <strong>#${data.order_id || 'ORD-' + Date.now()}</strong> has been received.</p>
-                        <button id="close-order-success" style="background:var(--primary-gradient);color:#fff;border:none;padding:0.75rem 2rem;border-radius:50px;font-weight:600;font-size:1rem;box-shadow:0 4px 15px rgba(64,92,245,0.3);transition:all 0.2s;cursor:pointer;">Continue Shopping</button>
+                        <button id="close-order-success" style="background:var(--primary-gradient);color:#fff;border:none;padding:0.75rem 2rem;font-weight:600;font-size:1rem;transition:all 0.2s;cursor:pointer;">Continue Shopping</button>
                     </div>
                 </div>
                 <style>
