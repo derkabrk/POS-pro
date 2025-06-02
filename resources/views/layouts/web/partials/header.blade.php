@@ -1,4 +1,4 @@
-{{-- header.blade.php (for homepage - request()->is('/')) --}}
+{{-- header.blade.php (Homepage with scroll functionality) --}}
 <div class="layout-wrapper landing">
     <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
         <div class="container">
@@ -121,3 +121,107 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Header scroll background styles */
+.navbar-landing {
+    transition: all 0.3s ease-in-out;
+    background-color: transparent;
+}
+
+.navbar-landing.navbar-scrolled {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.navbar-landing.navbar-scrolled .card-logo-light {
+    opacity: 0;
+}
+
+.navbar-landing.navbar-scrolled .card-logo-dark {
+    opacity: 1;
+}
+
+.navbar-landing .card-logo-light {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.navbar-landing .card-logo-dark {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.navbar-landing.navbar-scrolled .nav-link {
+    color: #495057 !important;
+}
+
+.navbar-landing.navbar-scrolled .nav-link:hover {
+    color: #007bff !important;
+}
+
+.navbar-landing.navbar-scrolled .nav-link.active {
+    color: #007bff !important;
+}
+
+.navbar-landing.navbar-scrolled .btn-link {
+    color: #495057 !important;
+}
+
+.navbar-landing.navbar-scrolled .navbar-toggler {
+    border-color: #495057;
+}
+
+.navbar-landing.navbar-scrolled .navbar-toggler .mdi {
+    color: #495057;
+}
+
+.navbar-brand {
+    position: relative;
+}
+
+.card-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-landing.navbar-scrolled {
+        background-color: rgba(255, 255, 255, 0.98) !important;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.getElementById('navbar');
+    let ticking = false;
+
+    function updateNavbar() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 50) {
+            navbar.classList.add('navbar-scrolled');
+        } else {
+            navbar.classList.remove('navbar-scrolled');
+        }
+        ticking = false;
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateNavbar);
+            ticking = true;
+        }
+    }
+
+    if (navbar) {
+        window.addEventListener('scroll', requestTick);
+        updateNavbar(); // Initial check
+    }
+});
+</script>
