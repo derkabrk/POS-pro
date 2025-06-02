@@ -1,13 +1,19 @@
 <header class="header-section home-header">
     <nav class="navbar navbar-expand-lg p-0">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
+            <!-- Desktop Logo and Menu -->
+            <a href="{{ route('home') }}" class="header-logo d-none d-lg-flex align-items-center"><img
+                    src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
+                    alt="header-logo" /></a>
+
+            <!-- Mobile Logo and Menu Toggle -->
+            <a href="{{ route('home') }}" class="header-logo d-flex d-lg-none align-items-center"><img
+                    src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
+                    alt="header-logo" /></a>
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
                 aria-controls="staticBackdrop">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
-            <a href="{{ route('home') }}" class="header-logo"><img
-                    src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
-                    alt="header-logo" /></a>
 
             <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"  class="get-app-btn login-btn ">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -26,7 +32,7 @@
             <div class="offcanvas offcanvas-start mobile-menu" data-bs-backdrop="static" tabindex="-1"
                 id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                 <div class="offcanvas-header home-offcanvas-header">
-                    <a href="{{ route('home') }}" class="header-logo"><img
+                    <a href="{{ route('home') }}" class="header-logo d-flex align-items-center"><img
                             src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
                             alt="header-logo" /></a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
