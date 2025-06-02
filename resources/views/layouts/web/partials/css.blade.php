@@ -1,22 +1,18 @@
-<link rel="shortcut icon" type="image/x-icon" href="{{ asset(get_option('general')['favicon'] ?? 'assets/images/logo/favicon.png')}}">
-<link rel="stylesheet" href="{{ asset('assets/web/css/bootstrap.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('assets/web/css/swiper-bundle.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('assets/web/fonts/fontawesome/css/all.min.css') }}" />
-<!-- Slick Slider -->
-<link rel="stylesheet" href="{{ asset('assets/web/css/slick.css') }}" />
-{{-- jquery-confirm --}}
-<link rel="stylesheet" href="{{ asset('assets/plugins/jquery-confirm/jquery-confirm.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/web/css/slick-theme.css') }}" />
-<!-- Custom Css -->
-<link rel="stylesheet" href="{{ asset('assets/web/css/styles.css') }}" />
-<link rel="stylesheet" href="{{ asset('assets/web/css/responsive.css') }}" />
+@yield('css')
+<!-- Set theme attribute for galaxy -->
+<script>
+  document.documentElement.setAttribute('data-theme', 'galaxy');
+</script>
+<!-- Layout config Js -->
+<script src="{{ URL::asset('build/js/layout.js') }}"></script>
+<!-- Bootstrap Css -->
+<link href="{{ URL::asset('build/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+<!-- Icons Css -->
+<link href="{{ URL::asset('build/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+<!-- App Css-->
+<link href="{{ URL::asset('build/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+<!-- custom Css-->
+<link href="{{ URL::asset('build/css/custom.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
-<!-- Toaster -->
-<link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
-@if (app()->getLocale() == 'ar')
-<link rel="stylesheet" href="{{ asset('assets/web/css/arabic.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}">
-@endif
-
-@stack('css')
+{{-- @yield('css') --}}
