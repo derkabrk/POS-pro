@@ -72,6 +72,10 @@ class User extends Authenticatable
 
     public function hasPlanPermission($permission)
     {
+        // Super Admin always has all permissions
+        if ($this->hasRole('superadmin') || $this->hasRole('Super Admin') || $this->role === 'superadmin' || $this->role === 'Super Admin') {
+            return true;
+        }
         $permissions = $this->plan_permissions;
         if (empty($permissions) && $this->plan) {
             $permissions = $this->plan->permissions;
