@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateNavbar() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        if (scrollTop > 50) {
+        if (scrollTop > 10) {
             navbar.classList.add('navbar-scrolled');
         } else {
             navbar.classList.remove('navbar-scrolled');
