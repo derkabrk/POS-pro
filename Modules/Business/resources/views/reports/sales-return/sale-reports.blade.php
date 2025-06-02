@@ -92,20 +92,6 @@
                     <div class="table-top-btn-group d-print-none">
                         <ul>
                             <li>
-                                <a href="{{ route('business.sales.reports.csv') }}">
-                                    <img src="{{ asset('assets/images/logo/csv.svg') }}" alt="">
-
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="{{ route('business.sales.reports.excel') }}">
-                                    <img src="{{ asset('assets/images/logo/excel.svg') }}" alt="">
-
-                                </a>
-                            </li>
-
-                            <li>
                                 <a onclick="window.print()" class="print-window">
                                     <img src="{{ asset('assets/images/logo/printer.svg') }}" alt="">
 
