@@ -1,21 +1,24 @@
 <header class="header-section home-header">
     <nav class="navbar navbar-expand-lg p-0">
         <div class="container">
-            <!-- Desktop Logo and Menu -->
+            <!-- Desktop Logo -->
             <a href="{{ route('home') }}" class="header-logo d-none d-lg-flex align-items-center"><img
                     src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
                     alt="header-logo" /></a>
 
-            <!-- Mobile Logo and Menu Toggle -->
+            <!-- Mobile Logo -->
             <a href="{{ route('home') }}" class="header-logo d-flex d-lg-none align-items-center"><img
                     src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
                     alt="header-logo" /></a>
+
+            <!-- Mobile Menu Toggle -->
             <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
                 aria-controls="staticBackdrop">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
 
-            <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"  class="get-app-btn login-btn ">
+            <!-- Mobile Login Button -->
+            <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"  class="get-app-btn login-btn d-inline-flex d-lg-none">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -82,8 +85,8 @@
                     </div>
                 </div>
             </div>
-            <!-- Desktop Menu -->
-            <div class="collapse navbar-collapse">
+            <!-- Desktop Menu and Login Button -->
+            <div class="collapse navbar-collapse d-none d-lg-flex align-items-center">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a href="{{ route('home') }}" class="nav-link active"
@@ -125,7 +128,7 @@
                     </li>
                 </ul>
                 <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"
-                    class="get-app-btn">
+                    class="get-app-btn d-none d-lg-inline-flex">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
