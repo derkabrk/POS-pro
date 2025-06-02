@@ -620,30 +620,18 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
                         <h6 class="dropdown-header">Welcome {{Auth::user()->name}}!</h6>
-                        
                         @if(auth()->check() && method_exists(Auth::user(), 'role'))
-                            <a class="dropdown-item" href="{{ route('admin.profiles.index') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('My Profile') }}</span></a>
+                            <a class="dropdown-item" href="{{ route('business.settings.index') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('My Profile') }}</span></a>
                         @else
                             <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
                         @endif
-                        
-                        <a class="dropdown-item" href="apps-chat"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
-                        <a class="dropdown-item" href="apps-tasks-kanban"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
-                        <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
+                        <a class="dropdown-item" href="{{ route('chat.index') }}?active=chat"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
+                        <a class="dropdown-item" href="{{ route('business.ticketSystem.index') }}"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
                         <div class="dropdown-divider"></div>
-                        
                         @if(auth()->check() && Route::has('cache-clear'))
                             <a class="dropdown-item" href="{{ url('cache-clear') }}"><i class="far fa-undo text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('Clear cache') }}</span></a>
                         @endif
-                        
                         <a class="dropdown-item" href="{{ route('business.settings.index') }}"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
-                        
-                        
-                        <a class="dropdown-item d-flex align-items-center" href="{{ route('business.invite-codes.index') }}">
-                            <i class="ri-key-line text-muted fs-16 align-middle me-2"></i>
-                            <span class="align-middle">Invite Codes</span>
-                        </a>
-                        
                         <a class="dropdown-item " href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span key="t-logout">@lang('translation.logout')</span></a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
