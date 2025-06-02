@@ -45,11 +45,11 @@
                         <div class="mt-4 d-flex gap-3 justify-content-center">
                             <a href="{{ $page_data['headings']['footer_apple_app_link'] ?? '' }}" target="_blank">
                                 <img src="{{ asset($page_data['footer_apple_app_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                     alt="App Store" height="35" />
+                                     alt="App Store" style="height:40px; width:auto; max-width:160px; object-fit:contain;" />
                             </a>
                             <a href="{{ $page_data['headings']['footer_google_play_app_link'] ?? '' }}" target="_blank">
                                 <img src="{{ asset($page_data['footer_google_app_image'] ?? 'assets/images/icons/img-upload.png') }}"
-                                     alt="Google Play" height="35" />
+                                     alt="Google Play" style="height:40px; width:auto; max-width:160px; object-fit:contain;" />
                             </a>
                         </div>
                     </div>
@@ -199,19 +199,18 @@
                             <i class="ri-double-quotes-l text-success display-3"></i>
                         </div>
                         <h4 class="text-white mb-5">{{ $page_data['headings']['testimonial_title'] ?? '' }}</h4>
-
                         <!-- Swiper -->
-                        <div class="swiper client-review-swiper rounded" dir="ltr">
+                        <div class="swiper client-review-swiper rounded customer-slider-section" dir="ltr" style="max-width: 900px; margin: 0 auto;">
                             <div class="swiper-wrapper">
                                 @foreach ($testimonials as $testimonial)
                                     <div class="swiper-slide">
                                         <div class="row justify-content-center">
-                                            <div class="col-10">
-                                                <div class="text-white-50 text-center">
+                                            <div class="col-12 col-md-10">
+                                                <div class="text-white-50 text-center px-2 px-md-4 py-3" style="min-height: 320px;">
                                                     <div class="avatar-lg mx-auto mb-4">
                                                         <img src="{{ asset($testimonial->client_image) }}" 
                                                              alt="{{ $testimonial->client_name }}" 
-                                                             class="img-fluid rounded-circle" />
+                                                             class="img-fluid rounded-circle" style="width:90px;height:90px;object-fit:cover;" />
                                                     </div>
                                                     <p class="fs-20 ff-secondary mb-4">"{{ $testimonial->text }}"</p>
                                                     <div>
@@ -242,10 +241,9 @@
         </div>
         <!-- end container -->
     </section>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Swiper for testimonials with auto-scroll
+            // Initialize Swiper for testimonials with auto-scroll and responsive slides
             var testimonialsSwiper = new Swiper('.client-review-swiper', {
                 loop: true,
                 autoplay: {
@@ -260,9 +258,14 @@
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
-                slidesPerView: 1,
+                slidesPerView: 2,
                 spaceBetween: 30,
                 speed: 800,
+                breakpoints: {
+                    0: { slidesPerView: 1 },
+                    768: { slidesPerView: 2 },
+                    1200: { slidesPerView: 2 }
+                }
             });
         });
     </script>
