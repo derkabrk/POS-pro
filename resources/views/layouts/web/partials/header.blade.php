@@ -164,6 +164,28 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 24px;
+    position: relative;
+}
+
+/* Desktop Layout */
+@media (min-width: 992px) {
+    .header-section.home-header .container {
+        justify-content: space-between;
+    }
+    
+    .header-logo {
+        order: 1;
+    }
+    
+    .navbar-collapse {
+        order: 2;
+        flex-grow: 1;
+        justify-content: center;
+    }
+    
+    .get-app-btn:not(.login-btn) {
+        order: 3;
+    }
 }
 
 /* Logo Styling */
@@ -404,6 +426,20 @@
 }
 
 /* Responsive Design */
+@media (min-width: 992px) {
+    .navbar-toggler {
+        display: none !important;
+    }
+    
+    .get-app-btn.login-btn {
+        display: none !important;
+    }
+    
+    .navbar-collapse {
+        display: flex !important;
+    }
+}
+
 @media (max-width: 991.98px) {
     .header-logo img {
         max-height: 28px !important;
@@ -414,11 +450,31 @@
     }
     
     .get-app-btn.login-btn {
-        display: inline-flex;
+        display: inline-flex !important;
     }
     
     .container .get-app-btn:not(.login-btn) {
-        display: none;
+        display: none !important;
+    }
+    
+    .navbar-toggler {
+        display: block !important;
+        order: 1;
+    }
+    
+    .header-logo {
+        order: 2;
+        flex-grow: 1;
+        justify-content: center;
+    }
+    
+    .get-app-btn.login-btn {
+        order: 3;
+    }
+    
+    .container {
+        display: flex !important;
+        align-items: center;
     }
 }
 
@@ -443,6 +499,11 @@
     .get-app-btn.login-btn svg {
         width: 14px;
         height: 14px;
+    }
+    
+    .header-logo {
+        justify-content: flex-start;
+        margin-left: 15px;
     }
 }
 
