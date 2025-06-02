@@ -666,7 +666,7 @@
         if (messagesTab) {
             messagesTab.addEventListener('click', function(e) {
                 e.preventDefault();
-                window.location.href = "{{ route('chats.index') }}?active=chat";
+                window.location.href = "{{ route('chat.index') }}?active=chat";
             });
         }
     });
