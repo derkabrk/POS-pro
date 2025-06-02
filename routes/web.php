@@ -26,7 +26,7 @@ Route::domain('{business}.shyftcom.com')->group(function () {
 
 // Marketplace routes for main domain (no subdomain)
 
-Route::get('/', [Web\WebController::class, 'index'])->name('home');
+Route::get('/home', [Web\WebController::class, 'index'])->name('home');
 Route::resource('blogs', Web\BlogController::class)->only('index', 'show', 'store');
 Route::get('/about-us', [Web\AboutController::class, 'index'])->name('about.index');
 Route::get('/plans', [Web\PlanController::class, 'index'])->name('plan.index');
@@ -80,7 +80,7 @@ Route::get('/cache-clear', function () {
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
     Artisan::call('route:clear');
-    Artisan::call('view:clear');
+    Artisan::call('view:clear');    
 
     return back()->with('success', __('Cache has been cleared.'));
 });

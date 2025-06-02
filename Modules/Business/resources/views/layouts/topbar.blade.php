@@ -321,7 +321,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <a href="{{ route('admin.notifications.mtView', $notification->id) }}" class="stretched-link">
+                                                        <a href="{{ route('chat.index') }}?active=chat" class="stretched-link">
                                                             <h6 class="mt-0 mb-2 lh-base">{{ __($notification->data['message'] ?? '') }}</h6>
                                                         </a>
                                                         <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
