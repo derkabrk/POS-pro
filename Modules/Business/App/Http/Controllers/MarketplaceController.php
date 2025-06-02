@@ -257,4 +257,81 @@ class MarketplaceController extends Controller
         // Reuse the show() logic by business_id
         return $this->show($businessModel->id);
     }
+
+    /**
+     * Show product details page for a marketplace product
+     */
+    public function productDetails($business, $business_id, $product_id)
+    {
+        // Accept either subdomain or numeric business_id
+        if (!is_numeric($business_id)) {
+            $businessModel = Business::where('subdomain', $business_id)->firstOrFail();
+            $business_id = $businessModel->id;
+        }
+        $business = Business::findOrFail($business_id);
+        $product = Product::with(['brand', 'category'])->where('business_id', $business_id)->findOrFail($product_id);
+        return view('business::products.product-details', compact('product', 'business'));
+    }
+
+    /**
+     * Handle order submission from product details page
+     */
+    public function submitProductOrder(Request $request, $business, $business_id, $product_id)
+    {
+        if (!is_numeric($business_id)) {
+            $businessModel = Business::where('subdomain', $business_id)->firstOrFail();
+            $business_id = $businessModel->id;
+        }
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+            'customer_name' => 'required|string|max:255',
+            'customer_email' => 'nullable|email',
+            'customer_phone' => 'nullable|string|max:32',
+            'customer_address' => 'nullable|string|max:255',
+            'special_instructions' => 'nullable|string|max:500',
+        ]);
+        $product = Product::where('business_id', $business_id)->findOrFail($product_id);
+        $customer = Party::firstOrCreate(
+            [
+                'business_id' => $business_id,
+                'phone' => $request->customer_phone,
+            ],
+            [
+                'name' => $request->customer_name,
+                'email' => $request->customer_email,
+                'address' => $request->customer_address,
+                'type' => 'Retailer',
+                'status' => 1,
+            ]
+        );
+        $totalAmount = $product->productSalePrice * $request->quantity;
+        $sale = Sale::create([
+            'business_id' => $business_id,
+            'party_id' => $customer->id,
+            'user_id' => null,
+            'source' => 'marketplace',
+            'totalAmount' => $totalAmount,
+            'paidAmount' => 0,
+            'dueAmount' => $totalAmount,
+            'isPaid' => 0,
+            'products' => json_encode([
+                [
+                    'product_id' => $product_id,
+                    'productName' => $product->productName,
+                    'quantity' => $request->quantity,
+                    'price' => $product->productSalePrice,
+                ]
+            ]),
+            'saleDate' => now(),
+            'meta' => json_encode([
+                'instructions' => $request->special_instructions,
+            ]),
+        ]);
+        session(['marketplace_customer_' . $business_id => [
+            'name' => $customer->name,
+            'email' => $customer->email,
+            'phone' => $customer->phone,
+        ]]);
+        return redirect()->back()->with('success', __('Order submitted!'));
+    }
 }

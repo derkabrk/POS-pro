@@ -24,6 +24,10 @@ Route::domain('{business}.shyftcom.com')->group(function () {
     Route::post('marketplace/{business_id}/checkout-order', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'storeCheckoutOrder'])->name('marketplace.checkout.order');
 });
 
+// Marketplace routes (public, no auth middleware)
+Route::get('marketplace/{business}/{business_id}/product/{product_id}', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'productDetails'])->name('marketplace.product.details');
+Route::post('marketplace/{business}/{business_id}/product/{product_id}/order', [\Modules\Business\App\Http\Controllers\MarketplaceController::class, 'submitProductOrder'])->name('marketplace.product.order');
+
 // Marketplace routes for main domain (no subdomain)
 
 Route::get('/home', [Web\WebController::class, 'index'])->name('home');
