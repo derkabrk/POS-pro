@@ -17,11 +17,11 @@
 </head>
 
 <body>
-    @if (request()->is('/'))
+  
         @include('layouts.web.partials.header')
-    @else
-        @include('layouts.web.partials.common_header')
-    @endif
+ 
+  
+ 
 
     @yield('content')
 

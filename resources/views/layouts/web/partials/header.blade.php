@@ -1,358 +1,204 @@
-<header id="page-topbar">
-    <div class="navbar-header">
-        <div class="container-fluid px-0">
-            <div class="navbar-brand-box">
-                <a href="{{ route('home') }}" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}" alt="" height="30">
-                    </span>
-                </a>
-                <a href="{{ route('home') }}" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}" alt="" height="30">
-                    </span>
-                </a>
-            </div>
-
-            <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" 
-                    data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
-                <span></span>
-                <span></span>
-                <span></span>
+<header class="header-section home-header">
+    <nav class="navbar navbar-expand-lg p-0">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
+                aria-controls="staticBackdrop">
+                <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
+            <a href="{{ route('home') }}" class="header-logo"><img
+                    src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
+                    alt="header-logo" /></a>
 
-            <!-- Navigation Menu -->
-            <div class="collapse navbar-collapse" id="topnav-menu-content">
-                <ul class="navbar-nav mx-auto" id="topnav-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}" data-key="t-home">
-                            {{ __('Home') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('about.index') }}" data-key="t-about">
-                            {{ __('About Us') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('plan.index') }}" data-key="t-pricing">
-                            {{ __('Pricing') }}
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown mega-dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="topnav-pages" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-key="t-pages">
-                            {{ __('Pages') }} <div class="arrow-down"></div>
-                        </a>
-                        <div class="dropdown-menu mega-dropdown-menu px-2 p-3">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <ul class="list-unstyled mega-dropdown-list">
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('blogs.index') }}" data-key="t-blog">
-                                                {{ __('Blog') }}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('term.index') }}" data-key="t-terms">
-                                                {{ __('Terms & Conditions') }}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('policy.index') }}" data-key="t-privacy">
-                                                {{ __('Privacy Policy') }}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+            <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"  class="get-app-btn login-btn ">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M5.48131 12.9012C4.30234 13.6032 1.21114 15.0366 3.09389 16.8304C4.01359 17.7065 5.03791 18.3332 6.32573 18.3332H13.6743C14.9621 18.3332 15.9864 17.7065 16.9061 16.8304C18.7888 15.0366 15.6977 13.6032 14.5187 12.9012C11.754 11.2549 8.24599 11.2549 5.48131 12.9012Z"
+                        fill="white" />
+                    <path
+                        d="M13.75 5.4165C13.75 7.48757 12.0711 9.1665 10 9.1665C7.92893 9.1665 6.25 7.48757 6.25 5.4165C6.25 3.34544 7.92893 1.6665 10 1.6665C12.0711 1.6665 13.75 3.34544 13.75 5.4165Z"
+                        fill="white" />
+                </svg>
+                {{ $page_data['headings']['header_btn_text'] ?? 'Login' }}
+            </a>
+
+            <!-- Mobile Menu -->
+            <div class="offcanvas offcanvas-start mobile-menu" data-bs-backdrop="static" tabindex="-1"
+                id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+                <div class="offcanvas-header home-offcanvas-header">
+                    <a href="{{ route('home') }}" class="header-logo"><img
+                            src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
+                            alt="header-logo" /></a>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="accordion accordion-flush mb-30" id="sidebarMenuAccordion">
+                        <div class="accordion-item">
+                            <a href="{{ route('home') }}" class="accordion-button without-sub-menu"
+                                type="button">{{ __('Home') }}</a>
+                        </div>
+                        <div class="accordion-item">
+                            <a href="{{ route('about.index') }}" class="accordion-button without-sub-menu"
+                                type="button">{{ __('About Us') }}</a>
+                        </div>
+                        <div class="accordion-item">
+                            <a href="{{ route('plan.index') }}" class="accordion-button without-sub-menu"
+                                type="button">{{ __('Pricing') }}</a>
+                        </div>
+                        <div class="accordion-item">
+                            <a href="javascript:void(0);" class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#support-menu" aria-expanded="false"
+                                aria-controls="support-menu">{{ __('Pages') }}</a>
+                            <div id="support-menu" class="accordion-collapse collapse"
+                                data-bs-parent="#sidebarMenuAccordion">
+                                <ul class="accordion-body p-0">
+                                    <li>
+                                        <a href="{{ route('blogs.index') }}">{{ __('Blog') }}</a>
+                                        <p class="mb-0 arrow">></p>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('term.index') }}"> {{ __('Terms & Conditions') }} </a>
+                                        <p class="mb-0 arrow">></p>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('policy.index') }}"> {{ __('Privacy Policy') }} </a>
+                                        <p class="mb-0 arrow">></p>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+                        <div class="accordion-item">
+                            <a href="{{ route('contact.index') }}" class="accordion-button without-sub-menu"
+                                type="button">{{ __('Contact Us') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Desktop Menu -->
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a href="{{ route('home') }}" class="nav-link active"
+                            aria-current="page">{{ __('Home') }}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page"
+                            href="{{ route('about.index') }}">{{ __('About Us') }}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page"
+                            href="{{ route('plan.index') }}">{{ __('Pricing') }}</a>
+                    </li>
+
+                    <li class="nav-item menu-dropdown">
+                        <a class="nav-link" aria-current="page" href="javascript:void(0);">{{ __('Pages') }} <span
+                                class="arrow">></span></a>
+                        <ul class="dropdown-content">
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('blogs.index') }}">{{ __('Blog') }}<span>></span></a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('term.index') }}">{{ __('Terms & Conditions') }}
+                                    <span>></span></a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('policy.index') }}">{{ __('Privacy Policy') }}<span>></span></a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('contact.index') }}" data-key="t-contact">
-                            {{ __('Contact Us') }}
-                        </a>
+                        <a class="nav-link" aria-current="page"
+                            href="{{ route('contact.index') }}">{{ __('Contact Us') }}</a>
                     </li>
                 </ul>
-            </div>
+                <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"
+                    class="get-app-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M5.48131 12.9012C4.30234 13.6032 1.21114 15.0366 3.09389 16.8304C4.01359 17.7065 5.03791 18.3332 6.32573 18.3332H13.6743C14.9621 18.3332 15.9864 17.7065 16.9061 16.8304C18.7888 15.0366 15.6977 13.6032 14.5187 12.9012C11.754 11.2549 8.24599 11.2549 5.48131 12.9012Z"
+                            fill="white" />
+                        <path
+                            d="M13.75 5.4165C13.75 7.48757 12.0711 9.1665 10 9.1665C7.92893 9.1665 6.25 7.48757 6.25 5.4165C6.25 3.34544 7.92893 1.6665 10 1.6665C12.0711 1.6665 13.75 3.34544 13.75 5.4165Z"
+                            fill="white" />
+                    </svg>
 
-            <div class="d-flex align-items-center">
-                <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}" 
-                   class="btn btn-primary">
-                    <i class="ri-user-line align-middle me-1"></i>
                     {{ $page_data['headings']['header_btn_text'] ?? 'Login' }}
+
                 </a>
             </div>
         </div>
-    </div>
-
-    <!-- Mobile Menu Offcanvas -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-        <div class="offcanvas-header border-bottom">
-            <a href="{{ route('home') }}" class="offcanvas-title" id="offcanvasNavbarLabel">
-                <img src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}" alt="" height="25">
-            </a>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
-                        <i class="ri-home-4-line me-2"></i>
-                        {{ __('Home') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('about.index') }}">
-                        <i class="ri-information-line me-2"></i>
-                        {{ __('About Us') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('plan.index') }}">
-                        <i class="ri-price-tag-3-line me-2"></i>
-                        {{ __('Pricing') }}
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="ri-pages-line me-2"></i>
-                        {{ __('Pages') }}
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="{{ route('blogs.index') }}">
-                                <i class="ri-article-line me-2"></i>
-                                {{ __('Blog') }}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('term.index') }}">
-                                <i class="ri-file-text-line me-2"></i>
-                                {{ __('Terms & Conditions') }}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('policy.index') }}">
-                                <i class="ri-shield-line me-2"></i>
-                                {{ __('Privacy Policy') }}
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contact.index') }}">
-                        <i class="ri-contacts-line me-2"></i>
-                        {{ __('Contact Us') }}
-                    </a>
-                </li>
-                <li class="nav-item mt-3">
-                    <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}" 
-                       class="btn btn-primary w-100">
-                        <i class="ri-user-line me-1"></i>
-                        {{ $page_data['headings']['header_btn_text'] ?? 'Login' }}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    </nav>
 </header>
 
 <style>
-/* Velzon Header Styling */
-#page-topbar {
+/* Velzon Header Styling using your original classes */
+
+/* Header Section */
+.header-section.home-header {
     position: fixed;
     top: 0;
-    right: 0;
     left: 0;
-    z-index: 1002;
-    background-color: #fff;
+    right: 0;
+    z-index: 1030;
+    background: #fff;
     box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12);
     transition: all 0.3s ease;
+    padding: 0;
 }
 
-.navbar-header {
+.header-section.home-header .navbar {
+    min-height: 70px;
+    padding: 0 !important;
+}
+
+.header-section.home-header .container {
     display: flex;
     align-items: center;
-    margin: 0;
-    padding: 0 calc(24px / 2);
-    min-height: 70px;
-}
-
-.navbar-brand-box {
-    width: 250px;
-    text-align: center;
+    justify-content: space-between;
     padding: 0 24px;
 }
 
-.logo {
-    line-height: 70px;
+/* Logo Styling */
+.header-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
-.logo img {
-    max-height: 30px !important;
+.header-logo img {
+    max-height: 35px !important;
     width: auto !important;
+    height: auto !important;
+    transition: all 0.3s ease;
 }
 
-.logo-sm {
-    display: none;
-}
-
-.logo-lg {
-    display: inline-block;
-}
-
-/* Navigation Styling */
+/* Navigation Links */
 .navbar-nav .nav-link {
-    color: #495057;
+    color: #495057 !important;
     font-weight: 500;
-    padding: 15px 20px;
+    padding: 15px 20px !important;
     position: relative;
     transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link:focus {
-    color: #405189;
+    color: #405189 !important;
 }
 
 .navbar-nav .nav-link.active {
-    color: #405189;
+    color: #405189 !important;
 }
 
-/* Dropdown Styling */
-.dropdown-menu {
-    border: 1px solid #e9ecef;
-    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.15);
-    border-radius: 6px;
-    margin-top: 5px;
-}
-
-.dropdown-item {
-    padding: 8px 20px;
-    color: #495057;
-    transition: all 0.2s ease;
-}
-
-.dropdown-item:hover {
-    background-color: #f8f9fa;
-    color: #405189;
-}
-
-/* Mobile Menu Button */
-.topnav-hamburger {
-    display: none;
-    background: none;
-    border: none;
-    padding: 0;
-    width: 18px;
-    height: 18px;
-    position: relative;
-}
-
-.topnav-hamburger span {
-    display: block;
-    height: 2px;
-    width: 100%;
-    background: #495057;
-    margin: 3px 0;
-    transition: 0.3s;
-}
-
-/* Mobile Offcanvas */
-.offcanvas-header {
-    padding: 1.5rem;
-}
-
-.offcanvas-body .nav-link {
-    padding: 12px 0;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.offcanvas-body .nav-link i {
-    width: 20px;
-    color: #878a99;
-}
-
-/* Responsive Design */
-@media (max-width: 991.98px) {
-    .navbar-brand-box {
-        width: auto;
-        text-align: left;
-        padding: 0;
-    }
-    
-    .logo-lg {
-        display: none;
-    }
-    
-    .logo-sm {
-        display: inline-block;
-    }
-    
-    .topnav-hamburger {
-        display: block;
-    }
-    
-    .collapse.navbar-collapse {
-        display: none !important;
-    }
-    
-    #page-topbar .d-flex {
-        gap: 15px;
-    }
-}
-
-@media (max-width: 575.98px) {
-    .navbar-header {
-        padding: 0 15px;
-        min-height: 60px;
-    }
-    
-    .logo {
-        line-height: 60px;
-    }
-    
-    .logo img {
-        max-height: 22px !important;
-    }
-}
-
-/* Button Styling */
-.btn-primary {
-    background-color: #405189;
-    border-color: #405189;
-    font-weight: 500;
-    padding: 8px 20px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: #364574;
-    border-color: #364574;
-    transform: translateY(-1px);
-}
-
-/* Arrow Down for Dropdown */
-.arrow-down {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    margin-left: 8px;
-    vertical-align: middle;
-    border-top: 4px solid;
-    border-right: 4px solid transparent;
-    border-bottom: 0;
-    border-left: 4px solid transparent;
-}
-
-/* Active Page Indicator */
 .navbar-nav .nav-link.active::after {
     content: '';
     position: absolute;
@@ -363,20 +209,251 @@
     height: 2px;
     background-color: #405189;
 }
+
+/* Dropdown Menu */
+.menu-dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    min-width: 220px;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    padding: 8px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    list-style: none;
+    margin: 0;
+    border: 1px solid #e9ecef;
+}
+
+.menu-dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-content li {
+    margin: 0;
+}
+
+.dropdown-content .dropdown-item {
+    color: #495057 !important;
+    padding: 8px 20px !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+
+.dropdown-content .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #405189 !important;
+}
+
+.dropdown-content .dropdown-item span {
+    color: #878a99;
+    font-size: 12px;
+}
+
+/* Arrow for dropdown */
+.nav-link .arrow {
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+    color: #878a99;
+}
+
+.menu-dropdown:hover .nav-link .arrow {
+    transform: rotate(90deg);
+}
+
+/* Get App Button */
+.get-app-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #405189;
+    color: #fff !important;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 14px;
+}
+
+.get-app-btn:hover {
+    background: #364574;
+    color: #fff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(64, 81, 137, 0.3);
+}
+
+.get-app-btn.login-btn {
+    display: none;
+}
+
+.get-app-btn svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Mobile Toggle */
+.navbar-toggler {
+    border: none;
+    padding: 8px;
+    background: none;
+    color: #495057;
+    font-size: 18px;
+    order: -1;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    max-width: 300px;
+}
+
+.home-offcanvas-header {
+    padding: 24px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.home-offcanvas-header .header-logo img {
+    max-height: 30px !important;
+}
+
+.home-offcanvas-header .btn-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #495057;
+}
+
+/* Mobile Accordion Menu */
+.accordion-flush .accordion-item {
+    border: none;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.accordion-button.without-sub-menu,
+.accordion-button {
+    background: none;
+    border: none;
+    color: #495057;
+    font-weight: 500;
+    padding: 15px 24px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    box-shadow: none;
+}
+
+.accordion-button.without-sub-menu:hover,
+.accordion-button:hover {
+    color: #405189;
+    background: #f8f9fa;
+}
+
+.accordion-body {
+    padding: 0;
+}
+
+.accordion-body ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.accordion-body li {
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.accordion-body li a {
+    color: #495057;
+    padding: 12px 24px 12px 40px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.accordion-body li a:hover {
+    color: #405189;
+    background: #f8f9fa;
+}
+
+.accordion-body .arrow {
+    color: #878a99;
+    font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 991.98px) {
+    .header-logo img {
+        max-height: 28px !important;
+    }
+    
+    .navbar-collapse {
+        display: none !important;
+    }
+    
+    .get-app-btn.login-btn {
+        display: inline-flex;
+    }
+    
+    .container .get-app-btn:not(.login-btn) {
+        display: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .header-section.home-header .container {
+        padding: 0 15px;
+    }
+    
+    .header-section.home-header .navbar {
+        min-height: 60px;
+    }
+    
+    .header-logo img {
+        max-height: 25px !important;
+    }
+    
+    .get-app-btn.login-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .get-app-btn.login-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+/* Scroll Effect */
+.header-section.home-header.scrolled {
+    box-shadow: 0 4px 12px rgba(15, 34, 58, 0.15);
+}
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
-    const hamburger = document.querySelector('.topnav-hamburger');
-    const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasNavbar'));
-    
-    if (hamburger) {
-        hamburger.addEventListener('click', function() {
-            offcanvas.toggle();
-        });
-    }
-    
     // Active navigation highlighting
     const currentLocation = location.pathname;
     const menuItems = document.querySelectorAll('.navbar-nav .nav-link');
@@ -389,12 +466,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Scroll effect for header
     window.addEventListener('scroll', function() {
-        const header = document.getElementById('page-topbar');
+        const header = document.querySelector('.header-section.home-header');
         if (window.scrollY > 10) {
-            header.style.boxShadow = '0 4px 12px rgba(15, 34, 58, 0.15)';
+            header.classList.add('scrolled');
         } else {
-            header.style.boxShadow = '0 2px 4px rgba(15, 34, 58, 0.12)';
+            header.classList.remove('scrolled');
         }
+    });
+    
+    // Close mobile menu when clicking on a link
+    const mobileLinks = document.querySelectorAll('.mobile-menu a');
+    const offcanvas = document.getElementById('staticBackdrop');
+    
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (!this.classList.contains('accordion-button') || this.classList.contains('without-sub-menu')) {
+                const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
+                if (bsOffcanvas) {
+                    bsOffcanvas.hide();
+                }
+            }
+        });
     });
 });
 </script>
