@@ -5,7 +5,6 @@ use App\Models\PaymentType;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Modules\Business\App\Http\Controllers as Business;
-use App\Http\Controllers\ChatController;
 
 Route::post('/webhook/{platform}', [Business\OrderSourceController::class, 'handleWebhook'])->name('webhook.handle');
 
@@ -77,15 +76,6 @@ Route::group([
 
 Route::get('/subscriptions-statistics', [\Modules\Business\App\Http\Controllers\DashboardController::class, 'subscriptionsStatistics'])->name('admin.dashboard.subscriptions');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::get('/chat/messages/{userId}', [ChatController::class, 'fetchMessages']);
-    Route::post('/chat/send', [ChatController::class, 'sendMessage']);
-});
-
-// Global chat user search route
-Route::get('/chat/search-users', [App\Http\Controllers\ChatController::class, 'searchUsers'])->name('chat.search-users');
-
 Route::get('/cache-clear', function () {
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
@@ -114,3 +104,4 @@ Route::fallback(function () {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/chat.php';
