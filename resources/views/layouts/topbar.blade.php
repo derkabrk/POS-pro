@@ -610,13 +610,13 @@
                         <h6 class="dropdown-header">Welcome {{Auth::user()->name}}!</h6>
                         
                         @if(auth()->check() && method_exists(Auth::user(), 'role'))
-                            <a class="dropdown-item" href="{{ route('admin.settings.index') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('My Profile') }}</span></a>
+                            <a class="dropdown-item" href="{{ route('admin.system-settings.index') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">{{ __('My Profile') }}</span></a>
                         @else
-                            <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                            <a class="dropdown-item" href="{{ route('admin.settings.index') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
                         @endif
                         
                         <a class="dropdown-item" href="{{ route('chat.index') }}?active=chat"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
-                        <a class="dropdown-item" href="{{ route('business.ticketSystem.index') }}"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
+                        <a class="dropdown-item" href="{{ route('admin.ticketSystem.index') }}"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
                         <div class="dropdown-divider"></div>
                         
                         @if(auth()->check() && Route::has('cache-clear'))
