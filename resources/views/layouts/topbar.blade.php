@@ -659,16 +659,15 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-@push('scripts')
+<!-- Place script immediately after notification dropdown for reliability -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var messagesTab = document.getElementById('messages-tab-link');
         if (messagesTab) {
             messagesTab.addEventListener('click', function(e) {
                 e.preventDefault();
-                window.location.href = "{{ route('business.chat.index') }}?active=chat";
+                window.location.href = "{{ route('chats.index') }}?active=chat";
             });
         }
     });
 </script>
-@endpush
