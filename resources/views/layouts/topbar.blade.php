@@ -249,8 +249,6 @@
                     </div>
                 </div>
 
-                
-
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-toggle="fullscreen">
                         <i class='bx bx-fullscreen fs-22'></i>
@@ -299,8 +297,8 @@
                                         </a>
                                     </li>
                                     <li class="nav-item waves-effect waves-light">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false">
-                                            Messages
+                                        <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false" id="messages-tab-link">
+                                            {{ __('Messages') }}
                                         </a>
                                     </li>
                                     <li class="nav-item waves-effect waves-light">
@@ -587,7 +585,20 @@
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-semibold user-name-text">{{Auth::user()->name}}</span>
                                 @if(method_exists(Auth::user(), 'role'))
-                                    <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{ ucfirst(Auth::user()->role) }}</span>
+                                    <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
+                                        @php
+                                            $role = method_exists(Auth::user(), 'role') ? strtolower(Auth::user()->role) : null;
+                                        @endphp
+                                        @if($role === 'superadmin')
+                                            Founder
+                                        @elseif($role === 'admin')
+                                            Admin
+                                        @elseif($role === 'business')
+                                            Business
+                                        @else
+                                            {{ ucfirst($role) ?: 'Founder' }}
+                                        @endif
+                                    </span>
                                 @else
                                     <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Founder</span>
                                 @endif
@@ -647,3 +658,17 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var messagesTab = document.getElementById('messages-tab-link');
+        if (messagesTab) {
+            messagesTab.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = "{{ route('business.chat.index') }}?active=chat";
+            });
+        }
+    });
+</script>
+@endpush
