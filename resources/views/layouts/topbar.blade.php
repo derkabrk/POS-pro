@@ -615,7 +615,7 @@
                             <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
                         @endif
                         
-                        <a class="dropdown-item" href="{{ route('business.chat.index') }}?active=chat"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
+                        <a class="dropdown-item" href="{{ route('chat.index') }}?active=chat"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
                         <a class="dropdown-item" href="{{ route('business.ticketSystem.index') }}"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
                         <div class="dropdown-divider"></div>
                         
@@ -666,7 +666,7 @@
         if (messagesTab) {
             messagesTab.addEventListener('click', function(e) {
                 e.preventDefault();
-                window.location.href = "{{ route('business.chat.index') }}?active=chat";
+                window.location.href = "{{ route('chat.index') }}?active=chat";
             });
         }
     });
