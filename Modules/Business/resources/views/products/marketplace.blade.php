@@ -11,8 +11,8 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         :root {
-            --primary-color: #405cf5;
-            --primary-gradient: linear-gradient(135deg, #405cf5 0%, #3730a3 100%);
+            --primary-color: #8c68cd;
+            --primary-gradient: linear-gradient(135deg, #8c68cd 0%, #3730a3 100%);
             --secondary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --success-gradient: linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
             --danger-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
