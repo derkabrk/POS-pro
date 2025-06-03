@@ -149,7 +149,7 @@
                                     {{ __('Your email address will not be published') }}
                                 </p>
                                 
-                                <form action="{{ route('blogs.store') }}" method="post" class="form-section ajaxform_instant_reload">
+                                <form action="{{ route('blogs.store') }}" method="post" class="form-section main-comment-form">
                                     @csrf
                                     <input type="hidden" name="blog_id" value="{{ $blog->id }}">
                                     <input type="hidden" name="blog_slug" value="{{ $blog->slug }}">
@@ -281,7 +281,33 @@
 @section('script')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(function() {
+$(document).ready(function() {
+    // Debug function
+    function debugLog(message, data = null) {
+        console.log('[Blog Debug]', message, data);
+    }
+
+    // Add CSS for animations
+    const style = document.createElement('style');
+    style.textContent = `
+        .spin { 
+            animation: spin 1s linear infinite; 
+            display: inline-block;
+        }
+        @keyframes spin { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
+        }
+        .hover-primary:hover { 
+            color: var(--bs-primary) !important; 
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    `;
+    document.head.appendChild(style);
+
     // Sticky sidebar
     var sidebar = $('.sticky-sidebar');
     if (sidebar.length) {
@@ -295,38 +321,125 @@ $(function() {
 
     // Add hover effects
     $('.hover-effect').on('mouseenter', function() {
-        $(this).css({transform: 'translateY(-2px)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transition: 'all 0.3s ease'});
+        $(this).css({
+            transform: 'translateY(-2px)', 
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)', 
+            transition: 'all 0.3s ease'
+        });
     }).on('mouseleave', function() {
-        $(this).css({transform: 'translateY(0)', boxShadow: 'none'});
+        $(this).css({
+            transform: 'translateY(0)', 
+            boxShadow: 'none'
+        });
     });
 
-    // Like button AJAX
+    // Like button functionality
     $(document).on('click', '.like-btn', function(e) {
         e.preventDefault();
+        e.stopPropagation();
+        
         var btn = $(this);
-        var commentId = btn.attr('data-id') || btn.data('id');
+        var commentId = btn.data('comment-id') || btn.data('id') || btn.attr('data-comment-id') || btn.attr('data-id');
+        
+        debugLog('Like button clicked', {
+            commentId: commentId,
+            button: btn[0],
+            dataAttributes: btn[0].dataset
+        });
+        
         if (!commentId) {
-            console.error('No commentId found on like button');
+            console.error('No comment ID found on like button. Available data attributes:', btn[0].dataset);
+            alert('Error: Comment ID not found. Please refresh the page and try again.');
             return;
         }
-        btn.prop('disabled', true);
+
+        // Prevent double clicks
+        if (btn.prop('disabled') || btn.hasClass('processing')) {
+            debugLog('Button already processing, ignoring click');
+            return;
+        }
+
+        btn.addClass('processing').prop('disabled', true);
+        
+        // Store original content
+        var originalHtml = btn.html();
+        var likeCountEl = btn.find('.like-count');
+        var currentCount = parseInt(likeCountEl.text()) || 0;
+        
+        // Show loading state
+        btn.html('<i class="ri-loader-2-line spin me-1"></i> Liking...');
+        
         $.ajax({
-            url: '{{ route('blogs.like-comment') }}',
+            url: '{{ route("blogs.like-comment") }}',
             type: 'POST',
             data: {
                 comment_id: commentId,
-                _token: '{{ csrf_token() }}'
+                _token: $('meta[name="csrf-token"]').attr('content') || '{{ csrf_token() }}'
             },
-            success: function(res) {
-                btn.find('.like-count').text(res.count);
-                btn.toggleClass('btn-outline-primary btn-primary');
+            timeout: 10000,
+            success: function(response) {
+                debugLog('Like success response', response);
+                
+                if (response.success || response.status === 'success') {
+                    // Update like count
+                    var newCount = response.count || response.likes_count || (currentCount + 1);
+                    likeCountEl.text(newCount);
+                    
+                    // Toggle button state
+                    if (response.liked !== undefined) {
+                        if (response.liked) {
+                            btn.removeClass('btn-outline-primary').addClass('btn-primary');
+                        } else {
+                            btn.removeClass('btn-primary').addClass('btn-outline-primary');
+                        }
+                    } else {
+                        // Fallback toggle
+                        btn.toggleClass('btn-outline-primary btn-primary');
+                    }
+                    
+                    // Show success feedback
+                    btn.html('<i class="ri-heart-fill me-1"></i> <span class="like-count">' + newCount + '</span>');
+                    
+                    // Brief success indication
+                    setTimeout(function() {
+                        btn.html(originalHtml.replace(/\d+/, newCount));
+                    }, 1000);
+                    
+                } else {
+                    throw new Error(response.message || 'Unknown error occurred');
+                }
             },
-            error: function(xhr) {
-                alert('Failed to like comment. Please try again.');
-                console.error(xhr.responseText);
+            error: function(xhr, status, error) {
+                debugLog('Like error', {xhr: xhr, status: status, error: error});
+                
+                var errorMessage = 'Failed to like comment. Please try again.';
+                
+                if (xhr.status === 419) {
+                    errorMessage = 'Session expired. Please refresh the page and try again.';
+                } else if (xhr.status === 422) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        errorMessage = response.message || errorMessage;
+                    } catch (e) {
+                        // Use default message
+                    }
+                } else if (xhr.status === 500) {
+                    errorMessage = 'Server error. Please try again later.';
+                } else if (status === 'timeout') {
+                    errorMessage = 'Request timed out. Please check your connection and try again.';
+                }
+                
+                alert(errorMessage);
+                console.error('Like request failed:', xhr.responseText);
             },
             complete: function() {
-                btn.prop('disabled', false);
+                // Always restore button state
+                btn.removeClass('processing').prop('disabled', false);
+                
+                // Restore original content if still in loading state
+                if (btn.html().includes('Liking...')) {
+                    btn.html(originalHtml);
+                }
             }
         });
     });
@@ -334,64 +447,216 @@ $(function() {
     // Reply form toggle
     $(document).on('click', '.reply-toggle-btn', function(e) {
         e.preventDefault();
+        e.stopPropagation();
+        
         var btn = $(this);
-        btn.closest('.flex-grow-1').find('.reply-form').toggleClass('d-none');
+        var replyForm = btn.closest('.comment-item, .flex-grow-1').find('.reply-form').first();
+        
+        debugLog('Reply toggle clicked', {
+            button: btn[0],
+            replyForm: replyForm[0]
+        });
+        
+        if (replyForm.length) {
+            replyForm.toggleClass('d-none');
+            
+            // Focus on the first input when showing
+            if (!replyForm.hasClass('d-none')) {
+                setTimeout(function() {
+                    replyForm.find('input[name="name"], textarea').first().focus();
+                }, 100);
+            }
+        } else {
+            console.error('Reply form not found');
+        }
     });
 
-    // AJAX instant reload for reply forms
+    // Reply form submission
     $(document).on('submit', '.reply-form', function(e) {
         e.preventDefault();
+        e.stopPropagation();
+        
         var form = $(this);
-        var btn = form.find('.submit-btn');
-        btn.html('<i class="ri-loader-2-line me-2 spin"></i>Replying...');
-        btn.prop('disabled', true);
+        var btn = form.find('.submit-btn, button[type="submit"]');
+        
+        debugLog('Reply form submitted', {
+            form: form[0],
+            action: form.attr('action'),
+            data: form.serialize()
+        });
+        
+        // Prevent double submission
+        if (btn.prop('disabled') || btn.hasClass('processing')) {
+            return;
+        }
+        
+        // Validate required fields
+        var isValid = true;
+        form.find('input[required], textarea[required]').each(function() {
+            if (!$(this).val().trim()) {
+                isValid = false;
+                $(this).addClass('is-invalid').focus();
+                return false;
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        btn.addClass('processing').prop('disabled', true);
+        var originalHtml = btn.html();
+        btn.html('<i class="ri-loader-2-line spin me-2"></i>Replying...');
+        
         $.ajax({
             url: form.attr('action'),
             type: 'POST',
             data: form.serialize(),
-            success: function(res) {
-                location.reload();
+            timeout: 15000,
+            success: function(response) {
+                debugLog('Reply success response', response);
+                
+                if (response.success || response.status === 'success') {
+                    // Show success message briefly
+                    btn.html('<i class="ri-check-line me-2"></i>Reply Posted!');
+                    
+                    // Reload page after short delay
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    throw new Error(response.message || 'Failed to post reply');
+                }
             },
-            error: function(xhr) {
-                alert('Failed to post reply. Please check your input.');
-                console.error(xhr.responseText);
-                btn.html('<i class="ri-send-plane-line label-icon align-middle rounded-pill fs-14 me-1"></i>Reply');
-                btn.prop('disabled', false);
+            error: function(xhr, status, error) {
+                debugLog('Reply error', {xhr: xhr, status: status, error: error});
+                
+                var errorMessage = 'Failed to post reply. Please check your input and try again.';
+                
+                if (xhr.status === 419) {
+                    errorMessage = 'Session expired. Please refresh the page and try again.';
+                } else if (xhr.status === 422) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.errors) {
+                            var errors = Object.values(response.errors).flat();
+                            errorMessage = errors.join(', ');
+                        } else {
+                            errorMessage = response.message || errorMessage;
+                        }
+                    } catch (e) {
+                        // Use default message
+                    }
+                } else if (status === 'timeout') {
+                    errorMessage = 'Request timed out. Please check your connection and try again.';
+                }
+                
+                alert(errorMessage);
+                console.error('Reply submission failed:', xhr.responseText);
+                
+                // Restore button
+                btn.html(originalHtml).removeClass('processing').prop('disabled', false);
             }
         });
     });
 
-    // Main comment form instant reload
-    $(document).on('submit', '.ajaxform_instant_reload', function(e) {
-        if ($(this).hasClass('reply-form')) return; // handled above
+    // Main comment form submission
+    $(document).on('submit', '.main-comment-form', function(e) {
         e.preventDefault();
+        e.stopPropagation();
+        
         var form = $(this);
         var btn = form.find('.submit-btn');
-        btn.html('<i class="ri-loader-2-line me-2 spin"></i>Posting...');
-        btn.prop('disabled', true);
+        
+        debugLog('Main comment form submitted', {
+            form: form[0],
+            action: form.attr('action'),
+            data: form.serialize()
+        });
+        
+        // Prevent double submission
+        if (btn.prop('disabled') || btn.hasClass('processing')) {
+            return;
+        }
+        
+        // Validate required fields
+        var isValid = true;
+        form.find('input[required], textarea[required]').each(function() {
+            if (!$(this).val().trim()) {
+                isValid = false;
+                $(this).addClass('is-invalid').focus();
+                return false;
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        btn.addClass('processing').prop('disabled', true);
+        var originalHtml = btn.html();
+        btn.html('<i class="ri-loader-2-line spin me-2"></i>Posting...');
+        
         $.ajax({
             url: form.attr('action'),
             type: 'POST',
             data: form.serialize(),
-            success: function(res) {
-                location.reload();
+            timeout: 15000,
+            success: function(response) {
+                debugLog('Comment success response', response);
+                
+                if (response.success || response.status === 'success') {
+                    // Show success message
+                    btn.html('<i class="ri-check-line me-2"></i>Comment Posted!');
+                    
+                    // Reload page after short delay
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    throw new Error(response.message || 'Failed to post comment');
+                }
             },
-            error: function(xhr) {
-                alert('Failed to post comment. Please check your input.');
-                btn.html('<i class="ri-send-plane-line label-icon align-middle rounded-pill fs-16 me-2"></i>Post Comment');
-                btn.prop('disabled', false);
+            error: function(xhr, status, error) {
+                debugLog('Comment error', {xhr: xhr, status: status, error: error});
+                
+                var errorMessage = 'Failed to post comment. Please check your input and try again.';
+                
+                if (xhr.status === 419) {
+                    errorMessage = 'Session expired. Please refresh the page and try again.';
+                } else if (xhr.status === 422) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.errors) {
+                            var errors = Object.values(response.errors).flat();
+                            errorMessage = errors.join(', ');
+                        } else {
+                            errorMessage = response.message || errorMessage;
+                        }
+                    } catch (e) {
+                        // Use default message
+                    }
+                } else if (status === 'timeout') {
+                    errorMessage = 'Request timed out. Please check your connection and try again.';
+                }
+                
+                alert(errorMessage);
+                console.error('Comment submission failed:', xhr.responseText);
+                
+                // Restore button
+                btn.html(originalHtml).removeClass('processing').prop('disabled', false);
             }
         });
     });
 
-    // Add CSS for spinning animation
-    const style = document.createElement('style');
-    style.textContent = `
-        .spin { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .hover-primary:hover { color: var(--bs-primary) !important; }
-    `;
-    document.head.appendChild(style);
+    // Initialize page
+    debugLog('Blog page initialized');
 });
 </script>
 @endsection
