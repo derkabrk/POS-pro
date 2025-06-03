@@ -36,8 +36,12 @@ class DropshipperController extends Controller
             'email' => 'required|email|unique:dropshippers,email',
             'password' => 'required|min:6|confirmed',
             'phone' => 'nullable',
+            // 'store' => 'required', // Make store optional
         ]);
         $data = $request->only('full_name', 'email', 'phone');
+        if ($request->filled('store')) {
+            $data['store'] = $request->store;
+        }
         $data['password'] = bcrypt($request->password);
         Dropshipper::create($data);
         return redirect()->route('business.dropshippers.index')->with('success', 'Dropshipper created successfully.');
