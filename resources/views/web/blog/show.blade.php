@@ -1,282 +1,149 @@
-@extends('layouts.web.master')
-
-@section('title')
-    {{ __('Blog') }}
-@endsection
-
-@section('content')
-<!-- Enhanced Hero Banner -->
-<section class="section pb-0 hero-section bg-primary bg-opacity-10 position-relative" id="hero">
-    <div class="bg-overlay bg-overlay-pattern opacity-25"></div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="text-center mt-4 pt-3 pb-2">
-                    <nav aria-label="breadcrumb" class="mb-4">
-                        <ol class="breadcrumb mb-0 bg-transparent p-0 justify-content-center">
-                            <li class="breadcrumb-item">
-                                <a href="/" class="text-decoration-none text-primary fw-medium">
-                                    <i class="ri-home-4-line me-1"></i>{{ __('Home') }}
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('blogs.index') }}" class="text-decoration-none text-primary fw-medium">
-                                    <i class="ri-article-line me-1"></i>{{ __('Blog List') }}
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
-                                {{ __('Blog Details') }}
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+{{-- resources/views/web/blog/partials/comment.blade.php --}}
+<div class="comment-item mb-4 p-4 bg-light rounded-3" data-comment-id="{{ $comment->id }}">
+    <div class="d-flex align-items-start">
+        <!-- User Avatar -->
+        <div class="avatar-sm me-3 flex-shrink-0">
+            <div class="avatar-title bg-primary bg-opacity-10 text-primary rounded-circle fw-semibold">
+                {{ strtoupper(substr($comment->name ?? 'U', 0, 1)) }}
             </div>
         </div>
-    </div>
-    
-    <!-- Hero Shape -->
-    <div class="position-absolute start-0 end-0 bottom-0 hero-shape-svg">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
-            <g mask="url(&quot;#SvgjsMask1003&quot;)" fill="none">
-                <path d="M 0,118 C 288,98.6 1152,40.4 1440,21L1440 140L0 140z" fill="rgba(255,255,255,1)"></path>
-            </g>
-        </svg>
-    </div>
-</section>
-
-<!-- Enhanced Blog Details Section -->
-<section class="section bg-light py-5">
-    <div class="container">
-        <div class="row gy-4">
-            <!-- Main Content -->
-            <div class="col-xl-8">
-                <div class="card shadow-lg border-0 rounded-4 overflow-hidden bg-white">
-                    <!-- Featured Image -->
-                    <div class="position-relative">
-                        <img src="{{ asset($blog->image) }}" 
-                             alt="{{ $blog->title }}" 
-                             class="card-img-top img-fluid w-100" 
-                             style="max-height: 400px; object-fit: cover;" />
-                        
-                        <!-- Floating Badge -->
-                        <div class="position-absolute top-0 start-0 m-3">
-                            <div class="badge bg-primary bg-opacity-90 text-white px-3 py-2 rounded-pill">
-                                <i class="ri-calendar-line me-1"></i>
-                                {{ formatted_date($blog->updated_at) }}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Article Content -->
-                    <div class="card-body p-4 p-lg-5">
-                        <!-- Article Meta -->
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="avatar-xs me-2">
-                                <div class="avatar-title bg-primary bg-opacity-10 text-primary rounded-circle">
-                                    <i class="ri-time-line fs-14"></i>
-                                </div>
-                            </div>
-                            <small class="text-muted fw-medium">
-                                Published {{ formatted_date($blog->updated_at) }}
-                            </small>
-                        </div>
-                        
-                        <!-- Article Title -->
-                        <h1 class="mb-4 fw-bold text-dark lh-base">{{ $blog->title }}</h1>
-                        
-                        <!-- Article Content -->
-                        <div class="article-content mb-5 text-muted lh-lg fs-16 ff-secondary">
-                            {!! $blog->descriptions !!}
-                        </div>
-                        
-                        <!-- Share Section -->
-                        <div class="border-top pt-4 mb-5">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                                <div>
-                                    <h6 class="mb-0 text-muted">Share this article:</h6>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <a href="#" class="btn btn-sm btn-soft-primary rounded-circle">
-                                        <i class="ri-facebook-fill"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-sm btn-soft-primary rounded-circle">
-                                        <i class="ri-twitter-fill"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-sm btn-soft-primary rounded-circle">
-                                        <i class="ri-linkedin-fill"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-sm btn-soft-primary rounded-circle">
-                                        <i class="ri-share-line"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Comments Section -->
-                        <div class="comments-section">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h4 class="mb-0 fw-semibold">
-                                    <i class="ri-message-2-line text-primary me-2"></i>
-                                    Comments ({{ $comments->count() }})
-                                </h4>
-                            </div>
-                            
-                            <!-- Comments List -->
-                            <div class="comments-list mb-5">
-                                @forelse ($comments as $comment)
-                                    @include('web.blog.partials.comment', ['comment' => $comment, 'blog' => $blog])
-                                @empty
-                                    <div class="text-center py-5">
-                                        <div class="avatar-lg mx-auto mb-3">
-                                            <div class="avatar-title bg-light text-muted rounded-circle">
-                                                <i class="ri-message-2-line fs-24"></i>
-                                            </div>
-                                        </div>
-                                        <h6 class="text-muted">No comments yet</h6>
-                                        <p class="text-muted mb-0">Be the first to share your thoughts!</p>
-                                    </div>
-                                @endforelse
-                            </div>
-                            
-                            <!-- Comment Form -->
-                            <div class="comment-form bg-white border rounded-4 p-4">
-                                <h5 class="mb-3 fw-semibold">
-                                    <i class="ri-edit-box-line text-primary me-2"></i>
-                                    {{ __('Leave a Comment') }}
-                                </h5>
-                                <p class="text-muted mb-4">
-                                    <i class="ri-information-line me-1"></i>
-                                    {{ __('Your email address will not be published') }}
-                                </p>
-                                
-                                <form action="{{ route('blogs.store') }}" method="post" class="form-section ajaxform_instant_reload">
-                                    @csrf
-                                    <input type="hidden" name="blog_id" value="{{ $blog->id }}">
-                                    <input type="hidden" name="blog_slug" value="{{ $blog->slug }}">
-                                    
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-6">
-                                            <label for="full-name" class="form-label fw-medium">
-                                                <i class="ri-user-line me-1"></i>{{ __('Full Name') }} *
-                                            </label>
-                                            <input type="text" name="name" class="form-control border-light bg-light" 
-                                                   id="full-name" required placeholder="{{ __('Enter your name') }}">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="email" class="form-label fw-medium">
-                                                <i class="ri-mail-line me-1"></i>{{ __('Email') }} *
-                                            </label>
-                                            <input type="email" name="email" class="form-control border-light bg-light" 
-                                                   id="email" required placeholder="{{ __('Enter your email') }}">
-                                        </div>
-                                        <div class="col-12">
-                                            <label for="message" class="form-label fw-medium">
-                                                <i class="ri-message-line me-1"></i>{{ __('Comment') }} *
-                                            </label>
-                                            <textarea class="form-control border-light bg-light" name="comment" 
-                                                      id="message" rows="4" required 
-                                                      placeholder="{{ __('Share your thoughts...') }}"></textarea>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary btn-label rounded-pill submit-btn">
-                                            <i class="ri-send-plane-line label-icon align-middle rounded-pill fs-16 me-2"></i>
-                                            {{ __('Post Comment') }}
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+        
+        <!-- Comment Content -->
+        <div class="flex-grow-1">
+            <!-- Comment Header -->
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <div>
+                    <h6 class="mb-1 fw-semibold text-dark">{{ $comment->name ?? 'Anonymous' }}</h6>
+                    <div class="d-flex align-items-center text-muted small">
+                        <i class="ri-time-line me-1"></i>
+                        <span>{{ $comment->created_at->diffForHumans() ?? 'Just now' }}</span>
                     </div>
                 </div>
             </div>
             
-            <!-- Sidebar -->
-            <div class="col-xl-4">
-                <div class="sticky-sidebar">
-                    <!-- Recent Posts Widget -->
-                    <div class="card shadow-sm border-0 rounded-4 mb-4">
-                        <div class="card-header bg-primary bg-opacity-10 border-0 rounded-top-4 p-4">
-                            <h5 class="mb-0 fw-semibold text-primary">
-                                <i class="ri-article-line me-2"></i>{{ __('Recent Posts') }}
-                            </h5>
-                        </div>
-                        <div class="card-body p-4">
-                            @forelse ($recent_blogs as $recent_blog)
-                                <div class="d-flex align-items-start mb-3 p-3 bg-light rounded-3 hover-effect">
-                                    <a href="{{ route('blogs.show', $recent_blog->slug) }}" class="flex-shrink-0 me-3">
-                                        <img src="{{ asset($recent_blog->image ?? '') }}" 
-                                             class="rounded-2 object-fit-cover" 
-                                             alt="{{ $recent_blog->title }}" 
-                                             style="width: 60px; height: 60px; object-fit: cover;" />
-                                    </a>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex align-items-center mb-1">
-                                            <div class="avatar-xs me-1">
-                                                <div class="avatar-title bg-primary bg-opacity-10 text-primary rounded-circle">
-                                                    <i class="ri-calendar-line fs-10"></i>
-                                                </div>
-                                            </div>
-                                            <small class="text-muted">{{ formatted_date($recent_blog->updated_at) }}</small>
-                                        </div>
-                                        <h6 class="mb-2 fw-medium lh-sm">
-                                            <a href="{{ route('blogs.show', $recent_blog->slug) }}" 
-                                               class="text-dark text-decoration-none hover-primary">
-                                                {{ Str::limit($recent_blog->title, 50, '...') }}
-                                            </a>
-                                        </h6>
-                                        <a href="{{ route('blogs.show', $recent_blog->slug) }}" 
-                                           class="text-primary small text-decoration-none fw-medium">
-                                            {{ __('Read More') }} 
-                                            <i class="ri-arrow-right-line ms-1"></i>
-                                        </a>
-                                    </div>
+            <!-- Comment Text -->
+            <div class="comment-text mb-3 text-muted lh-lg">
+                {{ $comment->comment ?? '' }}
+            </div>
+            
+            <!-- Comment Actions -->
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <!-- Like Button -->
+                <button type="button" 
+                        class="btn btn-sm btn-outline-primary like-btn d-flex align-items-center gap-1" 
+                        data-comment-id="{{ $comment->id }}"
+                        data-blog-id="{{ $blog->id }}">
+                    <i class="ri-thumb-up-line"></i>
+                    <span class="like-count">{{ $comment->likes_count ?? 0 }}</span>
+                    <span class="ms-1">{{ __('Like') }}</span>
+                </button>
+                
+                <!-- Reply Button -->
+                <button type="button" 
+                        class="btn btn-sm btn-outline-secondary reply-toggle-btn d-flex align-items-center gap-1">
+                    <i class="ri-reply-line"></i>
+                    <span>{{ __('Reply') }}</span>
+                </button>
+            </div>
+            
+            <!-- Reply Form (Initially Hidden) -->
+            <div class="reply-form d-none mt-3">
+                <div class="card border-0 bg-white">
+                    <div class="card-body p-3">
+                        <h6 class="mb-3 fw-semibold">
+                            <i class="ri-reply-line text-primary me-2"></i>
+                            {{ __('Reply to') }} {{ $comment->name ?? 'this comment' }}
+                        </h6>
+                        
+                        <form action="{{ route('blogs.reply.store') }}" method="post" class="reply-form-ajax">
+                            @csrf
+                            <input type="hidden" name="blog_id" value="{{ $blog->id }}">
+                            <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
+                            <input type="hidden" name="blog_slug" value="{{ $blog->slug }}">
+                            
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="reply-name-{{ $comment->id }}" class="form-label fw-medium small">
+                                        <i class="ri-user-line me-1"></i>{{ __('Your Name') }} *
+                                    </label>
+                                    <input type="text" 
+                                           name="name" 
+                                           class="form-control form-control-sm border-light" 
+                                           id="reply-name-{{ $comment->id }}" 
+                                           required 
+                                           placeholder="{{ __('Enter your name') }}">
                                 </div>
-                                @if (!$loop->last)
-                                    <hr class="my-3 opacity-25">
-                                @endif
-                            @empty
-                                <div class="text-center py-4">
-                                    <div class="avatar-lg mx-auto mb-3">
-                                        <div class="avatar-title bg-light text-muted rounded-circle">
-                                            <i class="ri-article-line fs-24"></i>
-                                        </div>
-                                    </div>
-                                    <p class="text-muted mb-0">No recent posts available</p>
+                                <div class="col-md-6">
+                                    <label for="reply-email-{{ $comment->id }}" class="form-label fw-medium small">
+                                        <i class="ri-mail-line me-1"></i>{{ __('Your Email') }} *
+                                    </label>
+                                    <input type="email" 
+                                           name="email" 
+                                           class="form-control form-control-sm border-light" 
+                                           id="reply-email-{{ $comment->id }}" 
+                                           required 
+                                           placeholder="{{ __('Enter your email') }}">
                                 </div>
-                            @endforelse
-                        </div>
-                    </div>
-                    
-                    <!-- Newsletter Widget -->
-                    <div class="card shadow-sm border-0 rounded-4 bg-primary bg-opacity-10">
-                        <div class="card-body p-4 text-center">
-                            <div class="avatar-lg mx-auto mb-3">
-                                <div class="avatar-title bg-primary text-white rounded-circle">
-                                    <i class="ri-mail-line fs-24"></i>
+                                <div class="col-12">
+                                    <label for="reply-comment-{{ $comment->id }}" class="form-label fw-medium small">
+                                        <i class="ri-message-line me-1"></i>{{ __('Your Reply') }} *
+                                    </label>
+                                    <textarea class="form-control form-control-sm border-light" 
+                                              name="comment" 
+                                              id="reply-comment-{{ $comment->id }}" 
+                                              rows="3" 
+                                              required 
+                                              placeholder="{{ __('Write your reply...') }}"></textarea>
                                 </div>
                             </div>
-                            <h5 class="mb-2 fw-semibold text-primary">Stay Updated</h5>
-                            <p class="text-muted mb-3 small">
-                                Subscribe to get our latest articles delivered to your inbox
-                            </p>
-                            <form class="d-grid gap-2">
-                                <input type="email" class="form-control border-light" 
-                                       placeholder="Enter your email">
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="ri-send-plane-line me-1"></i>Subscribe
+                            
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="button" class="btn btn-sm btn-light reply-cancel-btn">
+                                    {{ __('Cancel') }}
                                 </button>
-                            </form>
-                        </div>
+                                <button type="submit" class="btn btn-sm btn-primary reply-submit-btn">
+                                    <i class="ri-send-plane-line me-1"></i>
+                                    {{ __('Post Reply') }}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+            
+            <!-- Replies (if any) -->
+            @if(isset($comment->replies) && $comment->replies->count() > 0)
+                <div class="replies-section mt-4 ps-3 border-start border-2 border-primary border-opacity-25">
+                    @foreach($comment->replies as $reply)
+                        <div class="reply-item mb-3 p-3 bg-white rounded-2">
+                            <div class="d-flex align-items-start">
+                                <div class="avatar-xs me-2 flex-shrink-0">
+                                    <div class="avatar-title bg-secondary bg-opacity-10 text-secondary rounded-circle small fw-semibold">
+                                        {{ strtoupper(substr($reply->name ?? 'U', 0, 1)) }}
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <h6 class="mb-0 fw-semibold small text-dark">{{ $reply->name ?? 'Anonymous' }}</h6>
+                                        <small class="text-muted">{{ $reply->created_at->diffForHumans() ?? 'Just now' }}</small>
+                                    </div>
+                                    <p class="mb-2 text-muted small lh-base">{{ $reply->comment ?? '' }}</p>
+                                    <button type="button" 
+                                            class="btn btn-xs btn-outline-primary like-btn d-flex align-items-center gap-1" 
+                                            data-comment-id="{{ $reply->id }}"
+                                            data-blog-id="{{ $blog->id }}">
+                                        <i class="ri-thumb-up-line"></i>
+                                        <span class="like-count">{{ $reply->likes_count ?? 0 }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
-</section>
-
-@endsection
+</div>
 
 @section('script')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -300,96 +167,263 @@ $(function() {
         $(this).css({transform: 'translateY(0)', boxShadow: 'none'});
     });
 
-    // Like button AJAX
+    // Like button AJAX - Fixed
     $(document).on('click', '.like-btn', function(e) {
         e.preventDefault();
         var btn = $(this);
-        var commentId = btn.attr('data-id') || btn.data('id');
+        var commentId = btn.attr('data-comment-id') || btn.data('comment-id');
+        var blogId = btn.attr('data-blog-id') || btn.data('blog-id');
+        
         if (!commentId) {
             console.error('No commentId found on like button');
             return;
         }
+        
         btn.prop('disabled', true);
+        var originalHtml = btn.html();
+        btn.html('<i class="ri-loader-2-line spin"></i> Liking...');
+        
         $.ajax({
-            url: '{{ route('blogs.like-comment') }}',
+            url: '{{ route("blogs.like-comment") }}',
             type: 'POST',
             data: {
                 comment_id: commentId,
+                blog_id: blogId,
                 _token: '{{ csrf_token() }}'
             },
             success: function(res) {
-                btn.find('.like-count').text(res.count);
-                btn.toggleClass('btn-outline-primary btn-primary');
+                if (res.success) {
+                    btn.find('.like-count').text(res.count || res.likes_count || 0);
+                    
+                    // Toggle button appearance
+                    if (res.liked) {
+                        btn.removeClass('btn-outline-primary').addClass('btn-primary');
+                        btn.find('i').removeClass('ri-thumb-up-line').addClass('ri-thumb-up-fill');
+                    } else {
+                        btn.removeClass('btn-primary').addClass('btn-outline-primary');
+                        btn.find('i').removeClass('ri-thumb-up-fill').addClass('ri-thumb-up-line');
+                    }
+                    
+                    // Show success message
+                    showNotification('success', res.message || 'Action completed successfully!');
+                } else {
+                    showNotification('error', res.message || 'Something went wrong!');
+                }
             },
             error: function(xhr) {
-                alert('Failed to like comment. Please try again.');
-                console.error(xhr.responseText);
+                console.error('Like error:', xhr.responseText);
+                var errorMsg = 'Failed to like comment. Please try again.';
+                
+                if (xhr.status === 422) {
+                    try {
+                        var errors = JSON.parse(xhr.responseText);
+                        errorMsg = errors.message || errorMsg;
+                    } catch(e) {}
+                } else if (xhr.status === 401) {
+                    errorMsg = 'Please log in to like comments.';
+                }
+                
+                showNotification('error', errorMsg);
             },
             complete: function() {
                 btn.prop('disabled', false);
+                btn.html(originalHtml);
             }
         });
     });
 
-    // Reply form toggle
+    // Reply form toggle - Fixed
     $(document).on('click', '.reply-toggle-btn', function(e) {
         e.preventDefault();
         var btn = $(this);
-        btn.closest('.flex-grow-1').find('.reply-form').toggleClass('d-none');
+        var replyForm = btn.closest('.flex-grow-1').find('.reply-form');
+        
+        // Toggle form visibility
+        replyForm.toggleClass('d-none');
+        
+        // Update button text
+        if (replyForm.hasClass('d-none')) {
+            btn.html('<i class="ri-reply-line"></i> <span>{{ __("Reply") }}</span>');
+        } else {
+            btn.html('<i class="ri-close-line"></i> <span>{{ __("Cancel") }}</span>');
+            // Focus on the first input
+            replyForm.find('input[name="name"]').focus();
+        }
     });
 
-    // AJAX instant reload for reply forms
-    $(document).on('submit', '.reply-form', function(e) {
+    // Reply form cancel button
+    $(document).on('click', '.reply-cancel-btn', function(e) {
+        e.preventDefault();
+        var form = $(this).closest('.reply-form');
+        var toggleBtn = form.closest('.flex-grow-1').find('.reply-toggle-btn');
+        
+        form.addClass('d-none');
+        form.find('form')[0].reset(); // Reset form
+        toggleBtn.html('<i class="ri-reply-line"></i> <span>{{ __("Reply") }}</span>');
+    });
+
+    // AJAX for reply forms - Fixed
+    $(document).on('submit', '.reply-form-ajax', function(e) {
         e.preventDefault();
         var form = $(this);
-        var btn = form.find('.submit-btn');
-        btn.html('<i class="ri-loader-2-line me-2 spin"></i>Replying...');
+        var btn = form.find('.reply-submit-btn');
+        var originalHtml = btn.html();
+        
+        btn.html('<i class="ri-loader-2-line spin"></i> {{ __("Replying...") }}');
         btn.prop('disabled', true);
+        
         $.ajax({
             url: form.attr('action'),
             type: 'POST',
             data: form.serialize(),
             success: function(res) {
-                location.reload();
+                if (res.success) {
+                    showNotification('success', res.message || 'Reply posted successfully!');
+                    
+                    // Reset and hide form
+                    form[0].reset();
+                    form.closest('.reply-form').addClass('d-none');
+                    
+                    // Reset toggle button
+                    var toggleBtn = form.closest('.flex-grow-1').find('.reply-toggle-btn');
+                    toggleBtn.html('<i class="ri-reply-line"></i> <span>{{ __("Reply") }}</span>');
+                    
+                    // Reload page after short delay
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showNotification('error', res.message || 'Failed to post reply.');
+                }
             },
             error: function(xhr) {
-                alert('Failed to post reply. Please check your input.');
-                console.error(xhr.responseText);
-                btn.html('<i class="ri-send-plane-line label-icon align-middle rounded-pill fs-14 me-1"></i>Reply');
+                console.error('Reply error:', xhr.responseText);
+                var errorMsg = 'Failed to post reply. Please check your input.';
+                
+                if (xhr.status === 422) {
+                    try {
+                        var errors = JSON.parse(xhr.responseText);
+                        if (errors.errors) {
+                            var firstError = Object.values(errors.errors)[0];
+                            errorMsg = Array.isArray(firstError) ? firstError[0] : firstError;
+                        } else if (errors.message) {
+                            errorMsg = errors.message;
+                        }
+                    } catch(e) {}
+                }
+                
+                showNotification('error', errorMsg);
+            },
+            complete: function() {
+                btn.html(originalHtml);
                 btn.prop('disabled', false);
             }
         });
     });
 
-    // Main comment form instant reload
+    // Main comment form instant reload - Fixed
     $(document).on('submit', '.ajaxform_instant_reload', function(e) {
-        if ($(this).hasClass('reply-form')) return; // handled above
         e.preventDefault();
         var form = $(this);
         var btn = form.find('.submit-btn');
-        btn.html('<i class="ri-loader-2-line me-2 spin"></i>Posting...');
+        var originalHtml = btn.html();
+        
+        btn.html('<i class="ri-loader-2-line spin"></i> {{ __("Posting...") }}');
         btn.prop('disabled', true);
+        
         $.ajax({
             url: form.attr('action'),
             type: 'POST',
             data: form.serialize(),
             success: function(res) {
-                location.reload();
+                if (res.success) {
+                    showNotification('success', res.message || 'Comment posted successfully!');
+                    form[0].reset();
+                    
+                    // Reload page after short delay
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showNotification('error', res.message || 'Failed to post comment.');
+                }
             },
             error: function(xhr) {
-                alert('Failed to post comment. Please check your input.');
-                btn.html('<i class="ri-send-plane-line label-icon align-middle rounded-pill fs-16 me-2"></i>Post Comment');
+                console.error('Comment error:', xhr.responseText);
+                var errorMsg = 'Failed to post comment. Please check your input.';
+                
+                if (xhr.status === 422) {
+                    try {
+                        var errors = JSON.parse(xhr.responseText);
+                        if (errors.errors) {
+                            var firstError = Object.values(errors.errors)[0];
+                            errorMsg = Array.isArray(firstError) ? firstError[0] : firstError;
+                        } else if (errors.message) {
+                            errorMsg = errors.message;
+                        }
+                    } catch(e) {}
+                }
+                
+                showNotification('error', errorMsg);
+            },
+            complete: function() {
+                btn.html(originalHtml);
                 btn.prop('disabled', false);
             }
         });
     });
 
-    // Add CSS for spinning animation
+    // Notification function
+    function showNotification(type, message) {
+        // Remove existing notifications
+        $('.custom-notification').remove();
+        
+        var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        var iconClass = type === 'success' ? 'ri-check-line' : 'ri-error-warning-line';
+        
+        var notification = $(`
+            <div class="custom-notification alert ${alertClass} alert-dismissible fade show position-fixed" 
+                 style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+                <i class="${iconClass} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `);
+        
+        $('body').append(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(function() {
+            notification.fadeOut(function() {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+
+    // Add CSS for animations
     const style = document.createElement('style');
     style.textContent = `
-        .spin { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .hover-primary:hover { color: var(--bs-primary) !important; }
+        .spin { 
+            animation: spin 1s linear infinite; 
+        }
+        @keyframes spin { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
+        }
+        .hover-primary:hover { 
+            color: var(--bs-primary) !important; 
+        }
+        .custom-notification {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: none;
+        }
+        .reply-form {
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     `;
     document.head.appendChild(style);
 });
