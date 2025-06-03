@@ -76,6 +76,10 @@ class BlogController extends Controller
             $liked = true;
         }
         $count = CommentLike::where('comment_id', $request->comment_id)->count();
-        return response()->json(['liked' => $liked, 'count' => $count]);
+        return response()->json([
+            'success' => true,
+            'liked' => $liked,
+            'count' => $count
+        ]);
     }
 }

@@ -2,8 +2,8 @@
 <script src="{{ asset('assets/web/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/web/js/swiper-bundle.min.js') }}"></script>
 <script src="{{ asset('assets/web/js/lity.min.js') }}"></script>
-<script src="{{ asset('assets/web/js/custom.js') }}"></script>
 <script src="{{ asset('assets/web/js/slick.min.js') }}"></script>
+<script src="{{ asset('assets/web/js/custom.js') }}"></script>
 <script src="{{ asset('assets/web/js/type.js') }}"></script>
 
 <script src="{{ asset('assets/plugins/custom/notification.js') }}"></script>
