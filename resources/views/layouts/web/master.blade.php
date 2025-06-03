@@ -14,14 +14,15 @@
         @endif {{ get_option('general')['title'] ?? config('app.name') }}
     </title>
     @include('layouts.web.partials.css')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
 <body>
-  
+    @if (request()->is('/'))
         @include('layouts.web.partials.header')
- 
-  
- 
+    @else
+        @include('layouts.web.partials.common_header')
+    @endif
 
     @yield('content')
 

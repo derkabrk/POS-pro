@@ -23,7 +23,7 @@
         </div>
         <p class="mb-2 text-muted">{{ $comment->comment }}</p>
         <div class="d-flex align-items-center gap-3 mb-2">
-            <button class="btn btn-sm btn-outline-primary like-btn" data-id="{{ $comment->id }}">
+            <button class="btn btn-sm btn-outline-primary like-btn" data-comment-id="{{ $comment->id }}">
                 <i class="ri-thumb-up-line me-1"></i>
                 <span class="like-count">{{ $likeCount }}</span>
                 <span class="like-label">Like</span>
