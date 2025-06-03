@@ -18,33 +18,32 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#hero">{{ __('Home') }}</a>
+                        <a class="nav-link{{ request()->is('/') || request()->is('#hero') ? ' active' : '' }}" href="#hero">{{ __('Home') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('about.index') }}">{{ __('About Us') }}</a>
+                        <a class="nav-link{{ request()->routeIs('about.index') ? ' active' : '' }}" href="{{ route('about.index') }}">{{ __('About Us') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('plan.index') }}">{{ __('Pricing') }}</a>
+                        <a class="nav-link{{ request()->routeIs('plan.index') ? ' active' : '' }}" href="{{ route('plan.index') }}">{{ __('Pricing') }}</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" 
-                           data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle{{ (request()->routeIs('blogs.*') || request()->routeIs('term.*') || request()->routeIs('policy.*')) ? ' active' : '' }}" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ __('Pages') }}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="pagesDropdown">
                             <li>
-                                <a class="dropdown-item" href="{{ route('blogs.index') }}">{{ __('Blog') }}</a>
+                                <a class="dropdown-item{{ request()->routeIs('blogs.*') ? ' active' : '' }}" href="{{ route('blogs.index') }}">{{ __('Blog') }}</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('term.index') }}">{{ __('Terms & Conditions') }}</a>
+                                <a class="dropdown-item{{ request()->routeIs('term.*') ? ' active' : '' }}" href="{{ route('term.index') }}">{{ __('Terms & Conditions') }}</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('policy.index') }}">{{ __('Privacy Policy') }}</a>
+                                <a class="dropdown-item{{ request()->routeIs('policy.*') ? ' active' : '' }}" href="{{ route('policy.index') }}">{{ __('Privacy Policy') }}</a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('contact.index') }}">{{ __('Contact Us') }}</a>
+                        <a class="nav-link{{ request()->routeIs('contact.index') ? ' active' : '' }}" href="{{ route('contact.index') }}">{{ __('Contact Us') }}</a>
                     </li>
                 </ul>
 
