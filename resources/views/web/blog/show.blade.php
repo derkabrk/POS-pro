@@ -281,7 +281,14 @@
 @section('script')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
+// Ensure CSRF token is sent with all AJAX requests
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$(function() {
     // Debug function
     function debugLog(message, data = null) {
         console.log('[Blog Debug]', message, data);
