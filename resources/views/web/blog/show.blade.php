@@ -124,23 +124,7 @@
                             <!-- Comments List -->
                             <div class="comments-list mb-5">
                                 @forelse ($comments as $comment)
-                                    <div class="d-flex align-items-start mb-4 p-3 bg-light rounded-3">
-                                        <div class="avatar-sm me-3">
-                                            <div class="avatar-title bg-primary text-white rounded-circle fs-16 fw-medium">
-                                                {{ strtoupper(substr($comment->name, 0, 1)) }}
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                                <h6 class="mb-0 fw-semibold text-dark">{{ $comment->name }}</h6>
-                                                <small class="text-muted">
-                                                    <i class="ri-time-line me-1"></i>
-                                                    {{ $comment->updated_at->format('M d, Y \a\t g:i a') }}
-                                                </small>
-                                            </div>
-                                            <p class="mb-0 text-muted">{{ $comment->comment }}</p>
-                                        </div>
-                                    </div>
+                                    @include('web.blog.partials.comment', ['comment' => $comment, 'blog' => $blog])
                                 @empty
                                     <div class="text-center py-5">
                                         <div class="avatar-lg mx-auto mb-3">
@@ -357,5 +341,40 @@ style.textContent = `
     .hover-primary:hover { color: var(--bs-primary) !important; }
 `;
 document.head.appendChild(style);
+
+// Like button AJAX
+$(document).on('click', '.like-btn', function(e) {
+    e.preventDefault();
+    var btn = $(this);
+    var commentId = btn.data('id');
+    $.ajax({
+        url: '{{ route('blogs.like-comment') }}',
+        type: 'POST',
+        data: {
+            comment_id: commentId,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(res) {
+            btn.find('.like-count').text(res.count);
+            btn.toggleClass('btn-outline-primary btn-primary');
+        }
+    });
+});
+
+// Reply form toggle
+$(document).on('click', '.reply-toggle-btn', function(e) {
+    e.preventDefault();
+    var btn = $(this);
+    var commentId = btn.data('id');
+    btn.closest('.flex-grow-1').find('.reply-form').toggleClass('d-none');
+});
+
+// AJAX instant reload for reply forms
+$(document).on('submit', '.reply-form', function(e) {
+    var form = $(this);
+    var btn = form.find('.submit-btn');
+    btn.html('<i class="ri-loader-2-line me-2 spin"></i>Replying...');
+    btn.prop('disabled', true);
+});
 </script>
 @endsection

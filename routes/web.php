@@ -109,3 +109,5 @@ Route::fallback(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/chat.php';
+
+Route::post('blogs/like-comment', [Web\BlogController::class, 'likeComment'])->name('blogs.like-comment');
