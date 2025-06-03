@@ -78,8 +78,8 @@ class AuthenticatedSessionController extends Controller
                 $first_role = $role->permissions->pluck('name')->all()[0];
                 $page = explode('-', $first_role);
                 $redirect_url = route('admin.' . $page[0] . '.index');
-            } elseif ($user->role === 'dropshipper') {
-                // Redirect dropshipper to a dropshipper dashboard or home
+            } elseif ($user->role === 'dropshipper' && $user->dropshipper && $user->dropshipper->is_registered) {
+                // Only redirect to dropshipper dashboard if registration is completed
                 $redirect_url = route('business.dropshipper.dashboard');
             } else {
                 // Fallback redirect if role or permissions are missing
