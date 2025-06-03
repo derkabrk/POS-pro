@@ -21,12 +21,12 @@ class DropshipperController extends Controller
             $dropshipper->paid = $dropshipper->wallet_paid ?? 0;
             $dropshipper->cashout = $dropshipper->wallet_cashout ?? 0;
         }
-        return view('dropshippers.index', compact('dropshippers'));
+        return view('business::dropshippers.index', compact('dropshippers'));
     }
 
     public function create()
     {
-        return view('dropshippers.create');
+        return view('business::dropshippers.create');
     }
 
     public function store(Request $request)
@@ -43,7 +43,7 @@ class DropshipperController extends Controller
 
     public function edit(Dropshipper $dropshipper)
     {
-        return view('dropshippers.edit', compact('dropshipper'));
+        return view('business::dropshippers.edit', compact('dropshipper'));
     }
 
     public function update(Request $request, Dropshipper $dropshipper)
@@ -69,12 +69,12 @@ class DropshipperController extends Controller
     public function transactions()
     {
         // Placeholder: implement logic to fetch transactions
-        return view('dropshippers.transactions');
+        return view('business::dropshippers.transactions');
     }
 
     public function withdrawals()
     {
         // Placeholder: implement logic to fetch withdrawals
-        return view('dropshippers.withdrawals');
+        return view('business::dropshippers.withdrawals');
     }
 }
