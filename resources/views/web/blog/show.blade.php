@@ -283,44 +283,21 @@
 <script>
 $(function() {
     // Sticky sidebar
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.querySelector('.sticky-sidebar');
-        if (sidebar) {
-            const sidebarTop = sidebar.offsetTop;
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset >= sidebarTop - 20) {
-                    sidebar.style.position = 'sticky';
-                    sidebar.style.top = '20px';
-                }
-            });
-        }
-    });
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+    var sidebar = $('.sticky-sidebar');
+    if (sidebar.length) {
+        var sidebarTop = sidebar.offset().top;
+        $(window).on('scroll', function() {
+            if ($(window).scrollTop() >= sidebarTop - 20) {
+                sidebar.css({position: 'sticky', top: '20px'});
             }
         });
-    });
+    }
 
     // Add hover effects
-    document.querySelectorAll('.hover-effect').forEach(element => {
-        element.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px)';
-            this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-            this.style.transition = 'all 0.3s ease';
-        });
-        element.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = 'none';
-        });
+    $('.hover-effect').on('mouseenter', function() {
+        $(this).css({transform: 'translateY(-2px)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transition: 'all 0.3s ease'});
+    }).on('mouseleave', function() {
+        $(this).css({transform: 'translateY(0)', boxShadow: 'none'});
     });
 
     // Like button AJAX
