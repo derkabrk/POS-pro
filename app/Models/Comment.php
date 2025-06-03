@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Comment extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'email', 'comment', 'blog_id'];
+    protected $fillable = ['name', 'email', 'comment', 'blog_id', 'comment_id'];
 
     public function blog(): BelongsTo
     {
