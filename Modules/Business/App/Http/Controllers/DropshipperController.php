@@ -45,6 +45,7 @@ class DropshipperController extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->phone = $request->phone;
+        $user->role = 'dropshipper';
         $user->save();
 
         // Get current business (assuming authenticated business user)
