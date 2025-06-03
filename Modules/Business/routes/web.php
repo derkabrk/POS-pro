@@ -325,8 +325,8 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::delete('dropshippers/{dropshipper}', [Business\DropshipperController::class, 'destroy'])->name('dropshippers.destroy');
     Route::get('dropshippers/transactions', [Business\DropshipperController::class, 'transactions'])->name('dropshippers.transactions');
     Route::get('dropshippers/withdrawals', [Business\DropshipperController::class, 'withdrawals'])->name('dropshippers.withdrawals');
-    Route::get('dropshipper/registration', [Business\DropshipperController::class, 'showRegistrationForm'])->name('dropshipper.registration');
-    Route::post('dropshipper/registration', [Business\DropshipperController::class, 'completeRegistration'])->name('dropshipper.registration.submit');
+    Route::get('dropshipper/registration', [Business\DropshipperController::class, 'showRegistrationForm'])->name('business.dropshipper.registration');
+    Route::post('dropshipper/registration', [Business\DropshipperController::class, 'completeRegistration'])->name('business.dropshipper.registration.submit');
 
 });
 

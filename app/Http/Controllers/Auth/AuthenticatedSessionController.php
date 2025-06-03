@@ -50,7 +50,7 @@ class AuthenticatedSessionController extends Controller
             if (!$user->dropshipper || !$user->dropshipper->is_registered) {
                 return response()->json([
                     'message' => __('Please complete your registration.'),
-                    'redirect' => route('dropshipper.registration'),
+                    'redirect' => route('business.dropshipper.registration'),
                 ]);
             }
         }
