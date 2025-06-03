@@ -1,4 +1,8 @@
-@extends('layouts.app')
+@extends('business::layouts.master')
+
+
+@section('title', 'Add New Dropshipper')
+
 @section('content')
 <div class="container">
     <h1>Add New Dropshipper</h1>
