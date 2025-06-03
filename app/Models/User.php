@@ -98,4 +98,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\OrderStatusUpdate::class);
     }
+
+    public function dropshipper()
+    {
+        return $this->hasOne(\Modules\Business\App\Models\Dropshipper::class, 'user_id');
+    }
 }
