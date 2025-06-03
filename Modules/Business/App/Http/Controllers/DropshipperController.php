@@ -33,16 +33,31 @@ class DropshipperController extends Controller
     {
         $request->validate([
             'full_name' => 'required',
-            'email' => 'required|email|unique:dropshippers,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
             'phone' => 'nullable',
             // 'store' => 'required', // Make store optional
         ]);
+
+        // Create new user
+        $user = new \App\Models\User();
+        $user->name = $request->full_name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->phone = $request->phone;
+        $user->save();
+
+        // Get current business (assuming authenticated business user)
+        $businessId = auth()->user()->business_id ?? null;
+
         $data = $request->only('full_name', 'email', 'phone');
         if ($request->filled('store')) {
             $data['store'] = $request->store;
         }
-        $data['password'] = bcrypt($request->password);
+        $data['user_id'] = $user->id;
+        $data['business_id'] = $businessId;
+        $data['password'] = $user->password; // already encrypted
+
         Dropshipper::create($data);
         return redirect()->route('business.dropshippers.index')->with('success', 'Dropshipper created successfully.');
     }

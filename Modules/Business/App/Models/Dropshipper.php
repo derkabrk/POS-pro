@@ -18,5 +18,17 @@ class Dropshipper extends Model
         'paid',
         'cashout',
         'expires',
+        'business_id',
+        'user_id',
     ];
+
+    public function business()
+    {
+        return $this->belongsTo(\App\Models\Business::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
 }
