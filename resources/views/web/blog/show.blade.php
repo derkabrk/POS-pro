@@ -279,102 +279,136 @@
 @endsection
 
 @section('script')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-// Sticky sidebar
-document.addEventListener('DOMContentLoaded', function() {
-    const sidebar = document.querySelector('.sticky-sidebar');
-    if (sidebar) {
-        const sidebarTop = sidebar.offsetTop;
-        
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset >= sidebarTop - 20) {
-                sidebar.style.position = 'sticky';
-                sidebar.style.top = '20px';
-            }
-        });
-    }
-});
-
-// Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+$(function() {
+    // Sticky sidebar
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.sticky-sidebar');
+        if (sidebar) {
+            const sidebarTop = sidebar.offsetTop;
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset >= sidebarTop - 20) {
+                    sidebar.style.position = 'sticky';
+                    sidebar.style.top = '20px';
+                }
             });
         }
     });
-});
 
-// Add hover effects
-document.querySelectorAll('.hover-effect').forEach(element => {
-    element.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-2px)';
-        this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-        this.style.transition = 'all 0.3s ease';
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
     });
-    
-    element.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
-        this.style.boxShadow = 'none';
+
+    // Add hover effects
+    document.querySelectorAll('.hover-effect').forEach(element => {
+        element.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            this.style.transition = 'all 0.3s ease';
+        });
+        element.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+        });
     });
-});
 
-// Form validation enhancement
-const commentForm = document.querySelector('.ajaxform_instant_reload');
-if (commentForm) {
-    commentForm.addEventListener('submit', function(e) {
-        const submitBtn = this.querySelector('.submit-btn');
-        submitBtn.innerHTML = '<i class="ri-loader-2-line me-2 spin"></i>Posting...';
-        submitBtn.disabled = true;
+    // Like button AJAX
+    $(document).on('click', '.like-btn', function(e) {
+        e.preventDefault();
+        var btn = $(this);
+        var commentId = btn.data('id');
+        btn.prop('disabled', true);
+        $.ajax({
+            url: '{{ route('blogs.like-comment') }}',
+            type: 'POST',
+            data: {
+                comment_id: commentId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(res) {
+                btn.find('.like-count').text(res.count);
+                btn.toggleClass('btn-outline-primary btn-primary');
+            },
+            error: function() {
+                alert('Failed to like comment. Please try again.');
+            },
+            complete: function() {
+                btn.prop('disabled', false);
+            }
+        });
     });
-}
 
-// Add CSS for spinning animation
-const style = document.createElement('style');
-style.textContent = `
-    .spin { animation: spin 1s linear infinite; }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .hover-primary:hover { color: var(--bs-primary) !important; }
-`;
-document.head.appendChild(style);
-
-// Like button AJAX
-$(document).on('click', '.like-btn', function(e) {
-    e.preventDefault();
-    var btn = $(this);
-    var commentId = btn.data('id');
-    $.ajax({
-        url: '{{ route('blogs.like-comment') }}',
-        type: 'POST',
-        data: {
-            comment_id: commentId,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(res) {
-            btn.find('.like-count').text(res.count);
-            btn.toggleClass('btn-outline-primary btn-primary');
-        }
+    // Reply form toggle
+    $(document).on('click', '.reply-toggle-btn', function(e) {
+        e.preventDefault();
+        var btn = $(this);
+        btn.closest('.flex-grow-1').find('.reply-form').toggleClass('d-none');
     });
-});
 
-// Reply form toggle
-$(document).on('click', '.reply-toggle-btn', function(e) {
-    e.preventDefault();
-    var btn = $(this);
-    var commentId = btn.data('id');
-    btn.closest('.flex-grow-1').find('.reply-form').toggleClass('d-none');
-});
+    // AJAX instant reload for reply forms
+    $(document).on('submit', '.reply-form', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var btn = form.find('.submit-btn');
+        btn.html('<i class="ri-loader-2-line me-2 spin"></i>Replying...');
+        btn.prop('disabled', true);
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(res) {
+                location.reload();
+            },
+            error: function(xhr) {
+                alert('Failed to post reply. Please check your input.');
+                btn.html('<i class="ri-send-plane-line label-icon align-middle rounded-pill fs-14 me-1"></i>Reply');
+                btn.prop('disabled', false);
+            }
+        });
+    });
 
-// AJAX instant reload for reply forms
-$(document).on('submit', '.reply-form', function(e) {
-    var form = $(this);
-    var btn = form.find('.submit-btn');
-    btn.html('<i class="ri-loader-2-line me-2 spin"></i>Replying...');
-    btn.prop('disabled', true);
+    // Main comment form instant reload
+    $(document).on('submit', '.ajaxform_instant_reload', function(e) {
+        if ($(this).hasClass('reply-form')) return; // handled above
+        e.preventDefault();
+        var form = $(this);
+        var btn = form.find('.submit-btn');
+        btn.html('<i class="ri-loader-2-line me-2 spin"></i>Posting...');
+        btn.prop('disabled', true);
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(res) {
+                location.reload();
+            },
+            error: function(xhr) {
+                alert('Failed to post comment. Please check your input.');
+                btn.html('<i class="ri-send-plane-line label-icon align-middle rounded-pill fs-16 me-2"></i>Post Comment');
+                btn.prop('disabled', false);
+            }
+        });
+    });
+
+    // Add CSS for spinning animation
+    const style = document.createElement('style');
+    style.textContent = `
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .hover-primary:hover { color: var(--bs-primary) !important; }
+    `;
+    document.head.appendChild(style);
 });
 </script>
 @endsection
