@@ -40,12 +40,16 @@ class RedirectIfAuthenticated
                         return redirect(route('login'))->with('warning', 'Web addon is not installed.');
                     }
                 } else {
-
                     $role = Role::where('name', $user->role)->first();
-                    $first_role = $role->permissions->pluck('name')->all()[0];
-                    $page = explode('-', $first_role);
-                    return redirect(route('admin.' . $page[0] . '.index'))->with('warning', 'You are already logged in!');
-
+                    if ($role && $role->permissions->count() > 0) {
+                        $first_role = $role->permissions->pluck('name')->all()[0];
+                        $page = explode('-', $first_role);
+                        return redirect(route('admin.' . $page[0] . '.index'))->with('warning', 'You are already logged in!');
+                    } elseif ($user->role === 'dropshipper') {
+                        return redirect(route('business.dropshipper.dashboard'))->with('warning', 'You are already logged in!');
+                    } else {
+                        return redirect(route('home'))->with('warning', 'You are already logged in!');
+                    }
                 }
             }
         }
