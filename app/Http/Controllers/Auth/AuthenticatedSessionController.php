@@ -42,11 +42,17 @@ class AuthenticatedSessionController extends Controller
         $user = auth()->user();
 
         // Dropshipper registration check
-        if (($user->role === 'dropshipper' || (method_exists($user, 'isDropshipper') && $user->isDropshipper())) && isset($user->dropshipper) && !$user->dropshipper->is_registered) {
-            return response()->json([
-                'message' => __('Please complete your registration.'),
-                'redirect' => route('dropshipper.registration'),
-            ]);
+        if ($user->role === 'dropshipper') {
+            // If user relation is not loaded, eager load it
+            if (!isset($user->dropshipper)) {
+                $user->load('dropshipper');
+            }
+            if (!$user->dropshipper || !$user->dropshipper->is_registered) {
+                return response()->json([
+                    'message' => __('Please complete your registration.'),
+                    'redirect' => route('dropshipper.registration'),
+                ]);
+            }
         }
 
         // Check if the user is a shop-owner or staff
