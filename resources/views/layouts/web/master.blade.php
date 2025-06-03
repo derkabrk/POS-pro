@@ -31,6 +31,7 @@
     <input type="hidden" id="payment_success" value="{{ session('payment_success') }}">
 
     @include('layouts.web.partials.script')
+    @yield('script')
 </body>
 
 </html>
