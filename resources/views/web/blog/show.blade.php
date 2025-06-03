@@ -429,3 +429,10 @@ $(function() {
 });
 </script>
 @endsection
+
+{{-- Usage in the main comments section --}}
+<div class="comments-list mb-5">
+    @foreach ($comments as $comment)
+        @include('web.blog.partials.comment', ['comment' => $comment, 'blog' => $blog])
+    @endforeach
+</div>
