@@ -304,7 +304,11 @@ $(function() {
     $(document).on('click', '.like-btn', function(e) {
         e.preventDefault();
         var btn = $(this);
-        var commentId = btn.data('id');
+        var commentId = btn.attr('data-id') || btn.data('id');
+        if (!commentId) {
+            console.error('No commentId found on like button');
+            return;
+        }
         btn.prop('disabled', true);
         $.ajax({
             url: '{{ route('blogs.like-comment') }}',
@@ -317,8 +321,9 @@ $(function() {
                 btn.find('.like-count').text(res.count);
                 btn.toggleClass('btn-outline-primary btn-primary');
             },
-            error: function() {
+            error: function(xhr) {
                 alert('Failed to like comment. Please try again.');
+                console.error(xhr.responseText);
             },
             complete: function() {
                 btn.prop('disabled', false);
@@ -349,6 +354,7 @@ $(function() {
             },
             error: function(xhr) {
                 alert('Failed to post reply. Please check your input.');
+                console.error(xhr.responseText);
                 btn.html('<i class="ri-send-plane-line label-icon align-middle rounded-pill fs-14 me-1"></i>Reply');
                 btn.prop('disabled', false);
             }
