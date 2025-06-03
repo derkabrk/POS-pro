@@ -146,5 +146,6 @@ $(document).ready(function() {
         fetchBrands();
     });
 });
+
 </script>
 @endpush

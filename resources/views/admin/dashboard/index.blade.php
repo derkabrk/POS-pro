@@ -217,6 +217,37 @@
                 </div>
             </div>
         </div>
+
+        <div class="row mt-4">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header align-items-center d-flex">
+                        <h4 class="card-title mb-0 flex-grow-1">{{ __('Latest Blogs') }}</h4>
+                        <div class="flex-shrink-0">
+                            <a href="{{ route('admin.blogs.index') }}" class="btn btn-soft-primary btn-sm">
+                                <i class="ri-list-check me-1 align-bottom"></i> {{ __('View All Blogs') }}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (\App\Models\Blog::latest()->take(3)->get() as $blog)
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <img src="{{ asset($blog->image) }}" class="card-img-top" alt="{{ $blog->title }}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $blog->title }}</h5>
+                                            <p class="card-text">{{ Str::limit(strip_tags($blog->descriptions), 80) }}</p>
+                                            <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="btn btn-outline-primary btn-sm">{{ __('Edit') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     @php
