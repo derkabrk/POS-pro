@@ -68,9 +68,17 @@ class AuthenticatedSessionController extends Controller
         } else {
             // Handle other roles
             $role = Role::where('name', $user->role)->first();
-            $first_role = $role->permissions->pluck('name')->all()[0];
-            $page = explode('-', $first_role);
-            $redirect_url = route('admin.' . $page[0] . '.index');
+            if ($role && $role->permissions->count() > 0) {
+                $first_role = $role->permissions->pluck('name')->all()[0];
+                $page = explode('-', $first_role);
+                $redirect_url = route('admin.' . $page[0] . '.index');
+            } elseif ($user->role === 'dropshipper') {
+                // Redirect dropshipper to a dropshipper dashboard or home
+                $redirect_url = route('business.dropshipper.dashboard');
+            } else {
+                // Fallback redirect if role or permissions are missing
+                $redirect_url = route('home'); // or any default route you prefer
+            }
 
             return response()->json([
                 'message' => __('Logged In Successfully'),
