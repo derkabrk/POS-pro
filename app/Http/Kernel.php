@@ -75,6 +75,7 @@ class Kernel extends HttpKernel
         'users' =>  \App\Http\Middleware\UserMiddleware::class,
         'expired' => \App\Http\Middleware\ExpiredMiddleware::class,
         'plan_permission' => \App\Http\Middleware\CheckPlanPermission::class,
+        'dropshipper.registered' => \Modules\Business\App\Http\Middleware\EnsureDropshipperRegistered::class,
     ];
 
 

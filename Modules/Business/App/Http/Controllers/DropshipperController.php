@@ -32,12 +32,14 @@ class DropshipperController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'store' => 'required',
-            'phone' => 'nullable',
             'full_name' => 'required',
-            'expires' => 'nullable|date',
+            'email' => 'required|email|unique:dropshippers,email',
+            'password' => 'required|min:6|confirmed',
+            'phone' => 'nullable',
         ]);
-        Dropshipper::create($request->only('store', 'phone', 'full_name', 'expires'));
+        $data = $request->only('full_name', 'email', 'phone');
+        $data['password'] = bcrypt($request->password);
+        Dropshipper::create($data);
         return redirect()->route('business.dropshippers.index')->with('success', 'Dropshipper created successfully.');
     }
 
@@ -76,5 +78,31 @@ class DropshipperController extends Controller
     {
         // Placeholder: implement logic to fetch withdrawals
         return view('business::dropshippers.withdrawals');
+    }
+
+    public function showRegistrationForm()
+    {
+        return view('business::dropshippers.registration');
+    }
+
+    public function completeRegistration(Request $request)
+    {
+        $request->validate([
+            'full_name' => 'required',
+            'store' => 'required',
+            'phone' => 'required',
+            'wilaya' => 'required',
+            'expires' => 'nullable|date',
+            'store_logo' => 'nullable|image|max:2048',
+        ]);
+        $dropshipper = auth()->user()->dropshipper;
+        $data = $request->only(['full_name', 'store', 'phone', 'wilaya', 'expires']);
+        if ($request->hasFile('store_logo')) {
+            $data['store_logo'] = $request->file('store_logo')->store('dropshipper_logos', 'public');
+        }
+        $dropshipper->update($data);
+        $dropshipper->is_registered = true;
+        $dropshipper->save();
+        return redirect()->route('business.dropshipper.dashboard')->with('success', 'Registration completed!');
     }
 }
