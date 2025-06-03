@@ -328,6 +328,29 @@
                         </a>
                     </div>
                 </li>
+                <li class="menu-title"><span>Dropshippers</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarDropshippers" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarDropshippers">
+                        <i class="ri-user-shared-line"></i> <span>{{ __('Dropshippers') }}</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarDropshippers">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('business.dropshippers.index') }}" class="nav-link">{{ __('Dropshippers List') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('business.dropshippers.create') }}" class="nav-link">{{ __('Add New Dropshipper') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('business.dropshippers.transactions') }}" class="nav-link">{{ __('Transactions') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('business.dropshippers.withdrawals') }}" class="nav-link">{{ __('Withdrawals') }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

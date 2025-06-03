@@ -270,7 +270,7 @@ class AcnooBusinessController extends Controller
                 'phone' => $request->phoneNumber,
                 'image' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : $user->image,
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
-                'plan_id' => $request->plan_subscribe_id,
+                'plan_id' => $request->plan_id ?? $request->plan_subscribe_id,
                 'points' => $request->points,
             ];
             if ($request->plan_subscribe_id) {
