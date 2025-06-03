@@ -6,7 +6,8 @@
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\Business\\App\\Providers\\BusinessServiceProvider"
+        "Modules\\Business\\App\\Providers\\BusinessServiceProvider",
+        "Modules\\Business\\App\\Providers\\RouteServiceProvider"
     ],
     "files": []
 }
