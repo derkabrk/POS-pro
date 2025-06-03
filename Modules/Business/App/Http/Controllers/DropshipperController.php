@@ -12,14 +12,14 @@ class DropshipperController extends Controller
     {
         $dropshippers = Dropshipper::all();
         foreach ($dropshippers as $dropshipper) {
-            // Example calculation logic, replace with actual relationships/queries as needed
-            $dropshipper->total_orders = $dropshipper->orders()->count() ?? 0;
-            $dropshipper->delivered = $dropshipper->orders()->where('status', 'delivered')->count() ?? 0;
-            $dropshipper->returned = $dropshipper->orders()->where('status', 'returned')->count() ?? 0;
-            $dropshipper->pending = $dropshipper->orders()->where('status', 'pending')->count() ?? 0;
-            $dropshipper->available = $dropshipper->wallet_available ?? 0;
-            $dropshipper->paid = $dropshipper->wallet_paid ?? 0;
-            $dropshipper->cashout = $dropshipper->wallet_cashout ?? 0;
+            // Example calculation logic (replace with real relationships if available)
+            $dropshipper->total_orders = $dropshipper->total_orders ?? 0;
+            $dropshipper->delivered = $dropshipper->delivered ?? 0;
+            $dropshipper->returned = $dropshipper->returned ?? 0;
+            $dropshipper->pending = $dropshipper->pending ?? 0;
+            $dropshipper->available = $dropshipper->available ?? 0;
+            $dropshipper->paid = $dropshipper->paid ?? 0;
+            $dropshipper->cashout = $dropshipper->cashout ?? 0;
         }
         return view('business::dropshippers.index', compact('dropshippers'));
     }
@@ -55,7 +55,7 @@ class DropshipperController extends Controller
     public function update(Request $request, Dropshipper $dropshipper)
     {
         $request->validate([
-            'store' => 'required',
+            'store' => 'nullable',
             'phone' => 'nullable',
             'full_name' => 'required',
             'expires' => 'nullable|date',
