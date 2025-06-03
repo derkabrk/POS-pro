@@ -320,11 +320,11 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::get('dropshippers', [Business\DropshipperController::class, 'index'])->name('dropshippers.index');
     Route::get('dropshippers/create', [Business\DropshipperController::class, 'create'])->name('dropshippers.create');
     Route::post('dropshippers', [Business\DropshipperController::class, 'store'])->name('dropshippers.store');
-    Route::get('dropshippers/transactions', [Business\DropshipperController::class, 'transactions'])->name('dropshippers.transactions');
-    Route::get('dropshippers/withdrawals', [Business\DropshipperController::class, 'withdrawals'])->name('dropshippers.withdrawals');
     Route::get('dropshippers/{dropshipper}/edit', [Business\DropshipperController::class, 'edit'])->name('dropshippers.edit');
     Route::put('dropshippers/{dropshipper}', [Business\DropshipperController::class, 'update'])->name('dropshippers.update');
     Route::delete('dropshippers/{dropshipper}', [Business\DropshipperController::class, 'destroy'])->name('dropshippers.destroy');
+    Route::get('dropshippers/transactions', [Business\DropshipperController::class, 'transactions'])->name('dropshippers.transactions');
+    Route::get('dropshippers/withdrawals', [Business\DropshipperController::class, 'withdrawals'])->name('dropshippers.withdrawals');
 
 });
 

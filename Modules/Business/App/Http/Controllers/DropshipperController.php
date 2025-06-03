@@ -11,28 +11,39 @@ class DropshipperController extends Controller
     public function index()
     {
         $dropshippers = Dropshipper::all();
-        return view('business.dropshippers.index', compact('dropshippers'));
+        foreach ($dropshippers as $dropshipper) {
+            // Example calculation logic, replace with actual relationships/queries as needed
+            $dropshipper->total_orders = $dropshipper->orders()->count() ?? 0;
+            $dropshipper->delivered = $dropshipper->orders()->where('status', 'delivered')->count() ?? 0;
+            $dropshipper->returned = $dropshipper->orders()->where('status', 'returned')->count() ?? 0;
+            $dropshipper->pending = $dropshipper->orders()->where('status', 'pending')->count() ?? 0;
+            $dropshipper->available = $dropshipper->wallet_available ?? 0;
+            $dropshipper->paid = $dropshipper->wallet_paid ?? 0;
+            $dropshipper->cashout = $dropshipper->wallet_cashout ?? 0;
+        }
+        return view('dropshippers.index', compact('dropshippers'));
     }
 
     public function create()
     {
-        return view('business.dropshippers.create');
+        return view('dropshippers.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:dropshippers,email',
+            'store' => 'required',
             'phone' => 'nullable',
+            'full_name' => 'required',
+            'expires' => 'nullable|date',
         ]);
-        Dropshipper::create($request->only('name', 'email', 'phone'));
+        Dropshipper::create($request->only('store', 'phone', 'full_name', 'expires'));
         return redirect()->route('business.dropshippers.index')->with('success', 'Dropshipper created successfully.');
     }
 
     public function edit(Dropshipper $dropshipper)
     {
-        return view('business.dropshippers.edit', compact('dropshipper'));
+        return view('dropshippers.edit', compact('dropshipper'));
     }
 
     public function update(Request $request, Dropshipper $dropshipper)
@@ -41,17 +52,10 @@ class DropshipperController extends Controller
             'store' => 'required',
             'phone' => 'nullable',
             'full_name' => 'required',
-            'total_orders' => 'nullable|integer',
-            'delivered' => 'nullable|integer',
-            'returned' => 'nullable|integer',
-            'pending' => 'nullable|integer',
-            'available' => 'nullable|numeric',
-            'paid' => 'nullable|numeric',
-            'cashout' => 'nullable|numeric',
             'expires' => 'nullable|date',
         ]);
         $dropshipper->update($request->only([
-            'store', 'phone', 'full_name', 'total_orders', 'delivered', 'returned', 'pending', 'available', 'paid', 'cashout', 'expires'
+            'store', 'phone', 'full_name', 'expires'
         ]));
         return redirect()->route('business.dropshippers.index')->with('success', 'Dropshipper updated successfully.');
     }
@@ -65,12 +69,12 @@ class DropshipperController extends Controller
     public function transactions()
     {
         // Placeholder: implement logic to fetch transactions
-        return view('business.dropshippers.transactions');
+        return view('dropshippers.transactions');
     }
 
     public function withdrawals()
     {
         // Placeholder: implement logic to fetch withdrawals
-        return view('business.dropshippers.withdrawals');
+        return view('dropshippers.withdrawals');
     }
 }
